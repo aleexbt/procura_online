@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "141743015114",
+    "firebase_url": "https://procuraonline-a86d5.firebaseio.com",
+    "project_id": "procuraonline-a86d5",
+    "storage_bucket": "procuraonline-a86d5.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:141743015114:android:7ebcaddcc80b7012bde033",
+        "android_client_info": {
+          "package_name": "com.procura.procura_online"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "141743015114-lkpb5hd7p9h6roerhomgc31pbro39qt4.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.procura.procura_online",
+            "certificate_hash": "6bf5556ab90b8ac5a03c285492ae019e3f28893d"
+          }
+        },
+        {
+          "client_id": "141743015114-gnpfmbf15rrs7km9sd96bug35p13hovp.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDVWM61r68hV7GA_BesiI6z7K2BE15pEqc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "141743015114-gnpfmbf15rrs7km9sd96bug35p13hovp.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
