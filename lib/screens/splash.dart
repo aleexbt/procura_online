@@ -3,7 +3,6 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:procura_online/controllers/search_controller.dart';
 import 'package:procura_online/controllers/user_controller.dart';
-import 'package:procura_online/screens/home_pageview.dart';
 
 class SplashScreen extends StatefulWidget {
   @override
@@ -22,7 +21,8 @@ class _SplashScreenState extends State<SplashScreen> {
 
   void init() async {
     await Future.delayed(Duration(seconds: 1));
-    Get.offAll(HomePageView());
+    // Get.offAll(HomePageView());
+    Get.toNamed('/home');
   }
 
   @override

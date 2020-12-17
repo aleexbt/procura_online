@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:share/share.dart';
 
-class ProductDetails extends StatelessWidget {
+class ProductDetailsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    print('PRODUCT_ID: ${Get.parameters['id']}');
     return Scaffold(
       appBar: AppBar(
         elevation: 0,

@@ -1,9 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:procura_online/screens/change_password_screen.dart';
-import 'package:procura_online/screens/edit_profile_screen.dart';
-import 'package:procura_online/screens/splash.dart';
 
 class SettingsScreen extends StatefulWidget {
   @override
@@ -27,7 +24,7 @@ class _SettingsScreenState extends State<SettingsScreen> with AutomaticKeepAlive
         child: Column(
           children: [
             GestureDetector(
-              onTap: () => Get.to(EditProfileScreen()),
+              onTap: () => Get.toNamed('/settings/edit-profile'),
               behavior: HitTestBehavior.translucent,
               child: Row(
                 children: [
@@ -46,7 +43,7 @@ class _SettingsScreenState extends State<SettingsScreen> with AutomaticKeepAlive
             ),
             SizedBox(height: 20),
             GestureDetector(
-              onTap: () => Get.to(ChangePasswordScreen()),
+              onTap: () => Get.toNamed('/settings/change-password'),
               behavior: HitTestBehavior.translucent,
               child: Row(
                 children: [
@@ -65,7 +62,7 @@ class _SettingsScreenState extends State<SettingsScreen> with AutomaticKeepAlive
             ),
             SizedBox(height: 20),
             GestureDetector(
-              onTap: () => Get.offAll(SplashScreen()),
+              onTap: () => Get.offAndToNamed('/'),
               behavior: HitTestBehavior.translucent,
               child: Row(
                 children: [

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:procura_online/screens/conversation_screen.dart';
 
 class ChatScreen extends StatefulWidget {
   @override
@@ -102,7 +101,7 @@ class _ChatScreenState extends State<ChatScreen> with AutomaticKeepAliveClientMi
                         fontSize: 12,
                       ),
                     ),
-                    onTap: () => Get.to(ConversationScreen()),
+                    onTap: () => Get.toNamed('/chat/conversation/$index'),
                   );
                 }),
           )

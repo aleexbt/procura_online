@@ -3,12 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:procura_online/controllers/search_controller.dart';
-import 'package:procura_online/screens/product_details_screen.dart';
 import 'package:procura_online/utils/no_glow_behavior.dart';
 import 'package:procura_online/widgets/featured_box.dart';
 import 'package:procura_online/widgets/normal_box.dart';
-
-import 'filter_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -64,7 +61,7 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
                     ),
                   ),
                   GestureDetector(
-                    onTap: () => Get.to(FilterScreen()),
+                    onTap: () => Get.toNamed('/search-filter'),
                     child: Icon(CupertinoIcons.slider_horizontal_3),
                   ),
                 ],
@@ -141,7 +138,7 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
                                   'https://quatrorodas.abril.com.br/wp-content/uploads/2020/02/bmw_x5_xdrive45e-1-e1581517888476.jpeg?quality=70&strip=info',
                               title: 'Sport car',
                               salePrice: '19,000',
-                              onTap: () => Get.to(ProductDetails()),
+                              onTap: () => Get.toNamed('/product-details/$index'),
                             ),
                           );
                         },
@@ -164,7 +161,7 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
                                 'https://quatrorodas.abril.com.br/wp-content/uploads/2020/02/bmw_x5_xdrive45e-1-e1581517888476.jpeg?quality=70&strip=info',
                             title: 'Sport car',
                             salePrice: '19,000',
-                            onTap: () => Get.to(ProductDetails()),
+                            onTap: () => Get.toNamed('/product-details/$index'),
                           );
                         }),
                   ],
