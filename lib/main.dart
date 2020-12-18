@@ -6,6 +6,7 @@ import 'package:procura_online/screens/conversation_screen.dart';
 import 'package:procura_online/screens/edit_profile_screen.dart';
 import 'package:procura_online/screens/filter_screen.dart';
 import 'package:procura_online/screens/home_pageview.dart';
+import 'package:procura_online/screens/new_ad.dart';
 import 'package:procura_online/screens/product_details_screen.dart';
 import 'package:procura_online/screens/settings_screen.dart';
 import 'package:procura_online/screens/splash.dart';
@@ -26,7 +27,7 @@ class MyApp extends StatelessWidget {
         }
       },
       child: GetMaterialApp(
-        initialRoute: '/',
+        home: SplashScreen(),
         getPages: [
           GetPage(name: '/', page: () => SplashScreen()),
           GetPage(name: '/home', page: () => HomePageView()),
@@ -34,10 +35,11 @@ class MyApp extends StatelessWidget {
           GetPage(name: '/chat', page: () => ChatScreen(), transition: Transition.cupertino),
           GetPage(name: '/chat/conversation/:id', page: () => ConversationScreen(), transition: Transition.topLevel),
           GetPage(name: '/tests', page: () => TestsScreen()),
-          GetPage(name: '/search-filter', page: () => FilterScreen()),
+          GetPage(name: '/search-filter', page: () => FilterScreen(), fullscreenDialog: true),
           GetPage(name: '/settings', page: () => SettingsScreen()),
           GetPage(name: '/settings/edit-profile', page: () => EditProfileScreen()),
           GetPage(name: '/settings/change-password', page: () => ChangePasswordScreen()),
+          GetPage(name: '/ad/new', page: () => NewAdScreen()),
         ],
         debugShowCheckedModeBanner: false,
         title: 'Procura Online',

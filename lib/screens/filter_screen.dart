@@ -120,7 +120,10 @@ class _FilterScreenState extends State<FilterScreen> {
                   color: Colors.blue,
                 ),
                 gradient: LinearGradient(
-                  colors: <Color>[Colors.lightBlueAccent, Colors.blue],
+                  colors: <Color>[
+                    Colors.lightBlueAccent,
+                    Colors.blue,
+                  ],
                 ),
               ),
               child: Padding(
