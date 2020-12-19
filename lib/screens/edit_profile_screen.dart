@@ -36,7 +36,7 @@ class EditProfileScreen extends StatelessWidget {
             ),
             SizedBox(height: 5),
             Obx(() => CustomTextInput(
-                  controller: _name..text = _userController.name,
+                  controller: _name..text = _userController.userData.user?.name,
                   fillColor: Colors.grey[200],
                   hintText: _userController.name,
                   textCapitalization: TextCapitalization.words,
@@ -48,7 +48,7 @@ class EditProfileScreen extends StatelessWidget {
             ),
             SizedBox(height: 5),
             Obx(() => CustomTextInput(
-                  controller: _email..text = _userController.email,
+                  controller: _email..text = _userController.userData.user?.email,
                   fillColor: Colors.grey[200],
                   hintText: _userController.email,
                   keyboardType: TextInputType.emailAddress,

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:procura_online/controllers/search_controller.dart';
+import 'package:procura_online/screens/home/home_controller.dart';
 import 'package:procura_online/utils/no_glow_behavior.dart';
 import 'package:procura_online/widgets/featured_box.dart';
 import 'package:procura_online/widgets/normal_box.dart';
@@ -17,6 +18,7 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
   bool get wantKeepAlive => true;
 
   final SearchController _searchController = Get.find();
+  final HomeScreenController _homeController = Get.find();
 
   @override
   Widget build(BuildContext context) {
@@ -145,25 +147,29 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
                       ),
                     ),
                     SizedBox(height: 20),
-                    GridView.builder(
-                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 2,
-                          crossAxisSpacing: 5,
-                          mainAxisSpacing: 5,
-                          childAspectRatio: 0.80,
-                        ),
-                        shrinkWrap: true,
-                        physics: BouncingScrollPhysics(),
-                        itemCount: 6,
-                        itemBuilder: (context, index) {
-                          return NormalBox(
-                            image:
-                                'https://quatrorodas.abril.com.br/wp-content/uploads/2020/02/bmw_x5_xdrive45e-1-e1581517888476.jpeg?quality=70&strip=info',
-                            title: 'Sport car',
-                            salePrice: '19,000',
-                            onTap: () => Get.toNamed('/product-details/$index'),
-                          );
-                        }),
+                    _homeController.obx(
+                        (state) => GridView.builder(
+                              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                                crossAxisCount: 2,
+                                crossAxisSpacing: 5,
+                                mainAxisSpacing: 5,
+                                childAspectRatio: 0.80,
+                              ),
+                              shrinkWrap: true,
+                              physics: BouncingScrollPhysics(),
+                              itemCount: state.data.length,
+                              itemBuilder: (context, index) {
+                                return NormalBox(
+                                  image:
+                                      'https://quatrorodas.abril.com.br/wp-content/uploads/2020/02/bmw_x5_xdrive45e-1-e1581517888476.jpeg?quality=70&strip=info',
+                                  title: state.data[index].title,
+                                  salePrice: state.data[index].price,
+                                  normalPrice: state.data[index].oldPrice,
+                                  onTap: () => Get.toNamed('/product-details/${state.data[index].id}'),
+                                );
+                              },
+                            ),
+                        onError: (error) => Text('Ocorreu um erro')),
                   ],
                 ),
               ),

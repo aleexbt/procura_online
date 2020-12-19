@@ -3,6 +3,9 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:procura_online/controllers/search_controller.dart';
 import 'package:procura_online/controllers/user_controller.dart';
+import 'package:procura_online/repository/api_repository.dart';
+
+import 'home/home_controller.dart';
 
 class SplashScreen extends StatefulWidget {
   @override
@@ -10,9 +13,6 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
-  final SearchController _search = Get.put(SearchController());
-  final UserController _user = Get.put(UserController());
-
   @override
   void initState() {
     init();
@@ -20,9 +20,13 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   void init() async {
-    await Future.delayed(Duration(seconds: 1));
-    // Get.offAll(HomePageView());
-    Get.toNamed('/home');
+    Get.put(ApiRepository());
+    Get.put(UserController());
+    Get.put(SearchController());
+    Get.put(HomeScreenController());
+    // Get.put(DetailsController());
+    await Future.delayed(Duration(seconds: 2));
+    Get.offNamed('/app');
   }
 
   @override

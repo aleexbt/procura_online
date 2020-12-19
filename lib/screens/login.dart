@@ -18,6 +18,8 @@ class LoginScreen extends StatelessWidget {
     ));
 
     final UserController _userController = Get.find();
+    final TextEditingController _emailController = TextEditingController();
+    final TextEditingController _passwordController = TextEditingController();
 
     GoogleSignIn _googleSignIn = GoogleSignIn(
       scopes: [
@@ -94,11 +96,13 @@ class LoginScreen extends StatelessWidget {
                     Column(
                       children: [
                         CustomTextInput(
+                          controller: _emailController,
                           hintText: 'Email',
                           hintStyle: TextStyle(color: Colors.white),
                         ),
                         SizedBox(height: 10),
                         CustomTextInput(
+                          controller: _passwordController,
                           hintText: 'Password',
                           hintStyle: TextStyle(color: Colors.white),
                         ),
@@ -118,7 +122,8 @@ class LoginScreen extends StatelessWidget {
                       children: [
                         LargeButton(
                           text: 'Login',
-                          onPressed: () => _userController.signIn({"email": "alex@auth.com"}),
+                          onPressed: () =>
+                              _userController.signIn(email: _emailController.text, password: _passwordController.text),
                         ),
                         Padding(
                           padding: const EdgeInsets.all(8.0),

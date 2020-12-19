@@ -60,7 +60,7 @@ class NormalBox extends StatelessWidget {
                       style: TextStyle(color: Colors.blueAccent, fontSize: 12.0, fontWeight: FontWeight.w600),
                     ),
                     Text(
-                      '\$21,000',
+                      '\$$normalPrice',
                       style: TextStyle(
                         color: Colors.grey[400],
                         fontSize: 10,

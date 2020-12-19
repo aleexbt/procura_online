@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:procura_online/screens/app_screen.dart';
 import 'package:procura_online/screens/change_password_screen.dart';
 import 'package:procura_online/screens/chat_screen.dart';
 import 'package:procura_online/screens/conversation_screen.dart';
 import 'package:procura_online/screens/edit_profile_screen.dart';
 import 'package:procura_online/screens/filter_screen.dart';
-import 'package:procura_online/screens/home_pageview.dart';
+import 'package:procura_online/screens/home/home_screen.dart';
 import 'package:procura_online/screens/new_ad.dart';
-import 'package:procura_online/screens/product_details_screen.dart';
+import 'package:procura_online/screens/product/product_screen.dart';
 import 'package:procura_online/screens/settings_screen.dart';
 import 'package:procura_online/screens/splash.dart';
 import 'package:procura_online/screens/tests.dart';
@@ -30,8 +31,9 @@ class MyApp extends StatelessWidget {
         home: SplashScreen(),
         getPages: [
           GetPage(name: '/', page: () => SplashScreen()),
-          GetPage(name: '/home', page: () => HomePageView()),
-          GetPage(name: '/product-details/:id', page: () => ProductDetailsScreen()),
+          GetPage(name: '/home', page: () => HomeScreen()),
+          GetPage(name: '/app', page: () => AppScreen()),
+          GetPage(name: '/product-details/:id', page: () => ProductScreen()),
           GetPage(name: '/chat', page: () => ChatScreen(), transition: Transition.cupertino),
           GetPage(name: '/chat/conversation/:id', page: () => ConversationScreen(), transition: Transition.topLevel),
           GetPage(name: '/tests', page: () => TestsScreen()),

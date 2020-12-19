@@ -18,6 +18,7 @@ class CustomTextInput extends StatelessWidget {
   final bool obscureText;
   final Widget suffixIcon;
   final TextInputAction textInputAction;
+  final int maxLines;
 
   const CustomTextInput({
     Key key,
@@ -37,6 +38,7 @@ class CustomTextInput extends StatelessWidget {
     this.obscureText = false,
     this.suffixIcon,
     this.textInputAction,
+    this.maxLines = 1,
   }) : super(key: key);
 
   @override
@@ -49,13 +51,14 @@ class CustomTextInput extends StatelessWidget {
       textCapitalization: textCapitalization,
       maxLength: maxLength,
       textInputAction: textInputAction,
+      maxLines: maxLines,
       decoration: InputDecoration(
         hintText: hintText,
         hintStyle: hintStyle,
         filled: true,
         fillColor: fillColor ?? Colors.white.withOpacity(0.4),
         isDense: true,
-        contentPadding: EdgeInsets.all(22),
+        contentPadding: EdgeInsets.symmetric(vertical: 22, horizontal: 12),
         errorStyle: TextStyle(height: 0),
         counterText: '',
         suffixIcon: suffixIcon,

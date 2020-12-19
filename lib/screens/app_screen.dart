@@ -4,14 +4,14 @@ import 'package:procura_online/screens/chat_screen.dart';
 import 'package:procura_online/screens/settings_screen.dart';
 import 'package:procura_online/screens/tests.dart';
 
-import 'home.dart';
+import 'home/home_screen.dart';
 
-class HomePageView extends StatefulWidget {
+class AppScreen extends StatefulWidget {
   @override
-  _HomePageViewState createState() => _HomePageViewState();
+  _AppScreenState createState() => _AppScreenState();
 }
 
-class _HomePageViewState extends State<HomePageView> {
+class _AppScreenState extends State<AppScreen> {
   PageController _pageController = PageController();
   int _selectedIndex = 0;
   int productCount = 0;
