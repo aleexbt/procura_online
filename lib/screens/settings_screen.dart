@@ -12,7 +12,7 @@ class _SettingsScreenState extends State<SettingsScreen> with AutomaticKeepAlive
   @override
   bool get wantKeepAlive => true;
 
-  UserController _userController = Get.find();
+  UserControllerOld _userController = Get.find();
 
   @override
   Widget build(BuildContext context) {

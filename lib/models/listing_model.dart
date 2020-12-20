@@ -12,8 +12,8 @@ class ListingModel {
         data.add(new ListingItem.fromJson(v));
       });
     }
-    links = json['links'] != null ? new Links.fromJson(json['links']) : null;
-    meta = json['meta'] != null ? new Meta.fromJson(json['meta']) : null;
+    // links = json['links'] != null ? Links.fromJson(json['links']) : null;
+    meta = json['meta'] != null ? Meta.fromJson(json['meta']) : null;
   }
 
   Map<String, dynamic> toJson() {
@@ -187,10 +187,10 @@ class Links {
   Links({this.first, this.last, this.prev, this.next});
 
   Links.fromJson(Map<String, dynamic> json) {
-    first = json['first'];
-    last = json['last'];
-    prev = json['prev'];
-    next = json['next'];
+    first = json['first'] != null ? json['first'] : null;
+    last = json['last'] != null ? json['last'] : null;
+    // prev = json['prev'] != null ? json['prev'] : null;
+    next = json['next'] != null ? json['next'] : null;
   }
 
   Map<String, dynamic> toJson() {

@@ -4,7 +4,7 @@ import 'package:procura_online/controllers/user_controller.dart';
 import 'package:procura_online/widgets/text_input.dart';
 
 class EditProfileScreen extends StatelessWidget {
-  final UserController _userController = Get.find();
+  final UserControllerOld _userController = Get.find();
 
   final TextEditingController _name = TextEditingController();
   final TextEditingController _email = TextEditingController();

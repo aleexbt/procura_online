@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:procura_online/screens/login.dart';
-import 'package:procura_online/screens/register_screen.dart';
+import 'package:procura_online/screens/auth/register_screen.dart';
+
+import 'auth/login_screen.dart';
 
 class TestsScreen extends StatelessWidget {
   @override

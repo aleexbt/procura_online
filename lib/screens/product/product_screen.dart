@@ -1,11 +1,14 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
+import 'package:flutter_speed_dial/flutter_speed_dial.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:procura_online/screens/product/product_controller.dart';
 import 'package:share/share.dart';
 
 class ProductScreen extends StatelessWidget {
-  final ProductScreenController _productScreenController = Get.put(ProductScreenController());
+  final ProductController _productScreenController = Get.put(ProductController());
 
   @override
   Widget build(BuildContext context) {
@@ -16,7 +19,9 @@ class ProductScreen extends StatelessWidget {
           IconButton(
             icon: Icon(Icons.share),
             onPressed: () {
-              Share.share(_productScreenController.state?.title ?? 'Sharing');
+              if (_productScreenController.state?.title != null) {
+                Share.share(_productScreenController.state.title);
+              }
             },
           )
         ],
@@ -122,93 +127,135 @@ class ProductScreen extends StatelessWidget {
                 ),
                 onLoading: LinearProgressIndicator(),
                 onError: (error) => Padding(
-                  padding: const EdgeInsets.only(top: 250),
-                  child: Center(child: Text(error)),
+                  padding: EdgeInsets.only(top: Get.height / 4),
+                  child: Center(
+                      child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      SvgPicture.asset('assets/images/not_found_towing.svg', width: 350),
+                      SizedBox(height: 20),
+                      Text(
+                        error,
+                        style: TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ],
+                  )),
                 ),
               ),
               SizedBox(height: 80),
             ],
           ),
-          Positioned(
-            width: MediaQuery.of(context).size.width,
-            bottom: 0.0,
-            child: SafeArea(
-              top: false,
-              child: Padding(
-                padding: const EdgeInsets.all(15.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    SizedBox(
-                      width: 170,
-                      height: 60,
-                      child: Container(
-                        decoration: BoxDecoration(
-                          gradient: LinearGradient(
-                            begin: Alignment.centerLeft,
-                            end: Alignment.centerRight,
-                            colors: [
-                              Colors.blue[200],
-                              Colors.blue[700],
-                            ],
-                          ),
-                          borderRadius: BorderRadius.circular(6),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.grey[600],
-                              offset: Offset(2.0, 1.0), //(x,y)
-                              blurRadius: 5.0,
-                            ),
-                          ],
-                        ),
-                        child: Center(
-                            child: Text(
-                          'Message',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        )),
-                      ),
-                    ),
-                    SizedBox(
-                      width: 170,
-                      height: 60,
-                      child: Container(
-                        decoration: BoxDecoration(
-                          gradient: LinearGradient(
-                            begin: Alignment.centerLeft,
-                            end: Alignment.centerRight,
-                            colors: [
-                              Colors.blue[200],
-                              Colors.blue[700],
-                            ],
-                          ),
-                          borderRadius: BorderRadius.circular(6),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.grey[600],
-                              offset: Offset(2.0, 1.0), //(x,y)
-                              blurRadius: 5.0,
-                            ),
-                          ],
-                        ),
-                        child: Center(
-                            child: Text(
-                          'Call',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        )),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ),
+          // _productScreenController.obx(
+          //   (state) => Positioned(
+          //     width: MediaQuery.of(context).size.width,
+          //     bottom: 0.0,
+          //     child: SafeArea(
+          //       top: false,
+          //       child: Padding(
+          //         padding: const EdgeInsets.all(15.0),
+          //         child: Row(
+          //           mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          //           children: [
+          //             SizedBox(
+          //               width: 170,
+          //               height: 60,
+          //               child: Container(
+          //                 decoration: BoxDecoration(
+          //                   gradient: LinearGradient(
+          //                     begin: Alignment.centerLeft,
+          //                     end: Alignment.centerRight,
+          //                     colors: [
+          //                       Colors.blue[200],
+          //                       Colors.blue[700],
+          //                     ],
+          //                   ),
+          //                   borderRadius: BorderRadius.circular(6),
+          //                   boxShadow: [
+          //                     BoxShadow(
+          //                       color: Colors.grey[600],
+          //                       offset: Offset(2.0, 1.0), //(x,y)
+          //                       blurRadius: 5.0,
+          //                     ),
+          //                   ],
+          //                 ),
+          //                 child: Center(
+          //                     child: Text(
+          //                   'Message',
+          //                   style: TextStyle(
+          //                     color: Colors.white,
+          //                     fontWeight: FontWeight.bold,
+          //                   ),
+          //                 )),
+          //               ),
+          //             ),
+          //             SizedBox(
+          //               width: 170,
+          //               height: 60,
+          //               child: Container(
+          //                 decoration: BoxDecoration(
+          //                   gradient: LinearGradient(
+          //                     begin: Alignment.centerLeft,
+          //                     end: Alignment.centerRight,
+          //                     colors: [
+          //                       Colors.blue[200],
+          //                       Colors.blue[700],
+          //                     ],
+          //                   ),
+          //                   borderRadius: BorderRadius.circular(6),
+          //                   boxShadow: [
+          //                     BoxShadow(
+          //                       color: Colors.grey[600],
+          //                       offset: Offset(2.0, 1.0), //(x,y)
+          //                       blurRadius: 5.0,
+          //                     ),
+          //                   ],
+          //                 ),
+          //                 child: Center(
+          //                     child: Text(
+          //                   'Call',
+          //                   style: TextStyle(
+          //                     color: Colors.white,
+          //                     fontWeight: FontWeight.bold,
+          //                   ),
+          //                 )),
+          //               ),
+          //             ),
+          //           ],
+          //         ),
+          //       ),
+          //     ),
+          //   ),
+          //   onLoading: Container(),
+          //   onError: (_) => Container(),
+          // ),
         ],
+      ),
+      floatingActionButton: _productScreenController.obx(
+        (state) => SpeedDial(
+          // animatedIcon: AnimatedIcons.menu_close,
+          child: Icon(CupertinoIcons.ellipses_bubble_fill),
+          curve: Curves.bounceIn,
+          overlayOpacity: 0.5,
+          children: [
+            SpeedDialChild(
+              child: Icon(CupertinoIcons.phone),
+              backgroundColor: Colors.green,
+              label: 'Phone call',
+              onTap: () => print('Phone call'),
+            ),
+            SpeedDialChild(
+              child: Icon(CupertinoIcons.chat_bubble_fill),
+              backgroundColor: Colors.blue,
+              label: 'Send message',
+              onTap: () => print('Send message'),
+            ),
+          ],
+        ),
+        onLoading: Container(),
+        onError: (_) => Container(),
       ),
     );
   }

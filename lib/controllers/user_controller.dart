@@ -2,7 +2,7 @@ import 'package:dio/dio.dart' as dio;
 import 'package:dio_http_cache/dio_http_cache.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:procura_online/models/login_model.dart';
+import 'package:procura_online/models/user_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 final String baseUrl = 'https://procuraonline-dev.pt/api';
@@ -16,7 +16,7 @@ dio.Dio api = dio.Dio(options);
 final _dioCacheManager = DioCacheManager(CacheConfig());
 //Options _cacheOptions = buildCacheOptions(Duration(hours: 3));
 
-class UserController extends GetxController {
+class UserControllerOld extends GetxController {
   @override
   onInit() {
     _initSharedPrefs();

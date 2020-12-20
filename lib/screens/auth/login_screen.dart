@@ -4,8 +4,8 @@ import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:get/get.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
-import 'package:procura_online/controllers/user_controller.dart';
-import 'package:procura_online/screens/register_screen.dart';
+import 'package:procura_online/screens/auth/register_screen.dart';
+import 'package:procura_online/screens/auth/user_controller.dart';
 import 'package:procura_online/utils/colors.dart';
 import 'package:procura_online/widgets/large_button.dart';
 import 'package:procura_online/widgets/text_input.dart';
@@ -17,7 +17,8 @@ class LoginScreen extends StatelessWidget {
       statusBarColor: Colors.blue, //or set color with: Color(0xFF0000FF)
     ));
 
-    final UserController _userController = Get.find();
+    final UserController _userController = Get.put(UserController());
+
     final TextEditingController _emailController = TextEditingController();
     final TextEditingController _passwordController = TextEditingController();
 
@@ -63,7 +64,7 @@ class LoginScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: Colors.blue,
       body: Obx(
-        () => ModalProgressHUD(
+        () => (ModalProgressHUD(
           inAsyncCall: _userController.isLoading,
           child: SafeArea(
             child: SingleChildScrollView(
@@ -189,7 +190,7 @@ class LoginScreen extends StatelessWidget {
               ),
             ),
           ),
-        ),
+        )),
       ),
     );
   }

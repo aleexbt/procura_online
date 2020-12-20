@@ -18,7 +18,23 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
   bool get wantKeepAlive => true;
 
   final SearchController _searchController = Get.find();
-  final HomeScreenController _homeController = Get.find();
+  final HomeController _homeController = Get.find();
+  final ScrollController _scrollController = ScrollController();
+
+  @override
+  void initState() {
+    _scrollController.addListener(() {
+      double maxScroll = _scrollController.position.maxScrollExtent;
+      double currentScroll = _scrollController.position.pixels;
+      double delta = MediaQuery.of(context).size.height * 0.40;
+      if (maxScroll - currentScroll < delta) {
+        if (!_homeController.isLoadingMore && !_homeController.isLastPage) {
+          _homeController.nextPage();
+        }
+      }
+    });
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -123,6 +139,7 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
             child: ScrollConfiguration(
               behavior: NoGlowBehavior(),
               child: SingleChildScrollView(
+                controller: _scrollController,
                 child: Column(
                   children: [
                     SizedBox(
@@ -147,29 +164,29 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
                       ),
                     ),
                     SizedBox(height: 20),
-                    _homeController.obx(
-                        (state) => GridView.builder(
-                              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                                crossAxisCount: 2,
-                                crossAxisSpacing: 5,
-                                mainAxisSpacing: 5,
-                                childAspectRatio: 0.80,
-                              ),
-                              shrinkWrap: true,
-                              physics: BouncingScrollPhysics(),
-                              itemCount: state.data.length,
-                              itemBuilder: (context, index) {
-                                return NormalBox(
-                                  image:
-                                      'https://quatrorodas.abril.com.br/wp-content/uploads/2020/02/bmw_x5_xdrive45e-1-e1581517888476.jpeg?quality=70&strip=info',
-                                  title: state.data[index].title,
-                                  salePrice: state.data[index].price,
-                                  normalPrice: state.data[index].oldPrice,
-                                  onTap: () => Get.toNamed('/product-details/${state.data[index].id}'),
-                                );
-                              },
-                            ),
-                        onError: (error) => Text('Ocorreu um erro')),
+                    Obx(
+                      () => GridView.builder(
+                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 2,
+                          crossAxisSpacing: 5,
+                          mainAxisSpacing: 5,
+                          childAspectRatio: 0.80,
+                        ),
+                        shrinkWrap: true,
+                        physics: BouncingScrollPhysics(),
+                        itemCount: _homeController.results.data?.length ?? 0,
+                        itemBuilder: (context, index) {
+                          return NormalBox(
+                            image:
+                                'https://quatrorodas.abril.com.br/wp-content/uploads/2020/02/bmw_x5_xdrive45e-1-e1581517888476.jpeg?quality=70&strip=info',
+                            title: _homeController.results.data[index].title,
+                            salePrice: _homeController.results.data[index].price,
+                            normalPrice: _homeController.results.data[index].oldPrice,
+                            onTap: () => Get.toNamed('/product-details/${_homeController.results.data[index].id}'),
+                          );
+                        },
+                      ),
+                    ),
                   ],
                 ),
               ),

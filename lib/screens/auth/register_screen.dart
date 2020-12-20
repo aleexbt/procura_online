@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:procura_online/screens/auth/user_controller.dart';
 import 'package:procura_online/utils/colors.dart';
 import 'package:procura_online/widgets/large_button.dart';
 import 'package:procura_online/widgets/text_input.dart';
 
 class RegisterScreen extends StatelessWidget {
+  final UserController _userController = Get.find();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -60,7 +63,7 @@ class RegisterScreen extends StatelessWidget {
                   children: [
                     LargeButton(
                       text: 'Sign Up',
-                      onPressed: () => Get.back(),
+                      onPressed: () => _userController.signUp(),
                     ),
                     SizedBox(height: 25),
                     GestureDetector(

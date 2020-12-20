@@ -1,9 +1,9 @@
 import 'package:get/get.dart';
 import 'package:procura_online/models/listing_model.dart';
-import 'package:procura_online/repository/api_repository.dart';
+import 'package:procura_online/repositories/product_repository.dart';
 
-class ProductScreenController extends GetxController with StateMixin<ListingItem> {
-  final ApiRepository _repository = Get.find();
+class ProductController extends GetxController with StateMixin<ListingItem> {
+  final ProductRepository _repository = Get.find();
 
   @override
   void onInit() {

@@ -1,7 +1,7 @@
 import 'package:get/get.dart';
 import 'package:procura_online/models/listing_model.dart';
 
-class ApiRepository extends GetConnect {
+class ProductRepository extends GetConnect {
   @override
   void onInit() {
     httpClient.baseUrl = 'https://procuraonline-dev.pt';
@@ -12,11 +12,11 @@ class ApiRepository extends GetConnect {
     });
   }
 
-  Future<ListingModel> findAll() async {
-    final response = await get<ListingModel>('/api/v1/listings', decoder: (response) {
-      return ListingModel.fromJson(response ?? []);
+  Future<ListingModel> findAll({int page = 1}) async {
+    final response = await get<ListingModel>('/api/v1/listings', query: {"page": "$page"}, decoder: (response) {
+      return ListingModel.fromJson(response);
     });
-
+    print(response.request.url);
     if (response.hasError) {
       print('REPOSITORY_ERROR: Error getting information from server.');
     }

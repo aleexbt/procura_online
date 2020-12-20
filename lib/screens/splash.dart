@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:procura_online/controllers/search_controller.dart';
-import 'package:procura_online/controllers/user_controller.dart';
-import 'package:procura_online/repository/api_repository.dart';
+import 'package:procura_online/repositories/product_repository.dart';
+import 'package:procura_online/repositories/user_repository.dart';
 
 import 'home/home_controller.dart';
 
@@ -20,11 +20,13 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   void init() async {
-    Get.put(ApiRepository());
-    Get.put(UserController());
+    Get.put(ProductRepository());
+    // Get.put(UserControllerOld());
     Get.put(SearchController());
-    Get.put(HomeScreenController());
+    Get.put(HomeController());
     // Get.put(DetailsController());
+
+    Get.put(UserRepository());
     await Future.delayed(Duration(seconds: 2));
     Get.offNamed('/app');
   }
