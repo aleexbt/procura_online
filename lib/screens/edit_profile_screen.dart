@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:procura_online/controllers/user_controller.dart';
+import 'package:procura_online/screens/auth/user_controller.dart';
 import 'package:procura_online/widgets/text_input.dart';
 
 class EditProfileScreen extends StatelessWidget {
-  final UserControllerOld _userController = Get.find();
+  final UserController _userController = Get.find();
 
   final TextEditingController _name = TextEditingController();
   final TextEditingController _email = TextEditingController();
@@ -20,7 +20,7 @@ class EditProfileScreen extends StatelessWidget {
             icon: Icon(Icons.check, color: Colors.black),
             onPressed: () {
               FocusScope.of(context).unfocus();
-              _userController.setUser(name: _name.text, email: _email.text);
+              _userController.updateUserData(name: _name.text, email: _email.text);
             },
           ),
         ],
@@ -36,10 +36,10 @@ class EditProfileScreen extends StatelessWidget {
             ),
             SizedBox(height: 5),
             Obx(() => CustomTextInput(
-                  controller: _name..text = _userController.userData.user?.name,
+                  controller: _name..text = _userController.userData?.name,
                   fillColor: Colors.grey[200],
-                  hintText: _userController.name,
-                  textCapitalization: TextCapitalization.words,
+                  hintText: _userController.userData?.name,
+                  textCapitalization: TextCapitalization.sentences,
                 )),
             SizedBox(height: 10),
             Text(
@@ -48,9 +48,9 @@ class EditProfileScreen extends StatelessWidget {
             ),
             SizedBox(height: 5),
             Obx(() => CustomTextInput(
-                  controller: _email..text = _userController.userData.user?.email,
+                  controller: _email..text = _userController.userData?.email,
                   fillColor: Colors.grey[200],
-                  hintText: _userController.email,
+                  hintText: _userController.userData?.email,
                   keyboardType: TextInputType.emailAddress,
                 )),
           ],

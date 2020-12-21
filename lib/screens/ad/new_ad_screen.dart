@@ -67,7 +67,7 @@ class _NewAdScreenState extends State<NewAdScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('New Ad (REAL)'),
+        title: Text('New Ad'),
         elevation: 0,
       ),
       body: SingleChildScrollView(
@@ -203,7 +203,7 @@ class _NewAdScreenState extends State<NewAdScreen> {
                   CustomTextInput(
                     fillColor: Colors.grey[200],
                     hintText: 'Enter the title of your ad',
-                    textCapitalization: TextCapitalization.words,
+                    textCapitalization: TextCapitalization.sentences,
                   ),
                   SizedBox(height: 20),
                   Text(
@@ -216,7 +216,7 @@ class _NewAdScreenState extends State<NewAdScreen> {
                   CustomTextInput(
                     fillColor: Colors.grey[200],
                     hintText: 'Enter the description of the item',
-                    textCapitalization: TextCapitalization.words,
+                    textCapitalization: TextCapitalization.sentences,
                     maxLines: 5,
                   ),
                   SizedBox(height: 20),
@@ -296,7 +296,7 @@ class _NewAdScreenState extends State<NewAdScreen> {
       ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () {},
-        label: Text('Publish Ads'),
+        label: Text('Publish'),
         icon: Icon(Icons.save),
       ),
     );

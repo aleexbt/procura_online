@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:procura_online/screens/ad/new_ad_screen.dart';
 import 'package:procura_online/screens/app_screen.dart';
+import 'package:procura_online/screens/auth/login_screen.dart';
+import 'package:procura_online/screens/auth/register_screen.dart';
 import 'package:procura_online/screens/change_password_screen.dart';
 import 'package:procura_online/screens/chat_screen.dart';
 import 'package:procura_online/screens/conversation_screen.dart';
@@ -34,14 +36,16 @@ class MyApp extends StatelessWidget {
           GetPage(name: '/home', page: () => HomeScreen()),
           GetPage(name: '/app', page: () => AppScreen()),
           GetPage(name: '/product-details/:id', page: () => ProductScreen()),
-          GetPage(name: '/chat', page: () => ChatScreen(), transition: Transition.cupertino),
-          GetPage(name: '/chat/conversation/:id', page: () => ConversationScreen(), transition: Transition.topLevel),
+          GetPage(name: '/chat', page: () => ChatScreen()),
+          GetPage(name: '/chat/conversation/:id', page: () => ConversationScreen()),
           GetPage(name: '/tests', page: () => TestsScreen()),
           GetPage(name: '/search-filter', page: () => FilterScreen(), fullscreenDialog: true),
           GetPage(name: '/settings', page: () => SettingsScreen()),
           GetPage(name: '/settings/edit-profile', page: () => EditProfileScreen()),
           GetPage(name: '/settings/change-password', page: () => ChangePasswordScreen()),
           GetPage(name: '/ad/new', page: () => NewAdScreen()),
+          GetPage(name: '/auth/login', page: () => LoginScreen()),
+          GetPage(name: '/auth/register', page: () => RegisterScreen()),
         ],
         debugShowCheckedModeBanner: false,
         title: 'Procura Online',
@@ -49,6 +53,7 @@ class MyApp extends StatelessWidget {
           primaryColor: Colors.white,
           visualDensity: VisualDensity.adaptivePlatformDensity,
         ),
+
         // home: MyHomePage(),
         // home: SplashScreen(),
       ),

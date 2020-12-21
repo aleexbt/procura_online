@@ -1,20 +1,41 @@
 import 'dart:convert';
 
+import 'package:dio/dio.dart';
+import 'package:dio_http_cache/dio_http_cache.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:procura_online/models/auth_error_model.dart';
 import 'package:procura_online/models/user_model.dart';
 
+BaseOptions options = BaseOptions(
+  connectTimeout: 8000,
+  receiveTimeout: 3000,
+  baseUrl: 'https://procuraonline-dev.pt',
+  headers: {"Accept": "application/json", "Content-Type": "application/json"},
+);
+
+Dio _dio = Dio(options);
+final _dioCacheManager = DioCacheManager(CacheConfig());
+
 class UserRepository extends GetConnect {
   @override
-  void onInit() {
-    httpClient.baseUrl = 'https://procuraonline-dev.pt';
-    httpClient.addRequestModifier((request) {
-      request.headers['Accept'] = 'application/json';
-      request.headers['Content-Type'] = 'application/json';
-      return request;
-    });
-  }
+  void onInit() {}
+
+  // Future<UserModel> signIn({String email, String password}) async {
+  //   Map<String, dynamic> loginData = {
+  //     "email": email,
+  //     "password": password,
+  //     "device_name": "Android",
+  //   };
+  //   final response = await post<UserModel>('/api/v1/login', loginData, decoder: (response) {
+  //     return UserModel.fromJson(response ?? null);
+  //   });
+  //   if (response.hasError) {
+  //     Get.rawSnackbar(
+  //         message: 'Ops, something went wrong.', backgroundColor: Colors.red, duration: Duration(seconds: 3));
+  //   }
+  //   return response.body;
+  // }
 
   Future<UserModel> signIn({String email, String password}) async {
     Map<String, dynamic> loginData = {
@@ -22,14 +43,12 @@ class UserRepository extends GetConnect {
       "password": password,
       "device_name": "Android",
     };
-    final response = await post<UserModel>('/api/v1/login', loginData, decoder: (response) {
-      return UserModel.fromJson(response ?? null);
-    });
-    if (response.hasError) {
-      Get.rawSnackbar(
-          message: 'Ops, something went wrong.', backgroundColor: Colors.red, duration: Duration(seconds: 3));
+    final response = await _dio.post('/api/v1/login', data: loginData);
+
+    if (response.statusCode != 200) {
+      return null;
     }
-    return response.body;
+    return UserModel.fromJson(response.data);
   }
 
   Future<UserModel> signUp() async {

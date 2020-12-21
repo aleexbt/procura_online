@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:procura_online/controllers/search_controller.dart';
+import 'package:procura_online/screens/auth/user_controller.dart';
 import 'package:procura_online/screens/home/home_controller.dart';
 import 'package:procura_online/utils/no_glow_behavior.dart';
 import 'package:procura_online/widgets/featured_box.dart';
@@ -19,6 +20,7 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
 
   final SearchController _searchController = Get.find();
   final HomeController _homeController = Get.find();
+  final UserController _userController = Get.find();
   final ScrollController _scrollController = ScrollController();
 
   @override
@@ -95,7 +97,7 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
                 color: Colors.grey[200],
                 minWidth: 120,
                 height: 40,
-                onPressed: () => Get.toNamed('/ad/new'),
+                onPressed: () => _userController.isLoggedIn ? Get.toNamed('/ad/new') : Get.toNamed('/auth/login'),
                 child: Text('Sell'),
               ),
               FlatButton(
@@ -166,6 +168,15 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
                             onTap: () => Get.toNamed('/product-details/${_homeController.results[index].id}'),
                           );
                         },
+                      ),
+                    ),
+                    Obx(
+                      () => Visibility(
+                        visible: _homeController.isLoadingMore,
+                        child: (Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: CircularProgressIndicator(),
+                        )),
                       ),
                     ),
                   ],

@@ -1,6 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:procura_online/screens/auth/user_controller.dart';
 import 'package:procura_online/screens/chat_screen.dart';
+import 'package:procura_online/screens/protected_route.dart';
 import 'package:procura_online/screens/settings_screen.dart';
 import 'package:procura_online/screens/tests.dart';
 
@@ -12,7 +15,8 @@ class AppScreen extends StatefulWidget {
 }
 
 class _AppScreenState extends State<AppScreen> {
-  PageController _pageController = PageController();
+  final PageController _pageController = PageController();
+  final UserController _userController = Get.find();
   int _selectedIndex = 0;
   int productCount = 0;
 
@@ -32,9 +36,9 @@ class _AppScreenState extends State<AppScreen> {
           physics: NeverScrollableScrollPhysics(),
           children: [
             HomeScreen(),
-            ChatScreen(),
+            _userController.isLoggedIn ? ChatScreen() : ProtectedRoute(),
             TestsScreen(),
-            SettingsScreen(),
+            _userController.isLoggedIn ? SettingsScreen() : ProtectedRoute(),
           ],
         ),
       ),

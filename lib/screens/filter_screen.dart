@@ -54,7 +54,7 @@ class _FilterScreenState extends State<FilterScreen> {
                 BetterExpansionTile(
                   key: _brandsKey,
                   title: Text(
-                    'Makes',
+                    'Brands',
                     style: TextStyle(
                       fontSize: 22,
                       fontWeight: FontWeight.bold,
@@ -182,7 +182,7 @@ class _FilterScreenState extends State<FilterScreen> {
                         colorText: Colors.white,
                       ),
                       TextWidget(
-                        text: '578399 Ads',
+                        text: '0 ads',
                         colorText: Colors.white,
                       ),
                     ],

@@ -66,10 +66,10 @@ class NewAdController extends GetxController {
   }
 
   void setBrand(String value) {
-    _selectedBrand.value = value;
-    if (value != '') {
-      getModels(_selectedBrand.value);
+    if (value != '' && value != _selectedBrand.value) {
+      getModels(value);
     }
+    _selectedBrand.value = value;
   }
 
   void setModel(String value) {

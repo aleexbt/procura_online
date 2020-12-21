@@ -17,7 +17,7 @@ class LoginScreen extends StatelessWidget {
       statusBarColor: Colors.blue, //or set color with: Color(0xFF0000FF)
     ));
 
-    final UserController _userController = Get.put(UserController());
+    final UserController _userController = Get.find();
 
     final TextEditingController _emailController = TextEditingController();
     final TextEditingController _passwordController = TextEditingController();
@@ -106,6 +106,7 @@ class LoginScreen extends StatelessWidget {
                           controller: _passwordController,
                           hintText: 'Password',
                           hintStyle: TextStyle(color: Colors.white),
+                          obscureText: true,
                         ),
                         SizedBox(height: 10),
                         Align(
@@ -126,57 +127,57 @@ class LoginScreen extends StatelessWidget {
                           onPressed: () =>
                               _userController.signIn(email: _emailController.text, password: _passwordController.text),
                         ),
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Text('- OR -'),
-                        ),
-                        MaterialButton(
-                          child: Center(
-                              child: Padding(
-                            padding: const EdgeInsets.all(4.0),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: <Widget>[
-                                Padding(
-                                  padding: const EdgeInsets.only(right: 4.0),
-                                  child: Image.asset(
-                                    'assets/images/icon_google.png',
-                                    width: 20,
-                                    height: 20,
-                                  ),
-                                ),
-                                Text('Login with Google', style: TextStyle(color: Colors.blue)),
-                              ],
-                            ),
-                          )),
-                          onPressed: () => _handleSignInGoogle(),
-                          color: Colors.white,
-                        ),
-                        MaterialButton(
-                          child: Center(
-                              child: Padding(
-                            padding: const EdgeInsets.all(4.0),
-                            child: Padding(
-                              padding: const EdgeInsets.all(6.0),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: <Widget>[
-                                  Padding(
-                                    padding: const EdgeInsets.only(right: 8.0),
-                                    child: Image.asset(
-                                      'assets/images/icon_facebook.png',
-                                      width: 20,
-                                      height: 20,
-                                    ),
-                                  ),
-                                  Text('Login with Facebook', style: TextStyle(color: Colors.white)),
-                                ],
-                              ),
-                            ),
-                          )),
-                          onPressed: () => _handleSignInFacebook(),
-                          color: Color.fromRGBO(59, 89, 152, 1),
-                        ),
+                        // Padding(
+                        //   padding: const EdgeInsets.all(8.0),
+                        //   child: Text('- OR -'),
+                        // ),
+                        // MaterialButton(
+                        //   child: Center(
+                        //       child: Padding(
+                        //     padding: const EdgeInsets.all(4.0),
+                        //     child: Row(
+                        //       mainAxisAlignment: MainAxisAlignment.center,
+                        //       children: <Widget>[
+                        //         Padding(
+                        //           padding: const EdgeInsets.only(right: 4.0),
+                        //           child: Image.asset(
+                        //             'assets/images/icon_google.png',
+                        //             width: 20,
+                        //             height: 20,
+                        //           ),
+                        //         ),
+                        //         Text('Login with Google', style: TextStyle(color: Colors.blue)),
+                        //       ],
+                        //     ),
+                        //   )),
+                        //   onPressed: () => _handleSignInGoogle(),
+                        //   color: Colors.white,
+                        // ),
+                        // MaterialButton(
+                        //   child: Center(
+                        //       child: Padding(
+                        //     padding: const EdgeInsets.all(4.0),
+                        //     child: Padding(
+                        //       padding: const EdgeInsets.all(6.0),
+                        //       child: Row(
+                        //         mainAxisAlignment: MainAxisAlignment.center,
+                        //         children: <Widget>[
+                        //           Padding(
+                        //             padding: const EdgeInsets.only(right: 8.0),
+                        //             child: Image.asset(
+                        //               'assets/images/icon_facebook.png',
+                        //               width: 20,
+                        //               height: 20,
+                        //             ),
+                        //           ),
+                        //           Text('Login with Facebook', style: TextStyle(color: Colors.white)),
+                        //         ],
+                        //       ),
+                        //     ),
+                        //   )),
+                        //   onPressed: () => _handleSignInFacebook(),
+                        //   color: Color.fromRGBO(59, 89, 152, 1),
+                        // ),
                         SizedBox(height: 25),
                         GestureDetector(
                           behavior: HitTestBehavior.translucent,
