@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:procura_online/screens/ad/new_ad_screen.dart';
 import 'package:procura_online/screens/app_screen.dart';
 import 'package:procura_online/screens/change_password_screen.dart';
 import 'package:procura_online/screens/chat_screen.dart';
@@ -7,7 +8,6 @@ import 'package:procura_online/screens/conversation_screen.dart';
 import 'package:procura_online/screens/edit_profile_screen.dart';
 import 'package:procura_online/screens/filter_screen.dart';
 import 'package:procura_online/screens/home/home_screen.dart';
-import 'package:procura_online/screens/new_ad.dart';
 import 'package:procura_online/screens/product/product_screen.dart';
 import 'package:procura_online/screens/settings_screen.dart';
 import 'package:procura_online/screens/splash.dart';

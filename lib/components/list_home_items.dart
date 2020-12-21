@@ -1,6 +1,6 @@
 // import 'package:cached_network_image/cached_network_image.dart';
 // import 'package:flutter/material.dart';
-// import 'package:procura_online/models/listing_model.dart';
+// import 'package:procura_online/models/product_model.dart';
 // import 'package:procura_online/screens/product_details_screen.dart';
 // import 'package:procura_online/utils/colors.dart';
 //

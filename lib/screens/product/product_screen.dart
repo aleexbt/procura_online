@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -35,8 +36,7 @@ class ProductScreen extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Container(
-                      child: Image.network(
-                          'https://quatrorodas.abril.com.br/wp-content/uploads/2020/02/bmw_x5_xdrive45e-1-e1581517888476.jpeg?quality=70&strip=info'),
+                      child: Image.network('https://kknd26.ru/images/no_photo.png'),
                     ),
                     SizedBox(height: 8),
                     Padding(
@@ -75,11 +75,14 @@ class ProductScreen extends StatelessWidget {
                                     style: TextStyle(color: Colors.blueAccent),
                                   ),
                                   SizedBox(width: 10),
-                                  Text(
-                                    '\$${state.oldPrice}',
-                                    style: TextStyle(
-                                      color: Colors.grey[400],
-                                      decoration: TextDecoration.lineThrough,
+                                  Visibility(
+                                    visible: state.oldPrice != '0.00',
+                                    child: Text(
+                                      '\$${state.oldPrice}',
+                                      style: TextStyle(
+                                        color: Colors.grey[400],
+                                        decoration: TextDecoration.lineThrough,
+                                      ),
                                     ),
                                   ),
                                 ],
@@ -123,6 +126,203 @@ class ProductScreen extends StatelessWidget {
                         ),
                       ),
                     ),
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(5, 10, 5, 80),
+                      child: Container(
+                        constraints: BoxConstraints(minHeight: 60),
+                        width: double.infinity,
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.grey[300],
+                              offset: Offset(2.0, 1.0), //(x,y)
+                              blurRadius: 5.0,
+                            ),
+                          ],
+                          borderRadius: BorderRadius.circular(4),
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.all(20),
+                          child: Column(
+                            children: [
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        'Brand',
+                                        style: TextStyle(
+                                          color: Colors.grey[400],
+                                        ),
+                                      ),
+                                      Text(
+                                        state.make.capitalizeFirst ?? 'Not specified',
+                                        style: TextStyle(
+                                          fontSize: 16,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        'Model',
+                                        style: TextStyle(
+                                          color: Colors.grey[400],
+                                        ),
+                                      ),
+                                      Text(
+                                        state.model ?? 'Not specified',
+                                        style: TextStyle(
+                                          fontSize: 16,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        'Year',
+                                        style: TextStyle(
+                                          color: Colors.grey[400],
+                                        ),
+                                      ),
+                                      Text(
+                                        state.year ?? 'Not specified',
+                                        style: TextStyle(
+                                          fontSize: 16,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                              SizedBox(height: 10),
+                              Divider(),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        'Seats',
+                                        style: TextStyle(
+                                          color: Colors.grey[400],
+                                        ),
+                                      ),
+                                      Text(
+                                        state.numberOfSeats ?? 'Not specified',
+                                        style: TextStyle(
+                                          fontSize: 16,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        'Doors',
+                                        style: TextStyle(
+                                          color: Colors.grey[400],
+                                        ),
+                                      ),
+                                      Text(
+                                        state.numberOfDoors ?? 'Not specified',
+                                        style: TextStyle(
+                                          fontSize: 16,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        'Fuel',
+                                        style: TextStyle(
+                                          color: Colors.grey[400],
+                                        ),
+                                      ),
+                                      Text(
+                                        state.fuelType ?? 'Not specified',
+                                        style: TextStyle(
+                                          fontSize: 16,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                              SizedBox(height: 10),
+                              Divider(),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        'Color',
+                                        style: TextStyle(
+                                          color: Colors.grey[400],
+                                        ),
+                                      ),
+                                      Text(
+                                        state.numberOfSeats ?? 'Not specified',
+                                        style: TextStyle(
+                                          fontSize: 16,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        'Mileage',
+                                        style: TextStyle(
+                                          color: Colors.grey[400],
+                                        ),
+                                      ),
+                                      Text(
+                                        state.mileage ?? 'Not specified',
+                                        style: TextStyle(
+                                          fontSize: 16,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        'Transmission',
+                                        style: TextStyle(
+                                          color: Colors.grey[400],
+                                        ),
+                                      ),
+                                      Text(
+                                        state.transmission ?? 'Not specified',
+                                        style: TextStyle(
+                                          fontSize: 16,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
                   ],
                 ),
                 onLoading: LinearProgressIndicator(),
@@ -145,7 +345,6 @@ class ProductScreen extends StatelessWidget {
                   )),
                 ),
               ),
-              SizedBox(height: 80),
             ],
           ),
           // _productScreenController.obx(

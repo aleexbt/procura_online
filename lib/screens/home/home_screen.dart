@@ -90,47 +90,29 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Container(
+              FlatButton(
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(25)),
+                color: Colors.grey[200],
+                minWidth: 120,
                 height: 40,
-                constraints: BoxConstraints(
-                  minWidth: 120,
-                ),
-                decoration: BoxDecoration(color: Colors.grey[200], borderRadius: BorderRadius.circular(25)),
-                child: Padding(
-                  padding: const EdgeInsets.all(10),
-                  child: Center(
-                    child: Text('Sell'),
-                  ),
-                ),
+                onPressed: () => Get.toNamed('/ad/new'),
+                child: Text('Sell'),
               ),
-              Container(
+              FlatButton(
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(25)),
+                color: Colors.grey[200],
+                minWidth: 120,
                 height: 40,
-                constraints: BoxConstraints(
-                  minWidth: 120,
-                ),
-                decoration: BoxDecoration(color: Colors.grey[200], borderRadius: BorderRadius.circular(25)),
-                child: Padding(
-                  padding: const EdgeInsets.all(10),
-                  child: Center(
-                    child: Text('Vehicles'),
-                  ),
-                ),
+                onPressed: () {},
+                child: Text('Vehicles'),
               ),
-              Container(
+              FlatButton(
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(25)),
+                color: Colors.grey[200],
+                minWidth: 120,
                 height: 40,
-                constraints: BoxConstraints(
-                  minWidth: 120,
-                ),
-                decoration: BoxDecoration(
-                  color: Colors.grey[200],
-                  borderRadius: BorderRadius.circular(25),
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.all(10),
-                  child: Center(
-                    child: Text('Auto Parts'),
-                  ),
-                ),
+                onPressed: () {},
+                child: Text('Auto Parts'),
               ),
             ],
           ),
@@ -153,8 +135,7 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
                           return Padding(
                             padding: const EdgeInsets.only(right: 10),
                             child: FeaturedBox(
-                              image:
-                                  'https://quatrorodas.abril.com.br/wp-content/uploads/2020/02/bmw_x5_xdrive45e-1-e1581517888476.jpeg?quality=70&strip=info',
+                              image: 'https://kknd26.ru/images/no_photo.png',
                               title: 'Sport car',
                               salePrice: '19,000',
                               onTap: () => Get.toNamed('/product-details/$index'),
@@ -164,6 +145,7 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
                       ),
                     ),
                     SizedBox(height: 20),
+                    Obx(() => Text(_homeController.hasError.toString())),
                     Obx(
                       () => GridView.builder(
                         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
@@ -174,15 +156,14 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
                         ),
                         shrinkWrap: true,
                         physics: BouncingScrollPhysics(),
-                        itemCount: _homeController.results.data?.length ?? 0,
+                        itemCount: _homeController.results?.length ?? 0,
                         itemBuilder: (context, index) {
                           return NormalBox(
-                            image:
-                                'https://quatrorodas.abril.com.br/wp-content/uploads/2020/02/bmw_x5_xdrive45e-1-e1581517888476.jpeg?quality=70&strip=info',
-                            title: _homeController.results.data[index].title,
-                            salePrice: _homeController.results.data[index].price,
-                            normalPrice: _homeController.results.data[index].oldPrice,
-                            onTap: () => Get.toNamed('/product-details/${_homeController.results.data[index].id}'),
+                            image: 'https://kknd26.ru/images/no_photo.png',
+                            title: _homeController.results[index].title,
+                            salePrice: _homeController.results[index].price,
+                            normalPrice: _homeController.results[index].oldPrice,
+                            onTap: () => Get.toNamed('/product-details/${_homeController.results[index].id}'),
                           );
                         },
                       ),

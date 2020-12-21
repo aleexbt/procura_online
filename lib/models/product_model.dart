@@ -1,15 +1,15 @@
-class ListingModel {
-  List<ListingItem> data;
+class ProductModel {
+  List<Products> products;
   Links links;
   Meta meta;
 
-  ListingModel({this.data, this.links, this.meta});
+  ProductModel({this.products, this.links, this.meta});
 
-  ListingModel.fromJson(Map<String, dynamic> json) {
+  ProductModel.fromJson(Map<String, dynamic> json) {
     if (json['data'] != null) {
-      data = new List<ListingItem>();
+      products = new List<Products>();
       json['data'].forEach((v) {
-        data.add(new ListingItem.fromJson(v));
+        products.add(new Products.fromJson(v));
       });
     }
     // links = json['links'] != null ? Links.fromJson(json['links']) : null;
@@ -18,8 +18,8 @@ class ListingModel {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    if (this.data != null) {
-      data['data'] = this.data.map((v) => v.toJson()).toList();
+    if (this.products != null) {
+      data['data'] = this.products.map((v) => v.toJson()).toList();
     }
     if (this.links != null) {
       data['links'] = this.links.toJson();
@@ -31,7 +31,7 @@ class ListingModel {
   }
 }
 
-class ListingItem {
+class Products {
   int id;
   String userId;
   String title;
@@ -60,7 +60,7 @@ class ListingItem {
   String updatedAt;
   List<Categories> categories;
 
-  ListingItem(
+  Products(
       {this.id,
       this.userId,
       this.title,
@@ -89,7 +89,7 @@ class ListingItem {
       this.updatedAt,
       this.categories});
 
-  ListingItem.fromJson(Map<String, dynamic> json) {
+  Products.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     userId = json['user_id'];
     title = json['title'];

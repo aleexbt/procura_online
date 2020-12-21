@@ -1,6 +1,6 @@
 import 'package:get/get.dart';
 import 'package:procura_online/api/listing.dart';
-import 'package:procura_online/models/listing_model.dart';
+import 'package:procura_online/models/product_model.dart';
 import 'package:procura_online/models/response_handler.dart';
 
 class DetailsController extends GetxController {
@@ -12,19 +12,19 @@ class DetailsController extends GetxController {
 
   RxBool _isLoading = true.obs;
   RxBool _hasError = false.obs;
-  Rx<ListingItem> _data = ListingItem().obs;
+  Rx<Products> _data = Products().obs;
 
   bool get isLoading => _isLoading.value;
   bool get hasError => _hasError.value;
-  ListingItem get data => _data.value;
+  Products get data => _data.value;
 
-  Future<ListingItem> getOne(String id) async {
+  Future<Products> getOne(String id) async {
     ResponseHandler data = await ListingApi.getOne(id);
     if (data.hasError) {
       _hasError.value = true;
       _isLoading.value = false;
     } else {
-      ListingItem dados = ListingItem.fromJson(data.response['data']);
+      Products dados = Products.fromJson(data.response['data']);
       _data.value = dados;
       _hasError.value = false;
       _isLoading.value = false;

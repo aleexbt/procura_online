@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:smart_select/smart_select.dart';
 
 class SelectOption extends StatelessWidget {
+  final bool isLoading;
+  final bool isDisabled;
   final String modalTitle;
   final String placeholder;
   final String selectText;
@@ -11,6 +13,8 @@ class SelectOption extends StatelessWidget {
 
   const SelectOption({
     Key key,
+    this.isLoading = false,
+    this.isDisabled = false,
     this.modalTitle = 'Options',
     this.placeholder = 'Choose one',
     this.selectText = 'Select an option',
@@ -30,7 +34,7 @@ class SelectOption extends StatelessWidget {
       ),
       tileBuilder: (context, state) {
         return GestureDetector(
-          onTap: () => state.showModal(),
+          onTap: isLoading || isDisabled ? null : () => state.showModal(),
           behavior: HitTestBehavior.translucent,
           child: Container(
             height: 60,
@@ -57,10 +61,19 @@ class SelectOption extends StatelessWidget {
                       )
                     ],
                   ),
-                  Icon(
-                    Icons.arrow_forward_ios,
-                    color: Colors.grey[500],
-                  ),
+                  isLoading
+                      ? SizedBox(
+                          width: 25,
+                          height: 25,
+                          child: CircularProgressIndicator(
+                            valueColor: AlwaysStoppedAnimation(Colors.grey[500]),
+                            strokeWidth: 2.5,
+                          ),
+                        )
+                      : Icon(
+                          Icons.arrow_forward_ios,
+                          color: Colors.grey[500],
+                        ),
                 ],
               ),
             ),

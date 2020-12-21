@@ -59,12 +59,15 @@ class NormalBox extends StatelessWidget {
                       '\$$salePrice',
                       style: TextStyle(color: Colors.blueAccent, fontSize: 12.0, fontWeight: FontWeight.w600),
                     ),
-                    Text(
-                      '\$$normalPrice',
-                      style: TextStyle(
-                        color: Colors.grey[400],
-                        fontSize: 10,
-                        decoration: TextDecoration.lineThrough,
+                    Visibility(
+                      visible: normalPrice != '0.00',
+                      child: Text(
+                        '\$$normalPrice',
+                        style: TextStyle(
+                          color: Colors.grey[400],
+                          fontSize: 10,
+                          decoration: TextDecoration.lineThrough,
+                        ),
                       ),
                     ),
                   ],

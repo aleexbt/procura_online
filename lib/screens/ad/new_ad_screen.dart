@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:multi_image_picker/multi_image_picker.dart';
+import 'package:procura_online/screens/ad/new_ad_controller.dart';
 import 'package:procura_online/widgets/select_option.dart';
 import 'package:procura_online/widgets/text_input.dart';
 import 'package:smart_select/smart_select.dart';
@@ -10,6 +12,13 @@ class NewAdScreen extends StatefulWidget {
 }
 
 class _NewAdScreenState extends State<NewAdScreen> {
+  final NewAdController _newAdController = Get.put(NewAdController());
+
+  @override
+  initState() {
+    super.initState();
+  }
+
   List<Asset> images = [];
   String _error;
 
@@ -44,20 +53,7 @@ class _NewAdScreenState extends State<NewAdScreen> {
     }
   }
 
-  String selectedBrand = '';
-  String selectedModel = '';
   String selectedColor = '';
-
-  List<S2Choice<String>> brandOptions = [
-    S2Choice<String>(value: '1', title: 'BMW'),
-    S2Choice<String>(value: '2', title: 'Ford'),
-    S2Choice<String>(value: '3', title: 'Mercedes-Benz'),
-  ];
-
-  List<S2Choice<String>> modelOptions = [
-    S2Choice<String>(value: '1', title: 'Sedan'),
-    S2Choice<String>(value: '2', title: 'Sport'),
-  ];
 
   List<S2Choice<String>> colorOptions = [
     S2Choice<String>(value: '1', title: 'Black'),
@@ -71,7 +67,7 @@ class _NewAdScreenState extends State<NewAdScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('New Ad'),
+        title: Text('New Ad (REAL)'),
         elevation: 0,
       ),
       body: SingleChildScrollView(
@@ -231,13 +227,16 @@ class _NewAdScreenState extends State<NewAdScreen> {
                     ),
                   ),
                   SizedBox(height: 10),
-                  SelectOption(
-                    placeholder: 'Select one',
-                    modalTitle: 'Brands',
-                    selectText: 'Select a brand',
-                    value: selectedBrand,
-                    choiceItems: brandOptions,
-                    onChange: (state) => setState(() => selectedBrand = state.value),
+                  Obx(
+                    () => SelectOption(
+                      isLoading: _newAdController.isLoadingBrands,
+                      placeholder: 'Select one',
+                      modalTitle: 'Brands',
+                      selectText: 'Select a brand',
+                      value: _newAdController.selectedBrand,
+                      choiceItems: _newAdController.brands,
+                      onChange: (state) => _newAdController.setBrand(state.value),
+                    ),
                   ),
                   SizedBox(height: 20),
                   Text(
@@ -247,13 +246,17 @@ class _NewAdScreenState extends State<NewAdScreen> {
                     ),
                   ),
                   SizedBox(height: 10),
-                  SelectOption(
-                    placeholder: 'Select one',
-                    modalTitle: 'Models',
-                    selectText: 'Select a model',
-                    value: selectedModel,
-                    choiceItems: modelOptions,
-                    onChange: (state) => setState(() => selectedModel = state.value),
+                  Obx(
+                    () => SelectOption(
+                      isLoading: _newAdController.isLoadingModels,
+                      isDisabled: _newAdController.selectedBrand == '',
+                      placeholder: 'Select one',
+                      modalTitle: 'Models',
+                      selectText: 'Select a model',
+                      value: _newAdController.selectedModel,
+                      choiceItems: _newAdController.models,
+                      onChange: (state) => _newAdController.setModel(state.value),
+                    ),
                   ),
                   SizedBox(height: 20),
                   Text(
