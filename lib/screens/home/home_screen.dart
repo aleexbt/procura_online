@@ -14,7 +14,8 @@ class HomeScreen extends StatefulWidget {
   _HomeScreenState createState() => _HomeScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMixin {
+class _HomeScreenState extends State<HomeScreen>
+    with AutomaticKeepAliveClientMixin {
   @override
   bool get wantKeepAlive => true;
 
@@ -66,16 +67,20 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
                       decoration: InputDecoration(
                         hintText: 'Search',
                         border: const OutlineInputBorder(
-                          borderSide: const BorderSide(color: Colors.transparent, width: 0.0),
+                          borderSide: const BorderSide(
+                              color: Colors.transparent, width: 0.0),
                         ),
                         enabledBorder: const OutlineInputBorder(
-                          borderSide: const BorderSide(color: Colors.transparent, width: 0.0),
+                          borderSide: const BorderSide(
+                              color: Colors.transparent, width: 0.0),
                         ),
                         focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.transparent, width: 0.0),
+                          borderSide:
+                              BorderSide(color: Colors.transparent, width: 0.0),
                         ),
                       ),
-                      onChanged: (value) => _searchController.setSearchTerm(value),
+                      onChanged: (value) =>
+                          _searchController.setSearchTerm(value),
                       onSubmitted: (_) => _searchController.doSearch(),
                       textInputAction: TextInputAction.search,
                     ),
@@ -93,15 +98,19 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               FlatButton(
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(25)),
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(25)),
                 color: Colors.grey[200],
                 minWidth: 120,
                 height: 40,
-                onPressed: () => _userController.isLoggedIn ? Get.toNamed('/ad/new') : Get.toNamed('/auth/login'),
+                onPressed: () => _userController.isLoggedIn
+                    ? Get.toNamed('/ad/new')
+                    : Get.toNamed('/auth/login'),
                 child: Text('Sell'),
               ),
               FlatButton(
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(25)),
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(25)),
                 color: Colors.grey[200],
                 minWidth: 120,
                 height: 40,
@@ -109,7 +118,8 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
                 child: Text('Vehicles'),
               ),
               FlatButton(
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(25)),
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(25)),
                 color: Colors.grey[200],
                 minWidth: 120,
                 height: 40,
@@ -140,14 +150,14 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
                               image: 'https://kknd26.ru/images/no_photo.png',
                               title: 'Sport car',
                               salePrice: '19,000',
-                              onTap: () => Get.toNamed('/product-details/$index'),
+                              onTap: () =>
+                                  Get.toNamed('/product-details/$index'),
                             ),
                           );
                         },
                       ),
                     ),
                     SizedBox(height: 20),
-                    Obx(() => Text(_homeController.hasError.toString())),
                     Obx(
                       () => GridView.builder(
                         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
@@ -164,8 +174,10 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
                             image: 'https://kknd26.ru/images/no_photo.png',
                             title: _homeController.results[index].title,
                             salePrice: _homeController.results[index].price,
-                            normalPrice: _homeController.results[index].oldPrice,
-                            onTap: () => Get.toNamed('/product-details/${_homeController.results[index].id}'),
+                            normalPrice:
+                                _homeController.results[index].oldPrice,
+                            onTap: () => Get.toNamed(
+                                '/product-details/${_homeController.results[index].id}'),
                           );
                         },
                       ),

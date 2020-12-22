@@ -20,7 +20,8 @@ class EditProfileScreen extends StatelessWidget {
             icon: Icon(Icons.check, color: Colors.black),
             onPressed: () {
               FocusScope.of(context).unfocus();
-              _userController.updateUserData(name: _name.text, email: _email.text);
+              _userController.updateUserData(
+                  name: _name.text, email: _email.text);
             },
           ),
         ],
@@ -52,6 +53,7 @@ class EditProfileScreen extends StatelessWidget {
                   fillColor: Colors.grey[200],
                   hintText: _userController.userData?.email,
                   keyboardType: TextInputType.emailAddress,
+                  validatorText: 'Por favor digite seu e-mail',
                 )),
           ],
         ),
