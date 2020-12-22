@@ -21,14 +21,19 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   void init() async {
-    Get.put(ProductRepository());
-    Get.put(UserRepository());
-    Get.put(UserController());
-    Get.put(SearchController());
-    Get.put(HomeController());
-    // Get.put(DetailsController());
+    // Get.put(ProductRepository());
+    // Get.put(UserRepository());
+    // Get.put(UserController());
+    // Get.put(SearchController());
+    // Get.put(HomeController());
+    // Get.put(UserRepository());
 
-    Get.put(UserRepository());
+    Get.lazyPut(() => ProductRepository());
+    Get.lazyPut(() => UserRepository());
+    Get.lazyPut(() => UserController());
+    Get.lazyPut(() => HomeController());
+    Get.lazyPut(() => SearchController());
+
     await Future.delayed(Duration(seconds: 2));
     Get.offAllNamed('/app');
   }

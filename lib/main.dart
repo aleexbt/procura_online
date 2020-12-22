@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:procura_online/screens/ad/new_ad_screen.dart';
 import 'package:procura_online/screens/app_screen.dart';
 import 'package:procura_online/screens/auth/login_screen.dart';
@@ -25,7 +26,8 @@ class MyApp extends StatelessWidget {
     return GestureDetector(
       onTap: () {
         FocusScopeNode currentFocus = FocusScope.of(context);
-        if (!currentFocus.hasPrimaryFocus && currentFocus.focusedChild != null) {
+        if (!currentFocus.hasPrimaryFocus &&
+            currentFocus.focusedChild != null) {
           FocusManager.instance.primaryFocus.unfocus();
         }
       },
@@ -37,12 +39,19 @@ class MyApp extends StatelessWidget {
           GetPage(name: '/app', page: () => AppScreen()),
           GetPage(name: '/product-details/:id', page: () => ProductScreen()),
           GetPage(name: '/chat', page: () => ChatScreen()),
-          GetPage(name: '/chat/conversation/:id', page: () => ConversationScreen()),
+          GetPage(
+              name: '/chat/conversation/:id', page: () => ConversationScreen()),
           GetPage(name: '/tests', page: () => TestsScreen()),
-          GetPage(name: '/search-filter', page: () => FilterScreen(), fullscreenDialog: true),
+          GetPage(
+              name: '/search-filter',
+              page: () => FilterScreen(),
+              fullscreenDialog: true),
           GetPage(name: '/settings', page: () => SettingsScreen()),
-          GetPage(name: '/settings/edit-profile', page: () => EditProfileScreen()),
-          GetPage(name: '/settings/change-password', page: () => ChangePasswordScreen()),
+          GetPage(
+              name: '/settings/edit-profile', page: () => EditProfileScreen()),
+          GetPage(
+              name: '/settings/change-password',
+              page: () => ChangePasswordScreen()),
           GetPage(name: '/ad/new', page: () => NewAdScreen()),
           GetPage(name: '/auth/login', page: () => LoginScreen()),
           GetPage(name: '/auth/register', page: () => RegisterScreen()),
@@ -52,6 +61,9 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(
           primaryColor: Colors.white,
           visualDensity: VisualDensity.adaptivePlatformDensity,
+          textTheme: GoogleFonts.openSansTextTheme(
+            Theme.of(context).textTheme,
+          ),
         ),
 
         // home: MyHomePage(),
