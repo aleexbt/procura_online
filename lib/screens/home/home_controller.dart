@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:procura_online/models/product_model.dart';
@@ -9,12 +10,14 @@ class HomeController extends GetxController with StateMixin<ProductModel> {
   RxBool _isLoading = true.obs;
   RxBool _isLoadingMore = false.obs;
   RxBool _hasError = false.obs;
+  RxBool _hasErrorMore = false.obs;
 
   RxInt _page = 1.obs;
 
   bool get isLoading => _isLoading.value;
   bool get isLoadingMore => _isLoadingMore.value;
   bool get hasError => _hasError.value;
+  bool get hasErrorMore => _hasErrorMore.value;
 
   int get page => _page.value;
   Rx<ProductModel> _results = ProductModel().obs;
@@ -28,63 +31,34 @@ class HomeController extends GetxController with StateMixin<ProductModel> {
     findAll();
   }
 
-  // void findAll() {
-  //   _repository.findAll(page: page).then((res) {
-  //     change(res, status: RxStatus.success());
-  //     _results.value = res;
-  //   }, onError: (err) {
-  //     change(null, status: RxStatus.error('Error on get listings'));
-  //   });
-  // }
-
   void findAll() async {
     _isLoading.value = true;
-    await _repository.findAll(page: page).then((res) {
-      change(res, status: RxStatus.success());
-      _results.value = res;
-      _isLoading.value = false;
-    }, onError: (err) {
-      change(null, status: RxStatus.error('Error on get listings'));
-      print(err);
+    _hasError.value = false;
+    _page.value = 1;
+    try {
+      ProductModel response = await _repository.findAll(page: page);
+      _results.value = response;
+    } on DioError catch (err) {
       _hasError.value = true;
+    } finally {
       _isLoading.value = false;
-      Get.rawSnackbar(
-          message: 'Ops, something went wrong.', backgroundColor: Colors.red, duration: Duration(seconds: 3));
-    });
+    }
   }
 
   void nextPage() async {
     _isLoadingMore.value = true;
-    _page.value = _page.value + 1;
-    print('next_page $page');
-    var response = await _repository.findAll(page: page);
-    _results.update((val) {
-      value.products.addAll(response.products);
-    });
-    _isLoadingMore.value = false;
-  }
-
-  void nextPage2() async {
-    print('nextPage2');
-    _isLoadingMore.value = true;
-    _page.value = _page.value + 1;
-
-    _repository.findAll(page: page).then((res) {
-      // List<Products> products = [..._results.value.products, res.products];
-      // ProductModel newList = ProductModel(products: products);
-      res.products.forEach((element) {
-        results.add(element);
+    _hasErrorMore.value = false;
+    try {
+      _page.value = _page.value + 1;
+      ProductModel response = await _repository.findAll(page: page);
+      _results.update((val) {
+        val.products.addAll(response.products);
       });
-      change(_results.value, status: RxStatus.success());
-      _results.value = res;
-      _isLoading.value = false;
-    }, onError: (err) {
-      change(null, status: RxStatus.error('Error on get listings'));
-      print(err);
-      _hasError.value = true;
-      _isLoading.value = false;
+    } on DioError catch (err) {
+      _hasErrorMore.value = true;
       Get.rawSnackbar(
-          message: 'Ops, something went wrong.', backgroundColor: Colors.red, duration: Duration(seconds: 3));
-    });
+          message: 'Ops, error getting more items.', backgroundColor: Colors.red, duration: Duration(seconds: 3));
+    }
+    _isLoadingMore.value = false;
   }
 }

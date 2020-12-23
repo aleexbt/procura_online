@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:procura_online/screens/conversations/orders_controller.dart';
 
 import 'auth/user_controller.dart';
 
@@ -14,6 +15,7 @@ class _SettingsScreenState extends State<SettingsScreen> with AutomaticKeepAlive
   bool get wantKeepAlive => true;
 
   UserController _userController = Get.find();
+  OrdersController _ordersController = Get.find();
 
   @override
   Widget build(BuildContext context) {
@@ -22,6 +24,7 @@ class _SettingsScreenState extends State<SettingsScreen> with AutomaticKeepAlive
       appBar: AppBar(
         elevation: 0,
         title: Text('Settings'),
+        automaticallyImplyLeading: false,
       ),
       body: SingleChildScrollView(
         child: Padding(
@@ -67,7 +70,7 @@ class _SettingsScreenState extends State<SettingsScreen> with AutomaticKeepAlive
               ),
               SizedBox(height: 20),
               GestureDetector(
-                onTap: () => _userController.logOut(),
+                onTap: () => [_ordersController.resetState(), _userController.logOut()],
                 behavior: HitTestBehavior.translucent,
                 child: Row(
                   children: [

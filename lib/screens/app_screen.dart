@@ -1,11 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:procura_online/screens/auth/user_controller.dart';
-import 'package:procura_online/screens/chat_screen.dart';
+import 'package:procura_online/screens/conversations/chat_screen.dart';
 import 'package:procura_online/screens/protected_route.dart';
 import 'package:procura_online/screens/settings_screen.dart';
-import 'package:procura_online/screens/tests.dart';
+import 'package:procura_online/utils/navigation_helper.dart';
 
 import 'home/home_screen.dart';
 
@@ -15,7 +16,8 @@ class AppScreen extends StatefulWidget {
 }
 
 class _AppScreenState extends State<AppScreen> {
-  final PageController _pageController = PageController();
+  // final PageController _pageController = PageController();
+  PageController _pageController = NavKey.pageController;
   final UserController _userController = Get.find();
   int _selectedIndex = 0;
   int productCount = 0;
@@ -28,6 +30,11 @@ class _AppScreenState extends State<AppScreen> {
 
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+      statusBarBrightness: Brightness.light,
+      statusBarColor: Colors.white,
+      statusBarIconBrightness: Brightness.dark,
+    ));
     return Scaffold(
       body: SafeArea(
         child: PageView(
@@ -37,8 +44,8 @@ class _AppScreenState extends State<AppScreen> {
           children: [
             HomeScreen(),
             _userController.isLoggedIn ? ChatScreen() : ProtectedRoute(),
-            TestsScreen(),
             _userController.isLoggedIn ? SettingsScreen() : ProtectedRoute(),
+            // LoginScreen(),
           ],
         ),
       ),
@@ -59,10 +66,10 @@ class _AppScreenState extends State<AppScreen> {
             icon: Icon(CupertinoIcons.chat_bubble_fill),
             label: 'Chat',
           ),
-          BottomNavigationBarItem(
-            icon: Icon(CupertinoIcons.plus_app_fill),
-            label: 'Tests',
-          ),
+          // BottomNavigationBarItem(
+          //   icon: Icon(CupertinoIcons.plus_app_fill),
+          //   label: 'Tests',
+          // ),
           BottomNavigationBarItem(
             icon: Icon(Icons.account_box_rounded),
             label: 'Settings',

@@ -20,6 +20,8 @@ class TestsScreen extends StatelessWidget {
             FlatButton(onPressed: () => Get.to(LoginScreen()), child: Text('Show Login Screen')),
             SizedBox(height: 10),
             FlatButton(onPressed: () => Get.to(RegisterScreen()), child: Text('Show Register Screen')),
+            SizedBox(height: 10),
+            FlatButton(onPressed: () => Get.toNamed('/conversations/orders'), child: Text('Orders screen')),
           ],
         ),
       )),

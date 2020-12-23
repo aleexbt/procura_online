@@ -16,10 +16,13 @@ class CustomTextInput extends StatelessWidget {
   final Function onSubmitted;
   final FocusNode focusNode;
   final bool obscureText;
-  final Widget suffixIcon;
+  final Icon prefixIcon;
+  final Icon suffixIcon;
   final TextInputAction textInputAction;
   final int maxLines;
   final Function validator;
+  final Color errorTextColor;
+  final Color errorBorderColor;
 
   const CustomTextInput({
     Key key,
@@ -37,10 +40,13 @@ class CustomTextInput extends StatelessWidget {
     this.onSubmitted,
     this.focusNode,
     this.obscureText = false,
+    this.prefixIcon,
     this.suffixIcon,
     this.textInputAction,
     this.maxLines = 1,
     this.validator,
+    this.errorTextColor = Colors.red,
+    this.errorBorderColor = Colors.red,
   }) : super(key: key);
 
   @override
@@ -61,9 +67,13 @@ class CustomTextInput extends StatelessWidget {
         fillColor: fillColor ?? Colors.white.withOpacity(0.4),
         isDense: true,
         contentPadding: EdgeInsets.symmetric(vertical: 22, horizontal: 12),
-        errorStyle: TextStyle(height: 1),
+        errorStyle: TextStyle(height: 1, color: errorTextColor),
         counterText: '',
+        prefixIcon: prefixIcon,
         suffixIcon: suffixIcon,
+        errorBorder: OutlineInputBorder(
+          borderSide: BorderSide(color: errorBorderColor, width: 1),
+        ),
         border: const OutlineInputBorder(
           borderSide: const BorderSide(color: Colors.transparent, width: 0.0),
         ),

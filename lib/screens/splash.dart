@@ -1,12 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-import 'package:procura_online/controllers/search_controller.dart';
-import 'package:procura_online/repositories/product_repository.dart';
-import 'package:procura_online/repositories/user_repository.dart';
-import 'package:procura_online/screens/auth/user_controller.dart';
-
-import 'home/home_controller.dart';
 
 class SplashScreen extends StatefulWidget {
   @override
@@ -28,11 +22,14 @@ class _SplashScreenState extends State<SplashScreen> {
     // Get.put(HomeController());
     // Get.put(UserRepository());
 
-    Get.lazyPut(() => ProductRepository());
-    Get.lazyPut(() => UserRepository());
-    Get.lazyPut(() => UserController());
-    Get.lazyPut(() => HomeController());
-    Get.lazyPut(() => SearchController());
+    // Get.lazyPut(() => ProductRepository());
+    // Get.lazyPut(() => UserRepository());
+    // Get.lazyPut(() => UserController());
+    // Get.lazyPut(() => HomeController());
+    // Get.lazyPut(() => SearchController());
+    //
+    // Get.lazyPut(() => OrdersRepository());
+    // Get.lazyPut(() => OrdersController());
 
     await Future.delayed(Duration(seconds: 2));
     Get.offAllNamed('/app');
@@ -44,11 +41,22 @@ class _SplashScreenState extends State<SplashScreen> {
       statusBarColor: Colors.blue,
     ));
     return Scaffold(
-      backgroundColor: Colors.blue,
-      body: Center(
-        child: Image.asset(
-          'assets/images/logo.png',
-          width: 200,
+      body: Container(
+        constraints: BoxConstraints(
+          minHeight: Get.size.height,
+        ),
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: [Colors.blue, Colors.blue],
+          ),
+        ),
+        child: Center(
+          child: Image.asset(
+            'assets/images/logo.png',
+            width: 200,
+          ),
         ),
       ),
     );

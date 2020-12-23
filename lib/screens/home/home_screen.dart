@@ -14,8 +14,7 @@ class HomeScreen extends StatefulWidget {
   _HomeScreenState createState() => _HomeScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen>
-    with AutomaticKeepAliveClientMixin {
+class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMixin {
   @override
   bool get wantKeepAlive => true;
 
@@ -31,12 +30,22 @@ class _HomeScreenState extends State<HomeScreen>
       double currentScroll = _scrollController.position.pixels;
       double delta = MediaQuery.of(context).size.height * 0.40;
       if (maxScroll - currentScroll < delta) {
-        if (!_homeController.isLoadingMore && !_homeController.isLastPage) {
+        if (!_homeController.isLoadingMore && !_homeController.isLastPage && !_homeController.hasErrorMore) {
           _homeController.nextPage();
         }
       }
     });
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  Future<void> refresItems() async {
+    return _homeController.findAll();
   }
 
   @override
@@ -67,20 +76,16 @@ class _HomeScreenState extends State<HomeScreen>
                       decoration: InputDecoration(
                         hintText: 'Search',
                         border: const OutlineInputBorder(
-                          borderSide: const BorderSide(
-                              color: Colors.transparent, width: 0.0),
+                          borderSide: const BorderSide(color: Colors.transparent, width: 0.0),
                         ),
                         enabledBorder: const OutlineInputBorder(
-                          borderSide: const BorderSide(
-                              color: Colors.transparent, width: 0.0),
+                          borderSide: const BorderSide(color: Colors.transparent, width: 0.0),
                         ),
                         focusedBorder: OutlineInputBorder(
-                          borderSide:
-                              BorderSide(color: Colors.transparent, width: 0.0),
+                          borderSide: BorderSide(color: Colors.transparent, width: 0.0),
                         ),
                       ),
-                      onChanged: (value) =>
-                          _searchController.setSearchTerm(value),
+                      onChanged: (value) => _searchController.setSearchTerm(value),
                       onSubmitted: (_) => _searchController.doSearch(),
                       textInputAction: TextInputAction.search,
                     ),
@@ -98,19 +103,15 @@ class _HomeScreenState extends State<HomeScreen>
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               FlatButton(
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(25)),
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(25)),
                 color: Colors.grey[200],
                 minWidth: 120,
                 height: 40,
-                onPressed: () => _userController.isLoggedIn
-                    ? Get.toNamed('/ad/new')
-                    : Get.toNamed('/auth/login'),
+                onPressed: () => _userController.isLoggedIn ? Get.toNamed('/ad/new') : Get.toNamed('/auth/login'),
                 child: Text('Sell'),
               ),
               FlatButton(
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(25)),
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(25)),
                 color: Colors.grey[200],
                 minWidth: 120,
                 height: 40,
@@ -118,8 +119,7 @@ class _HomeScreenState extends State<HomeScreen>
                 child: Text('Vehicles'),
               ),
               FlatButton(
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(25)),
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(25)),
                 color: Colors.grey[200],
                 minWidth: 120,
                 height: 40,
@@ -132,66 +132,90 @@ class _HomeScreenState extends State<HomeScreen>
           Expanded(
             child: ScrollConfiguration(
               behavior: NoGlowBehavior(),
-              child: SingleChildScrollView(
-                controller: _scrollController,
-                child: Column(
-                  children: [
-                    SizedBox(
-                      height: 250,
-                      child: ListView.builder(
-                        scrollDirection: Axis.horizontal,
-                        physics: BouncingScrollPhysics(),
-                        shrinkWrap: true,
-                        itemCount: 4,
-                        itemBuilder: (context, index) {
-                          return Padding(
-                            padding: const EdgeInsets.only(right: 10),
-                            child: FeaturedBox(
-                              image: 'https://kknd26.ru/images/no_photo.png',
-                              title: 'Sport car',
-                              salePrice: '19,000',
-                              onTap: () =>
-                                  Get.toNamed('/product-details/$index'),
-                            ),
-                          );
-                        },
-                      ),
-                    ),
-                    SizedBox(height: 20),
-                    Obx(
-                      () => GridView.builder(
-                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 2,
-                          crossAxisSpacing: 5,
-                          mainAxisSpacing: 5,
-                          childAspectRatio: 0.80,
+              child: RefreshIndicator(
+                onRefresh: refresItems,
+                child: SingleChildScrollView(
+                  controller: _scrollController,
+                  child: Column(
+                    children: [
+                      SizedBox(
+                        height: 250,
+                        child: ListView.builder(
+                          scrollDirection: Axis.horizontal,
+                          physics: BouncingScrollPhysics(),
+                          shrinkWrap: true,
+                          itemCount: 4,
+                          itemBuilder: (context, index) {
+                            return Padding(
+                              padding: const EdgeInsets.only(right: 10),
+                              child: FeaturedBox(
+                                image: 'https://kknd26.ru/images/no_photo.png',
+                                title: 'Sport car',
+                                salePrice: '19,000',
+                                onTap: () => Get.toNamed('/product-details/$index'),
+                              ),
+                            );
+                          },
                         ),
-                        shrinkWrap: true,
-                        physics: BouncingScrollPhysics(),
-                        itemCount: _homeController.results?.length ?? 0,
-                        itemBuilder: (context, index) {
-                          return NormalBox(
-                            image: 'https://kknd26.ru/images/no_photo.png',
-                            title: _homeController.results[index].title,
-                            salePrice: _homeController.results[index].price,
-                            normalPrice:
-                                _homeController.results[index].oldPrice,
-                            onTap: () => Get.toNamed(
-                                '/product-details/${_homeController.results[index].id}'),
-                          );
-                        },
                       ),
-                    ),
-                    Obx(
-                      () => Visibility(
-                        visible: _homeController.isLoadingMore,
-                        child: (Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: CircularProgressIndicator(),
-                        )),
+                      SizedBox(height: 20),
+                      GetX<HomeController>(
+                          init: _homeController,
+                          builder: (_) {
+                            if (_.isLoading) {
+                              return Center(
+                                child: CircularProgressIndicator(),
+                              );
+                            }
+                            if (_.hasError) {
+                              return Center(
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Text('Ops, error retrieving items.'),
+                                    FlatButton(
+                                      onPressed: () => _.findAll(),
+                                      child: Text(
+                                        'Try again',
+                                        style: TextStyle(color: Colors.blue),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              );
+                            }
+                            return GridView.builder(
+                              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                                crossAxisCount: 2,
+                                crossAxisSpacing: 5,
+                                mainAxisSpacing: 5,
+                                childAspectRatio: 0.80,
+                              ),
+                              shrinkWrap: true,
+                              physics: BouncingScrollPhysics(),
+                              itemCount: _.results?.length ?? 0,
+                              itemBuilder: (context, index) {
+                                return NormalBox(
+                                  image: 'https://kknd26.ru/images/no_photo.png',
+                                  title: _.results[index].title,
+                                  salePrice: _.results[index].price,
+                                  normalPrice: _.results[index].oldPrice,
+                                  onTap: () => Get.toNamed('/product-details/${_.results[index].id}'),
+                                );
+                              },
+                            );
+                          }),
+                      Obx(
+                        () => Visibility(
+                          visible: _homeController.isLoadingMore,
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: CircularProgressIndicator(),
+                          ),
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
             ),

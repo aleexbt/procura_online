@@ -1,12 +1,7 @@
-import 'dart:convert';
-
 import 'package:dio/dio.dart';
 import 'package:dio_http_cache/dio_http_cache.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:procura_online/models/auth_error_model.dart';
 import 'package:procura_online/models/user_model.dart';
-import 'package:procura_online/screens/auth/user_controller.dart';
 
 BaseOptions options = BaseOptions(
   connectTimeout: 8000,
@@ -19,26 +14,6 @@ Dio _dio = Dio(options);
 final _dioCacheManager = DioCacheManager(CacheConfig());
 
 class UserRepository {
-  // UserController _userController = Get.find();
-  @override
-  void onInit() {}
-
-  // Future<UserModel> signIn({String email, String password}) async {
-  //   Map<String, dynamic> loginData = {
-  //     "email": email,
-  //     "password": password,
-  //     "device_name": "Android",
-  //   };
-  //   final response = await post<UserModel>('/api/v1/login', loginData, decoder: (response) {
-  //     return UserModel.fromJson(response ?? null);
-  //   });
-  //   if (response.hasError) {
-  //     Get.rawSnackbar(
-  //         message: 'Ops, something went wrong.', backgroundColor: Colors.red, duration: Duration(seconds: 3));
-  //   }
-  //   return response.body;
-  // }
-
   Future<UserModel> signIn({String email, String password}) async {
     Map<String, dynamic> loginData = {
       "email": email,
@@ -46,16 +21,24 @@ class UserRepository {
       "device_name": "Android",
     };
     final response = await _dio.post('/api/v1/login', data: loginData);
-
-    // print(response.data);
-
-    if (response.statusCode != 200) {
-      return null;
-    }
     return UserModel.fromJson(response.data);
   }
 
-  Future<UserModel> signUp() async {}
+  Future<User> signUp(Map<String, dynamic> registerData) async {
+    final response = await _dio.post('/api/v1/register', data: registerData);
+    if (response.statusCode == 201) {
+      return User.fromJson(response.data);
+    }
+    return response.data;
+  }
+
+  Future<String> passwordReset(String email) async {
+    final response = await _dio.post('/api/v1/forgot-password', data: email);
+    if (response.statusCode == 200) {
+      return response.data['message'];
+    }
+    return response.data;
+  }
 
   // Future<UserModel> signUp() async {
   //   Map<String, dynamic> registerData = {
@@ -115,10 +98,7 @@ class UserRepository {
       "new_password_confirmation": confirmPass,
     };
     _dio.options.headers["Authorization"] = 'Bearer $token';
-    final response =
-        await _dio.post('/api/v1/change-password', data: passwordData);
-
-    print(response.data);
+    final response = await _dio.post('/api/v1/change-password', data: passwordData);
 
     if (response.statusCode != 200) {
       return null;
