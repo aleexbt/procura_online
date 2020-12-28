@@ -26,33 +26,30 @@ class _SettingsScreenState extends State<SettingsScreen> with AutomaticKeepAlive
         automaticallyImplyLeading: false,
       ),
       body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Column(
-            children: [
-              ListTileMoreCustomizable(
-                onTap: (_) => Get.toNamed('/settings/edit-profile'),
-                leading: Icon(Icons.account_circle_outlined, color: Colors.blue),
-                title: Text('Account'),
-                horizontalTitleGap: 0,
-                subtitle: Text('Manage your account settings'),
-              ),
-              ListTileMoreCustomizable(
-                onTap: (_) => Get.toNamed('/settings/change-password'),
-                leading: Icon(CupertinoIcons.lock, color: Colors.blue),
-                title: Text('Change password'),
-                horizontalTitleGap: 0,
-                subtitle: Text('Change your account password'),
-              ),
-              ListTileMoreCustomizable(
-                onTap: (_) => _userController.logOut(),
-                leading: Icon(CupertinoIcons.power, color: Colors.blue),
-                title: Text('Sign out'),
-                horizontalTitleGap: 0,
-                subtitle: Text('Sign out of your account'),
-              ),
-            ],
-          ),
+        child: Column(
+          children: [
+            ListTileMoreCustomizable(
+              onTap: (_) => Get.toNamed('/settings/edit-profile'),
+              leading: Icon(Icons.account_circle_outlined, color: Colors.blue),
+              title: Text('Account'),
+              horizontalTitleGap: 0,
+              subtitle: Text('Manage your account settings'),
+            ),
+            ListTileMoreCustomizable(
+              onTap: (_) => Get.toNamed('/settings/change-password'),
+              leading: Icon(CupertinoIcons.lock, color: Colors.blue),
+              title: Text('Change password'),
+              horizontalTitleGap: 0,
+              subtitle: Text('Change your account password'),
+            ),
+            ListTileMoreCustomizable(
+              onTap: (_) => _userController.logOut(),
+              leading: Icon(CupertinoIcons.power, color: Colors.blue),
+              title: Text('Sign out'),
+              horizontalTitleGap: 0,
+              subtitle: Text('Sign out of your account'),
+            ),
+          ],
         ),
       ),
     );
