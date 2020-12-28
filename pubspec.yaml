@@ -52,6 +52,7 @@ dependencies:
   flutter_local_notifications: ^3.0.2
   introduction_screen: ^1.0.9
   badges: ^1.1.6
+  list_tile_more_customizable: ^1.3.3
 
 dev_dependencies:
   flutter_test:

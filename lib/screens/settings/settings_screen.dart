@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:list_tile_more_customizable/list_tile_more_customizable.dart';
 
 import '../../controllers/user_controller.dart';
 
@@ -29,61 +30,26 @@ class _SettingsScreenState extends State<SettingsScreen> with AutomaticKeepAlive
           padding: const EdgeInsets.all(8.0),
           child: Column(
             children: [
-              GestureDetector(
-                onTap: () => Get.toNamed('/settings/edit-profile'),
-                behavior: HitTestBehavior.translucent,
-                child: Row(
-                  children: [
-                    Icon(
-                      CupertinoIcons.pencil,
-                      color: Colors.blue,
-                      size: 25,
-                    ),
-                    SizedBox(width: 10),
-                    Text(
-                      'Edit profile',
-                      style: TextStyle(fontSize: 15),
-                    ),
-                  ],
-                ),
+              ListTileMoreCustomizable(
+                onTap: (_) => Get.toNamed('/settings/edit-profile'),
+                leading: Icon(Icons.account_circle_outlined, color: Colors.blue),
+                title: Text('Account'),
+                horizontalTitleGap: 0,
+                subtitle: Text('Manage your account settings'),
               ),
-              SizedBox(height: 20),
-              GestureDetector(
-                onTap: () => Get.toNamed('/settings/change-password'),
-                behavior: HitTestBehavior.translucent,
-                child: Row(
-                  children: [
-                    Icon(
-                      CupertinoIcons.lock,
-                      color: Colors.blue,
-                      size: 25,
-                    ),
-                    SizedBox(width: 10),
-                    Text(
-                      'Change password',
-                      style: TextStyle(fontSize: 15),
-                    ),
-                  ],
-                ),
+              ListTileMoreCustomizable(
+                onTap: (_) => Get.toNamed('/settings/change-password'),
+                leading: Icon(CupertinoIcons.lock, color: Colors.blue),
+                title: Text('Change password'),
+                horizontalTitleGap: 0,
+                subtitle: Text('Change your account password'),
               ),
-              SizedBox(height: 20),
-              GestureDetector(
-                onTap: () => _userController.logOut(),
-                behavior: HitTestBehavior.translucent,
-                child: Row(
-                  children: [
-                    Icon(
-                      CupertinoIcons.power,
-                      color: Colors.blue,
-                      size: 25,
-                    ),
-                    SizedBox(width: 10),
-                    Text(
-                      'Sign out',
-                      style: TextStyle(fontSize: 15),
-                    ),
-                  ],
-                ),
+              ListTileMoreCustomizable(
+                onTap: (_) => _userController.logOut(),
+                leading: Icon(CupertinoIcons.power, color: Colors.blue),
+                title: Text('Sign out'),
+                horizontalTitleGap: 0,
+                subtitle: Text('Sign out of your account'),
               ),
             ],
           ),
