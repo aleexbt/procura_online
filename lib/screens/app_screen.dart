@@ -94,7 +94,7 @@ class _AppScreenState extends State<AppScreen> {
           //   label: 'Tests',
           // ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.account_box_rounded),
+            icon: Icon(Icons.account_circle),
             label: 'Settings',
           ),
         ],
