@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -5,6 +6,7 @@ import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
+import 'package:octo_image/octo_image.dart';
 import 'package:procura_online/controllers/product_controller.dart';
 import 'package:share/share.dart';
 
@@ -36,7 +38,17 @@ class ProductScreen extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Container(
-                      child: Image.network('https://kknd26.ru/images/no_photo.png'),
+                      child: SizedBox(
+                        width: double.infinity,
+                        height: 300,
+                        child: OctoImage(
+                          image: CachedNetworkImageProvider(
+                              'https://source.unsplash.com/600x500/?bmw,audi,volvo?ad=${state.id}'),
+                          placeholderBuilder: OctoPlaceholder.circularProgressIndicator(),
+                          errorBuilder: OctoError.icon(color: Colors.grey[400]),
+                          fit: BoxFit.cover,
+                        ),
+                      ),
                     ),
                     SizedBox(height: 8),
                     Padding(

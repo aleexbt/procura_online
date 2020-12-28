@@ -58,7 +58,7 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
       statusBarIconBrightness: Brightness.dark,
     ));
     return Padding(
-      padding: const EdgeInsets.all(8.0),
+      padding: const EdgeInsets.fromLTRB(8, 8, 8, 0),
       child: Column(
         children: [
           Container(
@@ -152,7 +152,7 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
                             return Padding(
                               padding: const EdgeInsets.only(right: 10),
                               child: FeaturedBox(
-                                image: 'https://kknd26.ru/images/no_photo.png',
+                                image: 'https://source.unsplash.com/600x500/?bmw,audi,volvo˚?ad=$index',
                                 title: 'Sport car',
                                 salePrice: '19,000',
                                 onTap: () => Get.toNamed('/product/$index'),
@@ -199,7 +199,8 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
                               itemCount: _.results?.length ?? 0,
                               itemBuilder: (context, index) {
                                 return NormalBox(
-                                  image: 'https://kknd26.ru/images/no_photo.png',
+                                  image:
+                                      'https://source.unsplash.com/600x500/?bmw,audi,volvo?ad=${_.results[index].id}',
                                   title: _.results[index].title,
                                   salePrice: _.results[index].price,
                                   normalPrice: _.results[index].oldPrice,

@@ -1,4 +1,6 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:octo_image/octo_image.dart';
 
 class NormalBox extends StatelessWidget {
   final String image;
@@ -38,8 +40,10 @@ class NormalBox extends StatelessWidget {
               Expanded(
                 child: ClipRRect(
                   borderRadius: BorderRadius.vertical(top: Radius.circular(4)),
-                  child: Image.network(
-                    image,
+                  child: OctoImage(
+                    image: CachedNetworkImageProvider(image),
+                    placeholderBuilder: OctoPlaceholder.circularProgressIndicator(),
+                    errorBuilder: OctoError.icon(color: Colors.grey[400]),
                     fit: BoxFit.cover,
                   ),
                 ),
