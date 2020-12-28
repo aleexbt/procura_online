@@ -50,6 +50,7 @@ dependencies:
   intl: ^0.16.1
   firebase_messaging: ^7.0.3
   flutter_local_notifications: ^3.0.2
+  introduction_screen: ^1.0.9
 
 dev_dependencies:
   flutter_test:

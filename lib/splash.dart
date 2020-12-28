@@ -1,11 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:procura_online/utils/prefs.dart';
 
 class SplashScreen extends StatelessWidget {
   void init() async {
     await Future.delayed(Duration(seconds: 2));
-    Get.offNamed('/app');
+    bool showIntro = Prefs.getBool('showIntro') ?? true;
+    if (showIntro) {
+      Get.offNamed('/intro');
+    } else {
+      Get.offNamed('/app');
+    }
   }
 
   @override

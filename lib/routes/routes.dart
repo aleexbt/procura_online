@@ -1,5 +1,6 @@
 class Routers {
   static const initialRoute = '/';
+  static const intro = '/intro';
   static const app = '/app';
   static const home = '/home';
   static const chat = '/chat';

@@ -1,4 +1,5 @@
 import 'package:get/get.dart';
+import 'package:procura_online/intro.dart';
 import 'package:procura_online/routes/routes.dart';
 import 'package:procura_online/screens/ad/new_ad_screen.dart';
 import 'package:procura_online/screens/app_screen.dart';
@@ -20,6 +21,10 @@ List<GetPage> getPages = [
   GetPage(
     name: Routers.initialRoute,
     page: () => SplashScreen(),
+  ),
+  GetPage(
+    name: Routers.intro,
+    page: () => OnBoardingPage(),
   ),
   GetPage(
     name: Routers.home,
