@@ -1,5 +1,7 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:octo_image/octo_image.dart';
 import 'package:procura_online/controllers/orders_controller.dart';
 import 'package:shimmer/shimmer.dart';
 
@@ -121,10 +123,15 @@ class OrdersWidget extends StatelessWidget {
                     return ListTile(
                       leading: ClipRRect(
                         borderRadius: BorderRadius.circular(50),
-                        child: Image.network(
-                          orders.order[index].makeLogoUrl,
-                          height: 50.0,
-                          width: 50.0,
+                        child: SizedBox(
+                          width: 50,
+                          height: 50,
+                          child: OctoImage(
+                            image: CachedNetworkImageProvider(orders.order[index].makeLogoUrl),
+                            placeholderBuilder: OctoPlaceholder.circularProgressIndicator(),
+                            errorBuilder: OctoError.icon(color: Colors.grey[400]),
+                            fit: BoxFit.cover,
+                          ),
                         ),
                       ),
                       title: Text(orders.order[index].model),

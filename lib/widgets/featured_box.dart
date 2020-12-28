@@ -43,7 +43,7 @@ class FeaturedBox extends StatelessWidget {
                   child: OctoImage(
                     image: CachedNetworkImageProvider(image),
                     placeholderBuilder: OctoPlaceholder.circularProgressIndicator(),
-                    errorBuilder: OctoError.icon(color: Colors.red),
+                    errorBuilder: OctoError.icon(color: Colors.grey[400]),
                     fit: BoxFit.cover,
                   ),
                 ),

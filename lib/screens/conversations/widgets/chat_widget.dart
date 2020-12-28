@@ -1,5 +1,7 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:octo_image/octo_image.dart';
 import 'package:procura_online/controllers/chat_controller.dart';
 import 'package:shimmer/shimmer.dart';
 
@@ -117,10 +119,15 @@ class ChatWidget extends StatelessWidget {
                 return ListTile(
                   leading: ClipRRect(
                     borderRadius: BorderRadius.circular(50),
-                    child: Image.network(
-                      'https://mindbodygreen-res.cloudinary.com/images/w_767,q_auto:eco,f_auto,fl_lossy/usr/RetocQT/sarah-fielding.jpg',
-                      height: 50.0,
-                      width: 50.0,
+                    child: SizedBox(
+                      width: 50,
+                      height: 50,
+                      child: OctoImage(
+                        image: CachedNetworkImageProvider('https://i.pravatar.cc/200?cache=$index'),
+                        placeholderBuilder: OctoPlaceholder.circularProgressIndicator(),
+                        errorBuilder: OctoError.icon(color: Colors.grey[400]),
+                        fit: BoxFit.cover,
+                      ),
                     ),
                   ),
                   title: Text(_.conversations[index].userone.name),
