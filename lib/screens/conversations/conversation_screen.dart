@@ -1,10 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:procura_online/models/chat_model.dart';
 import 'package:procura_online/widgets/buble_item.dart';
 import 'package:procura_online/widgets/text_widget.dart';
 
 class ConversationScreen extends StatelessWidget {
+  final String params = Get.parameters['id'];
+  final Conversation conversation = Get.arguments;
+
   @override
   Widget build(BuildContext context) {
+    print(params);
+    print(conversation);
     return Scaffold(
       appBar: AppBar(
         shadowColor: Colors.transparent,

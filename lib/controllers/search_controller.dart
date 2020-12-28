@@ -6,7 +6,7 @@ class SearchController extends GetxController {
 
   @override
   onInit() {
-    getMakers();
+    getBrands();
     super.onInit();
   }
 
@@ -26,10 +26,10 @@ class SearchController extends GetxController {
   bool get isLoadingMakers => _isLoadingMakers.value;
   bool get isLoadingModels => _isLoadingModels.value;
 
-  RxList<String> _makers = List<String>().obs;
+  RxList<String> _brands = List<String>().obs;
   RxList<String> _models = List<String>().obs;
 
-  List<String> get makers => _makers;
+  List<String> get brands => _brands;
   List<String> get models => _models;
 
   String get searchTerm => _searchTerm.value;
@@ -40,16 +40,14 @@ class SearchController extends GetxController {
   String get price => _price.value;
   String get location => _location.value;
 
-  void getMakers() async {
+  void getBrands() async {
     try {
-      print('GETTING MAKERS...');
       _isLoadingMakers.value = true;
       List<String> makers = await _vehicleRepository.getMakers();
       if (makers.length > 0) {
-        _makers.assignAll(makers);
+        _brands.assignAll(makers);
       }
     } catch (err) {
-      print('GETTING MAKERS FAILED');
       print(err);
     } finally {
       _isLoadingMakers.value = false;

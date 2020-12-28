@@ -4,18 +4,12 @@ import 'package:procura_online/components/text_widget.dart';
 import 'package:procura_online/controllers/search_controller.dart';
 import 'package:procura_online/widgets/better_expandable_tile.dart';
 
-class FilterScreen extends StatefulWidget {
-  @override
-  _FilterScreenState createState() => _FilterScreenState();
-}
-
-class _FilterScreenState extends State<FilterScreen> {
+class FilterScreen extends GetView<SearchController> {
   final GlobalKey<BetterExpansionTileState> _categoryKey = GlobalKey();
   final GlobalKey<BetterExpansionTileState> _brandsKey = GlobalKey();
   final GlobalKey<BetterExpansionTileState> _modelsKey = GlobalKey();
   final GlobalKey<BetterExpansionTileState> _priceKey = GlobalKey();
   final GlobalKey<BetterExpansionTileState> _locationKey = GlobalKey();
-  final SearchController _searchController = Get.find();
 
   @override
   Widget build(BuildContext context) {
@@ -40,13 +34,13 @@ class _FilterScreenState extends State<FilterScreen> {
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  subtitle: Obx(() => Text(_searchController.category)),
+                  subtitle: Obx(() => Text(controller.category)),
                   children: [
                     ListTile(
                       title: Text('Category A'),
                       onTap: () => {
                         _categoryKey.currentState.closeExpansion(),
-                        _searchController.setCategory('Category A'),
+                        controller.setCategory('Category A'),
                       },
                     ),
                   ],
@@ -60,22 +54,21 @@ class _FilterScreenState extends State<FilterScreen> {
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  subtitle: Obx(() => Text(_searchController.brand)),
+                  subtitle: Obx(() => Text(controller.brand)),
                   children: [
                     Obx(
                       () => ListView.builder(
                         shrinkWrap: true,
-                        itemCount: _searchController.makers.length,
+                        itemCount: controller.brands.length,
                         physics: NeverScrollableScrollPhysics(),
                         itemBuilder: (context, index) {
-                          if (_searchController.isLoadingMakers) {
+                          if (controller.isLoadingMakers) {
                             return LinearProgressIndicator();
                           }
                           return ListTile(
-                            title: Text(_searchController.makers[index]),
+                            title: Text(controller.brands[index]),
                             onTap: () => {
-                              _searchController.setBrand(_searchController.makers[index]),
-                              // _searchController.getModels(_searchController.makers[index]),
+                              controller.setBrand(controller.brands[index]),
                               _brandsKey.currentState.closeExpansion(),
                             },
                           );
@@ -93,21 +86,21 @@ class _FilterScreenState extends State<FilterScreen> {
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  subtitle: Obx(() => Text(_searchController.model)),
+                  subtitle: Obx(() => Text(controller.model)),
                   children: [
                     Obx(
                       () => ListView.builder(
                         shrinkWrap: true,
-                        itemCount: _searchController.models.length,
+                        itemCount: controller.models.length,
                         physics: NeverScrollableScrollPhysics(),
                         itemBuilder: (context, index) {
-                          if (_searchController.isLoadingModels) {
+                          if (controller.isLoadingModels) {
                             return LinearProgressIndicator();
                           }
                           return ListTile(
-                            title: Text(_searchController.models[index]),
+                            title: Text(controller.models[index]),
                             onTap: () => {
-                              _searchController.setModel(_searchController.models[index]),
+                              controller.setModel(controller.models[index]),
                               _modelsKey.currentState.closeExpansion(),
                             },
                           );
@@ -125,12 +118,12 @@ class _FilterScreenState extends State<FilterScreen> {
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  subtitle: Obx(() => Text(_searchController.price)),
+                  subtitle: Obx(() => Text(controller.price)),
                   children: [
                     ListTile(
                       title: Text('\$30 - \$1250'),
                       onTap: () => {
-                        _searchController.setPrice('\$30 - \$1250'),
+                        controller.setPrice('\$30 - \$1250'),
                         _priceKey.currentState.closeExpansion(),
                       },
                     ),
@@ -145,12 +138,12 @@ class _FilterScreenState extends State<FilterScreen> {
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  subtitle: Obx(() => Text(_searchController.location)),
+                  subtitle: Obx(() => Text(controller.location)),
                   children: [
                     ListTile(
                       title: Text('Location A'),
                       onTap: () => {
-                        _searchController.setLocation('Location A'),
+                        controller.setLocation('Location A'),
                         _locationKey.currentState.closeExpansion(),
                       },
                     ),

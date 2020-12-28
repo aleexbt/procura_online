@@ -1,5 +1,5 @@
 class ProductModel {
-  List<Products> products;
+  List<Product> products;
   Links links;
   Meta meta;
 
@@ -7,9 +7,9 @@ class ProductModel {
 
   ProductModel.fromJson(Map<String, dynamic> json) {
     if (json['data'] != null) {
-      products = new List<Products>();
+      products = new List<Product>();
       json['data'].forEach((v) {
-        products.add(new Products.fromJson(v));
+        products.add(new Product.fromJson(v));
       });
     }
     // links = json['links'] != null ? Links.fromJson(json['links']) : null;
@@ -31,7 +31,7 @@ class ProductModel {
   }
 }
 
-class Products {
+class Product {
   int id;
   String userId;
   String title;
@@ -40,16 +40,16 @@ class Products {
   String make;
   String model;
   String year;
-  Null color;
-  Null numberOfSeats;
-  Null numberOfDoors;
-  Null fuelType;
-  Null engineDisplacement;
-  Null enginePower;
-  Null transmission;
-  Null registered;
-  Null mileage;
-  Null condition;
+  String color;
+  String numberOfSeats;
+  String numberOfDoors;
+  String fuelType;
+  String engineDisplacement;
+  String enginePower;
+  String transmission;
+  String registered;
+  String mileage;
+  String condition;
   String price;
   String oldPrice;
   String negotiable;
@@ -59,37 +59,42 @@ class Products {
   String createdAt;
   String updatedAt;
   List<Categories> categories;
+  MainPhoto mainPhoto;
+  Photos photos;
 
-  Products(
-      {this.id,
-      this.userId,
-      this.title,
-      this.slug,
-      this.description,
-      this.make,
-      this.model,
-      this.year,
-      this.color,
-      this.numberOfSeats,
-      this.numberOfDoors,
-      this.fuelType,
-      this.engineDisplacement,
-      this.enginePower,
-      this.transmission,
-      this.registered,
-      this.mileage,
-      this.condition,
-      this.price,
-      this.oldPrice,
-      this.negotiable,
-      this.featured,
-      this.approved,
-      this.viewsCount,
-      this.createdAt,
-      this.updatedAt,
-      this.categories});
+  Product({
+    this.id,
+    this.userId,
+    this.title,
+    this.slug,
+    this.description,
+    this.make,
+    this.model,
+    this.year,
+    this.color,
+    this.numberOfSeats,
+    this.numberOfDoors,
+    this.fuelType,
+    this.engineDisplacement,
+    this.enginePower,
+    this.transmission,
+    this.registered,
+    this.mileage,
+    this.condition,
+    this.price,
+    this.oldPrice,
+    this.negotiable,
+    this.featured,
+    this.approved,
+    this.viewsCount,
+    this.createdAt,
+    this.updatedAt,
+    this.categories,
+    this.mainPhoto,
+    this.photos,
+  });
 
-  Products.fromJson(Map<String, dynamic> json) {
+  Product.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     userId = json['user_id'];
     title = json['title'];
@@ -174,6 +179,75 @@ class Categories {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['id'] = this.id;
     data['name'] = this.name;
+    return data;
+  }
+}
+
+class MainPhoto {
+  String original;
+  String thumb;
+  String bigThumb;
+
+  MainPhoto({this.original, this.thumb, this.bigThumb});
+
+  MainPhoto.fromJson(Map<String, dynamic> json) {
+    original = json['original'];
+    thumb = json['thumb'];
+    bigThumb = json['big_thumb'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['original'] = this.original;
+    data['thumb'] = this.thumb;
+    data['big_thumb'] = this.bigThumb;
+    return data;
+  }
+}
+
+class Photos {
+  Original original;
+  Original thumb;
+  Original bigThumb;
+
+  Photos({this.original, this.thumb, this.bigThumb});
+
+  Photos.fromJson(Map<String, dynamic> json) {
+    original = json['original'] != null ? new Original.fromJson(json['original']) : null;
+    thumb = json['thumb'] != null ? new Original.fromJson(json['thumb']) : null;
+    bigThumb = json['big_thumb'] != null ? new Original.fromJson(json['big_thumb']) : null;
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    if (this.original != null) {
+      data['original'] = this.original.toJson();
+    }
+    if (this.thumb != null) {
+      data['thumb'] = this.thumb.toJson();
+    }
+    if (this.bigThumb != null) {
+      data['big_thumb'] = this.bigThumb.toJson();
+    }
+    return data;
+  }
+}
+
+class Original {
+  String s11771;
+  String s11772;
+
+  Original({this.s11771, this.s11772});
+
+  Original.fromJson(Map<String, dynamic> json) {
+    s11771 = json['11771'];
+    s11772 = json['11772'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['11771'] = this.s11771;
+    data['11772'] = this.s11772;
     return data;
   }
 }

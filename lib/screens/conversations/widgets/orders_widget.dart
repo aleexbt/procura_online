@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:procura_online/screens/conversations/orders_controller.dart';
+import 'package:procura_online/controllers/orders_controller.dart';
 import 'package:shimmer/shimmer.dart';
 
 class OrdersWidget extends StatelessWidget {
@@ -8,7 +8,7 @@ class OrdersWidget extends StatelessWidget {
   final ScrollController _scrollController = ScrollController();
 
   Future<void> refresItems() async {
-    return _ordersController.getOrders();
+    return _ordersController.findAll();
   }
 
   @override
@@ -91,7 +91,7 @@ class OrdersWidget extends StatelessWidget {
               children: [
                 Text('Ops, error retrieving your orders.'),
                 FlatButton(
-                  onPressed: () => _.getOrders(),
+                  onPressed: () => _.findAll(),
                   child: Text(
                     'Try again',
                     style: TextStyle(color: Colors.blue),

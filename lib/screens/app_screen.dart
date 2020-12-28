@@ -2,10 +2,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-import 'package:procura_online/screens/auth/user_controller.dart';
+import 'package:procura_online/controllers/user_controller.dart';
 import 'package:procura_online/screens/conversations/chat_screen.dart';
 import 'package:procura_online/screens/protected_route.dart';
-import 'package:procura_online/screens/settings_screen.dart';
+import 'package:procura_online/screens/settings/settings_screen.dart';
 import 'package:procura_online/utils/navigation_helper.dart';
 
 import 'home/home_screen.dart';
@@ -29,6 +29,24 @@ class _AppScreenState extends State<AppScreen> {
   }
 
   @override
+  void dispose() {
+    _pageController.dispose();
+    super.dispose();
+  }
+
+  final List<Widget> unauthenticatedScreens = [
+    HomeScreen(),
+    ProtectedRoute(),
+    ProtectedRoute(),
+  ];
+
+  final List<Widget> authenticatedScreeens = [
+    HomeScreen(),
+    ChatScreen(),
+    SettingsScreen(),
+  ];
+
+  @override
   Widget build(BuildContext context) {
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
       statusBarBrightness: Brightness.light,
@@ -38,15 +56,11 @@ class _AppScreenState extends State<AppScreen> {
     return Scaffold(
       body: SafeArea(
         child: PageView(
+          pageSnapping: false,
           controller: _pageController,
           onPageChanged: onPageChanged,
           physics: NeverScrollableScrollPhysics(),
-          children: [
-            HomeScreen(),
-            _userController.isLoggedIn ? ChatScreen() : ProtectedRoute(),
-            _userController.isLoggedIn ? SettingsScreen() : ProtectedRoute(),
-            // LoginScreen(),
-          ],
+          children: _userController.isLoggedIn ? authenticatedScreeens : unauthenticatedScreens,
         ),
       ),
       bottomNavigationBar: BottomNavigationBar(

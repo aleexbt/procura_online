@@ -2,14 +2,16 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:procura_online/controllers/home_controller.dart';
 import 'package:procura_online/controllers/search_controller.dart';
-import 'package:procura_online/screens/auth/user_controller.dart';
-import 'package:procura_online/screens/home/home_controller.dart';
+import 'package:procura_online/controllers/user_controller.dart';
 import 'package:procura_online/utils/no_glow_behavior.dart';
 import 'package:procura_online/widgets/featured_box.dart';
 import 'package:procura_online/widgets/normal_box.dart';
 
 class HomeScreen extends StatefulWidget {
+  const HomeScreen({Key key}) : super(key: key);
+
   @override
   _HomeScreenState createState() => _HomeScreenState();
 }
@@ -91,6 +93,7 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
                     ),
                   ),
                   GestureDetector(
+                    behavior: HitTestBehavior.translucent,
                     onTap: () => Get.toNamed('/search-filter'),
                     child: Icon(CupertinoIcons.slider_horizontal_3),
                   ),
@@ -98,7 +101,7 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
               ),
             ),
           ),
-          SizedBox(height: 15),
+          SizedBox(height: 10),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -152,7 +155,7 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
                                 image: 'https://kknd26.ru/images/no_photo.png',
                                 title: 'Sport car',
                                 salePrice: '19,000',
-                                onTap: () => Get.toNamed('/product-details/$index'),
+                                onTap: () => Get.toNamed('/product/$index'),
                               ),
                             );
                           },
@@ -200,7 +203,7 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
                                   title: _.results[index].title,
                                   salePrice: _.results[index].price,
                                   normalPrice: _.results[index].oldPrice,
-                                  onTap: () => Get.toNamed('/product-details/${_.results[index].id}'),
+                                  onTap: () => Get.toNamed('/product/${_.results[index].id}'),
                                 );
                               },
                             );

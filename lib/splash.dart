@@ -2,37 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 
-class SplashScreen extends StatefulWidget {
-  @override
-  _SplashScreenState createState() => _SplashScreenState();
-}
-
-class _SplashScreenState extends State<SplashScreen> {
-  @override
-  void initState() {
-    init();
-    super.initState();
-  }
-
+class SplashScreen extends StatelessWidget {
   void init() async {
-    // Get.put(ProductRepository());
-    // Get.put(UserRepository());
-    // Get.put(UserController());
-    // Get.put(SearchController());
-    // Get.put(HomeController());
-    // Get.put(UserRepository());
-
-    // Get.lazyPut(() => ProductRepository());
-    // Get.lazyPut(() => UserRepository());
-    // Get.lazyPut(() => UserController());
-    // Get.lazyPut(() => HomeController());
-    // Get.lazyPut(() => SearchController());
-    //
-    // Get.lazyPut(() => OrdersRepository());
-    // Get.lazyPut(() => OrdersController());
-
     await Future.delayed(Duration(seconds: 2));
-    Get.offAllNamed('/app');
+    Get.offNamed('/app');
   }
 
   @override
@@ -40,6 +13,7 @@ class _SplashScreenState extends State<SplashScreen> {
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light.copyWith(
       statusBarColor: Colors.blue,
     ));
+    init();
     return Scaffold(
       body: Container(
         constraints: BoxConstraints(

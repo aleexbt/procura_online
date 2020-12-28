@@ -2,7 +2,7 @@ import 'package:get/get.dart';
 import 'package:procura_online/models/product_model.dart';
 import 'package:procura_online/repositories/product_repository.dart';
 
-class ProductController extends GetxController with StateMixin<Products> {
+class ProductController extends GetxController with StateMixin<Product> {
   final ProductRepository _repository = Get.find();
 
   @override

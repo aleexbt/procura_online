@@ -21,7 +21,7 @@ class HomeController extends GetxController with StateMixin<ProductModel> {
 
   int get page => _page.value;
   Rx<ProductModel> _results = ProductModel().obs;
-  List<Products> get results => _results.value.products;
+  List<Product> get results => _results.value.products;
 
   bool get isLastPage => page == _results.value.meta.lastPage;
 

@@ -5,7 +5,7 @@ import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
-import 'package:procura_online/screens/product/product_controller.dart';
+import 'package:procura_online/controllers/product_controller.dart';
 import 'package:share/share.dart';
 
 class ProductScreen extends StatelessWidget {

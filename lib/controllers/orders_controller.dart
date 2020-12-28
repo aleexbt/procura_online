@@ -2,15 +2,13 @@ import 'package:dio/dio.dart';
 import 'package:get/get.dart';
 import 'package:procura_online/models/orders_model.dart';
 import 'package:procura_online/repositories/orders_repository.dart';
-import 'package:procura_online/screens/auth/user_controller.dart';
 
 class OrdersController extends GetxController {
-  OrdersRepository _repository = Get.find();
-  UserController _userController = Get.find();
+  OrdersRepository _repository = Get.put(OrdersRepository(), permanent: true);
 
   @override
   onInit() {
-    getOrders();
+    findAll();
     super.onInit();
   }
 
@@ -27,15 +25,16 @@ class OrdersController extends GetxController {
   OrdersModel get orders => _orders.value;
   int get totalOrders => _orders.value.order?.length ?? 0;
   bool get isLastPage => false;
+  List<Order> filteredOrders;
 
-  void getOrders() async {
-    print('getting new orders');
+  void findAll() async {
     _isLoading.value = true;
     _hasError.value = false;
     _page.value = 1;
     try {
-      OrdersModel orders = await _repository.getOrders(_userController.token, page: _page.value);
+      OrdersModel orders = await _repository.findAll(page: _page.value);
       _orders.value = orders;
+      filteredOrders = List.from(orders.order);
     } on DioError catch (err) {
       _hasError.value = true;
       print(err);
@@ -47,12 +46,13 @@ class OrdersController extends GetxController {
   void nextPage() async {
     _isLoadingMore.value = true;
     _page.value = _page.value + 1;
-    OrdersModel orders = await _repository.getOrders(_userController.token, page: _page.value);
+    OrdersModel orders = await _repository.findAll(page: _page.value);
 
     if (orders != null) {
       _orders.update((val) {
         val.order.addAll(orders.order);
       });
+      filteredOrders.addAll(orders.order);
     }
     _isLoadingMore.value = false;
   }
@@ -63,5 +63,12 @@ class OrdersController extends GetxController {
     _hasError.value = false;
     _page.value = 1;
     _orders.value = OrdersModel();
+  }
+
+  void filterResults(String term) {
+    List<Order> filtered =
+        filteredOrders.where((order) => order.model.toLowerCase().contains(term.toLowerCase())).toList();
+    _orders.value.order = filtered;
+    _orders.refresh();
   }
 }

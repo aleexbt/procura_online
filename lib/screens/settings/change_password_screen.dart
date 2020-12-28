@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
-import 'package:procura_online/screens/auth/user_controller.dart';
+import 'package:procura_online/controllers/user_controller.dart';
 import 'package:procura_online/widgets/text_input.dart';
 
 class ChangePasswordScreen extends StatelessWidget {
   final UserController _userController = Get.find();
   final _formKey = GlobalKey<FormState>();
-  // final _formKey = GlobalKey<FormBuilderState>();
   final TextEditingController _currentPassword = TextEditingController();
   final TextEditingController _newPassword = TextEditingController();
   final TextEditingController _confirmPassword = TextEditingController();

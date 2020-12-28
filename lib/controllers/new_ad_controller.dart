@@ -1,9 +1,15 @@
-import 'package:get/get.dart';
+import 'dart:io';
+
+import 'package:dio/dio.dart';
+import 'package:flutter/material.dart';
+import 'package:get/get.dart' hide MultipartFile;
+import 'package:procura_online/repositories/product_repository.dart';
 import 'package:procura_online/repositories/vehicle_repository.dart';
 import 'package:smart_select/smart_select.dart';
 
 class NewAdController extends GetxController {
   VehicleRepository _vehicleRepository = Get.put(VehicleRepository());
+  ProductRepository _productRepository = Get.find();
 
   @override
   onInit() {
@@ -19,8 +25,12 @@ class NewAdController extends GetxController {
 
   RxBool _isLoadingBrands = false.obs;
   RxBool _isLoadingModels = false.obs;
+  RxBool _isCreatingAd = false.obs;
+  RxBool _isAdCreated = false.obs;
   bool get isLoadingBrands => _isLoadingBrands.value;
   bool get isLoadingModels => _isLoadingModels.value;
+  bool get isCreatingAd => _isCreatingAd.value;
+  bool get isAdCreated => _isAdCreated.value;
 
   RxList<S2Choice<String>> _brands = List<S2Choice<String>>().obs;
   RxList<S2Choice<String>> _models = List<S2Choice<String>>().obs;
@@ -74,5 +84,71 @@ class NewAdController extends GetxController {
 
   void setModel(String value) {
     _selectedModel.value = value;
+  }
+
+  void create({
+    List<File> photos,
+    String title,
+    String description,
+    String brand,
+    String model,
+    String year,
+    String color,
+    String engineDisplacement,
+    String enginePower,
+    String transmission,
+    String miliage,
+    String numberOfSeats,
+    String numberOfDoors,
+    String fuelType,
+    String condition,
+    String price,
+    String negotiable,
+    String registered,
+  }) async {
+    _isCreatingAd.value = true;
+    try {
+      await _productRepository.create(
+        photos: photos,
+        title: title,
+        description: description,
+        brand: brand,
+        model: model,
+        year: year,
+        color: color,
+        engineDisplacement: engineDisplacement,
+        enginePower: enginePower,
+        transmission: transmission,
+        miliage: miliage,
+        numberOfSeats: numberOfSeats,
+        numberOfDoors: numberOfDoors,
+        fuelType: fuelType,
+        condition: condition,
+        price: price,
+        negotiable: negotiable,
+        registered: registered,
+      );
+      _isAdCreated.value = true;
+    } on DioError catch (err) {
+      try {
+        Map<String, dynamic> errors = err.response.data['errors'];
+        List<String> errorList = [];
+        errors.forEach((key, value) {
+          errorList.add(value[0]);
+        });
+        Get.rawSnackbar(
+            message: errorList.join('\n'),
+            backgroundColor: Colors.red,
+            duration: Duration(seconds: 3 + errorList.length));
+      } catch (err) {
+        Get.rawSnackbar(
+          message: 'Ops, something went wrong.',
+          backgroundColor: Colors.red,
+          duration: Duration(seconds: 3),
+        );
+      }
+    } finally {
+      _isCreatingAd.value = false;
+    }
   }
 }

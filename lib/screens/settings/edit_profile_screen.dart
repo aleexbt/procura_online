@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:procura_online/screens/auth/user_controller.dart';
+import 'package:procura_online/controllers/user_controller.dart';
 import 'package:procura_online/widgets/select_option.dart';
 import 'package:procura_online/widgets/text_input.dart';
 import 'package:smart_select/smart_select.dart';

@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:procura_online/controllers/chat_controller.dart';
+import 'package:procura_online/controllers/orders_controller.dart';
 import 'package:procura_online/screens/conversations/widgets/chat_widget.dart';
 import 'package:procura_online/screens/conversations/widgets/orders_widget.dart';
 import 'package:procura_online/utils/no_glow_behavior.dart';
@@ -13,6 +16,10 @@ class _ChatScreenState extends State<ChatScreen> with AutomaticKeepAliveClientMi
   bool get wantKeepAlive => true;
 
   final PageController _pageController = PageController();
+  final TextEditingController _ordersTerm = TextEditingController();
+  final TextEditingController _chatTerm = TextEditingController();
+  final OrdersController _ordersController = Get.put(OrdersController(), permanent: true);
+  final ChatController _chatController = Get.put(ChatController(), permanent: true);
 
   int _selectedIndex = 0;
 
@@ -31,6 +38,7 @@ class _ChatScreenState extends State<ChatScreen> with AutomaticKeepAliveClientMi
   @override
   Widget build(BuildContext context) {
     super.build(context);
+    print('RENDER_CHAT_SCREEN');
     return Scaffold(
       body: Padding(
         padding: const EdgeInsets.all(8.0),
@@ -50,6 +58,7 @@ class _ChatScreenState extends State<ChatScreen> with AutomaticKeepAliveClientMi
                     Icon(Icons.search),
                     Expanded(
                       child: TextField(
+                        controller: _selectedIndex == 0 ? _ordersTerm : _chatTerm,
                         decoration: InputDecoration(
                           hintText: 'Search',
                           border: const OutlineInputBorder(
@@ -62,6 +71,9 @@ class _ChatScreenState extends State<ChatScreen> with AutomaticKeepAliveClientMi
                             borderSide: BorderSide(color: Colors.transparent, width: 0.0),
                           ),
                         ),
+                        onChanged: (value) => _selectedIndex == 0
+                            ? _ordersController.filterResults(value)
+                            : _chatController.filterResults(value),
                       ),
                     ),
                   ],
@@ -78,7 +90,7 @@ class _ChatScreenState extends State<ChatScreen> with AutomaticKeepAliveClientMi
                   minWidth: 120,
                   height: 40,
                   onPressed: () =>
-                      _pageController.animateToPage(0, duration: Duration(milliseconds: 500), curve: Curves.linear),
+                      _pageController.animateToPage(0, duration: Duration(milliseconds: 300), curve: Curves.linear),
                   child: Text('Orders'),
                 ),
                 FlatButton(
@@ -87,7 +99,7 @@ class _ChatScreenState extends State<ChatScreen> with AutomaticKeepAliveClientMi
                   minWidth: 120,
                   height: 40,
                   onPressed: () =>
-                      _pageController.animateToPage(1, duration: Duration(milliseconds: 500), curve: Curves.linear),
+                      _pageController.animateToPage(1, duration: Duration(milliseconds: 300), curve: Curves.linear),
                   child: Text('Conversations'),
                 ),
                 FlatButton(
