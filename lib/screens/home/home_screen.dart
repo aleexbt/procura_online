@@ -33,7 +33,7 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
       double delta = MediaQuery.of(context).size.height * 0.40;
       if (maxScroll - currentScroll < delta) {
         if (!_homeController.isLoadingMore && !_homeController.isLastPage && !_homeController.hasErrorMore) {
-          _homeController.nextPage();
+          _homeController.getNextPage();
         }
       }
     });
@@ -88,7 +88,7 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
                         ),
                       ),
                       onChanged: (value) => _searchController.setSearchTerm(value),
-                      onSubmitted: (_) => _searchController.doSearch(),
+                      onSubmitted: (_) => _homeController.doSearch(),
                       textInputAction: TextInputAction.search,
                     ),
                   ),
@@ -163,61 +163,62 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
                       ),
                       SizedBox(height: 20),
                       GetX<HomeController>(
-                          init: _homeController,
-                          builder: (_) {
-                            if (_.isLoading) {
-                              return Center(
-                                child: CircularProgressIndicator(),
-                              );
-                            }
-                            if (_.hasError) {
-                              return Center(
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Text('Ops, error retrieving items.'),
-                                    FlatButton(
-                                      onPressed: () => _.findAll(),
-                                      child: Text(
-                                        'Try again',
-                                        style: TextStyle(color: Colors.blue),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              );
-                            }
-                            return GridView.builder(
-                              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                                crossAxisCount: 2,
-                                crossAxisSpacing: 5,
-                                mainAxisSpacing: 5,
-                                childAspectRatio: 0.80,
-                              ),
-                              shrinkWrap: true,
-                              physics: BouncingScrollPhysics(),
-                              itemCount: _.results?.length ?? 0,
-                              itemBuilder: (context, index) {
-                                return NormalBox(
-                                  image:
-                                      'https://source.unsplash.com/600x500/?bmw,audi,volvo?ad=${_.results[index].id}',
-                                  title: _.results[index].title,
-                                  salePrice: _.results[index].price,
-                                  normalPrice: _.results[index].oldPrice,
-                                  onTap: () => Get.toNamed('/product/${_.results[index].id}'),
-                                );
-                              },
+                        init: _homeController,
+                        builder: (_) {
+                          if (_.isLoading) {
+                            return Center(
+                              child: CircularProgressIndicator(),
                             );
-                          }),
+                          }
+                          if (_.hasError) {
+                            return Center(
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text('Ops, error retrieving items.'),
+                                  FlatButton(
+                                    onPressed: () => _.findAll(),
+                                    child: Text(
+                                      'Try again',
+                                      style: TextStyle(color: Colors.blue),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            );
+                          }
+                          return GridView.builder(
+                            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                              crossAxisCount: 2,
+                              crossAxisSpacing: 5,
+                              mainAxisSpacing: 5,
+                              childAspectRatio: 0.80,
+                            ),
+                            shrinkWrap: true,
+                            physics: BouncingScrollPhysics(),
+                            itemCount: _.results?.length ?? 0,
+                            itemBuilder: (context, index) {
+                              return NormalBox(
+                                image: 'https://source.unsplash.com/600x500/?bmw,audi,volvo?ad=${_.results[index].id}',
+                                title: _.results[index].title,
+                                salePrice: _.results[index].price,
+                                normalPrice: _.results[index].oldPrice,
+                                onTap: () => Get.toNamed('/product/${_.results[index].id}'),
+                              );
+                            },
+                          );
+                        },
+                      ),
                       Obx(
                         () => Visibility(
                           visible: _homeController.isLoadingMore,
                           child: Padding(
-                            padding: const EdgeInsets.all(8.0),
+                            padding: const EdgeInsets.only(top: 15),
                             child: CircularProgressIndicator(),
                           ),
                         ),
                       ),
+                      SizedBox(height: 15),
                     ],
                   ),
                 ),

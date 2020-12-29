@@ -9,6 +9,7 @@ class Routers {
   static const register = '/auth/register';
   static const forgotPassword = '/auth/forgot-password';
   static const product = '/product/:id';
+  static const showPhotos = '/show-photos';
   static const settings = '/settings';
   static const editProfile = '/settings/edit-profile';
   static const changePassword = '/settings/change-password';

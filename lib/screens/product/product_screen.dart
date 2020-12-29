@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:carousel_pro/carousel_pro.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -37,17 +38,36 @@ class ProductScreen extends StatelessWidget {
                 (state) => Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Container(
-                      child: SizedBox(
-                        width: double.infinity,
-                        height: 300,
-                        child: OctoImage(
-                          image: CachedNetworkImageProvider(
-                              'https://source.unsplash.com/600x500/?bmw,audi,volvo?ad=${state.id}'),
-                          placeholderBuilder: OctoPlaceholder.circularProgressIndicator(),
-                          errorBuilder: OctoError.icon(color: Colors.grey[400]),
-                          fit: BoxFit.cover,
+                    SizedBox(
+                      width: double.infinity,
+                      height: 300,
+                      child: Carousel(
+                        dotSize: 5.0,
+                        dotSpacing: 15.0,
+                        dotBgColor: Colors.transparent,
+                        dotColor: Colors.blue.withOpacity(0.5),
+                        overlayShadow: true,
+                        dotIncreasedColor: Colors.blue,
+                        autoplay: false,
+                        onImageTap: (value) => Get.toNamed(
+                          '/show-photos',
+                          arguments: {
+                            "photoId": "${state.id}",
+                            "photoUrl": "https://source.unsplash.com/1000x900/?bmw,audi,volvo?ad=${state.id}",
+                          },
                         ),
+                        images: [
+                          Hero(
+                            tag: '${state.id}',
+                            child: OctoImage(
+                              image: CachedNetworkImageProvider(
+                                  'https://source.unsplash.com/1000x900/?bmw,audi,volvo?ad=${state.id}'),
+                              placeholderBuilder: OctoPlaceholder.circularProgressIndicator(),
+                              errorBuilder: OctoError.icon(color: Colors.grey[400]),
+                              fit: BoxFit.cover,
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                     SizedBox(height: 8),

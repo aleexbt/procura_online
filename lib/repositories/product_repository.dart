@@ -91,4 +91,10 @@ class ProductRepository {
 
     return Product.fromJson(response.data);
   }
+
+  Future<ProductModel> productSearch(String category, String term, {int page = 1}) async {
+    final Response response =
+        await _dio.get('/api/v1/search/$category', queryParameters: {"search": "$term", "page": "$page"});
+    return ProductModel.fromJson(response.data);
+  }
 }

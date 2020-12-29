@@ -1,8 +1,10 @@
 import 'package:get/get.dart';
+import 'package:procura_online/repositories/product_repository.dart';
 import 'package:procura_online/repositories/vehicle_repository.dart';
 
 class SearchController extends GetxController {
   VehicleRepository _vehicleRepository = Get.put(VehicleRepository());
+  ProductRepository _productRepository = Get.put(ProductRepository());
 
   @override
   onInit() {
@@ -11,10 +13,10 @@ class SearchController extends GetxController {
   }
 
   RxString _searchTerm = ''.obs;
-  RxBool _loadingResults = true.obs;
   RxList _results = [].obs;
 
   RxString _category = 'Select a category'.obs;
+  RxString _categoryValue = 'auto'.obs;
   RxString _brand = 'Select a brand'.obs;
   RxString _model = 'Select a model'.obs;
   RxString _price = 'Select a price'.obs;
@@ -34,9 +36,12 @@ class SearchController extends GetxController {
 
   String get searchTerm => _searchTerm.value;
   List get results => _results;
-  String get category => _category.value;
+
+  String get categoryName => _category.value;
+  String get category => _categoryValue.value;
   String get brand => _brand.value;
   String get model => _model.value;
+
   String get price => _price.value;
   String get location => _location.value;
 
@@ -68,12 +73,11 @@ class SearchController extends GetxController {
     }
   }
 
-  void setSearchTerm(String value) {
-    _searchTerm.value = value;
-  }
+  void setSearchTerm(String value) => _searchTerm.value = value;
 
-  void setCategory(String value) {
-    _category.value = value;
+  void setCategory({String name, String value}) {
+    _category.value = name;
+    _categoryValue.value = value;
   }
 
   void setBrand(String value) {
@@ -93,13 +97,5 @@ class SearchController extends GetxController {
 
   void setLocation(String value) {
     _location.value = value;
-  }
-
-  Future<void> doSearch() async {
-    print('SEARCHING FOR: $searchTerm');
-    _loadingResults.value = true;
-    await Future.delayed(Duration(seconds: 2));
-    _loadingResults.value = false;
-    return null;
   }
 }

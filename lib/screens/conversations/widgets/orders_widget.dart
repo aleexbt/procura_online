@@ -15,6 +15,7 @@ class OrdersWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print('ORDER_WIDGET_REBUILD');
     _scrollController.addListener(() {
       double maxScroll = _scrollController.position.maxScrollExtent;
       double currentScroll = _scrollController.position.pixels;

@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:procura_online/components/text_widget.dart';
+import 'package:procura_online/controllers/home_controller.dart';
 import 'package:procura_online/controllers/search_controller.dart';
 import 'package:procura_online/widgets/better_expandable_tile.dart';
+import 'package:procura_online/widgets/gradient_button.dart';
 
 class FilterScreen extends GetView<SearchController> {
   final GlobalKey<BetterExpansionTileState> _categoryKey = GlobalKey();
@@ -10,6 +11,7 @@ class FilterScreen extends GetView<SearchController> {
   final GlobalKey<BetterExpansionTileState> _modelsKey = GlobalKey();
   final GlobalKey<BetterExpansionTileState> _priceKey = GlobalKey();
   final GlobalKey<BetterExpansionTileState> _locationKey = GlobalKey();
+  final HomeController _homeController = Get.find();
 
   @override
   Widget build(BuildContext context) {
@@ -34,13 +36,27 @@ class FilterScreen extends GetView<SearchController> {
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  subtitle: Obx(() => Text(controller.category)),
+                  subtitle: Obx(() => Text(controller.categoryName)),
                   children: [
                     ListTile(
-                      title: Text('Category A'),
+                      title: Text('Peças Auto'),
                       onTap: () => {
                         _categoryKey.currentState.closeExpansion(),
-                        controller.setCategory('Category A'),
+                        controller.setCategory(name: 'Peças Auto', value: 'pecas'),
+                      },
+                    ),
+                    ListTile(
+                      title: Text('Automóveis'),
+                      onTap: () => {
+                        _categoryKey.currentState.closeExpansion(),
+                        controller.setCategory(name: 'Automóveis', value: 'auto'),
+                      },
+                    ),
+                    ListTile(
+                      title: Text('Salvados'),
+                      onTap: () => {
+                        _categoryKey.currentState.closeExpansion(),
+                        controller.setCategory(name: 'Salvados', value: 'salvados'),
                       },
                     ),
                   ],
@@ -151,38 +167,7 @@ class FilterScreen extends GetView<SearchController> {
                 ),
               ],
             ),
-            Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.all(Radius.circular(4)),
-                  border: Border.all(
-                    color: Colors.blue,
-                  ),
-                  gradient: LinearGradient(
-                    colors: <Color>[
-                      Colors.lightBlueAccent,
-                      Colors.blue,
-                    ],
-                  ),
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.only(left: 72.0, right: 72, top: 8, bottom: 8),
-                  child: Column(
-                    children: <Widget>[
-                      TextWidget(
-                        text: 'Show Results',
-                        colorText: Colors.white,
-                      ),
-                      TextWidget(
-                        text: '0 ads',
-                        colorText: Colors.white,
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ),
+            SizedBox(width: 230, child: GradientButton(text: 'Search', onPressed: () => [_homeController.doSearch(), Get.back()])),
           ],
         ),
       ),
