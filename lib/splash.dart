@@ -1,10 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:procura_online/utils/prefs.dart';
 
 class SplashScreen extends StatelessWidget {
-  void init() async {
+  void init(BuildContext context) async {
+    await precachePicture(
+        SvgPicture.asset('assets/images/by_my_car.svg').pictureProvider,
+        context);
+    await precachePicture(
+        SvgPicture.asset('assets/images/not_found_towing.svg').pictureProvider,
+        context);
+    await precachePicture(
+        SvgPicture.asset('assets/images/success_ad.svg').pictureProvider,
+        context);
+
     await Future.delayed(Duration(seconds: 2));
     bool showIntro = Prefs.getBool('showIntro') ?? true;
     if (showIntro) {
@@ -19,7 +30,7 @@ class SplashScreen extends StatelessWidget {
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light.copyWith(
       statusBarColor: Colors.blue,
     ));
-    init();
+    init(context);
     return Scaffold(
       body: Container(
         constraints: BoxConstraints(

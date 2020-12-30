@@ -127,6 +127,8 @@ class Product {
         categories.add(new Categories.fromJson(v));
       });
     }
+    mainPhoto = json['main_photo'] != null ? MainPhoto.fromJson(json['main_photo']) : null;
+    photos = json['photos'] != null ? Photos.fromJson(json['photos']) : null;
   }
 
   Map<String, dynamic> toJson() {
@@ -159,6 +161,12 @@ class Product {
     data['updated_at'] = this.updatedAt;
     if (this.categories != null) {
       data['categories'] = this.categories.map((v) => v.toJson()).toList();
+    }
+    if (this.mainPhoto != null) {
+      data['main_photo'] = this.mainPhoto.toJson();
+    }
+    if (this.photos != null) {
+      data['photos'] = this.photos.toJson();
     }
     return data;
   }
@@ -236,18 +244,53 @@ class Photos {
 class Original {
   String s11771;
   String s11772;
+  String s11794;
+  String s11795;
+  String s11796;
+  String s11790;
+  String s11791;
+  String s11792;
+  String s11776;
+  String s11777;
 
-  Original({this.s11771, this.s11772});
+  Original({
+    this.s11771,
+    this.s11772,
+    this.s11794,
+    this.s11795,
+    this.s11796,
+    this.s11790,
+    this.s11791,
+    this.s11792,
+    this.s11776,
+    this.s11777,
+  });
 
   Original.fromJson(Map<String, dynamic> json) {
     s11771 = json['11771'];
     s11772 = json['11772'];
+    s11794 = json['11794'];
+    s11795 = json['11795'];
+    s11796 = json['11796'];
+    s11790 = json['11790'];
+    s11791 = json['11791'];
+    s11792 = json['11792'];
+    s11776 = json['11776'];
+    s11777 = json['11777'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['11771'] = this.s11771;
     data['11772'] = this.s11772;
+    data['11794'] = this.s11794;
+    data['11795'] = this.s11795;
+    data['11796'] = this.s11796;
+    data['11790'] = this.s11790;
+    data['11791'] = this.s11791;
+    data['11792'] = this.s11792;
+    data['11776'] = this.s11776;
+    data['11777'] = this.s11777;
     return data;
   }
 }

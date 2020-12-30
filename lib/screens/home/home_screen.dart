@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:procura_online/controllers/home_controller.dart';
 import 'package:procura_online/controllers/search_controller.dart';
@@ -16,7 +17,8 @@ class HomeScreen extends StatefulWidget {
   _HomeScreenState createState() => _HomeScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMixin {
+class _HomeScreenState extends State<HomeScreen>
+    with AutomaticKeepAliveClientMixin {
   @override
   bool get wantKeepAlive => true;
 
@@ -32,7 +34,9 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
       double currentScroll = _scrollController.position.pixels;
       double delta = MediaQuery.of(context).size.height * 0.40;
       if (maxScroll - currentScroll < delta) {
-        if (!_homeController.isLoadingMore && !_homeController.isLastPage && !_homeController.hasErrorMore) {
+        if (!_homeController.isLoadingMore &&
+            !_homeController.isLastPage &&
+            !_homeController.hasErrorMore) {
           _homeController.getNextPage();
         }
       }
@@ -47,7 +51,11 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
   }
 
   Future<void> refresItems() async {
-    return _homeController.findAll();
+    if (_homeController.isSearch) {
+      _homeController.doSearch();
+    } else {
+      return _homeController.findAll();
+    }
   }
 
   @override
@@ -78,16 +86,20 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
                       decoration: InputDecoration(
                         hintText: 'Search',
                         border: const OutlineInputBorder(
-                          borderSide: const BorderSide(color: Colors.transparent, width: 0.0),
+                          borderSide: const BorderSide(
+                              color: Colors.transparent, width: 0.0),
                         ),
                         enabledBorder: const OutlineInputBorder(
-                          borderSide: const BorderSide(color: Colors.transparent, width: 0.0),
+                          borderSide: const BorderSide(
+                              color: Colors.transparent, width: 0.0),
                         ),
                         focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.transparent, width: 0.0),
+                          borderSide:
+                              BorderSide(color: Colors.transparent, width: 0.0),
                         ),
                       ),
-                      onChanged: (value) => _searchController.setSearchTerm(value),
+                      onChanged: (value) =>
+                          _searchController.setSearchTerm(value),
                       onSubmitted: (_) => _homeController.doSearch(),
                       textInputAction: TextInputAction.search,
                     ),
@@ -106,15 +118,19 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               FlatButton(
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(25)),
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(25)),
                 color: Colors.grey[200],
                 minWidth: 120,
                 height: 40,
-                onPressed: () => _userController.isLoggedIn ? Get.toNamed('/ad/new') : Get.toNamed('/auth/login'),
+                onPressed: () => _userController.isLoggedIn
+                    ? Get.toNamed('/ad/new')
+                    : Get.toNamed('/auth/login'),
                 child: Text('Sell'),
               ),
               FlatButton(
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(25)),
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(25)),
                 color: Colors.grey[200],
                 minWidth: 120,
                 height: 40,
@@ -122,7 +138,8 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
                 child: Text('Vehicles'),
               ),
               FlatButton(
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(25)),
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(25)),
                 color: Colors.grey[200],
                 minWidth: 120,
                 height: 40,
@@ -152,7 +169,8 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
                             return Padding(
                               padding: const EdgeInsets.only(right: 10),
                               child: FeaturedBox(
-                                image: 'https://source.unsplash.com/600x500/?bmw,audi,volvo˚?ad=$index',
+                                image:
+                                    'https://source.unsplash.com/600x500/?bmw,audi,volvo˚?ad=$index',
                                 title: 'Sport car',
                                 salePrice: '19,000',
                                 onTap: () => Get.toNamed('/product/$index'),
@@ -187,8 +205,32 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
                               ),
                             );
                           }
+                          if (_.total == 0) {
+                            return Padding(
+                              padding: EdgeInsets.only(top: 50),
+                              child: Center(
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    SvgPicture.asset(
+                                        'assets/images/by_my_car.svg',
+                                        width: 220),
+                                    SizedBox(height: 20),
+                                    Text(
+                                      'No results match your search.',
+                                      style: TextStyle(
+                                        fontSize: 13,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            );
+                          }
                           return GridView.builder(
-                            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                            gridDelegate:
+                                SliverGridDelegateWithFixedCrossAxisCount(
                               crossAxisCount: 2,
                               crossAxisSpacing: 5,
                               mainAxisSpacing: 5,
@@ -199,11 +241,13 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
                             itemCount: _.results?.length ?? 0,
                             itemBuilder: (context, index) {
                               return NormalBox(
-                                image: 'https://source.unsplash.com/600x500/?bmw,audi,volvo?ad=${_.results[index].id}',
+                                image: _.results[index].mainPhoto?.thumb ??
+                                    'https://source.unsplash.com/600x500/?bmw,audi,volvo?ad=${_.results[index].id}',
                                 title: _.results[index].title,
                                 salePrice: _.results[index].price,
                                 normalPrice: _.results[index].oldPrice,
-                                onTap: () => Get.toNamed('/product/${_.results[index].id}'),
+                                onTap: () => Get.toNamed(
+                                    '/product/${_.results[index].id}'),
                               );
                             },
                           );

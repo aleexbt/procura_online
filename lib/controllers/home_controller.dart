@@ -21,8 +21,10 @@ class HomeController extends GetxController with StateMixin<ProductModel> {
   bool get isLoadingMore => _isLoadingMore.value;
   bool get hasError => _hasError.value;
   bool get hasErrorMore => _hasErrorMore.value;
+  bool get isSearch => _isSearch.value;
 
   int get page => _page.value;
+  int get total => _results.value.meta?.total ?? 0;
   Rx<ProductModel> _results = ProductModel().obs;
   List<Product> get results => _results.value.products;
   bool get isLastPage => _page.value >= _results.value.meta.lastPage;
@@ -69,7 +71,9 @@ class HomeController extends GetxController with StateMixin<ProductModel> {
     } on DioError catch (err) {
       _hasErrorMore.value = true;
       Get.rawSnackbar(
-          message: 'Ops, error getting more items.', backgroundColor: Colors.red, duration: Duration(seconds: 3));
+          message: 'Ops, error getting more items.',
+          backgroundColor: Colors.red,
+          duration: Duration(seconds: 3));
     }
     _isLoadingMore.value = false;
   }
@@ -80,15 +84,18 @@ class HomeController extends GetxController with StateMixin<ProductModel> {
     _hasErrorMore.value = false;
     try {
       _page.value = _page.value + 1;
-      ProductModel response =
-          await _repository.productSearch(_searchController.category, _searchController.searchTerm, page: page);
+      ProductModel response = await _repository.productSearch(
+          _searchController.category, _searchController.searchTerm,
+          page: page);
       _results.update((val) {
         val.products.addAll(response.products);
       });
     } on DioError catch (err) {
       _hasErrorMore.value = true;
       Get.rawSnackbar(
-          message: 'Ops, error getting more items.', backgroundColor: Colors.red, duration: Duration(seconds: 3));
+          message: 'Ops, error getting more items.',
+          backgroundColor: Colors.red,
+          duration: Duration(seconds: 3));
     }
     _isLoadingMore.value = false;
   }
@@ -104,8 +111,8 @@ class HomeController extends GetxController with StateMixin<ProductModel> {
         ProductModel response = await _repository.findAll(page: page);
         _results.value = response;
       } else {
-        ProductModel response =
-            await _repository.productSearch(_searchController.category, _searchController.searchTerm);
+        ProductModel response = await _repository.productSearch(
+            _searchController.category, _searchController.searchTerm);
         _results.value = response;
       }
     } catch (err) {
