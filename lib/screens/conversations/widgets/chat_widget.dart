@@ -105,7 +105,19 @@ class ChatWidget extends StatelessWidget {
           }
           if (_.totalConversations == 0) {
             return Center(
-              child: Text('You don\'t have any conversations to show.'),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text('You don\'t have any conversations to show.'),
+                  FlatButton(
+                    onPressed: () => _.findAll(),
+                    child: Text(
+                      'Check again',
+                      style: TextStyle(color: Colors.blue),
+                    ),
+                  ),
+                ],
+              ),
             );
           }
           return RefreshIndicator(
@@ -130,7 +142,7 @@ class ChatWidget extends StatelessWidget {
                       ),
                     ),
                   ),
-                  title: Text(_.conversations[index].userone.name),
+                  title: Text(_.conversations[index].usertwo.name),
                   subtitle: Text(_.conversations[index].latestMessage.message),
                   trailing: Text(
                     _.conversations[index].latestMessage.humanReadDate,

@@ -38,7 +38,6 @@ class _ChatScreenState extends State<ChatScreen> with AutomaticKeepAliveClientMi
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    print('RENDER_CHAT_SCREEN');
     return Scaffold(
       body: Padding(
         padding: const EdgeInsets.all(8.0),
@@ -130,7 +129,7 @@ class _ChatScreenState extends State<ChatScreen> with AutomaticKeepAliveClientMi
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {},
+        onPressed: () => Get.toNamed('/orders/new'),
         child: Icon(Icons.add),
       ),
     );

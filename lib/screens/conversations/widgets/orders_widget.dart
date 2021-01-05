@@ -15,7 +15,6 @@ class OrdersWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print('ORDER_WIDGET_REBUILD');
     _scrollController.addListener(() {
       double maxScroll = _scrollController.position.maxScrollExtent;
       double currentScroll = _scrollController.position.pixels;
@@ -106,7 +105,19 @@ class OrdersWidget extends StatelessWidget {
         }
         if (_.totalOrders == 0) {
           return Center(
-            child: Text('You don\'t have any orders to show.'),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text('You don\'t have any orders to show.'),
+                FlatButton(
+                  onPressed: () => _.findAll(),
+                  child: Text(
+                    'Check again',
+                    style: TextStyle(color: Colors.blue),
+                  ),
+                ),
+              ],
+            ),
           );
         }
         return RefreshIndicator(
@@ -148,7 +159,7 @@ class OrdersWidget extends StatelessWidget {
                           fontSize: 12,
                         ),
                       ),
-                      onTap: () {},
+                      onTap: () => Get.toNamed('/orders/reply/${orders.order[index].id}'),
                     );
                   },
                 ),

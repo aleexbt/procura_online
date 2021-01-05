@@ -41,8 +41,8 @@ class Order {
   UserInfo userInfo;
   String makeLogoUrl;
   String mediaCount;
-  List<Null> conversations;
-  List<Null> media;
+  List<String> conversations;
+  List<Media> media;
   bool seen;
   String humanReadDate;
   bool sold;
@@ -107,12 +107,37 @@ class Order {
     //   data['conversations'] =
     //       this.conversations.map((v) => v.toJson()).toList();
     // }
-    // if (this.media != null) {
-    //   data['media'] = this.media.map((v) => v.toJson()).toList();
-    // }
+    if (data['media'] != null) {
+      media = new List<Media>();
+      data['media'].forEach((v) {
+        media.add(new Media.fromJson(v));
+      });
+    }
     data['seen'] = this.seen;
     data['human_read_date'] = this.humanReadDate;
     data['sold'] = this.sold;
+    return data;
+  }
+}
+
+class Media {
+  int id;
+  String thumb;
+  String image;
+
+  Media({this.id, this.thumb, this.image});
+
+  Media.fromJson(Map<String, dynamic> json) {
+    id = json['id'];
+    thumb = json['thumb'];
+    image = json['image'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['id'] = this.id;
+    data['thumb'] = this.thumb;
+    data['image'] = this.image;
     return data;
   }
 }
@@ -129,28 +154,28 @@ class UserInfo {
   String address;
   String postcode;
   String vatNumber;
-  Null vatId;
-  Null billingName;
-  Null billingCountry;
-  Null billingZip;
-  Null billingCity;
-  Null billingAddress;
-  Null billingPostcode;
-  Null extraBillingInformation;
+  String vatId;
+  String billingName;
+  String billingCountry;
+  String billingZip;
+  String billingCity;
+  String billingAddress;
+  String billingPostcode;
+  String extraBillingInformation;
   String type;
-  Null referredBy;
+  String referredBy;
   String balance;
-  Null notificationsFrequency;
+  String notificationsFrequency;
   String subscribed;
   String approved;
   String password;
   String rememberToken;
-  Null lastReadAnnouncementsAt;
+  String lastReadAnnouncementsAt;
   String lastLoginAt;
   String lastLoginIp;
   String createdAt;
   String updatedAt;
-  Null deletedAt;
+  String deletedAt;
   int id;
 
   UserInfo(

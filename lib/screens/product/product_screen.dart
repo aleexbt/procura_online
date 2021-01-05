@@ -46,8 +46,7 @@ class ProductScreen extends StatelessWidget {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        SvgPicture.asset('assets/images/not_found_towing.svg',
-                            width: 350),
+                        SvgPicture.asset('assets/images/not_found_towing.svg', width: 350),
                         SizedBox(height: 20),
                         Text(
                           'Ops, we cannot find this product.',
@@ -75,7 +74,24 @@ class ProductScreen extends StatelessWidget {
                       overlayShadow: true,
                       dotIncreasedColor: Colors.blue,
                       autoplay: false,
-                      images: buildImage(_.product.photos),
+                      onImageTap: (value) => Get.toNamed(
+                        '/show-photos',
+                        arguments: {
+                          "photoId": "photo",
+                          "photoUrl": "${_.product.mainPhoto.original}",
+                        },
+                      ),
+                      images: [
+                        Hero(
+                          tag: 'photo',
+                          child: OctoImage(
+                            image: CachedNetworkImageProvider(_.product.mainPhoto.original),
+                            placeholderBuilder: OctoPlaceholder.circularProgressIndicator(),
+                            errorBuilder: OctoError.icon(color: Colors.grey[400]),
+                            fit: BoxFit.cover,
+                          ),
+                        )
+                      ],
                     ),
                   ),
                   SizedBox(height: 8),
@@ -199,8 +215,7 @@ class ProductScreen extends StatelessWidget {
                                       ),
                                     ),
                                     Text(
-                                      _.product.make.capitalizeFirst ??
-                                          'Not specified',
+                                      _.product.make.capitalizeFirst ?? 'Not specified',
                                       style: TextStyle(
                                         fontSize: 16,
                                       ),
@@ -258,8 +273,7 @@ class ProductScreen extends StatelessWidget {
                                       ),
                                     ),
                                     Text(
-                                      _.product.numberOfSeats ??
-                                          'Not specified',
+                                      _.product.numberOfSeats ?? 'Not specified',
                                       style: TextStyle(
                                         fontSize: 16,
                                       ),
@@ -276,8 +290,7 @@ class ProductScreen extends StatelessWidget {
                                       ),
                                     ),
                                     Text(
-                                      _.product.numberOfDoors ??
-                                          'Not specified',
+                                      _.product.numberOfDoors ?? 'Not specified',
                                       style: TextStyle(
                                         fontSize: 16,
                                       ),
@@ -318,8 +331,7 @@ class ProductScreen extends StatelessWidget {
                                       ),
                                     ),
                                     Text(
-                                      _.product.numberOfSeats ??
-                                          'Not specified',
+                                      _.product.numberOfSeats ?? 'Not specified',
                                       style: TextStyle(
                                         fontSize: 16,
                                       ),
@@ -410,8 +422,7 @@ class ProductScreen extends StatelessWidget {
       Map<String, dynamic> _list = photos.original.toJson();
       _list.removeWhere((key, value) => value == null);
 
-      Map<String, dynamic> object =
-          Map.fromEntries(_list.entries.map((e) => MapEntry(e.key, e.value)));
+      Map<String, dynamic> object = Map.fromEntries(_list.entries.map((e) => MapEntry(e.key, e.value)));
 
       for (var item in object.entries) {
         photosList.add(GestureDetector(
@@ -446,8 +457,7 @@ class ProductScreen extends StatelessWidget {
           child: Hero(
             tag: 'photo',
             child: OctoImage(
-              image: CachedNetworkImageProvider(
-                  'https://source.unsplash.com/600x500/?bmw,audi,volvo'),
+              image: CachedNetworkImageProvider('https://source.unsplash.com/600x500/?bmw,audi,volvo'),
               placeholderBuilder: OctoPlaceholder.circularProgressIndicator(),
               errorBuilder: OctoError.icon(color: Colors.grey[400]),
               fit: BoxFit.cover,

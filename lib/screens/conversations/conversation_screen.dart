@@ -1,117 +1,287 @@
+import 'dart:async';
+
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:list_tile_more_customizable/list_tile_more_customizable.dart';
+import 'package:modal_progress_hud/modal_progress_hud.dart';
+import 'package:octo_image/octo_image.dart';
+import 'package:procura_online/controllers/chat_controller.dart';
+import 'package:procura_online/controllers/user_controller.dart';
 import 'package:procura_online/models/chat_model.dart';
 import 'package:procura_online/widgets/buble_item.dart';
-import 'package:procura_online/widgets/text_widget.dart';
 
-class ConversationScreen extends StatelessWidget {
-  final String params = Get.parameters['id'];
+class ConversationScreen extends StatefulWidget {
+  @override
+  _ConversationScreenState createState() => _ConversationScreenState();
+}
+
+class _ConversationScreenState extends State<ConversationScreen> {
+  final String conversationId = Get.parameters['id'];
   final Conversation conversation = Get.arguments;
+  final ChatController _chatController = Get.find();
+  final UserController _userController = Get.find();
+  final ScrollController _scrollController = ScrollController();
+
+  @override
+  void initState() {
+    _chatController.findOne(conversationId);
+    super.initState();
+  }
+
+  void _scrollToBottom() {
+    if (_scrollController.hasClients) {
+      _scrollController.animateTo(
+        _scrollController.position.maxScrollExtent,
+        curve: Curves.easeOut,
+        duration: const Duration(milliseconds: 500),
+      );
+    } else {
+      Timer(Duration(milliseconds: 400), () => _scrollToBottom());
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
-    print(params);
-    print(conversation);
     return Scaffold(
       appBar: AppBar(
         shadowColor: Colors.transparent,
         title: Row(
           children: <Widget>[
             ClipOval(
-                child: Image.network(
-              'https://mindbodygreen-res.cloudinary.com/images/w_767,q_auto:eco,f_auto,fl_lossy/usr/RetocQT/sarah-fielding.jpg',
-              width: 30,
-              height: 30,
-              fit: BoxFit.cover,
-            )),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: TextWidget(
-                text: 'Emma Liam',
-                textType: TextType.TEXT_MEDIUM,
-                colorText: Colors.black,
+              child: Image.network(
+                'https://mindbodygreen-res.cloudinary.com/images/w_767,q_auto:eco,f_auto,fl_lossy/usr/RetocQT/sarah-fielding.jpg',
+                width: 30,
+                height: 30,
+                fit: BoxFit.cover,
+              ),
+            ),
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text(
+                  conversation.usertwo.name,
+                  style: TextStyle(
+                    fontSize: 16,
+                  ),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
               ),
             )
           ],
         ),
-      ),
-      body: Padding(
-        padding: EdgeInsets.all(0.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: <Widget>[
-            Expanded(
-              child: Padding(
+        actions: [
+          IconButton(
+            icon: Icon(Icons.more_vert),
+            onPressed: () => Get.bottomSheet(
+              Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: SingleChildScrollView(
+                child: Container(
                   child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: <Widget>[
-                      Bubble(
-                        message: 'Hi Ankit',
-                        time: 'Nov,12:00',
-                        delivered: true,
-                        isMe: false,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      ListTileMoreCustomizable(
+                        leading: Icon(
+                          CupertinoIcons.speaker_slash,
+                          color: Colors.black,
+                        ),
+                        title: Text(
+                          "Mute conversation",
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontWeight: FontWeight.w400,
+                          ),
+                        ),
+                        horizontalTitleGap: 0,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        onTap: (_) => _chatController.muteConversation(conversationId),
                       ),
-                      Bubble(
-                        message: 'how are you?',
-                        time: 'Nov,12:01',
-                        delivered: true,
-                        isMe: false,
-                      ),
-                      Bubble(
-                        message: 'Hello!',
-                        time: 'Nov,12:00',
-                        delivered: true,
-                        isMe: true,
-                      ),
-                      Bubble(
-                        message: 'Are you free tonight',
-                        time: 'Nov,12:00',
-                        delivered: true,
-                        isMe: true,
-                      ),
-                      Bubble(
-                        message: 'No! I am busy!',
-                        time: 'Nov,12:00',
-                        delivered: true,
-                        isMe: false,
+                      Divider(),
+                      ListTileMoreCustomizable(
+                        leading: Icon(
+                          CupertinoIcons.delete,
+                          color: Colors.black,
+                        ),
+                        title: Text(
+                          "Delete conversation",
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontWeight: FontWeight.w400,
+                          ),
+                        ),
+                        horizontalTitleGap: 0,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        onTap: (_) => _chatController.deleteConversation(conversationId),
                       ),
                     ],
                   ),
                 ),
               ),
+              backgroundColor: Colors.white,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(8),
+              ),
             ),
-            Container(
-              color: Colors.grey[200],
-              child: Row(
-                children: [
-                  IconButton(
-                    icon: Icon(
-                      Icons.attachment,
-                    ),
-                    onPressed: () {},
-                  ),
-                  Expanded(
-                    child: TextField(
-                      decoration: InputDecoration.collapsed(
-                        hintText: "Write your message",
+          ),
+        ],
+      ),
+      body: GetX<ChatController>(
+          init: _chatController,
+          builder: (_) {
+            if (_.isLoadingMsgs) {
+              return LinearProgressIndicator();
+            }
+            if (_.hasError) {
+              return Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text('Ops, error retrieving message data.'),
+                    FlatButton(
+                      onPressed: () => _.findOne(conversationId),
+                      child: Text(
+                        'Try again',
+                        style: TextStyle(color: Colors.blue),
                       ),
                     ),
-                  ),
-                  IconButton(
-                    icon: Icon(
-                      Icons.send,
-                      color: Colors.blue,
+                  ],
+                ),
+              );
+            }
+            return ModalProgressHUD(
+              inAsyncCall: _.isDeletingChat,
+              child: Padding(
+                padding: EdgeInsets.all(0.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: <Widget>[
+                    Expanded(
+                      child: SingleChildScrollView(
+                        controller: _scrollController,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: <Widget>[
+                            Padding(
+                              padding: const EdgeInsets.all(8),
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  color: Color(0xfff5ca99),
+                                  borderRadius: BorderRadius.circular(5),
+                                ),
+                                child: Padding(
+                                  padding: const EdgeInsets.all(15),
+                                  child: Row(
+                                    children: [
+                                      SizedBox(
+                                        width: 70,
+                                        height: 70,
+                                        child: ClipOval(
+                                          child: OctoImage(
+                                            image: CachedNetworkImageProvider(conversation.order.makeLogoUrl),
+                                            placeholderBuilder: OctoPlaceholder.circularProgressIndicator(),
+                                            errorBuilder: OctoError.icon(color: Colors.grey[400]),
+                                            fit: BoxFit.cover,
+                                          ),
+                                        ),
+                                      ),
+                                      SizedBox(width: 10),
+                                      Expanded(
+                                        child: Column(
+                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              '${conversation.order.make} ${conversation.order.model} ${conversation.order.year}',
+                                              style: TextStyle(
+                                                fontSize: 16,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
+                                            Text(conversation.order.noteText),
+                                          ],
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
+                              child: ListView.builder(
+                                shrinkWrap: true,
+                                itemCount: _.messages.length,
+                                physics: NeverScrollableScrollPhysics(),
+                                itemBuilder: (context, index) {
+                                  WidgetsBinding.instance.addPostFrameCallback((_) => _scrollToBottom());
+                                  return Bubble(
+                                    photo: _.messages[index].hasAttachments ? _.messages[index].media[0].image : null,
+                                    message: _.messages[index].message,
+                                    time: _.messages[index].humanReadDate,
+                                    delivered: true,
+                                    isMe: _userController.userData.id.toString() == _.messages[index].userId,
+                                  );
+                                },
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
                     ),
-                    onPressed: () {},
-                  ),
-                ],
+                    Container(
+                      color: Colors.grey[200],
+                      child: Row(
+                        children: [
+                          IconButton(
+                            icon: Icon(
+                              Icons.attachment,
+                            ),
+                            onPressed: () {},
+                          ),
+                          Expanded(
+                            child: TextField(
+                              controller: _chatController.messageInput,
+                              textCapitalization: TextCapitalization.sentences,
+                              decoration: InputDecoration.collapsed(
+                                hintText: "Write your message",
+                              ),
+                            ),
+                          ),
+                          Obx(
+                            () => _chatController.isReplyingMsg
+                                ? Padding(
+                                    padding: const EdgeInsets.only(right: 8),
+                                    child: SizedBox(
+                                      width: 20,
+                                      height: 20,
+                                      child: CircularProgressIndicator(strokeWidth: 2.5),
+                                    ),
+                                  )
+                                : IconButton(
+                                    icon: Icon(
+                                      Icons.send,
+                                      color: Colors.blue,
+                                    ),
+                                    onPressed: () => _chatController.replyMessage(
+                                      message: _chatController.messageInput.text,
+                                      orderId: conversation.orderId,
+                                      conversationId: conversationId,
+                                    ),
+                                  ),
+                          ),
+                        ],
+                      ),
+                    )
+                  ],
+                ),
               ),
-            )
-          ],
-        ),
-      ),
+            );
+          }),
     );
   }
 }

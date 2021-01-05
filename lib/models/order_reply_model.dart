@@ -1,32 +1,93 @@
-class ChatModel {
-  List<Conversation> data;
-  Links links;
-  Meta meta;
+class OrderReplyModel {
+  Data data;
 
-  ChatModel({this.data, this.links, this.meta});
+  OrderReplyModel({this.data});
 
-  ChatModel.fromJson(Map<String, dynamic> json) {
-    if (json['data'] != null) {
-      data = new List<Conversation>();
-      json['data'].forEach((v) {
-        data.add(new Conversation.fromJson(v));
-      });
-    }
-    links = json['links'] != null ? new Links.fromJson(json['links']) : null;
-    meta = json['meta'] != null ? new Meta.fromJson(json['meta']) : null;
+  OrderReplyModel.fromJson(Map<String, dynamic> json) {
+    data = json['data'] != null ? new Data.fromJson(json['data']) : null;
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     if (this.data != null) {
-      data['data'] = this.data.map((v) => v.toJson()).toList();
+      data['data'] = this.data.toJson();
     }
-    if (this.links != null) {
-      data['links'] = this.links.toJson();
+    return data;
+  }
+}
+
+class Data {
+  int id;
+  int userId;
+  String message;
+  int isSeen;
+  String deletedFromSender;
+  String deletedFromReceiver;
+  int conversationId;
+  String humanReadDate;
+  String daysSectionDate;
+  Conversation conversation;
+  Userone sender;
+  bool hasAttachments;
+  List<Null> media;
+
+  Data(
+      {this.id,
+      this.userId,
+      this.message,
+      this.isSeen,
+      this.deletedFromSender,
+      this.deletedFromReceiver,
+      this.conversationId,
+      this.humanReadDate,
+      this.daysSectionDate,
+      this.conversation,
+      this.sender,
+      this.hasAttachments,
+      this.media});
+
+  Data.fromJson(Map<String, dynamic> json) {
+    id = json['id'];
+    userId = json['user_id'];
+    message = json['message'];
+    isSeen = json['is_seen'];
+    deletedFromSender = json['deleted_from_sender'];
+    deletedFromReceiver = json['deleted_from_receiver'];
+    conversationId = json['conversation_id'];
+    humanReadDate = json['human_read_date'];
+    daysSectionDate = json['days_section_date'];
+    conversation = json['conversation'] != null ? new Conversation.fromJson(json['conversation']) : null;
+    sender = json['sender'] != null ? new Userone.fromJson(json['sender']) : null;
+    hasAttachments = json['has_attachments'];
+    // if (json['media'] != null) {
+    //   media = new List<String>();
+    //   json['media'].forEach((v) {
+    //     media.add(new Null.fromJson(v));
+    //   });
+    // }
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['id'] = this.id;
+    data['user_id'] = this.userId;
+    data['message'] = this.message;
+    data['is_seen'] = this.isSeen;
+    data['deleted_from_sender'] = this.deletedFromSender;
+    data['deleted_from_receiver'] = this.deletedFromReceiver;
+    data['conversation_id'] = this.conversationId;
+    data['human_read_date'] = this.humanReadDate;
+    data['days_section_date'] = this.daysSectionDate;
+    if (this.conversation != null) {
+      data['conversation'] = this.conversation.toJson();
     }
-    if (this.meta != null) {
-      data['meta'] = this.meta.toJson();
+    if (this.sender != null) {
+      data['sender'] = this.sender.toJson();
     }
+    data['has_attachments'] = this.hasAttachments;
+    // if (this.media != null) {
+    //   data['media'] = this.media.map((v) => v.toJson()).toList();
+    // }
     return data;
   }
 }
@@ -107,21 +168,20 @@ class Conversation {
 class Userone {
   int id;
   String name;
-  String company;
+  Null company;
   String type;
   String email;
   String phone;
-  String phoneClicksCount;
   String districtId;
   String cityId;
   String address;
   String postcode;
-  String vatNumber;
+  Null vatNumber;
   String billingCountry;
   String billingName;
   String billingCity;
   String billingAddress;
-  String billingPostcode;
+  Null billingPostcode;
   String billingZip;
   String vatId;
   String extraBillingInformation;
@@ -131,19 +191,19 @@ class Userone {
   String notificationsFrequency;
   String subscribed;
   String approved;
-  String lastReadAnnouncementsAt;
+  Null lastReadAnnouncementsAt;
   String lastLoginAt;
   String lastLoginIp;
   String tourStatus;
   String emailVerifiedAt;
   String createdAt;
   String updatedAt;
-  String deletedAt;
-  String logo;
-  String cover;
+  Null deletedAt;
+  Null logo;
+  Null cover;
   String referralLink;
   bool isOnline;
-  List<String> media;
+  List<Null> media;
 
   Userone(
       {this.id,
@@ -152,7 +212,6 @@ class Userone {
       this.type,
       this.email,
       this.phone,
-      this.phoneClicksCount,
       this.districtId,
       this.cityId,
       this.address,
@@ -193,7 +252,6 @@ class Userone {
     type = json['type'];
     email = json['email'];
     phone = json['phone'];
-    phoneClicksCount = json['phone_clicks_count'];
     districtId = json['district_id'];
     cityId = json['city_id'];
     address = json['address'];
@@ -241,7 +299,6 @@ class Userone {
     data['type'] = this.type;
     data['email'] = this.email;
     data['phone'] = this.phone;
-    data['phone_clicks_count'] = this.phoneClicksCount;
     data['district_id'] = this.districtId;
     data['city_id'] = this.cityId;
     data['address'] = this.address;
@@ -289,9 +346,9 @@ class Order {
   String noteText;
   UserInfo userInfo;
   String makeLogoUrl;
-  Null mediaCount;
-  List<int> conversations;
-  List<Media> media;
+  String mediaCount;
+  String conversations;
+  List<String> media;
   bool seen;
   String humanReadDate;
   bool sold;
@@ -322,13 +379,13 @@ class Order {
     userInfo = json['user_info'] != null ? new UserInfo.fromJson(json['user_info']) : null;
     makeLogoUrl = json['make_logo_url'];
     mediaCount = json['media_count'];
-    // conversations = json['conversations'].cast<int>();
-    if (json['media'] != null) {
-      media = new List<Media>();
-      json['media'].forEach((v) {
-        media.add(new Media.fromJson(v));
-      });
-    }
+    conversations = json['conversations'];
+    // if (json['media'] != null) {
+    //   media = new List<Null>();
+    //   json['media'].forEach((v) {
+    //     media.add(new Null.fromJson(v));
+    //   });
+    // }
     seen = json['seen'];
     humanReadDate = json['human_read_date'];
     sold = json['sold'];
@@ -348,9 +405,9 @@ class Order {
     data['make_logo_url'] = this.makeLogoUrl;
     data['media_count'] = this.mediaCount;
     data['conversations'] = this.conversations;
-    if (this.media != null) {
-      data['media'] = this.media.map((v) => v.toJson()).toList();
-    }
+    // if (this.media != null) {
+    //   data['media'] = this.media.map((v) => v.toJson()).toList();
+    // }
     data['seen'] = this.seen;
     data['human_read_date'] = this.humanReadDate;
     data['sold'] = this.sold;
@@ -360,7 +417,7 @@ class Order {
 
 class UserInfo {
   String name;
-  String company;
+  Null company;
   String email;
   String slug;
   String phone;
@@ -369,14 +426,14 @@ class UserInfo {
   String cityId;
   String address;
   String postcode;
-  String vatNumber;
+  Null vatNumber;
   String vatId;
   String billingName;
   String billingCountry;
   String billingZip;
   String billingCity;
   String billingAddress;
-  String billingPostcode;
+  Null billingPostcode;
   String extraBillingInformation;
   String type;
   String referredBy;
@@ -386,12 +443,12 @@ class UserInfo {
   String approved;
   String password;
   String rememberToken;
-  String lastReadAnnouncementsAt;
+  Null lastReadAnnouncementsAt;
   String lastLoginAt;
   String lastLoginIp;
   String createdAt;
   String updatedAt;
-  String deletedAt;
+  Null deletedAt;
   int id;
 
   UserInfo(
@@ -507,28 +564,6 @@ class UserInfo {
   }
 }
 
-class Media {
-  int id;
-  String thumb;
-  String image;
-
-  Media({this.id, this.thumb, this.image});
-
-  Media.fromJson(Map<String, dynamic> json) {
-    id = json['id'];
-    thumb = json['thumb'];
-    image = json['image'];
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['id'] = this.id;
-    data['thumb'] = this.thumb;
-    data['image'] = this.image;
-    return data;
-  }
-}
-
 class LatestMessage {
   int id;
   String message;
@@ -588,75 +623,6 @@ class LatestMessage {
     if (this.sender != null) {
       data['sender'] = this.sender.toJson();
     }
-    return data;
-  }
-}
-
-class Links {
-  String first;
-  String last;
-  String prev;
-  String next;
-
-  Links({this.first, this.last, this.prev, this.next});
-
-  Links.fromJson(Map<String, dynamic> json) {
-    first = json['first'];
-    last = json['last'];
-    prev = json['prev'];
-    next = json['next'];
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['first'] = this.first;
-    data['last'] = this.last;
-    data['prev'] = this.prev;
-    data['next'] = this.next;
-    return data;
-  }
-}
-
-class Meta {
-  int currentPage;
-  int from;
-  int lastPage;
-  List<Links> links;
-  String path;
-  int perPage;
-  int to;
-  int total;
-
-  Meta({this.currentPage, this.from, this.lastPage, this.links, this.path, this.perPage, this.to, this.total});
-
-  Meta.fromJson(Map<String, dynamic> json) {
-    currentPage = json['current_page'];
-    from = json['from'];
-    lastPage = json['last_page'];
-    if (json['links'] != null) {
-      links = new List<Links>();
-      json['links'].forEach((v) {
-        links.add(new Links.fromJson(v));
-      });
-    }
-    path = json['path'];
-    perPage = json['per_page'];
-    to = json['to'];
-    total = json['total'];
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['current_page'] = this.currentPage;
-    data['from'] = this.from;
-    data['last_page'] = this.lastPage;
-    if (this.links != null) {
-      data['links'] = this.links.map((v) => v.toJson()).toList();
-    }
-    data['path'] = this.path;
-    data['per_page'] = this.perPage;
-    data['to'] = this.to;
-    data['total'] = this.total;
     return data;
   }
 }
