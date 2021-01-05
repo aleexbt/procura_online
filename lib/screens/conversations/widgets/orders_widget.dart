@@ -108,7 +108,7 @@ class OrdersWidget extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text('You don\'t have any orders to show.'),
+                Text('We don\'t have any orders to show.'),
                 FlatButton(
                   onPressed: () => _.findAll(),
                   child: Text(
@@ -127,10 +127,13 @@ class OrdersWidget extends StatelessWidget {
               Expanded(
                 child: ListView.builder(
                   shrinkWrap: true,
-                  itemCount: _.totalOrders,
+                  itemCount: _.totalOrders + 1,
                   controller: _scrollController,
                   physics: AlwaysScrollableScrollPhysics(),
                   itemBuilder: (context, index) {
+                    if (index == _.totalOrders) {
+                      return SizedBox(height: 70);
+                    }
                     var orders = _.orders;
                     return ListTile(
                       leading: ClipRRect(
@@ -159,7 +162,8 @@ class OrdersWidget extends StatelessWidget {
                           fontSize: 12,
                         ),
                       ),
-                      onTap: () => Get.toNamed('/orders/reply/${orders.order[index].id}'),
+                      onTap: () =>
+                          Get.toNamed('/orders/reply/${orders.order[index].id}', arguments: orders.order[index]),
                     );
                   },
                 ),

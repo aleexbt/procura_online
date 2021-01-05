@@ -7,7 +7,7 @@ import 'package:shimmer/shimmer.dart';
 
 class ChatWidget extends StatelessWidget {
   final ChatController _chatController = Get.find();
-  final ScrollController _scrollController = ScrollController();
+  final ScrollController _scrollController2 = ScrollController();
 
   Future<void> refresItems() async {
     return _chatController.findAll();
@@ -15,9 +15,9 @@ class ChatWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    _scrollController.addListener(() {
-      double maxScroll = _scrollController.position.maxScrollExtent;
-      double currentScroll = _scrollController.position.pixels;
+    _scrollController2.addListener(() {
+      double maxScroll = _scrollController2.position.maxScrollExtent;
+      double currentScroll = _scrollController2.position.pixels;
       double delta = MediaQuery.of(context).size.height * 0.40;
       if (maxScroll - currentScroll < delta) {
         if (!_chatController.isLoadingMore && !_chatController.isLastPage) {
@@ -122,39 +122,52 @@ class ChatWidget extends StatelessWidget {
           }
           return RefreshIndicator(
             onRefresh: refresItems,
-            child: ListView.builder(
-              shrinkWrap: true,
-              itemCount: _chatController.totalConversations,
-              controller: _scrollController,
-              physics: AlwaysScrollableScrollPhysics(),
-              itemBuilder: (context, index) {
-                return ListTile(
-                  leading: ClipRRect(
-                    borderRadius: BorderRadius.circular(50),
-                    child: SizedBox(
-                      width: 50,
-                      height: 50,
-                      child: OctoImage(
-                        image: CachedNetworkImageProvider('https://i.pravatar.cc/200?cache=$index'),
-                        placeholderBuilder: OctoPlaceholder.circularProgressIndicator(),
-                        errorBuilder: OctoError.icon(color: Colors.grey[400]),
-                        fit: BoxFit.cover,
-                      ),
-                    ),
+            child: Column(
+              children: [
+                Expanded(
+                  child: ListView.builder(
+                    shrinkWrap: true,
+                    itemCount: _chatController.totalConversations,
+                    controller: _scrollController2,
+                    physics: AlwaysScrollableScrollPhysics(),
+                    itemBuilder: (context, index) {
+                      return ListTile(
+                        leading: ClipRRect(
+                          borderRadius: BorderRadius.circular(50),
+                          child: SizedBox(
+                            width: 50,
+                            height: 50,
+                            child: OctoImage(
+                              image: CachedNetworkImageProvider('https://i.pravatar.cc/200?cache=$index'),
+                              placeholderBuilder: OctoPlaceholder.circularProgressIndicator(),
+                              errorBuilder: OctoError.icon(color: Colors.grey[400]),
+                              fit: BoxFit.cover,
+                            ),
+                          ),
+                        ),
+                        title: Text(_.conversations[index].usertwo.name),
+                        subtitle: Text(_.conversations[index].latestMessage.message),
+                        trailing: Text(
+                          _.conversations[index].latestMessage.humanReadDate,
+                          style: TextStyle(
+                            color: Colors.grey[400],
+                            fontSize: 12,
+                          ),
+                        ),
+                        onTap: () => Get.toNamed('/chat/conversation/${_.conversations[index].id}',
+                            arguments: _.conversations[index]),
+                      );
+                    },
                   ),
-                  title: Text(_.conversations[index].usertwo.name),
-                  subtitle: Text(_.conversations[index].latestMessage.message),
-                  trailing: Text(
-                    _.conversations[index].latestMessage.humanReadDate,
-                    style: TextStyle(
-                      color: Colors.grey[400],
-                      fontSize: 12,
-                    ),
+                ),
+                Visibility(
+                  visible: _.isLoadingMore,
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: CircularProgressIndicator(),
                   ),
-                  onTap: () =>
-                      Get.toNamed('/chat/conversation/${_.conversations[index].id}', arguments: _.conversations[index]),
-                );
-              },
+                ),
+              ],
             ),
           );
         });

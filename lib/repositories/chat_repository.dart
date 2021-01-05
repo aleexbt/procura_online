@@ -19,6 +19,7 @@ class ChatRepository {
     String token = Prefs.getString('token') ?? null;
     _dio.options.headers["Authorization"] = 'Bearer $token';
     Response response = await _dio.get('/api/v1/conversation', queryParameters: {"page": "$page"});
+    print(response.request.uri);
     return ChatModel.fromJson(response.data);
   }
 

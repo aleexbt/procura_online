@@ -156,129 +156,173 @@ class _ConversationScreenState extends State<ConversationScreen> {
             }
             return ModalProgressHUD(
               inAsyncCall: _.isDeletingChat,
-              child: Padding(
-                padding: EdgeInsets.all(0.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: <Widget>[
-                    Expanded(
-                      child: SingleChildScrollView(
-                        controller: _scrollController,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.stretch,
-                          children: <Widget>[
-                            Padding(
-                              padding: const EdgeInsets.all(8),
-                              child: Container(
-                                decoration: BoxDecoration(
-                                  color: Color(0xfff5ca99),
-                                  borderRadius: BorderRadius.circular(5),
-                                ),
-                                child: Padding(
-                                  padding: const EdgeInsets.all(15),
-                                  child: Row(
-                                    children: [
-                                      SizedBox(
-                                        width: 70,
-                                        height: 70,
-                                        child: ClipOval(
-                                          child: OctoImage(
-                                            image: CachedNetworkImageProvider(conversation.order.makeLogoUrl),
-                                            placeholderBuilder: OctoPlaceholder.circularProgressIndicator(),
-                                            errorBuilder: OctoError.icon(color: Colors.grey[400]),
-                                            fit: BoxFit.cover,
-                                          ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: <Widget>[
+                  Expanded(
+                    child: SingleChildScrollView(
+                      controller: _scrollController,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: <Widget>[
+                          Padding(
+                            padding: const EdgeInsets.all(8),
+                            child: Container(
+                              decoration: BoxDecoration(
+                                color: Color(0xfff5ca99),
+                                borderRadius: BorderRadius.circular(5),
+                              ),
+                              child: Padding(
+                                padding: const EdgeInsets.all(15),
+                                child: Row(
+                                  children: [
+                                    SizedBox(
+                                      width: 70,
+                                      height: 70,
+                                      child: ClipOval(
+                                        child: OctoImage(
+                                          image: CachedNetworkImageProvider(conversation.order.makeLogoUrl),
+                                          placeholderBuilder: OctoPlaceholder.circularProgressIndicator(),
+                                          errorBuilder: OctoError.icon(color: Colors.grey[400]),
+                                          fit: BoxFit.cover,
                                         ),
                                       ),
-                                      SizedBox(width: 10),
-                                      Expanded(
-                                        child: Column(
-                                          crossAxisAlignment: CrossAxisAlignment.start,
-                                          children: [
-                                            Text(
-                                              '${conversation.order.make} ${conversation.order.model} ${conversation.order.year}',
-                                              style: TextStyle(
-                                                fontSize: 16,
-                                                fontWeight: FontWeight.bold,
+                                    ),
+                                    SizedBox(width: 10),
+                                    Expanded(
+                                      child: Column(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            '${conversation.order.make} ${conversation.order.model} ${conversation.order.year}',
+                                            style: TextStyle(
+                                              fontSize: 16,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          ),
+                                          SizedBox(height: 5),
+                                          Text('MPN: ${conversation.order.mpn}'),
+                                          Divider(),
+                                          Text('Model: ${conversation.order.model}'),
+                                          Divider(),
+                                          Text('Number of Doors: ${conversation.order.numberOfDoors}'),
+                                          Divider(),
+                                          Text('Fuel Type: ${conversation.order.fuelType}'),
+                                          Divider(),
+                                          Text('Notes: ${conversation.order.noteText}'),
+                                          Visibility(
+                                            visible: conversation.order.media.length > 0,
+                                            child: Padding(
+                                              padding: const EdgeInsets.only(top: 5),
+                                              child: SizedBox(
+                                                height: 30,
+                                                child: ListView.builder(
+                                                  scrollDirection: Axis.horizontal,
+                                                  itemCount: conversation.order.media.length,
+                                                  itemBuilder: (context, index) {
+                                                    return Padding(
+                                                      padding: const EdgeInsets.only(right: 5),
+                                                      child: GestureDetector(
+                                                        onTap: () => Get.toNamed(
+                                                          '/show-photos',
+                                                          arguments: {
+                                                            "photoId": "photo_$index",
+                                                            "photoUrl": "${conversation.order.media[index].image}",
+                                                          },
+                                                        ),
+                                                        child: Hero(
+                                                          tag: 'photo_$index',
+                                                          child: OctoImage(
+                                                            image: CachedNetworkImageProvider(
+                                                                conversation.order.media[index].thumb),
+                                                            placeholderBuilder:
+                                                                OctoPlaceholder.circularProgressIndicator(),
+                                                            errorBuilder: OctoError.icon(color: Colors.grey[400]),
+                                                            fit: BoxFit.cover,
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    );
+                                                  },
+                                                ),
                                               ),
                                             ),
-                                            Text(conversation.order.noteText),
-                                          ],
-                                        ),
+                                          ),
+                                        ],
                                       ),
-                                    ],
-                                  ),
+                                    ),
+                                  ],
                                 ),
                               ),
                             ),
-                            Padding(
-                              padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
-                              child: ListView.builder(
-                                shrinkWrap: true,
-                                itemCount: _.messages.length,
-                                physics: NeverScrollableScrollPhysics(),
-                                itemBuilder: (context, index) {
-                                  WidgetsBinding.instance.addPostFrameCallback((_) => _scrollToBottom());
-                                  return Bubble(
-                                    photo: _.messages[index].hasAttachments ? _.messages[index].media[0].image : null,
-                                    message: _.messages[index].message,
-                                    time: _.messages[index].humanReadDate,
-                                    delivered: true,
-                                    isMe: _userController.userData.id.toString() == _.messages[index].userId,
-                                  );
-                                },
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                    Container(
-                      color: Colors.grey[200],
-                      child: Row(
-                        children: [
-                          IconButton(
-                            icon: Icon(
-                              Icons.attachment,
-                            ),
-                            onPressed: () {},
                           ),
-                          Expanded(
-                            child: TextField(
-                              controller: _chatController.messageInput,
-                              textCapitalization: TextCapitalization.sentences,
-                              decoration: InputDecoration.collapsed(
-                                hintText: "Write your message",
-                              ),
+                          Padding(
+                            padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
+                            child: ListView.builder(
+                              shrinkWrap: true,
+                              itemCount: _.messages.length,
+                              physics: NeverScrollableScrollPhysics(),
+                              itemBuilder: (context, index) {
+                                WidgetsBinding.instance.addPostFrameCallback((_) => _scrollToBottom());
+                                return Bubble(
+                                  photo: _.messages[index].hasAttachments ? _.messages[index].media[0].image : null,
+                                  message: _.messages[index].message,
+                                  time: _.messages[index].humanReadDate,
+                                  delivered: true,
+                                  isMe: _userController.userData.id.toString() == _.messages[index].userId,
+                                );
+                              },
                             ),
-                          ),
-                          Obx(
-                            () => _chatController.isReplyingMsg
-                                ? Padding(
-                                    padding: const EdgeInsets.only(right: 8),
-                                    child: SizedBox(
-                                      width: 20,
-                                      height: 20,
-                                      child: CircularProgressIndicator(strokeWidth: 2.5),
-                                    ),
-                                  )
-                                : IconButton(
-                                    icon: Icon(
-                                      Icons.send,
-                                      color: Colors.blue,
-                                    ),
-                                    onPressed: () => _chatController.replyMessage(
-                                      message: _chatController.messageInput.text,
-                                      orderId: conversation.orderId,
-                                      conversationId: conversationId,
-                                    ),
-                                  ),
                           ),
                         ],
                       ),
-                    )
-                  ],
-                ),
+                    ),
+                  ),
+                  Container(
+                    color: Colors.grey[200],
+                    child: Row(
+                      children: [
+                        IconButton(
+                          icon: Icon(
+                            Icons.attachment,
+                          ),
+                          onPressed: () {},
+                        ),
+                        Expanded(
+                          child: TextField(
+                            controller: _chatController.messageInput,
+                            textCapitalization: TextCapitalization.sentences,
+                            decoration: InputDecoration.collapsed(
+                              hintText: "Write your message",
+                            ),
+                          ),
+                        ),
+                        Obx(
+                          () => _chatController.isReplyingMsg
+                              ? Padding(
+                                  padding: const EdgeInsets.only(right: 8),
+                                  child: SizedBox(
+                                    width: 20,
+                                    height: 20,
+                                    child: CircularProgressIndicator(strokeWidth: 2.5),
+                                  ),
+                                )
+                              : IconButton(
+                                  icon: Icon(
+                                    Icons.send,
+                                    color: Colors.blue,
+                                  ),
+                                  onPressed: () => _chatController.replyMessage(
+                                    message: _chatController.messageInput.text,
+                                    orderId: conversation.orderId,
+                                    conversationId: conversationId,
+                                  ),
+                                ),
+                        ),
+                      ],
+                    ),
+                  )
+                ],
               ),
             );
           }),

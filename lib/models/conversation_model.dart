@@ -101,7 +101,7 @@ class Media {
 class Userone {
   int id;
   String name;
-  Null company;
+  String company;
   String type;
   String email;
   String phone;
@@ -131,9 +131,9 @@ class Userone {
   String emailVerifiedAt;
   String createdAt;
   String updatedAt;
-  Null deletedAt;
-  Null logo;
-  Null cover;
+  String deletedAt;
+  String logo;
+  String cover;
   String referralLink;
   bool isOnline;
   List<Media> media;
@@ -212,8 +212,8 @@ class Userone {
     createdAt = json['created_at'];
     updatedAt = json['updated_at'];
     deletedAt = json['deleted_at'];
-    logo = json['logo'];
-    cover = json['cover'];
+    // logo = json['logo'];
+    // cover = json['cover'];
     referralLink = json['referral_link'];
     isOnline = json['is_online'];
 // if (json['media'] != null) {

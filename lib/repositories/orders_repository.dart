@@ -2,6 +2,8 @@ import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:dio_http_cache/dio_http_cache.dart';
+import 'package:get/instance_manager.dart';
+import 'package:procura_online/controllers/orders_controller.dart';
 import 'package:procura_online/models/media_upload_model.dart';
 import 'package:procura_online/models/order_reply_model.dart' hide Order;
 import 'package:procura_online/models/orders_model.dart';
@@ -43,6 +45,7 @@ class OrdersRepository {
   }
 
   Future<MediaUploadModel> mediaUpload(File photo) async {
+    OrdersController _ordersController = Get.find();
     String token = Prefs.getString('token') ?? null;
     Uuid uuid = Uuid();
 
@@ -55,7 +58,7 @@ class OrdersRepository {
 
     _dio.options.headers["Authorization"] = 'Bearer $token';
     Response response = await _dio.post('/api/v1/orders/media', data: data, onSendProgress: (sent, total) {
-      print(((sent / total) * 100).round());
+      _ordersController.uploadImageProgress.value = ((sent / total));
     });
     print(response.data);
     return MediaUploadModel.fromJson(response.data);

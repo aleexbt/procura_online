@@ -38,6 +38,10 @@ class Order {
   String model;
   String year;
   String noteText;
+  String numberOfDoors;
+  String fuelType;
+  String engineDisplacement;
+  String mpn;
   UserInfo userInfo;
   String makeLogoUrl;
   String mediaCount;
@@ -54,6 +58,10 @@ class Order {
       this.model,
       this.year,
       this.noteText,
+      this.numberOfDoors,
+      this.fuelType,
+      this.engineDisplacement,
+      this.mpn,
       this.userInfo,
       this.makeLogoUrl,
       this.mediaCount,
@@ -70,6 +78,10 @@ class Order {
     model = json['model'];
     year = json['year'];
     noteText = json['note_text'];
+    numberOfDoors = json['number_of_doors'];
+    fuelType = json['fuel_type'];
+    engineDisplacement = json['engine_displacement'];
+    mpn = json['mpn'];
     userInfo = json['user_info'] != null ? new UserInfo.fromJson(json['user_info']) : null;
     makeLogoUrl = json['make_logo_url'];
     mediaCount = json['media_count'];
@@ -79,12 +91,12 @@ class Order {
     //     conversations.add(new Null.fromJson(v));
     //   });
     // }
-    // if (json['media'] != null) {
-    //   media = new List<Null>();
-    //   json['media'].forEach((v) {
-    //     media.add(new Null.fromJson(v));
-    //   });
-    // }
+    if (json['media'] != null) {
+      media = new List<Media>();
+      json['media'].forEach((v) {
+        media.add(new Media.fromJson(v));
+      });
+    }
     seen = json['seen'];
     humanReadDate = json['human_read_date'];
     sold = json['sold'];
@@ -98,6 +110,10 @@ class Order {
     data['model'] = this.model;
     data['year'] = this.year;
     data['note_text'] = this.noteText;
+    data['number_of_doors'] = this.numberOfDoors;
+    data['fuel_type'] = this.fuelType;
+    data['engine_displacement'] = this.engineDisplacement;
+    data['mpn'] = this.mpn;
     if (this.userInfo != null) {
       data['user_info'] = this.userInfo.toJson();
     }

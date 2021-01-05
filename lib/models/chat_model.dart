@@ -1,3 +1,5 @@
+import 'orders_model.dart';
+
 class ChatModel {
   List<Conversation> data;
   Links links;
@@ -221,8 +223,8 @@ class Userone {
     createdAt = json['created_at'];
     updatedAt = json['updated_at'];
     deletedAt = json['deleted_at'];
-    logo = json['logo'];
-    cover = json['cover'];
+    // logo = json['logo'];
+    // cover = json['cover'];
     referralLink = json['referral_link'];
     isOnline = json['is_online'];
     // if (json['media'] != null) {
@@ -276,84 +278,6 @@ class Userone {
     // if (this.media != null) {
     //   data['media'] = this.media.map((v) => v.toJson()).toList();
     // }
-    return data;
-  }
-}
-
-class Order {
-  int id;
-  String userId;
-  String make;
-  String model;
-  String year;
-  String noteText;
-  UserInfo userInfo;
-  String makeLogoUrl;
-  Null mediaCount;
-  List<int> conversations;
-  List<Media> media;
-  bool seen;
-  String humanReadDate;
-  bool sold;
-
-  Order(
-      {this.id,
-      this.userId,
-      this.make,
-      this.model,
-      this.year,
-      this.noteText,
-      this.userInfo,
-      this.makeLogoUrl,
-      this.mediaCount,
-      this.conversations,
-      this.media,
-      this.seen,
-      this.humanReadDate,
-      this.sold});
-
-  Order.fromJson(Map<String, dynamic> json) {
-    id = json['id'];
-    userId = json['user_id'];
-    make = json['make'];
-    model = json['model'];
-    year = json['year'];
-    noteText = json['note_text'];
-    userInfo = json['user_info'] != null ? new UserInfo.fromJson(json['user_info']) : null;
-    makeLogoUrl = json['make_logo_url'];
-    mediaCount = json['media_count'];
-    // conversations = json['conversations'].cast<int>();
-    if (json['media'] != null) {
-      media = new List<Media>();
-      json['media'].forEach((v) {
-        media.add(new Media.fromJson(v));
-      });
-    }
-    seen = json['seen'];
-    humanReadDate = json['human_read_date'];
-    sold = json['sold'];
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['id'] = this.id;
-    data['user_id'] = this.userId;
-    data['make'] = this.make;
-    data['model'] = this.model;
-    data['year'] = this.year;
-    data['note_text'] = this.noteText;
-    if (this.userInfo != null) {
-      data['user_info'] = this.userInfo.toJson();
-    }
-    data['make_logo_url'] = this.makeLogoUrl;
-    data['media_count'] = this.mediaCount;
-    data['conversations'] = this.conversations;
-    if (this.media != null) {
-      data['media'] = this.media.map((v) => v.toJson()).toList();
-    }
-    data['seen'] = this.seen;
-    data['human_read_date'] = this.humanReadDate;
-    data['sold'] = this.sold;
     return data;
   }
 }

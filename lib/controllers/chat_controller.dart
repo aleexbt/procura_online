@@ -35,7 +35,7 @@ class ChatController extends GetxController {
   ChatModel get chat => _chat.value;
   List<Conversation> get conversations => _chat.value.data;
   int get totalConversations => _chat.value.data?.length ?? 0;
-  bool get isLastPage => false;
+  bool get isLastPage => _page.value == _chat.value.meta.lastPage;
   List<Conversation> filteredConversations;
 
   RxList<Message> _messages = List<Message>().obs;
@@ -156,7 +156,7 @@ class ChatController extends GetxController {
     List<Conversation> filtered = filteredConversations
         .where(
           (conversation) =>
-              conversation.userone.name.toLowerCase().contains(term.toLowerCase()) ||
+              conversation.usertwo.name.toLowerCase().contains(term.toLowerCase()) ||
               conversation.latestMessage.message.toLowerCase().contains(term.toLowerCase()),
         )
         .toList();

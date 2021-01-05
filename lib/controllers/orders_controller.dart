@@ -1,6 +1,8 @@
 import 'dart:io';
 
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:dio/dio.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:procura_online/models/media_upload_model.dart';
 import 'package:procura_online/models/orders_model.dart';
@@ -18,6 +20,8 @@ class OrdersController extends GetxController {
   RxBool _isLoading = false.obs;
   RxBool _isLoadingMore = false.obs;
   RxBool _isUploadingImage = false.obs;
+  RxBool _isPublishingOrder = false.obs;
+  RxDouble uploadImageProgress = 0.0.obs;
   RxBool _hasError = false.obs;
   RxInt _page = 1.obs;
   Rx<OrdersModel> _orders = OrdersModel().obs;
@@ -25,11 +29,12 @@ class OrdersController extends GetxController {
   bool get isLoading => _isLoading.value;
   bool get isLoadingMore => _isLoadingMore.value;
   bool get isUploadingImage => _isUploadingImage.value;
+  bool get isPublishingOrder => _isPublishingOrder.value;
   bool get hasError => _hasError.value;
   int get page => _page.value;
   OrdersModel get orders => _orders.value;
   int get totalOrders => _orders.value.order?.length ?? 0;
-  bool get isLastPage => false;
+  bool get isLastPage => _page.value == _orders.value.meta.lastPage;
   List<Order> filteredOrders;
 
   void findAll() async {
@@ -59,30 +64,27 @@ class OrdersController extends GetxController {
     String numberOfDoors,
     String fuelType,
   }) async {
+    _isPublishingOrder.value = true;
     try {
       Map<String, dynamic> data = {
         "make": brand,
         "model": model,
-        "year": int.parse(year) ?? null,
+        "year": year,
         "note_text": note,
         "mpn": mpn,
-        "number_of_doors": int.parse(numberOfDoors) ?? null,
+        "number_of_doors": numberOfDoors,
         "fuel_type": fuelType,
+        "engine_displacement": engineDisplacement,
         "attachments": images,
       };
       await _repository.createOrder(data);
+      successDialog(title: 'Success', message: 'Your order has been published successfully.');
     } on DioError catch (err) {
       print(err);
-      print({
-        "make": brand,
-        "model": model,
-        "year": int.parse(year),
-        "note_text": note,
-        "mpn": mpn,
-        "number_of_doors": int.parse(numberOfDoors),
-        "fuel_type": fuelType,
-        "attachments": images,
-      });
+      Get.rawSnackbar(
+          message: 'Ops, something went wrong.', backgroundColor: Colors.red, duration: Duration(seconds: 5));
+    } finally {
+      _isPublishingOrder.value = false;
     }
   }
 
@@ -121,6 +123,7 @@ class OrdersController extends GetxController {
   }
 
   Future<MediaUploadModel> mediaUpload(File photo) async {
+    uploadImageProgress.value = 0.0;
     _isUploadingImage.value = true;
     var _result;
     try {
@@ -128,9 +131,33 @@ class OrdersController extends GetxController {
       _result = response;
     } on DioError catch (err) {
       print(err);
+      Get.rawSnackbar(
+          message: 'Ops, error while uploading image', backgroundColor: Colors.red, duration: Duration(seconds: 5));
     } finally {
       _isUploadingImage.value = false;
     }
     return _result;
+  }
+
+  AwesomeDialog successDialog({String title, String message}) {
+    return AwesomeDialog(
+      dismissOnTouchOutside: false,
+      dismissOnBackKeyPress: false,
+      context: Get.context,
+      animType: AnimType.BOTTOMSLIDE,
+      headerAnimationLoop: false,
+      dialogType: DialogType.SUCCES,
+      title: title,
+      useRootNavigator: false,
+      padding: EdgeInsets.only(left: 10, right: 10),
+      desc: message,
+      btnOkText: 'OK',
+      btnOkOnPress: () {},
+      onDissmissCallback: () {
+        Get.back();
+      },
+      btnOkIcon: Icons.check_circle,
+      btnOkColor: Colors.blue,
+    )..show();
   }
 }

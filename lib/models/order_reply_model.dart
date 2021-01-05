@@ -181,7 +181,7 @@ class Userone {
   String billingName;
   String billingCity;
   String billingAddress;
-  Null billingPostcode;
+  String billingPostcode;
   String billingZip;
   String vatId;
   String extraBillingInformation;
@@ -191,16 +191,16 @@ class Userone {
   String notificationsFrequency;
   String subscribed;
   String approved;
-  Null lastReadAnnouncementsAt;
+  String lastReadAnnouncementsAt;
   String lastLoginAt;
   String lastLoginIp;
   String tourStatus;
   String emailVerifiedAt;
   String createdAt;
   String updatedAt;
-  Null deletedAt;
-  Null logo;
-  Null cover;
+  String deletedAt;
+  String logo;
+  String cover;
   String referralLink;
   bool isOnline;
   List<Null> media;
@@ -417,7 +417,7 @@ class Order {
 
 class UserInfo {
   String name;
-  Null company;
+  String company;
   String email;
   String slug;
   String phone;
@@ -426,14 +426,14 @@ class UserInfo {
   String cityId;
   String address;
   String postcode;
-  Null vatNumber;
+  String vatNumber;
   String vatId;
   String billingName;
   String billingCountry;
   String billingZip;
   String billingCity;
   String billingAddress;
-  Null billingPostcode;
+  String billingPostcode;
   String extraBillingInformation;
   String type;
   String referredBy;
@@ -443,12 +443,12 @@ class UserInfo {
   String approved;
   String password;
   String rememberToken;
-  Null lastReadAnnouncementsAt;
+  String lastReadAnnouncementsAt;
   String lastLoginAt;
   String lastLoginIp;
   String createdAt;
   String updatedAt;
-  Null deletedAt;
+  String deletedAt;
   int id;
 
   UserInfo(

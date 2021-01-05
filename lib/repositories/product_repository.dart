@@ -18,8 +18,8 @@ Dio _dio = Dio(options);
 final _dioCacheManager = DioCacheManager(CacheConfig());
 
 class ProductRepository {
-  Future<ProductModel> findAll({int page = 1}) async {
-    final Response response = await _dio.get('/api/v1/listings', queryParameters: {"page": "$page"});
+  Future<ProductModel> findAll({String category = 'listings', int page = 1}) async {
+    final Response response = await _dio.get('/api/v1/$category', queryParameters: {"page": "$page"});
     return ProductModel.fromJson(response.data);
   }
 

@@ -128,9 +128,13 @@ class _ChatScreenState extends State<ChatScreen> with AutomaticKeepAliveClientMi
           ],
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () => Get.toNamed('/orders/new'),
-        child: Icon(Icons.add),
+      floatingActionButton: AnimatedOpacity(
+        opacity: _selectedIndex == 0 ? 1.0 : 0.0,
+        duration: Duration(milliseconds: 300),
+        child: FloatingActionButton(
+          onPressed: () => Get.toNamed('/orders/new'),
+          child: Icon(Icons.add),
+        ),
       ),
     );
   }
