@@ -4,6 +4,7 @@ import 'package:smart_select/smart_select.dart';
 class SelectOption extends StatelessWidget {
   final bool isLoading;
   final bool isDisabled;
+  final bool enableFilter;
   final String modalTitle;
   final String placeholder;
   final String selectText;
@@ -15,6 +16,7 @@ class SelectOption extends StatelessWidget {
     Key key,
     this.isLoading = false,
     this.isDisabled = false,
+    this.enableFilter = false,
     this.modalTitle = 'Options',
     this.placeholder = 'Choose one',
     this.selectText = 'Select an option',
@@ -26,6 +28,8 @@ class SelectOption extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SmartSelect<String>.single(
+      modalConfig: S2ModalConfig(filterAuto: true, useFilter: enableFilter),
+      modalType: S2ModalType.bottomSheet,
       modalTitle: modalTitle,
       placeholder: placeholder,
       modalHeaderStyle: S2ModalHeaderStyle(

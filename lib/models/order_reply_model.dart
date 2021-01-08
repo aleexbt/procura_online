@@ -168,7 +168,7 @@ class Conversation {
 class Userone {
   int id;
   String name;
-  Null company;
+  String company;
   String type;
   String email;
   String phone;
@@ -176,7 +176,7 @@ class Userone {
   String cityId;
   String address;
   String postcode;
-  Null vatNumber;
+  String vatNumber;
   String billingCountry;
   String billingName;
   String billingCity;

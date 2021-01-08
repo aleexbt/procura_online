@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:octo_image/octo_image.dart';
 import 'package:procura_online/controllers/orders_controller.dart';
-import 'package:procura_online/models/orders_model.dart';
+import 'package:procura_online/models/order_model.dart';
 import 'package:procura_online/widgets/text_widget.dart';
 
 class OrderReplyScreen extends StatelessWidget {
@@ -14,8 +14,6 @@ class OrderReplyScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print(orderId);
-    print(order);
     return Scaffold(
       appBar: AppBar(
         shadowColor: Colors.transparent,
@@ -94,10 +92,11 @@ class OrderReplyScreen extends StatelessWidget {
                                   Text('Notes: ${order.noteText}'),
                                   Visibility(
                                     visible: order.media.length > 0,
-                                    child: SizedBox(
-                                      height: 30,
-                                      child: Padding(
-                                        padding: const EdgeInsets.only(top: 8.0),
+                                    child: Padding(
+                                      padding: const EdgeInsets.only(top: 5),
+                                      child: SizedBox(
+                                        height: 40,
+                                        width: 40,
                                         child: ListView.builder(
                                           scrollDirection: Axis.horizontal,
                                           itemCount: order.media.length,
@@ -158,13 +157,23 @@ class OrderReplyScreen extends StatelessWidget {
                     ),
                   ),
                 ),
-                IconButton(
-                  icon: Icon(
-                    Icons.send,
-                    color: Colors.blue,
-                  ),
-                  onPressed: null,
-                  // onPressed: () => _ordersController.replyOrder(message: _message.text, orderId: orderId),
+                Obx(
+                  () => _ordersController.isReplyingMsg
+                      ? Padding(
+                          padding: const EdgeInsets.only(right: 8),
+                          child: SizedBox(
+                            width: 20,
+                            height: 20,
+                            child: CircularProgressIndicator(strokeWidth: 2.5),
+                          ),
+                        )
+                      : IconButton(
+                          icon: Icon(
+                            Icons.send,
+                            color: Colors.blue,
+                          ),
+                          onPressed: () => _ordersController.replyOrder(message: _message.text, orderId: orderId),
+                        ),
                 ),
               ],
             ),

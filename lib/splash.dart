@@ -6,17 +6,11 @@ import 'package:procura_online/utils/prefs.dart';
 
 class SplashScreen extends StatelessWidget {
   void init(BuildContext context) async {
-    await precachePicture(
-        SvgPicture.asset('assets/images/by_my_car.svg').pictureProvider,
-        context);
-    await precachePicture(
-        SvgPicture.asset('assets/images/not_found_towing.svg').pictureProvider,
-        context);
-    await precachePicture(
-        SvgPicture.asset('assets/images/success_ad.svg').pictureProvider,
-        context);
+    await precachePicture(SvgPicture.asset('assets/images/by_my_car.svg').pictureProvider, context);
+    await precachePicture(SvgPicture.asset('assets/images/not_found_towing.svg').pictureProvider, context);
+    await precachePicture(SvgPicture.asset('assets/images/success_ad.svg').pictureProvider, context);
 
-    await Future.delayed(Duration(seconds: 2));
+    await Future.delayed(Duration(seconds: 1));
     bool showIntro = Prefs.getBool('showIntro') ?? true;
     if (showIntro) {
       Get.offNamed('/intro');

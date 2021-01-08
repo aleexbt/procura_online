@@ -5,7 +5,7 @@ class Routers {
   static const home = '/home';
   static const chat = '/chat';
   static const chatConversation = '/chat/conversation/:id';
-  static const orderReply = '/orders/reply/:id';
+  static const chatReply = '/chat/new/:id';
   static const login = '/auth/login';
   static const register = '/auth/register';
   static const forgotPassword = '/auth/forgot-password';
@@ -15,7 +15,8 @@ class Routers {
   static const editProfile = '/settings/edit-profile';
   static const changePassword = '/settings/change-password';
   static const searchFilter = '/search-filter';
-  static const newAd = '/ad/new';
+  static const createAd = '/ad/new';
+  static const editAd = '/ad/edit/:id';
   static const createOrder = '/orders/new';
 
   static const tests = '/tests';

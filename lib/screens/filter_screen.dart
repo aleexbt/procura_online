@@ -2,16 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:procura_online/controllers/home_controller.dart';
 import 'package:procura_online/controllers/search_controller.dart';
-import 'package:procura_online/widgets/better_expandable_tile.dart';
 import 'package:procura_online/widgets/gradient_button.dart';
+import 'package:procura_online/widgets/select_option.dart';
 
-class FilterScreen extends GetView<SearchController> {
-  final GlobalKey<BetterExpansionTileState> _categoryKey = GlobalKey();
-  final GlobalKey<BetterExpansionTileState> _brandsKey = GlobalKey();
-  final GlobalKey<BetterExpansionTileState> _modelsKey = GlobalKey();
-  final GlobalKey<BetterExpansionTileState> _priceKey = GlobalKey();
-  final GlobalKey<BetterExpansionTileState> _locationKey = GlobalKey();
+class FilterScreen extends StatelessWidget {
   final HomeController _homeController = Get.find();
+  final SearchController _searchController = Get.find();
 
   @override
   Widget build(BuildContext context) {
@@ -19,157 +15,81 @@ class FilterScreen extends GetView<SearchController> {
       appBar: AppBar(
         elevation: 0,
         title: Text('Filter results'),
-      ),
-      body: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Column(
-              children: [
-                BetterExpansionTile(
-                  key: _categoryKey,
-                  title: Text(
-                    'Category',
-                    style: TextStyle(
-                      fontSize: 22,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  subtitle: Obx(() => Text(controller.categoryName)),
-                  children: [
-                    ListTile(
-                      title: Text('Peças Auto'),
-                      onTap: () => {
-                        _categoryKey.currentState.closeExpansion(),
-                        controller.setCategory(name: 'Peças Auto', value: 'pecas'),
-                      },
-                    ),
-                    ListTile(
-                      title: Text('Automóveis'),
-                      onTap: () => {
-                        _categoryKey.currentState.closeExpansion(),
-                        controller.setCategory(name: 'Automóveis', value: 'auto'),
-                      },
-                    ),
-                    ListTile(
-                      title: Text('Salvados'),
-                      onTap: () => {
-                        _categoryKey.currentState.closeExpansion(),
-                        controller.setCategory(name: 'Salvados', value: 'salvados'),
-                      },
-                    ),
-                  ],
-                ),
-                BetterExpansionTile(
-                  key: _brandsKey,
-                  title: Text(
-                    'Brands',
-                    style: TextStyle(
-                      fontSize: 22,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  subtitle: Obx(() => Text(controller.brand)),
-                  children: [
-                    Obx(
-                      () => ListView.builder(
-                        shrinkWrap: true,
-                        itemCount: controller.brands.length,
-                        physics: NeverScrollableScrollPhysics(),
-                        itemBuilder: (context, index) {
-                          if (controller.isLoadingMakers) {
-                            return LinearProgressIndicator();
-                          }
-                          return ListTile(
-                            title: Text(controller.brands[index]),
-                            onTap: () => {
-                              controller.setBrand(controller.brands[index]),
-                              _brandsKey.currentState.closeExpansion(),
-                            },
-                          );
-                        },
-                      ),
-                    ),
-                  ],
-                ),
-                BetterExpansionTile(
-                  key: _modelsKey,
-                  title: Text(
-                    'Models',
-                    style: TextStyle(
-                      fontSize: 22,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  subtitle: Obx(() => Text(controller.model)),
-                  children: [
-                    Obx(
-                      () => ListView.builder(
-                        shrinkWrap: true,
-                        itemCount: controller.models.length,
-                        physics: NeverScrollableScrollPhysics(),
-                        itemBuilder: (context, index) {
-                          if (controller.isLoadingModels) {
-                            return LinearProgressIndicator();
-                          }
-                          return ListTile(
-                            title: Text(controller.models[index]),
-                            onTap: () => {
-                              controller.setModel(controller.models[index]),
-                              _modelsKey.currentState.closeExpansion(),
-                            },
-                          );
-                        },
-                      ),
-                    ),
-                  ],
-                ),
-                BetterExpansionTile(
-                  key: _priceKey,
-                  title: Text(
-                    'Price',
-                    style: TextStyle(
-                      fontSize: 22,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  subtitle: Obx(() => Text(controller.price)),
-                  children: [
-                    ListTile(
-                      title: Text('\$30 - \$1250'),
-                      onTap: () => {
-                        controller.setPrice('\$30 - \$1250'),
-                        _priceKey.currentState.closeExpansion(),
-                      },
-                    ),
-                  ],
-                ),
-                BetterExpansionTile(
-                  key: _locationKey,
-                  title: Text(
-                    'Location',
-                    style: TextStyle(
-                      fontSize: 22,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  subtitle: Obx(() => Text(controller.location)),
-                  children: [
-                    ListTile(
-                      title: Text('Location A'),
-                      onTap: () => {
-                        controller.setLocation('Location A'),
-                        _locationKey.currentState.closeExpansion(),
-                      },
-                    ),
-                  ],
-                ),
-              ],
+        actions: [
+          FlatButton(
+            onPressed: () => [_searchController.clear(), _homeController.doSearch(), Get.back()],
+            child: Text(
+              'CLEAR',
+              style: TextStyle(fontWeight: FontWeight.bold),
             ),
-            SizedBox(width: 230, child: GradientButton(text: 'Search', onPressed: () => [_homeController.doSearch(), Get.back()])),
-          ],
-        ),
+          )
+        ],
+      ),
+      body: LayoutBuilder(
+        builder: (context, constraint) {
+          return SingleChildScrollView(
+            child: ConstrainedBox(
+              constraints: BoxConstraints(minHeight: constraint.maxHeight),
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Brands',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        SizedBox(height: 10),
+                        Obx(
+                          () => SelectOption(
+                            enableFilter: true,
+                            isLoading: _searchController.isLoadingBrands,
+                            placeholder: 'Select one',
+                            modalTitle: 'Brands',
+                            selectText: 'Select a brand',
+                            value: _searchController.selectedBrand,
+                            choiceItems: _searchController.brands,
+                            onChange: (state) => _searchController.setBrand(state.value),
+                          ),
+                        ),
+                        SizedBox(height: 20),
+                        Text(
+                          'Models',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        SizedBox(height: 10),
+                        Obx(
+                          () => SelectOption(
+                            isLoading: _searchController.isLoadingModels,
+                            isDisabled: _searchController.selectedBrand == '',
+                            placeholder: 'Select one',
+                            modalTitle: 'Models',
+                            selectText: 'Select a model',
+                            value: _searchController.selectedModel,
+                            choiceItems: _searchController.models,
+                            onChange: (state) => _searchController.setModel(state.value),
+                          ),
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 20),
+                    SizedBox(
+                        width: 230,
+                        child:
+                            GradientButton(text: 'Search', onPressed: () => [_homeController.doSearch(), Get.back()])),
+                  ],
+                ),
+              ),
+            ),
+          );
+        },
       ),
     );
   }

@@ -33,7 +33,7 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
       double currentScroll = _scrollController.position.pixels;
       double delta = MediaQuery.of(context).size.height * 0.40;
       if (maxScroll - currentScroll < delta) {
-        if (!_homeController.isLoadingMore && !_homeController.isLastPage && !_homeController.hasErrorMore) {
+        if (!_homeController.isLoadingMore && !_homeController.isLastPage && !_homeController.loadingMoreError) {
           _homeController.getNextPage();
         }
       }
@@ -49,9 +49,9 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
 
   Future<void> refresItems() async {
     if (_homeController.isSearch) {
-      _homeController.doSearch();
+      _homeController.doSearch(skipLoading: true);
     } else {
-      return _homeController.findAll();
+      return _homeController.findAll(skipLoading: true);
     }
   }
 
@@ -156,43 +156,25 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
                 onRefresh: refresItems,
                 child: SingleChildScrollView(
                   controller: _scrollController,
-                  child: Column(
-                    children: [
-                      SizedBox(
-                        height: 250,
-                        child: ListView.builder(
-                          scrollDirection: Axis.horizontal,
-                          physics: BouncingScrollPhysics(),
-                          shrinkWrap: true,
-                          itemCount: 4,
-                          itemBuilder: (context, index) {
-                            return Padding(
-                              padding: const EdgeInsets.only(right: 10),
-                              child: FeaturedBox(
-                                image: 'https://source.unsplash.com/600x500/?bmw,audi,volvo˚?ad=$index',
-                                title: 'Sport car',
-                                salePrice: '19,000',
-                                onTap: () => Get.toNamed('/product/$index'),
-                              ),
-                            );
-                          },
-                        ),
-                      ),
-                      SizedBox(height: 20),
-                      GetX<HomeController>(
-                        init: _homeController,
-                        builder: (_) {
-                          if (_.isLoading) {
-                            return Center(
+                  child: GetX<HomeController>(
+                      init: _homeController,
+                      builder: (_) {
+                        if (_.isLoading) {
+                          return Padding(
+                            padding: EdgeInsets.only(top: Get.size.height / 3),
+                            child: Center(
                               child: CircularProgressIndicator(),
-                            );
-                          }
-                          if (_.hasError) {
-                            return Center(
+                            ),
+                          );
+                        }
+                        if (_.hasError) {
+                          return Padding(
+                            padding: EdgeInsets.only(top: Get.size.height / 4),
+                            child: Center(
                               child: Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                  Text('Ops, error retrieving items.'),
+                                  Text('Ops, error while retrieving items.'),
                                   FlatButton(
                                     onPressed: () => _.findAll(),
                                     child: Text(
@@ -202,64 +184,89 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
                                   ),
                                 ],
                               ),
-                            );
-                          }
-                          if (_.total == 0) {
-                            return Padding(
-                              padding: EdgeInsets.only(top: 50),
-                              child: Center(
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    SvgPicture.asset('assets/images/by_my_car.svg', width: 220),
-                                    SizedBox(height: 20),
-                                    Text(
-                                      'No results match your search.',
-                                      style: TextStyle(
-                                        fontSize: 13,
-                                        fontWeight: FontWeight.bold,
-                                      ),
+                            ),
+                          );
+                        }
+                        if (_.total == 0) {
+                          return Padding(
+                            padding: EdgeInsets.only(top: Get.size.height / 5),
+                            child: Center(
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  SvgPicture.asset('assets/images/by_my_car.svg', width: 280),
+                                  SizedBox(height: 20),
+                                  Text(
+                                    'Oh, looks like we couldn\'t find any results.',
+                                    style: TextStyle(
+                                      fontSize: 13,
+                                      fontWeight: FontWeight.bold,
                                     ),
-                                  ],
+                                  ),
+                                ],
+                              ),
+                            ),
+                          );
+                        }
+                        return Column(
+                          children: [
+                            SizedBox(
+                              height: 250,
+                              child: ListView.builder(
+                                scrollDirection: Axis.horizontal,
+                                physics: BouncingScrollPhysics(),
+                                shrinkWrap: true,
+                                itemCount: _.featured.length,
+                                itemBuilder: (context, index) {
+                                  return Padding(
+                                    padding: const EdgeInsets.only(right: 10),
+                                    child: FeaturedBox(
+                                      image: _.featured[index].mainPhoto?.bigThumb ??
+                                          'https://source.unsplash.com/600x500/?bmw,audi,volvo',
+                                      title: _.featured[index].title ?? 'Title',
+                                      salePrice: _.featured[index].price ?? '0',
+                                      normalPrice: _.featured[index].oldPrice,
+                                      onTap: () => Get.toNamed('/product/${_homeController.featured[index].id}'),
+                                    ),
+                                  );
+                                },
+                              ),
+                            ),
+                            SizedBox(height: 20),
+                            GridView.builder(
+                              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                                crossAxisCount: 2,
+                                crossAxisSpacing: 5,
+                                mainAxisSpacing: 5,
+                                childAspectRatio: 0.80,
+                              ),
+                              shrinkWrap: true,
+                              physics: BouncingScrollPhysics(),
+                              itemCount: _.results?.length ?? 0,
+                              itemBuilder: (context, index) {
+                                return NormalBox(
+                                  image: _.results[index].mainPhoto?.thumb ??
+                                      'https://source.unsplash.com/600x500/?bmw,audi,volvo?ad=${_.results[index].id}',
+                                  title: _.results[index].title,
+                                  salePrice: _.results[index].price,
+                                  normalPrice: _.results[index].oldPrice,
+                                  onTap: () => Get.toNamed('/product/${_.results[index].id}'),
+                                );
+                              },
+                            ),
+                            Obx(
+                              () => Visibility(
+                                visible: _homeController.isLoadingMore,
+                                child: Padding(
+                                  padding: const EdgeInsets.only(top: 15),
+                                  child: CircularProgressIndicator(),
                                 ),
                               ),
-                            );
-                          }
-                          return GridView.builder(
-                            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                              crossAxisCount: 2,
-                              crossAxisSpacing: 5,
-                              mainAxisSpacing: 5,
-                              childAspectRatio: 0.80,
                             ),
-                            shrinkWrap: true,
-                            physics: BouncingScrollPhysics(),
-                            itemCount: _.results?.length ?? 0,
-                            itemBuilder: (context, index) {
-                              return NormalBox(
-                                image: _.results[index].mainPhoto?.thumb ??
-                                    'https://source.unsplash.com/600x500/?bmw,audi,volvo?ad=${_.results[index].id}',
-                                title: _.results[index].title,
-                                salePrice: _.results[index].price,
-                                normalPrice: _.results[index].oldPrice,
-                                onTap: () => Get.toNamed('/product/${_.results[index].id}'),
-                              );
-                            },
-                          );
-                        },
-                      ),
-                      Obx(
-                        () => Visibility(
-                          visible: _homeController.isLoadingMore,
-                          child: Padding(
-                            padding: const EdgeInsets.only(top: 15),
-                            child: CircularProgressIndicator(),
-                          ),
-                        ),
-                      ),
-                      SizedBox(height: 15),
-                    ],
-                  ),
+                            SizedBox(height: 15),
+                          ],
+                        );
+                      }),
                 ),
               ),
             ),

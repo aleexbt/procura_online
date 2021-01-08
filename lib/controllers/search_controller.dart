@@ -1,10 +1,9 @@
 import 'package:get/get.dart';
-import 'package:procura_online/repositories/product_repository.dart';
 import 'package:procura_online/repositories/vehicle_repository.dart';
+import 'package:smart_select/smart_select.dart';
 
 class SearchController extends GetxController {
-  VehicleRepository _vehicleRepository = Get.put(VehicleRepository());
-  ProductRepository _productRepository = Get.put(ProductRepository());
+  VehicleRepository _vehicleRepository = Get.find();
 
   @override
   onInit() {
@@ -13,58 +12,67 @@ class SearchController extends GetxController {
   }
 
   RxString _searchTerm = ''.obs;
-  RxList _results = [].obs;
 
-  RxString _category = 'Select a category'.obs;
-  RxString _categoryValue = 'auto'.obs;
   RxString _brand = 'Select a brand'.obs;
   RxString _model = 'Select a model'.obs;
-  RxString _price = 'Select a price'.obs;
-  RxString _location = 'Select a location'.obs;
+  RxString _category = 'Listings'.obs;
+  RxString _categoryValue = 'listings'.obs;
 
-  RxBool _isLoadingMakers = false.obs;
+  RxBool _isLoadingBrands = false.obs;
   RxBool _isLoadingModels = false.obs;
 
-  bool get isLoadingMakers => _isLoadingMakers.value;
+  bool get isLoadingBrands => _isLoadingBrands.value;
   bool get isLoadingModels => _isLoadingModels.value;
 
-  RxList<String> _brands = List<String>().obs;
-  RxList<String> _models = List<String>().obs;
+  RxList<S2Choice<String>> _brands = List<S2Choice<String>>().obs;
+  RxList<S2Choice<String>> _models = List<S2Choice<String>>().obs;
 
-  List<String> get brands => _brands;
-  List<String> get models => _models;
+  List<S2Choice<String>> get brands => _brands;
+  List<S2Choice<String>> get models => _models;
 
   String get searchTerm => _searchTerm.value;
-  List get results => _results;
 
-  String get categoryName => _category.value;
-  String get category => _categoryValue.value;
   String get brand => _brand.value;
   String get model => _model.value;
+  String get category => _category.value;
+  String get categoryValue => _categoryValue.value;
 
-  String get price => _price.value;
-  String get location => _location.value;
+  RxString _selectedBrand = ''.obs;
+  RxString _selectedModel = ''.obs;
+
+  String get selectedBrand => _selectedBrand.value;
+  String get selectedModel => _selectedModel.value;
 
   void getBrands() async {
     try {
-      _isLoadingMakers.value = true;
-      List<String> makers = await _vehicleRepository.getMakers();
-      if (makers.length > 0) {
-        _brands.assignAll(makers);
+      _isLoadingBrands.value = true;
+      List<String> brands = await _vehicleRepository.getMakers();
+      if (brands.length > 0) {
+        List<S2Choice<String>> options = S2Choice.listFrom<String, dynamic>(
+          source: brands,
+          value: (index, item) => item,
+          title: (index, item) => item,
+        );
+        _brands.assignAll(options);
       }
     } catch (err) {
       print(err);
     } finally {
-      _isLoadingMakers.value = false;
+      _isLoadingBrands.value = false;
     }
   }
 
-  void getModels(String model) async {
+  void getModels(String brand) async {
     try {
       _isLoadingModels.value = true;
-      List<String> models = await _vehicleRepository.getModels(model);
+      List<String> models = await _vehicleRepository.getModels(brand);
       if (models.length > 0) {
-        _models.assignAll(models);
+        List<S2Choice<String>> options = S2Choice.listFrom<String, dynamic>(
+          source: models,
+          value: (index, item) => item,
+          title: (index, item) => item,
+        );
+        _models.assignAll(options);
       }
     } catch (err) {
       print(err);
@@ -81,21 +89,27 @@ class SearchController extends GetxController {
   }
 
   void setBrand(String value) {
-    _brand.value = value;
-    _model.value = 'Select a model';
-    _models.assignAll([]);
-    getModels(_brand.value);
+    if (value != '' && value != _selectedBrand.value) {
+      getModels(value);
+    }
+    _selectedBrand.value = value;
   }
 
   void setModel(String value) {
-    _model.value = value;
+    _selectedModel.value = value;
   }
 
-  void setPrice(String value) {
-    _price.value = value;
-  }
-
-  void setLocation(String value) {
-    _location.value = value;
+  void clear() {
+    print('clear');
+    _selectedBrand.update((val) {
+      val = '';
+    });
+    _selectedModel.update((val) {
+      val = '';
+    });
+    _selectedBrand.value = '';
+    _selectedModel.value = '';
+    _selectedBrand.refresh();
+    _selectedModel.refresh();
   }
 }

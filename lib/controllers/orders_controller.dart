@@ -4,12 +4,16 @@ import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:procura_online/models/media_upload_model.dart';
+import 'package:procura_online/models/message_model.dart';
+import 'package:procura_online/models/order_model.dart';
 import 'package:procura_online/models/orders_model.dart';
+import 'package:procura_online/models/upload_media_model.dart';
+import 'package:procura_online/repositories/chat_repository.dart';
 import 'package:procura_online/repositories/orders_repository.dart';
 
 class OrdersController extends GetxController {
-  OrdersRepository _repository = Get.put(OrdersRepository(), permanent: true);
+  OrdersRepository _ordersRepository = Get.find();
+  ChatRepository _chatRepository = Get.find();
 
   @override
   onInit() {
@@ -19,22 +23,38 @@ class OrdersController extends GetxController {
 
   RxBool _isLoading = false.obs;
   RxBool _isLoadingMore = false.obs;
+  RxBool _loadingMoreError = false.obs;
   RxBool _isUploadingImage = false.obs;
   RxBool _isPublishingOrder = false.obs;
+  RxBool _publishingOrderError = false.obs;
+  RxBool _isReplyingMsg = false.obs;
+  RxBool _replyingMsgError = false.obs;
   RxDouble uploadImageProgress = 0.0.obs;
   RxBool _hasError = false.obs;
+
+  Rx<Orders> _orders = Orders().obs;
+  RxString _filter = 'vazio'.obs;
+  RxString _filterName = 'Unread'.obs;
   RxInt _page = 1.obs;
-  Rx<OrdersModel> _orders = OrdersModel().obs;
 
   bool get isLoading => _isLoading.value;
   bool get isLoadingMore => _isLoadingMore.value;
+  bool get loadingMoreError => _loadingMoreError.value;
   bool get isUploadingImage => _isUploadingImage.value;
   bool get isPublishingOrder => _isPublishingOrder.value;
+  bool get publishingOrderError => _publishingOrderError.value;
+  bool get isReplyingMsg => _isReplyingMsg.value;
+  bool get replyingMsgError => _replyingMsgError.value;
   bool get hasError => _hasError.value;
+
+  Orders get orders => _orders.value;
   int get page => _page.value;
-  OrdersModel get orders => _orders.value;
-  int get totalOrders => _orders.value.order?.length ?? 0;
+  String get filter => _filter.value;
+  String get filterName => _filterName.value;
+  int get perPage => _orders.value.meta.perPage;
+  int get totalOrders => _orders.value.meta.total;
   bool get isLastPage => _page.value == _orders.value.meta.lastPage;
+
   List<Order> filteredOrders;
 
   void findAll() async {
@@ -42,10 +62,13 @@ class OrdersController extends GetxController {
     _hasError.value = false;
     _page.value = 1;
     try {
-      OrdersModel orders = await _repository.findAll(page: _page.value);
-      _orders.value = orders;
-      filteredOrders = List.from(orders.order);
+      Orders response = await _ordersRepository.findAll(filter: _filter.value, page: _page.value);
+      _orders.value = response;
+      filteredOrders = List.from(response.orders);
     } on DioError catch (err) {
+      _hasError.value = true;
+      print(err);
+    } catch (err) {
       _hasError.value = true;
       print(err);
     } finally {
@@ -65,6 +88,7 @@ class OrdersController extends GetxController {
     String fuelType,
   }) async {
     _isPublishingOrder.value = true;
+    _publishingOrderError.value = false;
     try {
       Map<String, dynamic> data = {
         "make": brand,
@@ -77,10 +101,16 @@ class OrdersController extends GetxController {
         "engine_displacement": engineDisplacement,
         "attachments": images,
       };
-      await _repository.createOrder(data);
+      await _ordersRepository.createOrder(data);
       successDialog(title: 'Success', message: 'Your order has been published successfully.');
     } on DioError catch (err) {
       print(err);
+      _publishingOrderError.value = true;
+      Get.rawSnackbar(
+          message: 'Ops, something went wrong.', backgroundColor: Colors.red, duration: Duration(seconds: 5));
+    } catch (err) {
+      print(err);
+      _publishingOrderError.value = true;
       Get.rawSnackbar(
           message: 'Ops, something went wrong.', backgroundColor: Colors.red, duration: Duration(seconds: 5));
     } finally {
@@ -88,23 +118,54 @@ class OrdersController extends GetxController {
     }
   }
 
-  void replyOrder({String message, String orderId, String conversationId}) async {
-    Map<String, dynamic> data = {"message": message, "order_id": orderId, "conversation_id": conversationId ?? ""};
-    await _repository.replyOrder(data);
+  void replyOrder({String message, String orderId}) async {
+    _isReplyingMsg.value = true;
+    _replyingMsgError.value = false;
+    try {
+      Map<String, dynamic> data = {"message": message, "order_id": orderId};
+      Message response = await _chatRepository.replyMessage(data);
+      _chatRepository.findAll();
+      Get.offNamed('/chat/conversation/${response.conversationId}');
+    } on DioError catch (err) {
+      print(err);
+      _replyingMsgError.value = true;
+      Get.rawSnackbar(
+          message: 'Ops, something went wrong.', backgroundColor: Colors.red, duration: Duration(seconds: 3));
+    } catch (err) {
+      print(err);
+      _replyingMsgError.value = true;
+      Get.rawSnackbar(
+          message: 'Ops, something went wrong.', backgroundColor: Colors.red, duration: Duration(seconds: 3));
+    } finally {
+      _isReplyingMsg.value = false;
+    }
   }
 
   void nextPage() async {
     _isLoadingMore.value = true;
-    _page.value = _page.value + 1;
-    OrdersModel orders = await _repository.findAll(page: _page.value);
-
-    if (orders != null) {
-      _orders.update((val) {
-        val.order.addAll(orders.order);
-      });
-      filteredOrders.addAll(orders.order);
+    _loadingMoreError.value = false;
+    try {
+      _page.value = _page.value + 1;
+      Orders response = await _ordersRepository.findAll(page: _page.value);
+      if (response != null) {
+        _orders.update((val) {
+          val.orders.addAll(response.orders);
+        });
+        filteredOrders.addAll(response.orders);
+      }
+    } on DioError catch (err) {
+      print(err);
+      _loadingMoreError.value = true;
+      Get.rawSnackbar(
+          message: 'Ops, something went wrong.', backgroundColor: Colors.red, duration: Duration(seconds: 3));
+    } catch (err) {
+      print(err);
+      _loadingMoreError.value = true;
+      Get.rawSnackbar(
+          message: 'Ops, something went wrong.', backgroundColor: Colors.red, duration: Duration(seconds: 3));
+    } finally {
+      _isLoadingMore.value = false;
     }
-    _isLoadingMore.value = false;
   }
 
   void resetState() {
@@ -112,29 +173,34 @@ class OrdersController extends GetxController {
     _isLoadingMore.value = false;
     _hasError.value = false;
     _page.value = 1;
-    _orders.value = OrdersModel();
+    _orders.value = Orders();
   }
 
   void filterResults(String term) {
     List<Order> filtered =
         filteredOrders.where((order) => order.model.toLowerCase().contains(term.toLowerCase())).toList();
-    _orders.value.order = filtered;
+    _orders.value.orders = filtered;
     _orders.refresh();
   }
 
-  Future<MediaUploadModel> mediaUpload(File photo) async {
+  Future<UploadMedia> mediaUpload(File photo) async {
     uploadImageProgress.value = 0.0;
     _isUploadingImage.value = true;
     var _result;
     try {
-      MediaUploadModel response = await _repository.mediaUpload(photo);
+      UploadMedia response = await _ordersRepository.mediaUpload(photo);
       _result = response;
     } on DioError catch (err) {
       print(err);
       Get.rawSnackbar(
           message: 'Ops, error while uploading image', backgroundColor: Colors.red, duration: Duration(seconds: 5));
+    } catch (err) {
+      print(err);
+      Get.rawSnackbar(
+          message: 'Ops, error while uploading image', backgroundColor: Colors.red, duration: Duration(seconds: 5));
     } finally {
       _isUploadingImage.value = false;
+      uploadImageProgress.value = 0.0;
     }
     return _result;
   }
@@ -159,5 +225,11 @@ class OrdersController extends GetxController {
       btnOkIcon: Icons.check_circle,
       btnOkColor: Colors.blue,
     )..show();
+  }
+
+  void changeFilter({@required String value, @required String name}) {
+    _filter.value = value;
+    _filterName.value = name;
+    findAll();
   }
 }

@@ -9,7 +9,6 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:octo_image/octo_image.dart';
 import 'package:procura_online/controllers/product_controller.dart';
-import 'package:procura_online/models/product_model.dart';
 import 'package:share/share.dart';
 
 class ProductScreen extends StatelessWidget {
@@ -25,7 +24,8 @@ class ProductScreen extends StatelessWidget {
             icon: Icon(Icons.share),
             onPressed: () {
               if (_productController.product.title != null) {
-                Share.share(_productController.product.title);
+                Share.share(
+                    'I think I found a product you may like ${_productController.product.title}, https://procuraonline-dev.pt/listings/${_productController.product.slug}/${_productController.product.id}');
               }
             },
           )
@@ -74,24 +74,7 @@ class ProductScreen extends StatelessWidget {
                       overlayShadow: true,
                       dotIncreasedColor: Colors.blue,
                       autoplay: false,
-                      onImageTap: (value) => Get.toNamed(
-                        '/show-photos',
-                        arguments: {
-                          "photoId": "photo",
-                          "photoUrl": "${_.product.mainPhoto.original}",
-                        },
-                      ),
-                      images: [
-                        Hero(
-                          tag: 'photo',
-                          child: OctoImage(
-                            image: CachedNetworkImageProvider(_.product.mainPhoto.original),
-                            placeholderBuilder: OctoPlaceholder.circularProgressIndicator(),
-                            errorBuilder: OctoError.icon(color: Colors.grey[400]),
-                            fit: BoxFit.cover,
-                          ),
-                        )
-                      ],
+                      images: buildImage(_.product.photos?.original, _.product.mainPhoto?.original),
                     ),
                   ),
                   SizedBox(height: 8),
@@ -415,37 +398,53 @@ class ProductScreen extends StatelessWidget {
     );
   }
 
-  List buildImage(Photos photos) {
-    List<GestureDetector> photosList = [];
+  List buildImage(Map<String, dynamic> photos, String mainPhoto) {
+    List images = [];
 
-    try {
-      Map<String, dynamic> _list = photos.original.toJson();
-      _list.removeWhere((key, value) => value == null);
-
-      Map<String, dynamic> object = Map.fromEntries(_list.entries.map((e) => MapEntry(e.key, e.value)));
-
-      for (var item in object.entries) {
-        photosList.add(GestureDetector(
+    if (photos != null) {
+      images = photos.entries
+          .map((entry) => GestureDetector(
+                onTap: () => Get.toNamed(
+                  '/show-photos',
+                  arguments: {
+                    "photoId": "photo_${entry.key}",
+                    "photoUrl": "${entry.value}",
+                  },
+                ),
+                child: Hero(
+                  tag: 'photo_${entry.key}',
+                  child: OctoImage(
+                    image: CachedNetworkImageProvider(entry.value),
+                    placeholderBuilder: OctoPlaceholder.circularProgressIndicator(),
+                    errorBuilder: OctoError.icon(color: Colors.grey[400]),
+                    fit: BoxFit.cover,
+                  ),
+                ),
+              ))
+          .toList();
+    } else if (mainPhoto != null) {
+      images = [
+        GestureDetector(
           onTap: () => Get.toNamed(
             '/show-photos',
             arguments: {
-              "photoId": "photo_${item.key}",
-              "photoUrl": "${item.value}",
+              "photoId": "photo",
+              "photoUrl": "$mainPhoto",
             },
           ),
           child: Hero(
-            tag: 'photo_${item.key}',
+            tag: 'photo',
             child: OctoImage(
-              image: CachedNetworkImageProvider(item.value),
+              image: CachedNetworkImageProvider(mainPhoto),
               placeholderBuilder: OctoPlaceholder.circularProgressIndicator(),
               errorBuilder: OctoError.icon(color: Colors.grey[400]),
               fit: BoxFit.cover,
             ),
           ),
-        ));
-      }
-    } catch (_) {
-      photosList.add(
+        )
+      ];
+    } else {
+      images = [
         GestureDetector(
           onTap: () => Get.toNamed(
             '/show-photos',
@@ -463,9 +462,9 @@ class ProductScreen extends StatelessWidget {
               fit: BoxFit.cover,
             ),
           ),
-        ),
-      );
+        )
+      ];
     }
-    return photosList;
+    return images;
   }
 }

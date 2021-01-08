@@ -7,7 +7,7 @@ import 'package:shimmer/shimmer.dart';
 
 class ChatWidget extends StatelessWidget {
   final ChatController _chatController = Get.find();
-  final ScrollController _scrollController2 = ScrollController();
+  final ScrollController _scrollController = ScrollController();
 
   Future<void> refresItems() async {
     return _chatController.findAll();
@@ -15,9 +15,9 @@ class ChatWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    _scrollController2.addListener(() {
-      double maxScroll = _scrollController2.position.maxScrollExtent;
-      double currentScroll = _scrollController2.position.pixels;
+    _scrollController.addListener(() {
+      double maxScroll = _scrollController.position.maxScrollExtent;
+      double currentScroll = _scrollController.position.pixels;
       double delta = MediaQuery.of(context).size.height * 0.40;
       if (maxScroll - currentScroll < delta) {
         if (!_chatController.isLoadingMore && !_chatController.isLastPage) {
@@ -103,7 +103,7 @@ class ChatWidget extends StatelessWidget {
               ),
             );
           }
-          if (_.totalConversations == 0) {
+          if (_.chats.chats.length == 0) {
             return Center(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -127,8 +127,8 @@ class ChatWidget extends StatelessWidget {
                 Expanded(
                   child: ListView.builder(
                     shrinkWrap: true,
-                    itemCount: _chatController.totalConversations,
-                    controller: _scrollController2,
+                    itemCount: _chatController.chats.chats.length,
+                    controller: _scrollController,
                     physics: AlwaysScrollableScrollPhysics(),
                     itemBuilder: (context, index) {
                       return ListTile(
@@ -145,17 +145,17 @@ class ChatWidget extends StatelessWidget {
                             ),
                           ),
                         ),
-                        title: Text(_.conversations[index].usertwo.name),
-                        subtitle: Text(_.conversations[index].latestMessage.message),
+                        title: Text(
+                            '${_.chats.chats[index].order.model} ${_.chats.chats[index].order.year}'), // messages.messages[index].usertwo.name
+                        subtitle: Text(_.chats.chats[index].latestMessage.message),
                         trailing: Text(
-                          _.conversations[index].latestMessage.humanReadDate,
+                          _.chats.chats[index].latestMessage.humanReadDate,
                           style: TextStyle(
                             color: Colors.grey[400],
                             fontSize: 12,
                           ),
                         ),
-                        onTap: () => Get.toNamed('/chat/conversation/${_.conversations[index].id}',
-                            arguments: _.conversations[index]),
+                        onTap: () => Get.toNamed('/chat/conversation/${_.chats.chats[index].id}'),
                       );
                     },
                   ),

@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:procura_online/controllers/home_controller.dart';
 import 'package:procura_online/controllers/orders_controller.dart';
 import 'package:procura_online/models/user_model.dart';
 import 'package:procura_online/repositories/user_repository.dart';
@@ -12,8 +11,8 @@ import 'package:procura_online/utils/prefs.dart';
 
 import 'chat_controller.dart';
 
-class UserController extends GetxController with StateMixin<UserModel> {
-  UserRepository _repository = Get.find();
+class UserController extends GetxController with StateMixin<User> {
+  UserRepository _userRepository = Get.find();
   // OrdersController _ordersController = Get.find();
   // PageController _pageController = NavKey.pageController;
 
@@ -58,13 +57,14 @@ class UserController extends GetxController with StateMixin<UserModel> {
         "device_name": "Android",
       };
 
-      UserModel response = await _repository.signIn(loginData);
+      var response = await _userRepository.signIn(loginData);
+      User user = User.fromJson(response['user']);
       _isLoggedIn.value = true;
-      _token.value = response.token;
-      _userData.value = response.user;
+      _token.value = response['token'];
+      _userData.value = user;
       Prefs.setBool('isLoggedIn', true);
-      Prefs.setString('token', response.token);
-      Prefs.setString('userData', jsonEncode(response.user));
+      Prefs.setString('token', response['token']);
+      Prefs.setString('userData', jsonEncode(user));
       Get.offAllNamed('/');
     } on DioError catch (err) {
       Map<String, dynamic> errors = err.response.data['errors'];
@@ -107,12 +107,10 @@ class UserController extends GetxController with StateMixin<UserModel> {
         "postcode": postcode ?? "90210"
       };
 
-      await _repository.signUp(registerData);
+      await _userRepository.signUp(registerData);
       Get.back();
       Get.rawSnackbar(
-          message: 'User registered successfully.',
-          backgroundColor: Colors.green,
-          duration: Duration(seconds: 3));
+          message: 'User registered successfully.', backgroundColor: Colors.green, duration: Duration(seconds: 3));
     } on DioError catch (err) {
       Map<String, dynamic> errors = err.response.data['errors'];
       List<String> errorList = [];
@@ -133,11 +131,8 @@ class UserController extends GetxController with StateMixin<UserModel> {
   void passwordReset(String email) async {
     _isLoading.value = true;
     try {
-      String response = await _repository.passwordReset(email);
-      Get.rawSnackbar(
-          message: response,
-          backgroundColor: Colors.green,
-          duration: Duration(seconds: 3));
+      String response = await _userRepository.passwordReset(email);
+      Get.rawSnackbar(message: response, backgroundColor: Colors.green, duration: Duration(seconds: 3));
     } on DioError catch (err) {
       Map<String, dynamic> errors = err.response.data['errors'];
       List<String> errorList = [];
@@ -168,12 +163,7 @@ class UserController extends GetxController with StateMixin<UserModel> {
   }
 
   void updateUserData(
-      {String name,
-      String email,
-      String phone,
-      String company,
-      String address,
-      String postcode}) async {
+      {String name, String email, String phone, String company, String address, String postcode}) async {
     _userData.update((val) {
       val.name = name;
       val.email = email;
@@ -185,15 +175,10 @@ class UserController extends GetxController with StateMixin<UserModel> {
     Prefs.setString('userData', jsonEncode(_userData));
     Get.back();
     Get.rawSnackbar(
-        message: 'Profile updated successfully.',
-        backgroundColor: Colors.green,
-        duration: Duration(seconds: 3));
+        message: 'Profile updated successfully.', backgroundColor: Colors.green, duration: Duration(seconds: 3));
   }
 
-  void changePassword(
-      {@required String currentPass,
-      @required String newPass,
-      @required String confirmPass}) async {
+  void changePassword({@required String currentPass, @required String newPass, @required String confirmPass}) async {
     _isLoading.value = true;
     try {
       Map<String, dynamic> passwordData = {
@@ -201,12 +186,10 @@ class UserController extends GetxController with StateMixin<UserModel> {
         "new_password": newPass,
         "new_password_confirmation": confirmPass,
       };
-      await _repository.changePassword(passwordData);
+      await _userRepository.changePassword(passwordData);
       Get.back();
       Get.rawSnackbar(
-          message: 'Password changed successfully.',
-          backgroundColor: Colors.green,
-          duration: Duration(seconds: 3));
+          message: 'Password changed successfully.', backgroundColor: Colors.green, duration: Duration(seconds: 3));
     } on DioError catch (err) {
       Map<String, dynamic> errors = err.response.data['errors'];
       List<String> errorList = [];

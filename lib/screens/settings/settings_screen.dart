@@ -49,6 +49,13 @@ class _SettingsScreenState extends State<SettingsScreen> with AutomaticKeepAlive
               horizontalTitleGap: 0,
               subtitle: Text('Sign out of your account'),
             ),
+            ListTileMoreCustomizable(
+              onTap: (_) => Get.toNamed('/ad/edit/24'),
+              leading: Icon(Icons.account_circle_outlined, color: Colors.blue),
+              title: Text('Edit'),
+              horizontalTitleGap: 0,
+              subtitle: Text('Manage your account settings'),
+            ),
           ],
         ),
       ),

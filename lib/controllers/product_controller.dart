@@ -4,7 +4,7 @@ import 'package:procura_online/models/product_model.dart';
 import 'package:procura_online/repositories/product_repository.dart';
 
 class ProductController extends GetxController {
-  final ProductRepository _repository = Get.find();
+  final ProductRepository _productRepository = Get.find();
   final String productId = Get.parameters['id'];
 
   RxBool _isLoading = false.obs;
@@ -23,10 +23,14 @@ class ProductController extends GetxController {
 
   void findOne() async {
     _isLoading.value = true;
+    _hasError.value = false;
     try {
-      Product response = await _repository.findOne(productId);
+      Product response = await _productRepository.findOne(productId);
       _product.value = response;
     } on DioError catch (err) {
+      print(err);
+      _hasError.value = true;
+    } catch (err) {
       print(err);
       _hasError.value = true;
     } finally {

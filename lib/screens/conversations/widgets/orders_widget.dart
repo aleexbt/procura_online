@@ -91,7 +91,7 @@ class OrdersWidget extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text('Ops, error retrieving your orders.'),
+                Text('Ops, error retrieving orders.'),
                 FlatButton(
                   onPressed: () => _.findAll(),
                   child: Text(
@@ -127,14 +127,13 @@ class OrdersWidget extends StatelessWidget {
               Expanded(
                 child: ListView.builder(
                   shrinkWrap: true,
-                  itemCount: _.totalOrders + 1,
+                  itemCount: _.orders.orders.length + 1,
                   controller: _scrollController,
                   physics: AlwaysScrollableScrollPhysics(),
                   itemBuilder: (context, index) {
-                    if (index == _.totalOrders) {
+                    if (index == _.orders.orders.length) {
                       return SizedBox(height: 70);
                     }
-                    var orders = _.orders;
                     return ListTile(
                       leading: ClipRRect(
                         borderRadius: BorderRadius.circular(50),
@@ -142,28 +141,28 @@ class OrdersWidget extends StatelessWidget {
                           width: 50,
                           height: 50,
                           child: OctoImage(
-                            image: CachedNetworkImageProvider(orders.order[index].makeLogoUrl),
+                            image: CachedNetworkImageProvider(_.orders.orders[index].makeLogoUrl),
                             placeholderBuilder: OctoPlaceholder.circularProgressIndicator(),
                             errorBuilder: OctoError.icon(color: Colors.grey[400]),
                             fit: BoxFit.cover,
                           ),
                         ),
                       ),
-                      title: Text(orders.order[index].model),
+                      title: Text(_.orders.orders[index].model),
                       subtitle: Text(
-                        orders.order[index].noteText,
+                        _.orders.orders[index].noteText,
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                       ),
                       trailing: Text(
-                        orders.order[index].humanReadDate,
+                        _.orders.orders[index].humanReadDate,
                         style: TextStyle(
                           color: Colors.grey[400],
                           fontSize: 12,
                         ),
                       ),
                       onTap: () =>
-                          Get.toNamed('/orders/reply/${orders.order[index].id}', arguments: orders.order[index]),
+                          Get.toNamed('/chat/new/${_.orders.orders[index].id}', arguments: _.orders.orders[index]),
                     );
                   },
                 ),

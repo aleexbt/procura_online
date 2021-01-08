@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 class CustomTextInput extends StatelessWidget {
   final bool enabled;
   final bool isRequired;
+  final String initialValue;
   final TextEditingController controller;
   final TextInputType keyboardType;
   final List<TextInputFormatter> inputFormatters;
@@ -28,6 +29,7 @@ class CustomTextInput extends StatelessWidget {
     Key key,
     this.enabled = true,
     this.isRequired = true,
+    this.initialValue,
     this.controller,
     this.keyboardType = TextInputType.text,
     this.inputFormatters,
@@ -60,6 +62,7 @@ class CustomTextInput extends StatelessWidget {
       maxLength: maxLength,
       textInputAction: textInputAction,
       maxLines: maxLines,
+      initialValue: initialValue,
       decoration: InputDecoration(
         hintText: hintText,
         hintStyle: hintStyle,

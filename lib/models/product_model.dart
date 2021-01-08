@@ -1,38 +1,11 @@
-class ProductModel {
-  List<Product> products;
-  Links links;
-  Meta meta;
+import 'package:json_annotation/json_annotation.dart';
 
-  ProductModel({this.products, this.links, this.meta});
+part 'product_model.g.dart';
 
-  ProductModel.fromJson(Map<String, dynamic> json) {
-    if (json['data'] != null) {
-      products = new List<Product>();
-      json['data'].forEach((v) {
-        products.add(new Product.fromJson(v));
-      });
-    }
-    // links = json['links'] != null ? Links.fromJson(json['links']) : null;
-    meta = json['meta'] != null ? Meta.fromJson(json['meta']) : null;
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    if (this.products != null) {
-      data['data'] = this.products.map((v) => v.toJson()).toList();
-    }
-    if (this.links != null) {
-      data['links'] = this.links.toJson();
-    }
-    if (this.meta != null) {
-      data['meta'] = this.meta.toJson();
-    }
-    return data;
-  }
-}
-
+@JsonSerializable()
 class Product {
   int id;
+  @JsonKey(name: 'user_id')
   String userId;
   String title;
   String slug;
@@ -41,25 +14,36 @@ class Product {
   String model;
   String year;
   String color;
+  @JsonKey(name: 'number_of_seats')
   String numberOfSeats;
+  @JsonKey(name: 'number_of_doors')
   String numberOfDoors;
+  @JsonKey(name: 'fuel_type')
   String fuelType;
+  @JsonKey(name: 'engine_displacement')
   String engineDisplacement;
+  @JsonKey(name: 'engine_power')
   String enginePower;
   String transmission;
   String registered;
   String mileage;
   String condition;
   String price;
+  @JsonKey(name: 'old_price')
   String oldPrice;
   String negotiable;
   String featured;
   String approved;
+  @JsonKey(name: 'views_count')
   String viewsCount;
+  @JsonKey(name: 'created_at')
   String createdAt;
+  @JsonKey(name: 'updated_at')
   String updatedAt;
   List<Categories> categories;
+  @JsonKey(name: 'main_photo', includeIfNull: false)
   MainPhoto mainPhoto;
+  @JsonKey(includeIfNull: false, defaultValue: [])
   Photos photos;
 
   Product({
@@ -94,294 +78,117 @@ class Product {
     this.photos,
   });
 
-  Product.fromJson(Map<String, dynamic> json) {
-    id = json['id'];
-    userId = json['user_id'];
-    title = json['title'];
-    slug = json['slug'];
-    description = json['description'];
-    make = json['make'];
-    model = json['model'];
-    year = json['year'];
-    color = json['color'];
-    numberOfSeats = json['number_of_seats'];
-    numberOfDoors = json['number_of_doors'];
-    fuelType = json['fuel_type'];
-    engineDisplacement = json['engine_displacement'];
-    enginePower = json['engine_power'];
-    transmission = json['transmission'];
-    registered = json['registered'];
-    mileage = json['mileage'];
-    condition = json['condition'];
-    price = json['price'];
-    oldPrice = json['old_price'];
-    negotiable = json['negotiable'];
-    featured = json['featured'];
-    approved = json['approved'];
-    viewsCount = json['views_count'];
-    createdAt = json['created_at'];
-    updatedAt = json['updated_at'];
-    if (json['categories'] != null) {
-      categories = new List<Categories>();
-      json['categories'].forEach((v) {
-        categories.add(new Categories.fromJson(v));
-      });
-    }
-    mainPhoto = json['main_photo'] != null ? MainPhoto.fromJson(json['main_photo']) : null;
-    photos = json['photos'] != null ? Photos.fromJson(json['photos']) : null;
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['id'] = this.id;
-    data['user_id'] = this.userId;
-    data['title'] = this.title;
-    data['slug'] = this.slug;
-    data['description'] = this.description;
-    data['make'] = this.make;
-    data['model'] = this.model;
-    data['year'] = this.year;
-    data['color'] = this.color;
-    data['number_of_seats'] = this.numberOfSeats;
-    data['number_of_doors'] = this.numberOfDoors;
-    data['fuel_type'] = this.fuelType;
-    data['engine_displacement'] = this.engineDisplacement;
-    data['engine_power'] = this.enginePower;
-    data['transmission'] = this.transmission;
-    data['registered'] = this.registered;
-    data['mileage'] = this.mileage;
-    data['condition'] = this.condition;
-    data['price'] = this.price;
-    data['old_price'] = this.oldPrice;
-    data['negotiable'] = this.negotiable;
-    data['featured'] = this.featured;
-    data['approved'] = this.approved;
-    data['views_count'] = this.viewsCount;
-    data['created_at'] = this.createdAt;
-    data['updated_at'] = this.updatedAt;
-    if (this.categories != null) {
-      data['categories'] = this.categories.map((v) => v.toJson()).toList();
-    }
-    if (this.mainPhoto != null) {
-      data['main_photo'] = this.mainPhoto.toJson();
-    }
-    if (this.photos != null) {
-      data['photos'] = this.photos.toJson();
-    }
-    return data;
-  }
+  factory Product.fromJson(Map<String, dynamic> json) => _$ProductFromJson(json);
+  Map<String, dynamic> toJson() => _$ProductToJson(this);
 }
 
+@JsonSerializable()
 class Categories {
   int id;
   String name;
 
   Categories({this.id, this.name});
 
-  Categories.fromJson(Map<String, dynamic> json) {
-    id = json['id'];
-    name = json['name'];
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['id'] = this.id;
-    data['name'] = this.name;
-    return data;
-  }
+  factory Categories.fromJson(Map<String, dynamic> json) => _$CategoriesFromJson(json);
+  Map<String, dynamic> toJson() => _$CategoriesToJson(this);
 }
 
+@JsonSerializable(includeIfNull: false)
 class MainPhoto {
   String original;
   String thumb;
+  @JsonKey(name: 'big_thumb')
   String bigThumb;
 
   MainPhoto({this.original, this.thumb, this.bigThumb});
 
-  MainPhoto.fromJson(Map<String, dynamic> json) {
-    original = json['original'];
-    thumb = json['thumb'];
-    bigThumb = json['big_thumb'];
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['original'] = this.original;
-    data['thumb'] = this.thumb;
-    data['big_thumb'] = this.bigThumb;
-    return data;
-  }
+  factory MainPhoto.fromJson(Map<String, dynamic> json) => _$MainPhotoFromJson(json);
+  Map<String, dynamic> toJson() => _$MainPhotoToJson(this);
 }
 
+@JsonSerializable()
 class Photos {
-  Original original;
-  Original thumb;
-  Original bigThumb;
+  Map<String, dynamic> original;
+  Map<String, dynamic> thumb;
+  Map<String, dynamic> bigThumb;
 
   Photos({this.original, this.thumb, this.bigThumb});
 
-  Photos.fromJson(Map<String, dynamic> json) {
-    original = json['original'] != null ? new Original.fromJson(json['original']) : null;
-    thumb = json['thumb'] != null ? new Original.fromJson(json['thumb']) : null;
-    bigThumb = json['big_thumb'] != null ? new Original.fromJson(json['big_thumb']) : null;
-  }
+  factory Photos.fromJson(Map<String, dynamic> json) => Photos(
+        original:
+            json['original'] != null ? Map.from(json['original']).map((k, v) => MapEntry<String, dynamic>(k, v)) : null,
+        thumb: json['thumb'] != null ? Map.from(json['thumb']).map((k, v) => MapEntry<String, dynamic>(k, v)) : null,
+        bigThumb: json['big_thumb'] != null
+            ? Map.from(json['big_thumb']).map((k, v) => MapEntry<String, dynamic>(k, v))
+            : null,
+      );
 
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    if (this.original != null) {
-      data['original'] = this.original.toJson();
-    }
-    if (this.thumb != null) {
-      data['thumb'] = this.thumb.toJson();
-    }
-    if (this.bigThumb != null) {
-      data['big_thumb'] = this.bigThumb.toJson();
-    }
-    return data;
-  }
+  // Map<String, dynamic> toJson() {
+  //   final Map<String, dynamic> data = new Map<String, dynamic>();
+  //   if (this.original != null) {
+  //     data['original'] = this.original.toJson();
+  //   }
+  //   if (this.thumb != null) {
+  //     data['thumb'] = this.thumb.toJson();
+  //   }
+  //   if (this.bigThumb != null) {
+  //     data['big_thumb'] = this.bigThumb.toJson();
+  //   }
+  //   return data;
+  // }
+  Map<String, dynamic> toJson() => _$PhotosToJson(this);
 }
 
-class Original {
-  String s11771;
-  String s11772;
-  String s11794;
-  String s11795;
-  String s11796;
-  String s11790;
-  String s11791;
-  String s11792;
-  String s11776;
-  String s11777;
-
-  Original({
-    this.s11771,
-    this.s11772,
-    this.s11794,
-    this.s11795,
-    this.s11796,
-    this.s11790,
-    this.s11791,
-    this.s11792,
-    this.s11776,
-    this.s11777,
-  });
-
-  Original.fromJson(Map<String, dynamic> json) {
-    s11771 = json['11771'];
-    s11772 = json['11772'];
-    s11794 = json['11794'];
-    s11795 = json['11795'];
-    s11796 = json['11796'];
-    s11790 = json['11790'];
-    s11791 = json['11791'];
-    s11792 = json['11792'];
-    s11776 = json['11776'];
-    s11777 = json['11777'];
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['11771'] = this.s11771;
-    data['11772'] = this.s11772;
-    data['11794'] = this.s11794;
-    data['11795'] = this.s11795;
-    data['11796'] = this.s11796;
-    data['11790'] = this.s11790;
-    data['11791'] = this.s11791;
-    data['11792'] = this.s11792;
-    data['11776'] = this.s11776;
-    data['11777'] = this.s11777;
-    return data;
-  }
-}
-
-class Links {
-  String first;
-  String last;
-  Null prev;
-  String next;
-
-  Links({this.first, this.last, this.prev, this.next});
-
-  Links.fromJson(Map<String, dynamic> json) {
-    first = json['first'] != null ? json['first'] : null;
-    last = json['last'] != null ? json['last'] : null;
-    // prev = json['prev'] != null ? json['prev'] : null;
-    next = json['next'] != null ? json['next'] : null;
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['first'] = this.first;
-    data['last'] = this.last;
-    data['prev'] = this.prev;
-    data['next'] = this.next;
-    return data;
-  }
-}
-
-class Meta {
-  int currentPage;
-  int from;
-  int lastPage;
-  List<Links> links;
-  String path;
-  int perPage;
-  int to;
-  int total;
-
-  Meta({this.currentPage, this.from, this.lastPage, this.links, this.path, this.perPage, this.to, this.total});
-
-  Meta.fromJson(Map<String, dynamic> json) {
-    currentPage = json['current_page'];
-    from = json['from'];
-    lastPage = json['last_page'];
-    if (json['links'] != null) {
-      links = new List<Links>();
-      json['links'].forEach((v) {
-        links.add(new Links.fromJson(v));
-      });
-    }
-    path = json['path'];
-    perPage = json['per_page'];
-    to = json['to'];
-    total = json['total'];
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['current_page'] = this.currentPage;
-    data['from'] = this.from;
-    data['last_page'] = this.lastPage;
-    if (this.links != null) {
-      data['links'] = this.links.map((v) => v.toJson()).toList();
-    }
-    data['path'] = this.path;
-    data['per_page'] = this.perPage;
-    data['to'] = this.to;
-    data['total'] = this.total;
-    return data;
-  }
-}
-
-// class Links {
-//   String url;
-//   String label;
-//   bool active;
+// class Original {
+//   String s11771;
+//   String s11772;
+//   String s11794;
+//   String s11795;
+//   String s11796;
+//   String s11790;
+//   String s11791;
+//   String s11792;
+//   String s11776;
+//   String s11777;
 //
-//   Links({this.url, this.label, this.active});
+//   Original({
+//     this.s11771,
+//     this.s11772,
+//     this.s11794,
+//     this.s11795,
+//     this.s11796,
+//     this.s11790,
+//     this.s11791,
+//     this.s11792,
+//     this.s11776,
+//     this.s11777,
+//   });
 //
-//   Links.fromJson(Map<String, dynamic> json) {
-//     url = json['url'];
-//     label = json['label'];
-//     active = json['active'];
+//   Original.fromJson(Map<String, dynamic> json) {
+//     s11771 = json['11771'];
+//     s11772 = json['11772'];
+//     s11794 = json['11794'];
+//     s11795 = json['11795'];
+//     s11796 = json['11796'];
+//     s11790 = json['11790'];
+//     s11791 = json['11791'];
+//     s11792 = json['11792'];
+//     s11776 = json['11776'];
+//     s11777 = json['11777'];
 //   }
 //
 //   Map<String, dynamic> toJson() {
 //     final Map<String, dynamic> data = new Map<String, dynamic>();
-//     data['url'] = this.url;
-//     data['label'] = this.label;
-//     data['active'] = this.active;
+//     data['11771'] = this.s11771;
+//     data['11772'] = this.s11772;
+//     data['11794'] = this.s11794;
+//     data['11795'] = this.s11795;
+//     data['11796'] = this.s11796;
+//     data['11790'] = this.s11790;
+//     data['11791'] = this.s11791;
+//     data['11792'] = this.s11792;
+//     data['11776'] = this.s11776;
+//     data['11777'] = this.s11777;
 //     return data;
 //   }
 // }

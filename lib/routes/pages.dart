@@ -1,7 +1,8 @@
 import 'package:get/get.dart';
 import 'package:procura_online/intro.dart';
 import 'package:procura_online/routes/routes.dart';
-import 'package:procura_online/screens/ad/new_ad_screen.dart';
+import 'package:procura_online/screens/ad/create_ad_screen.dart';
+import 'package:procura_online/screens/ad/edit_ad_screen.dart';
 import 'package:procura_online/screens/app_screen.dart';
 import 'package:procura_online/screens/auth/forgot_password_screen.dart';
 import 'package:procura_online/screens/auth/login_screen.dart';
@@ -63,7 +64,7 @@ List<GetPage> getPages = [
     page: () => ConversationScreen(),
   ),
   GetPage(
-    name: Routers.orderReply,
+    name: Routers.chatReply,
     page: () => OrderReplyScreen(),
   ),
   GetPage(
@@ -84,8 +85,12 @@ List<GetPage> getPages = [
     page: () => ChangePasswordScreen(),
   ),
   GetPage(
-    name: Routers.newAd,
-    page: () => NewAdScreen(),
+    name: Routers.createAd,
+    page: () => CreateAdScreen(),
+  ),
+  GetPage(
+    name: Routers.editAd,
+    page: () => EditAdScreen(),
   ),
   GetPage(
     name: Routers.createOrder,

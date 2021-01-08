@@ -1,6 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:dio_http_cache/dio_http_cache.dart';
-import 'package:procura_online/models/user_model.dart';
+import 'package:procura_online/models/user_model_old.dart';
 import 'package:procura_online/utils/prefs.dart';
 
 BaseOptions options = BaseOptions(
@@ -14,9 +14,9 @@ Dio _dio = Dio(options);
 final _dioCacheManager = DioCacheManager(CacheConfig());
 
 class UserRepository {
-  Future<UserModel> signIn(Map<String, dynamic> loginData) async {
+  Future signIn(Map<String, dynamic> loginData) async {
     final response = await _dio.post('/api/v1/login', data: loginData);
-    return UserModel.fromJson(response.data);
+    return response.data;
   }
 
   Future<User> signUp(Map<String, dynamic> registerData) async {
