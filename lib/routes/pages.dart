@@ -8,7 +8,7 @@ import 'package:procura_online/screens/auth/forgot_password_screen.dart';
 import 'package:procura_online/screens/auth/login_screen.dart';
 import 'package:procura_online/screens/auth/register_screen.dart';
 import 'package:procura_online/screens/conversations/chat_screen.dart';
-import 'package:procura_online/screens/conversations/conversation_screen.dart';
+import 'package:procura_online/screens/conversations/conversation_screen_pusher.dart';
 import 'package:procura_online/screens/conversations/order_reply_screen.dart';
 import 'package:procura_online/screens/create_order_screen.dart';
 import 'package:procura_online/screens/filter_screen.dart';
@@ -61,7 +61,7 @@ List<GetPage> getPages = [
   ),
   GetPage(
     name: Routers.chatConversation,
-    page: () => ConversationScreen(),
+    page: () => ConversationScreenPusher(),
   ),
   GetPage(
     name: Routers.chatReply,

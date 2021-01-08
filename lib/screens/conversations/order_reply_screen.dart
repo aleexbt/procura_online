@@ -1,11 +1,12 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:list_tile_more_customizable/list_tile_more_customizable.dart';
 import 'package:octo_image/octo_image.dart';
 import 'package:procura_online/controllers/orders_controller.dart';
 import 'package:procura_online/models/order_model.dart';
 import 'package:procura_online/repositories/orders_repository.dart';
-import 'package:procura_online/widgets/text_widget.dart';
 
 class OrderReplyScreen extends StatelessWidget {
   final OrdersController _ordersController = Get.find();
@@ -29,16 +30,60 @@ class OrderReplyScreen extends StatelessWidget {
               height: 30,
               fit: BoxFit.cover,
             )),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: TextWidget(
-                text: order.userInfo.name,
-                textType: TextType.TEXT_MEDIUM,
-                colorText: Colors.black,
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text(
+                  order.userInfo.name,
+                  style: TextStyle(
+                    fontSize: 16,
+                  ),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
               ),
             )
           ],
         ),
+        actions: [
+          IconButton(
+            icon: Icon(Icons.more_vert),
+            onPressed: () => Get.bottomSheet(
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Container(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      ListTileMoreCustomizable(
+                        leading: Icon(
+                          CupertinoIcons.archivebox,
+                          color: Colors.black,
+                        ),
+                        title: Text(
+                          "Mark as sold",
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontWeight: FontWeight.w400,
+                          ),
+                        ),
+                        horizontalTitleGap: 0,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        onTap: (_) => _ordersController.markOrderAsSold(orderId),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              backgroundColor: Colors.white,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(8),
+              ),
+            ),
+          ),
+        ],
       ),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -143,42 +188,47 @@ class OrderReplyScreen extends StatelessWidget {
             ),
           ),
           Container(
+            height: 50,
             color: Colors.grey[200],
-            child: Row(
-              children: [
-                IconButton(
-                  icon: Icon(
-                    Icons.attachment,
-                  ),
-                  onPressed: () {},
-                ),
-                Expanded(
-                  child: TextField(
-                    controller: _message,
-                    decoration: InputDecoration.collapsed(
-                      hintText: "Write your message",
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 10),
+              child: Row(
+                children: [
+                  // IconButton(
+                  //   icon: Icon(
+                  //     Icons.attachment,
+                  //   ),
+                  //   onPressed: () {},
+                  // ),
+                  Expanded(
+                    child: TextField(
+                      controller: _message,
+                      textCapitalization: TextCapitalization.sentences,
+                      decoration: InputDecoration.collapsed(
+                        hintText: "Write your message",
+                      ),
                     ),
                   ),
-                ),
-                Obx(
-                  () => _ordersController.isReplyingMsg
-                      ? Padding(
-                          padding: const EdgeInsets.only(right: 8),
-                          child: SizedBox(
-                            width: 20,
-                            height: 20,
-                            child: CircularProgressIndicator(strokeWidth: 2.5),
+                  Obx(
+                    () => _ordersController.isReplyingMsg
+                        ? Padding(
+                            padding: const EdgeInsets.only(right: 12),
+                            child: SizedBox(
+                              width: 20,
+                              height: 20,
+                              child: CircularProgressIndicator(strokeWidth: 2.5),
+                            ),
+                          )
+                        : IconButton(
+                            icon: Icon(
+                              Icons.send,
+                              color: Colors.blue,
+                            ),
+                            onPressed: () => _ordersController.replyOrder(message: _message.text, orderId: orderId),
                           ),
-                        )
-                      : IconButton(
-                          icon: Icon(
-                            Icons.send,
-                            color: Colors.blue,
-                          ),
-                          onPressed: () => _ordersController.replyOrder(message: _message.text, orderId: orderId),
-                        ),
-                ),
-              ],
+                  ),
+                ],
+              ),
             ),
           )
         ],

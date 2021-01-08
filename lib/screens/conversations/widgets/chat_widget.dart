@@ -147,9 +147,9 @@ class ChatWidget extends StatelessWidget {
                         ),
                         title: Text(
                             '${_.chats.chats[index].order.model} ${_.chats.chats[index].order.year}'), // messages.messages[index].usertwo.name
-                        subtitle: Text(_.chats.chats[index].latestMessage.message),
+                        subtitle: Text(_.chats?.chats[index]?.latestMessage?.message ?? ''),
                         trailing: Text(
-                          _.chats.chats[index].latestMessage.humanReadDate,
+                          _.chats?.chats[index]?.latestMessage?.humanReadDate ?? '',
                           style: TextStyle(
                             color: Colors.grey[400],
                             fontSize: 12,

@@ -13,8 +13,6 @@ import 'chat_controller.dart';
 
 class UserController extends GetxController with StateMixin<User> {
   UserRepository _userRepository = Get.find();
-  // OrdersController _ordersController = Get.find();
-  // PageController _pageController = NavKey.pageController;
 
   @override
   onInit() {
@@ -33,8 +31,25 @@ class UserController extends GetxController with StateMixin<User> {
         var decoded = jsonDecode(userData) as Map<String, dynamic>;
         _userData.value = User.fromJson(decoded);
       }
+      if (isLoggedIn) {
+        updateUserInfo();
+      }
     } catch (err) {
       print(err);
+    }
+  }
+
+  void updateUserInfo() async {
+    try {
+      User response = await _userRepository.userInfo();
+      Prefs.setString('userData', jsonEncode(response));
+      _userData.value = response;
+    } on DioError catch (err) {
+      print('Error updating user information.');
+    } catch (err) {
+      print('Error updating user information.');
+    } finally {
+      print('User information updated.');
     }
   }
 

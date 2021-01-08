@@ -190,6 +190,9 @@ class OrdersController extends GetxController {
   }
 
   void replyOrder({String message, String orderId}) async {
+    if (message.isNullOrBlank) {
+      return;
+    }
     _isReplyingMsg.value = true;
     _replyingMsgError.value = false;
     try {
@@ -274,6 +277,16 @@ class OrdersController extends GetxController {
       uploadImageProgress.value = 0.0;
     }
     return _result;
+  }
+
+  void markOrderAsSold(String orderId) {
+    try {
+      _ordersRepository.markOrderAsSold(orderId);
+    } on DioError catch (err) {
+      print(err);
+    } finally {
+      Get.back();
+    }
   }
 
   AwesomeDialog successDialog({String title, String message}) {

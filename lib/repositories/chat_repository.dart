@@ -40,7 +40,7 @@ class ChatRepository {
   void markMessageAsRead(String chatId) {
     String token = Prefs.getString('token') ?? null;
     _dio.options.headers["Authorization"] = 'Bearer $token';
-    _dio.get('/api/v1/conversation/$chatId/seen');
+    _dio.post('/api/v1/conversation/$chatId/seen');
   }
 
   Future muteConversation(String conversationId) async {

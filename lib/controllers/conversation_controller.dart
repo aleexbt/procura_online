@@ -4,16 +4,27 @@ import 'package:get/get.dart';
 import 'package:procura_online/controllers/chat_controller.dart';
 import 'package:procura_online/models/messages_model.dart';
 import 'package:procura_online/repositories/chat_repository.dart';
+import 'package:procura_online/services/pusher_service.dart';
 
 class ConversationController extends GetxController {
   final String chatId = Get.parameters['id'];
   final ChatRepository _chatRepository = Get.find();
   final ChatController _chatController = Get.find();
+  PusherService pusherService = PusherService();
 
   @override
   void onInit() {
     findOne();
+    pusherService = PusherService();
+    pusherService.firePusher('public', 'my-event');
     super.onInit();
+  }
+
+  @override
+  void onClose() {
+    pusherService.unbindEvent('my-event');
+    pusherService.unSubscribePusher('my-event');
+    super.onClose();
   }
 
   RxBool _isLoading = false.obs;
@@ -32,8 +43,7 @@ class ConversationController extends GetxController {
   bool get deletingError => _deletingError.value;
   Messages get messages => _messages.value;
 
-  Rx<TextEditingController> _messageInput = TextEditingController().obs;
-  TextEditingController get messageInput => _messageInput.value;
+  Rx<TextEditingController> messageInput = TextEditingController().obs;
 
   findOne() async {
     _isLoading.value = true;
@@ -62,7 +72,7 @@ class ConversationController extends GetxController {
     try {
       Map<String, dynamic> data = {"message": message, "order_id": orderId, "conversation_id": chatId ?? ""};
       await _chatRepository.replyMessage(data);
-      updateMessages();
+      pusherService.channel.updateMessages();
     } on DioError catch (err) {
       _replyingError.value = true;
       Get.rawSnackbar(
@@ -116,7 +126,7 @@ class ConversationController extends GetxController {
     } on DioError catch (err) {
       print(err);
     } finally {
-      _messageInput.value.clear();
+      messageInput.value.clear();
       _isReplying.value = false;
       _chatController.findAll();
     }
