@@ -37,6 +37,18 @@ class OrdersRepository {
     return response.data['data']['conversation_id'];
   }
 
+  void markOrderAsRead(String orderId) {
+    String token = Prefs.getString('token') ?? null;
+    _dio.options.headers["Authorization"] = 'Bearer $token';
+    _dio.get('/api/v1/orders/seen/$orderId');
+  }
+
+  void markOrderAsSold(String orderId) {
+    String token = Prefs.getString('token') ?? null;
+    _dio.options.headers["Authorization"] = 'Bearer $token';
+    _dio.get('/api/v1/orders/$orderId/sold');
+  }
+
   Future<Order> createOrder(Map<String, dynamic> data) async {
     String token = Prefs.getString('token') ?? null;
     _dio.options.headers["Authorization"] = 'Bearer $token';

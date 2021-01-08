@@ -101,7 +101,7 @@ class _ChatScreenState extends State<ChatScreen> with AutomaticKeepAliveClientMi
                                   children: [
                                     ListTileMoreCustomizable(
                                       leading: Icon(
-                                        Icons.arrow_forward_ios,
+                                        Icons.visibility_off_outlined,
                                         color: Colors.black,
                                       ),
                                       title: Text(
@@ -121,7 +121,7 @@ class _ChatScreenState extends State<ChatScreen> with AutomaticKeepAliveClientMi
                                     Divider(),
                                     ListTileMoreCustomizable(
                                       leading: Icon(
-                                        Icons.arrow_forward_ios,
+                                        Icons.visibility_outlined,
                                         color: Colors.black,
                                       ),
                                       title: Text(
@@ -141,7 +141,7 @@ class _ChatScreenState extends State<ChatScreen> with AutomaticKeepAliveClientMi
                                     Divider(),
                                     ListTileMoreCustomizable(
                                       leading: Icon(
-                                        Icons.arrow_forward_ios,
+                                        Icons.send_outlined,
                                         color: Colors.black,
                                       ),
                                       title: Text(
@@ -161,7 +161,7 @@ class _ChatScreenState extends State<ChatScreen> with AutomaticKeepAliveClientMi
                                     Divider(),
                                     ListTileMoreCustomizable(
                                       leading: Icon(
-                                        Icons.arrow_forward_ios,
+                                        Icons.clear,
                                         color: Colors.black,
                                       ),
                                       title: Text(

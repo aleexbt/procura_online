@@ -104,19 +104,37 @@ class OrdersWidget extends StatelessWidget {
           );
         }
         if (_.totalOrders == 0) {
-          return Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text('We don\'t have any orders to show.'),
-                FlatButton(
-                  onPressed: () => _.findAll(),
-                  child: Text(
-                    'Check again',
-                    style: TextStyle(color: Colors.blue),
+          return Padding(
+            padding: const EdgeInsets.all(18),
+            child: Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  RichText(
+                    text: TextSpan(
+                      text: 'We don\'t have any orders to show. You can change the filter from ',
+                      style: TextStyle(color: Colors.grey[800]),
+                      children: [
+                        TextSpan(
+                          text: '${_ordersController.filterName}',
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                        ),
+                        TextSpan(
+                          text: ' to something else.',
+                        ),
+                      ],
+                    ),
+                    textAlign: TextAlign.center,
                   ),
-                ),
-              ],
+                  FlatButton(
+                    onPressed: () => _.findAll(),
+                    child: Text(
+                      'Check again',
+                      style: TextStyle(color: Colors.blue),
+                    ),
+                  ),
+                ],
+              ),
             ),
           );
         }

@@ -4,16 +4,19 @@ import 'package:get/get.dart';
 import 'package:octo_image/octo_image.dart';
 import 'package:procura_online/controllers/orders_controller.dart';
 import 'package:procura_online/models/order_model.dart';
+import 'package:procura_online/repositories/orders_repository.dart';
 import 'package:procura_online/widgets/text_widget.dart';
 
 class OrderReplyScreen extends StatelessWidget {
   final OrdersController _ordersController = Get.find();
+  final OrdersRepository _ordersRepository = Get.find();
   final String orderId = Get.parameters['id'];
   final Order order = Get.arguments;
   final TextEditingController _message = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
+    _ordersRepository.markOrderAsRead(orderId);
     return Scaffold(
       appBar: AppBar(
         shadowColor: Colors.transparent,

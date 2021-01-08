@@ -39,7 +39,7 @@ class OrdersController extends GetxController {
   RxBool _hasError = false.obs;
 
   Rx<Orders> _orders = Orders().obs;
-  RxString _filter = 'vazio'.obs;
+  RxString _filter = 'unread'.obs;
   RxString _filterName = 'Unread'.obs;
   RxInt _page = 1.obs;
 

@@ -40,6 +40,7 @@ class ConversationController extends GetxController {
     _hasError.value = false;
     try {
       Messages response = await _chatRepository.findOne(chatId);
+      _chatRepository.markMessageAsRead(chatId);
       _messages.value = response;
     } on DioError catch (err) {
       _hasError.value = true;

@@ -37,6 +37,12 @@ class ChatRepository {
     return Message.fromJson(response.data['data']);
   }
 
+  void markMessageAsRead(String chatId) {
+    String token = Prefs.getString('token') ?? null;
+    _dio.options.headers["Authorization"] = 'Bearer $token';
+    _dio.get('/api/v1/conversation/$chatId/seen');
+  }
+
   Future muteConversation(String conversationId) async {
     String token = Prefs.getString('token') ?? null;
     _dio.options.headers["Authorization"] = 'Bearer $token';
