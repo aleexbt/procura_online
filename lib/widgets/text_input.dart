@@ -17,8 +17,8 @@ class CustomTextInput extends StatelessWidget {
   final Function onSubmitted;
   final FocusNode focusNode;
   final bool obscureText;
-  final Icon prefixIcon;
-  final Icon suffixIcon;
+  final Widget prefixIcon;
+  final Widget suffixIcon;
   final TextInputAction textInputAction;
   final int maxLines;
   final Function validator;

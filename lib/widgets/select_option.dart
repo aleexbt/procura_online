@@ -4,6 +4,7 @@ import 'package:smart_select/smart_select.dart';
 class SelectOption extends StatelessWidget {
   final bool isLoading;
   final bool isDisabled;
+  final bool hasError;
   final bool enableFilter;
   final String modalTitle;
   final String placeholder;
@@ -16,6 +17,7 @@ class SelectOption extends StatelessWidget {
     Key key,
     this.isLoading = false,
     this.isDisabled = false,
+    this.hasError = false,
     this.enableFilter = false,
     this.modalTitle = 'Options',
     this.placeholder = 'Choose one',
@@ -44,6 +46,7 @@ class SelectOption extends StatelessWidget {
             height: 60,
             decoration: BoxDecoration(
               color: Colors.grey[200],
+              border: hasError ? Border.all(color: Colors.red) : null,
               borderRadius: BorderRadius.circular(4),
             ),
             child: Padding(

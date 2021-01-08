@@ -155,7 +155,7 @@ class CreateAdController extends GetxController {
         numberOfSeats: numberOfSeats.value.text,
         numberOfDoors: numberOfDoors.value.text,
         fuelType: selectedFuel.value,
-        condition: selectedColor.value,
+        condition: selectedCondition.value,
         price: price.value.text,
         negotiable: selectedNegotiable.value,
         registered: registeredDate.value,

@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import 'package:procura_online/models/product_model.dart';
 import 'package:procura_online/repositories/product_repository.dart';
 import 'package:procura_online/repositories/vehicle_repository.dart';
@@ -20,6 +21,8 @@ class EditAdController extends GetxController {
     super.onInit();
   }
 
+  final currency = NumberFormat('##,###,00', 'pt_BR');
+  // final currency = NumberFormat.currency(locale: 'pt_PT', symbol: 'EUR', decimalDigits: 1);
   RxBool _isLoading = false.obs;
   RxBool _isSaving = false.obs;
   RxBool _isAdEdited = false.obs;
@@ -149,7 +152,6 @@ class EditAdController extends GetxController {
     try {
       Product response = await _productRepository.findOne(productId);
       _product.value = response;
-
       title.value.text = response.title;
       description.value.text = response.description;
       year.value.text = response.year;
@@ -159,7 +161,6 @@ class EditAdController extends GetxController {
       numberOfSeats.value.text = response.numberOfSeats;
       numberOfDoors.value.text = response.numberOfDoors;
       price.value.text = response.price;
-
       selectedColor.value = response.color;
       selectedFuel.value = response.fuelType;
       selectedTransmission.value = response.transmission;
@@ -168,8 +169,7 @@ class EditAdController extends GetxController {
       registeredDate.value = response.registered;
       setBrand(response.make);
       setModel(response.model);
-
-      var date = DateTime.parse(response.registered.toString());
+      DateTime date = DateTime.parse(response.registered.toString());
       formattedRegisteredDate.value = '${date.day}/${date.month}/${date.year}';
     } on DioError catch (err) {
       print(err);

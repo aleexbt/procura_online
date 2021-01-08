@@ -134,6 +134,7 @@ class _CreateOrderScreenState extends State<CreateOrderScreen> {
                             value: _ordersController.selectedBrand.value,
                             choiceItems: _ordersController.brands,
                             onChange: (state) => _ordersController.setBrand(state.value),
+                            hasError: _ordersController.selectedBrand.value.isEmpty && submitted,
                           ),
                         ),
                         Obx(
@@ -166,6 +167,7 @@ class _CreateOrderScreenState extends State<CreateOrderScreen> {
                             value: _ordersController.selectedModel.value,
                             choiceItems: _ordersController.models,
                             onChange: (state) => _ordersController.setModel(state.value),
+                            hasError: _ordersController.selectedModel.value.isEmpty && submitted,
                           ),
                         ),
                         Obx(
@@ -252,6 +254,7 @@ class _CreateOrderScreenState extends State<CreateOrderScreen> {
                           value: _ordersController.selectedFuel.value,
                           choiceItems: _ordersController.fuelOptions,
                           onChange: (state) => _ordersController.setFuel(state.value),
+                          hasError: _ordersController.selectedFuel.value.isEmpty && submitted,
                         ),
                         Visibility(
                           visible: _ordersController.selectedFuel.value.isEmpty && submitted,

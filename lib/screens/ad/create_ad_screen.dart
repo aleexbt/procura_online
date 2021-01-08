@@ -159,6 +159,7 @@ class _CreateAdScreenState extends State<CreateAdScreen> {
                                       value: _.selectedBrand.value,
                                       choiceItems: _.brands,
                                       onChange: (state) => _.setBrand(state.value),
+                                      hasError: _.selectedBrand.value.isEmpty && submitted,
                                     ),
                                   ),
                                   Obx(
@@ -191,6 +192,7 @@ class _CreateAdScreenState extends State<CreateAdScreen> {
                                       value: _.selectedModel.value,
                                       choiceItems: _.models,
                                       onChange: (state) => _.setModel(state.value),
+                                      hasError: _.selectedModel.value.isEmpty && submitted,
                                     ),
                                   ),
                                   Obx(
@@ -239,6 +241,7 @@ class _CreateAdScreenState extends State<CreateAdScreen> {
                                     value: _.selectedColor.value,
                                     choiceItems: _.colorOptions,
                                     onChange: (state) => _.setColor(state.value),
+                                    hasError: _.selectedColor.value.isEmpty && submitted,
                                   ),
                                   Visibility(
                                     visible: _.selectedColor.value.isEmpty && submitted,
@@ -300,6 +303,17 @@ class _CreateAdScreenState extends State<CreateAdScreen> {
                                     value: _.selectedTransmission.value,
                                     choiceItems: _.transmissionOptions,
                                     onChange: (state) => _.setTransmission(state.value),
+                                    hasError: _.selectedTransmission.value.isEmpty && submitted,
+                                  ),
+                                  Visibility(
+                                    visible: _.selectedTransmission.value.isEmpty && submitted,
+                                    child: Padding(
+                                      padding: const EdgeInsets.only(left: 12, top: 5),
+                                      child: Text(
+                                        'Please select a transmission type',
+                                        style: TextStyle(color: Colors.red, fontSize: 12),
+                                      ),
+                                    ),
                                   ),
                                   SizedBox(height: 20),
                                   Text(
@@ -374,6 +388,7 @@ class _CreateAdScreenState extends State<CreateAdScreen> {
                                     value: _.selectedFuel.value,
                                     choiceItems: _.fuelOptions,
                                     onChange: (state) => _.setFuel(state.value),
+                                    hasError: _.selectedFuel.value.isEmpty && submitted,
                                   ),
                                   Visibility(
                                     visible: _.selectedFuel.value.isEmpty && submitted,
@@ -399,6 +414,17 @@ class _CreateAdScreenState extends State<CreateAdScreen> {
                                     value: _.selectedCondition.value,
                                     choiceItems: _.conditionOptions,
                                     onChange: (state) => _.setCondition(state.value),
+                                    hasError: _.selectedCondition.value.isEmpty && submitted,
+                                  ),
+                                  Visibility(
+                                    visible: _.selectedCondition.value.isEmpty && submitted,
+                                    child: Padding(
+                                      padding: const EdgeInsets.only(left: 12, top: 5),
+                                      child: Text(
+                                        'Please select a condition',
+                                        style: TextStyle(color: Colors.red, fontSize: 12),
+                                      ),
+                                    ),
                                   ),
                                   SizedBox(height: 20),
                                   Text(
@@ -434,6 +460,17 @@ class _CreateAdScreenState extends State<CreateAdScreen> {
                                     value: _.selectedNegotiable.value,
                                     choiceItems: _.negotiableOptions,
                                     onChange: (state) => _.setNegotiable(state.value),
+                                    hasError: _.selectedNegotiable.value.isEmpty && submitted,
+                                  ),
+                                  Visibility(
+                                    visible: _.selectedNegotiable.value.isEmpty && submitted,
+                                    child: Padding(
+                                      padding: const EdgeInsets.only(left: 12, top: 5),
+                                      child: Text(
+                                        'Please select if is negotiable',
+                                        style: TextStyle(color: Colors.red, fontSize: 12),
+                                      ),
+                                    ),
                                   ),
                                   SizedBox(height: 20),
                                   Text(
