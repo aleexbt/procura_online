@@ -72,7 +72,6 @@ class ConversationController extends GetxController {
     try {
       Map<String, dynamic> data = {"message": message, "order_id": orderId, "conversation_id": chatId ?? ""};
       await _chatRepository.replyMessage(data);
-      pusherService.channel.updateMessages();
     } on DioError catch (err) {
       _replyingError.value = true;
       Get.rawSnackbar(
