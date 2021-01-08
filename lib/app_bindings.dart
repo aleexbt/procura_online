@@ -1,6 +1,5 @@
 import 'package:get/get.dart';
 import 'package:procura_online/controllers/home_controller.dart';
-import 'package:procura_online/controllers/search_controller.dart';
 import 'package:procura_online/controllers/user_controller.dart';
 import 'package:procura_online/repositories/chat_repository.dart';
 import 'package:procura_online/repositories/orders_repository.dart';
@@ -18,7 +17,7 @@ class AppBindings implements Bindings {
     Get.lazyPut(() => VehicleRepository(), fenix: true);
 
     Get.put(UserController(), permanent: true);
-    Get.put(SearchController(), permanent: true);
+    // Get.put(SearchController(), permanent: true);
     Get.put(HomeController(), permanent: true);
   }
 }

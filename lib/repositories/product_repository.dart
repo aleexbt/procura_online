@@ -21,6 +21,7 @@ final _dioCacheManager = DioCacheManager(CacheConfig());
 class ProductRepository {
   Future<Listing> findAll({String category = 'listings', int page = 1}) async {
     final Response response = await _dio.get('/api/v1/$category', queryParameters: {"page": "$page"});
+    print(response.request.uri);
     return Listing.fromJson(response.data);
   }
 
@@ -165,7 +166,8 @@ class ProductRepository {
   }
 
   Future<Listing> productSearch(String category, String term, {int page = 1, String brand, String model}) async {
-    final Response response = await _dio.get('/api/v1/search/vehicles',
+    var cat = category == 'listings' ? 'vehicles' : category;
+    final Response response = await _dio.get('/api/v1/search/$cat',
         queryParameters: {"search": "$term", "makes[0]": "$brand", "model": "$model", "page": "$page"});
     print(response.request.uri);
     return Listing.fromJson(response.data);

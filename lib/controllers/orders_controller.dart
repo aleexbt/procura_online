@@ -10,19 +10,25 @@ import 'package:procura_online/models/orders_model.dart';
 import 'package:procura_online/models/upload_media_model.dart';
 import 'package:procura_online/repositories/chat_repository.dart';
 import 'package:procura_online/repositories/orders_repository.dart';
+import 'package:procura_online/repositories/vehicle_repository.dart';
+import 'package:smart_select/smart_select.dart';
 
 class OrdersController extends GetxController {
   OrdersRepository _ordersRepository = Get.find();
   ChatRepository _chatRepository = Get.find();
+  VehicleRepository _vehicleRepository = Get.find();
 
   @override
   onInit() {
     findAll();
+    getBrands();
     super.onInit();
   }
 
   RxBool _isLoading = false.obs;
   RxBool _isLoadingMore = false.obs;
+  RxBool _isLoadingBrands = false.obs;
+  RxBool _isLoadingModels = false.obs;
   RxBool _loadingMoreError = false.obs;
   RxBool _isUploadingImage = false.obs;
   RxBool _isPublishingOrder = false.obs;
@@ -39,6 +45,8 @@ class OrdersController extends GetxController {
 
   bool get isLoading => _isLoading.value;
   bool get isLoadingMore => _isLoadingMore.value;
+  bool get isLoadingBrands => _isLoadingBrands.value;
+  bool get isLoadingModels => _isLoadingModels.value;
   bool get loadingMoreError => _loadingMoreError.value;
   bool get isUploadingImage => _isUploadingImage.value;
   bool get isPublishingOrder => _isPublishingOrder.value;
@@ -56,6 +64,77 @@ class OrdersController extends GetxController {
   bool get isLastPage => _page.value == _orders.value.meta.lastPage;
 
   List<Order> filteredOrders;
+
+  Rx<TextEditingController> mpn = TextEditingController().obs;
+  Rx<TextEditingController> note = TextEditingController().obs;
+  Rx<TextEditingController> year = TextEditingController().obs;
+  Rx<TextEditingController> engineDisplacement = TextEditingController().obs;
+  Rx<TextEditingController> numberOfDoors = TextEditingController().obs;
+
+  RxList<S2Choice<String>> _brands = List<S2Choice<String>>().obs;
+  RxList<S2Choice<String>> _models = List<S2Choice<String>>().obs;
+  List<S2Choice<String>> get brands => _brands;
+  List<S2Choice<String>> get models => _models;
+
+  RxString selectedBrand = ''.obs;
+  RxString selectedModel = ''.obs;
+  RxString selectedFuel = ''.obs;
+
+  List<S2Choice<String>> fuelOptions = [
+    S2Choice<String>(value: 'gas', title: 'Gasoline'),
+    S2Choice<String>(value: 'diesel', title: 'Diesel'),
+    S2Choice<String>(value: 'hybrid', title: 'Hybrid'),
+    S2Choice<String>(value: 'electric', title: 'Electric'),
+  ];
+
+  void getBrands() async {
+    try {
+      _isLoadingBrands.value = true;
+      List<String> brands = await _vehicleRepository.getMakers();
+      if (brands.length > 0) {
+        List<S2Choice<String>> options = S2Choice.listFrom<String, dynamic>(
+          source: brands,
+          value: (index, item) => item,
+          title: (index, item) => item,
+        );
+        _brands.assignAll(options);
+      }
+    } catch (err) {
+      print(err);
+    } finally {
+      _isLoadingBrands.value = false;
+    }
+  }
+
+  void getModels(String brand) async {
+    try {
+      _isLoadingModels.value = true;
+      List<String> models = await _vehicleRepository.getModels(brand);
+      if (models.length > 0) {
+        List<S2Choice<String>> options = S2Choice.listFrom<String, dynamic>(
+          source: models,
+          value: (index, item) => item,
+          title: (index, item) => item,
+        );
+        _models.assignAll(options);
+      }
+    } catch (err) {
+      print(err);
+    } finally {
+      _isLoadingModels.value = false;
+    }
+  }
+
+  void setBrand(String value) {
+    if (value != '' && value != selectedBrand.value) {
+      getModels(value);
+    }
+    selectedBrand.value = value;
+  }
+
+  void setModel(String value) => selectedModel.value = value;
+
+  void setFuel(String value) => selectedFuel.value = value;
 
   void findAll() async {
     _isLoading.value = true;
@@ -78,27 +157,19 @@ class OrdersController extends GetxController {
 
   void createOrder({
     List<String> images,
-    String mpn,
-    String note,
-    String brand,
-    String model,
-    String year,
-    String engineDisplacement,
-    String numberOfDoors,
-    String fuelType,
   }) async {
     _isPublishingOrder.value = true;
     _publishingOrderError.value = false;
     try {
       Map<String, dynamic> data = {
-        "make": brand,
-        "model": model,
-        "year": year,
-        "note_text": note,
-        "mpn": mpn,
-        "number_of_doors": numberOfDoors,
-        "fuel_type": fuelType,
-        "engine_displacement": engineDisplacement,
+        "make": selectedBrand.value,
+        "model": selectedModel.value,
+        "year": year.value.text,
+        "note_text": note.value.text,
+        "mpn": mpn.value.text,
+        "number_of_doors": numberOfDoors.value.text,
+        "fuel_type": selectedFuel.value,
+        "engine_displacement": engineDisplacement.value.text,
         "attachments": images,
       };
       await _ordersRepository.createOrder(data);

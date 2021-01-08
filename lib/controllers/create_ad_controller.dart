@@ -4,16 +4,28 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart' hide MultipartFile;
 import 'package:procura_online/repositories/product_repository.dart';
+import 'package:procura_online/repositories/vehicle_repository.dart';
 import 'package:smart_select/smart_select.dart';
 
 class CreateAdController extends GetxController {
   ProductRepository _productRepository = Get.find();
+  VehicleRepository _vehicleRepository = Get.find();
+
+  @override
+  onInit() {
+    getBrands();
+    super.onInit();
+  }
 
   RxBool _isCreatingAd = false.obs;
   RxBool _isAdCreated = false.obs;
+  RxBool _isLoadingBrands = false.obs;
+  RxBool _isLoadingModels = false.obs;
 
   bool get isCreatingAd => _isCreatingAd.value;
   bool get isAdCreated => _isAdCreated.value;
+  bool get isLoadingBrands => _isLoadingBrands.value;
+  bool get isLoadingModels => _isLoadingModels.value;
 
   Rx<TextEditingController> title = TextEditingController().obs;
   Rx<TextEditingController> description = TextEditingController().obs;
@@ -25,6 +37,13 @@ class CreateAdController extends GetxController {
   Rx<TextEditingController> numberOfDoors = TextEditingController().obs;
   Rx<TextEditingController> price = TextEditingController().obs;
 
+  RxList<S2Choice<String>> _brands = List<S2Choice<String>>().obs;
+  RxList<S2Choice<String>> _models = List<S2Choice<String>>().obs;
+  List<S2Choice<String>> get brands => _brands;
+  List<S2Choice<String>> get models => _models;
+
+  RxString selectedBrand = ''.obs;
+  RxString selectedModel = ''.obs;
   RxString selectedColor = ''.obs;
   RxString selectedFuel = ''.obs;
   RxString selectedTransmission = ''.obs;
@@ -71,19 +90,62 @@ class CreateAdController extends GetxController {
   void setCondition(String value) => selectedCondition.value = value;
   void setNegotiable(String value) => selectedNegotiable.value = value;
 
-  void create({
-    List<File> photos,
-    String brand,
-    String model,
-  }) async {
+  void setBrand(String value) {
+    if (value != '' && value != selectedBrand.value) {
+      getModels(value);
+    }
+    selectedBrand.value = value;
+  }
+
+  void setModel(String value) => selectedModel.value = value;
+
+  void getBrands() async {
+    try {
+      _isLoadingBrands.value = true;
+      List<String> brands = await _vehicleRepository.getMakers();
+      if (brands.length > 0) {
+        List<S2Choice<String>> options = S2Choice.listFrom<String, dynamic>(
+          source: brands,
+          value: (index, item) => item,
+          title: (index, item) => item,
+        );
+        _brands.assignAll(options);
+      }
+    } catch (err) {
+      print(err);
+    } finally {
+      _isLoadingBrands.value = false;
+    }
+  }
+
+  void getModels(String brand) async {
+    try {
+      _isLoadingModels.value = true;
+      List<String> models = await _vehicleRepository.getModels(brand);
+      if (models.length > 0) {
+        List<S2Choice<String>> options = S2Choice.listFrom<String, dynamic>(
+          source: models,
+          value: (index, item) => item,
+          title: (index, item) => item,
+        );
+        _models.assignAll(options);
+      }
+    } catch (err) {
+      print(err);
+    } finally {
+      _isLoadingModels.value = false;
+    }
+  }
+
+  void create({List<File> photos}) async {
     _isCreatingAd.value = true;
     try {
       await _productRepository.create(
         photos: photos,
         title: title.value.text,
         description: description.value.text,
-        brand: brand,
-        model: model,
+        brand: selectedBrand.value,
+        model: selectedModel.value,
         year: year.value.text,
         color: selectedColor.value,
         engineDisplacement: engineDisplacement.value.text,

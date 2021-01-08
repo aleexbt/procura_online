@@ -4,7 +4,6 @@ import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:procura_online/controllers/home_controller.dart';
-import 'package:procura_online/controllers/search_controller.dart';
 import 'package:procura_online/controllers/user_controller.dart';
 import 'package:procura_online/utils/no_glow_behavior.dart';
 import 'package:procura_online/widgets/featured_box.dart';
@@ -21,7 +20,7 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
   @override
   bool get wantKeepAlive => true;
 
-  final SearchController _searchController = Get.find();
+  // final SearchController _searchController = Get.find();
   final HomeController _homeController = Get.find();
   final UserController _userController = Get.find();
   final ScrollController _scrollController = ScrollController();
@@ -55,11 +54,11 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
     }
   }
 
-  void changeCategory(String category) {
-    if (_homeController.category == category) {
-      _homeController.changeCategory('listings');
+  void changeCategory({String name, String value}) {
+    if (_homeController.categoryValue == value) {
+      _homeController.changeCategory(name: 'Listings', value: 'listings');
     } else {
-      _homeController.changeCategory(category);
+      _homeController.changeCategory(name: name, value: value);
     }
   }
 
@@ -100,7 +99,7 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
                           borderSide: BorderSide(color: Colors.transparent, width: 0.0),
                         ),
                       ),
-                      onChanged: (value) => _searchController.setSearchTerm(value),
+                      onChanged: (value) => _homeController.setSearchTerm(value),
                       onSubmitted: (_) => _homeController.doSearch(),
                       textInputAction: TextInputAction.search,
                     ),
@@ -129,20 +128,20 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
               Obx(
                 () => FlatButton(
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(25)),
-                  color: _homeController.category == 'vehicles' ? Colors.grey[300] : Colors.grey[200],
+                  color: _homeController.categoryValue == 'vehicles' ? Colors.grey[300] : Colors.grey[200],
                   minWidth: 120,
                   height: 40,
-                  onPressed: () => changeCategory('vehicles'),
+                  onPressed: () => changeCategory(name: 'Vehicles', value: 'vehicles'),
                   child: Text('Vehicles'),
                 ),
               ),
               Obx(
                 () => FlatButton(
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(25)),
-                  color: _homeController.category == 'auto-parts' ? Colors.grey[300] : Colors.grey[200],
+                  color: _homeController.categoryValue == 'auto-parts' ? Colors.grey[300] : Colors.grey[200],
                   minWidth: 120,
                   height: 40,
-                  onPressed: () => changeCategory('auto-parts'),
+                  onPressed: () => changeCategory(name: 'Auto Parts', value: 'auto-parts'),
                   child: Text('Auto Parts'),
                 ),
               ),

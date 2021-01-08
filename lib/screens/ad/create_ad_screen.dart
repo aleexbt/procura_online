@@ -6,7 +6,6 @@ import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:procura_online/controllers/create_ad_controller.dart';
-import 'package:procura_online/controllers/search_controller.dart';
 import 'package:procura_online/widgets/gradient_button.dart';
 import 'package:procura_online/widgets/select_option.dart';
 import 'package:procura_online/widgets/text_input.dart';
@@ -18,7 +17,6 @@ class CreateAdScreen extends StatefulWidget {
 
 class _CreateAdScreenState extends State<CreateAdScreen> {
   final CreateAdController _createAdController = Get.put(CreateAdController());
-  final SearchController _searchController = Get.find();
   final _formKey = GlobalKey<FormState>();
 
   @override
@@ -154,18 +152,18 @@ class _CreateAdScreenState extends State<CreateAdScreen> {
                                   SizedBox(height: 10),
                                   Obx(
                                     () => SelectOption(
-                                      isLoading: _searchController.isLoadingBrands,
+                                      isLoading: _.isLoadingBrands,
                                       placeholder: 'Select one',
                                       modalTitle: 'Brands',
                                       selectText: 'Select a brand',
-                                      value: _searchController.selectedBrand,
-                                      choiceItems: _searchController.brands,
-                                      onChange: (state) => _searchController.setBrand(state.value),
+                                      value: _.selectedBrand.value,
+                                      choiceItems: _.brands,
+                                      onChange: (state) => _.setBrand(state.value),
                                     ),
                                   ),
                                   Obx(
                                     () => Visibility(
-                                      visible: _searchController.selectedBrand.isEmpty && submitted,
+                                      visible: _.selectedBrand.value.isEmpty && submitted,
                                       child: Padding(
                                         padding: const EdgeInsets.only(left: 12, top: 5),
                                         child: Text(
@@ -185,19 +183,19 @@ class _CreateAdScreenState extends State<CreateAdScreen> {
                                   SizedBox(height: 10),
                                   Obx(
                                     () => SelectOption(
-                                      isLoading: _searchController.isLoadingModels,
-                                      isDisabled: _searchController.selectedBrand == '',
+                                      isLoading: _.isLoadingModels,
+                                      isDisabled: _.selectedBrand.value == '',
                                       placeholder: 'Select one',
                                       modalTitle: 'Models',
                                       selectText: 'Select a model',
-                                      value: _searchController.selectedModel,
-                                      choiceItems: _searchController.models,
-                                      onChange: (state) => _searchController.setModel(state.value),
+                                      value: _.selectedModel.value,
+                                      choiceItems: _.models,
+                                      onChange: (state) => _.setModel(state.value),
                                     ),
                                   ),
                                   Obx(
                                     () => Visibility(
-                                      visible: _searchController.selectedModel.isEmpty && submitted,
+                                      visible: _.selectedModel.value.isEmpty && submitted,
                                       child: Padding(
                                         padding: const EdgeInsets.only(left: 12, top: 5),
                                         child: Text(
@@ -459,23 +457,19 @@ class _CreateAdScreenState extends State<CreateAdScreen> {
                                   ),
                                   SizedBox(height: 20),
                                   GradientButton(
-                                      text: 'Publish ad',
-                                      onPressed: () {
-                                        setState(() => submitted = true);
-                                        if (_formKey.currentState.validate() &&
-                                            _searchController.selectedBrand.isNotEmpty &&
-                                            _searchController.selectedModel.isNotEmpty &&
-                                            _.selectedColor.value.isNotEmpty &&
-                                            _.selectedFuel.value.isNotEmpty) {
-                                          FocusScope.of(context).unfocus();
-
-                                          _createAdController.create(
-                                            photos: images,
-                                            brand: _searchController.selectedBrand,
-                                            model: _searchController.selectedModel,
-                                          );
-                                        }
-                                      }),
+                                    text: 'Publish ad',
+                                    onPressed: () {
+                                      setState(() => submitted = true);
+                                      if (_formKey.currentState.validate() &&
+                                          _.selectedBrand.value.isNotEmpty &&
+                                          _.selectedModel.value.isNotEmpty &&
+                                          _.selectedColor.value.isNotEmpty &&
+                                          _.selectedFuel.value.isNotEmpty) {
+                                        FocusScope.of(context).unfocus();
+                                        _createAdController.create(photos: images);
+                                      }
+                                    },
+                                  ),
                                 ],
                               ),
                             ),

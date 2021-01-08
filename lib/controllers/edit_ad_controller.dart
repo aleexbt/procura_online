@@ -3,30 +3,35 @@ import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:procura_online/controllers/search_controller.dart';
 import 'package:procura_online/models/product_model.dart';
 import 'package:procura_online/repositories/product_repository.dart';
+import 'package:procura_online/repositories/vehicle_repository.dart';
 import 'package:smart_select/smart_select.dart';
 
 class EditAdController extends GetxController {
   final ProductRepository _productRepository = Get.find();
+  final VehicleRepository _vehicleRepository = Get.find();
   final String productId = Get.parameters['id'];
-  final SearchController _searchController = Get.find();
 
   @override
   void onInit() {
     findOne();
+    getBrands();
     super.onInit();
   }
 
   RxBool _isLoading = false.obs;
   RxBool _isSaving = false.obs;
   RxBool _isAdEdited = false.obs;
+  RxBool _isLoadingBrands = false.obs;
+  RxBool _isLoadingModels = false.obs;
   Rx<Product> _product = Product().obs;
 
   bool get isLoading => _isLoading.value;
   bool get isSaving => _isSaving.value;
   bool get isAdEdited => _isAdEdited.value;
+  bool get isLoadingBrands => _isLoadingBrands.value;
+  bool get isLoadingModels => _isLoadingModels.value;
   Product get product => _product.value;
 
   Rx<TextEditingController> title = TextEditingController().obs;
@@ -39,6 +44,13 @@ class EditAdController extends GetxController {
   Rx<TextEditingController> numberOfDoors = TextEditingController().obs;
   Rx<TextEditingController> price = TextEditingController().obs;
 
+  RxList<S2Choice<String>> _brands = List<S2Choice<String>>().obs;
+  RxList<S2Choice<String>> _models = List<S2Choice<String>>().obs;
+  List<S2Choice<String>> get brands => _brands;
+  List<S2Choice<String>> get models => _models;
+
+  RxString selectedBrand = ''.obs;
+  RxString selectedModel = ''.obs;
   RxString selectedColor = ''.obs;
   RxString selectedFuel = ''.obs;
   RxString selectedTransmission = ''.obs;
@@ -85,6 +97,53 @@ class EditAdController extends GetxController {
   void setCondition(String value) => selectedCondition.value = value;
   void setNegotiable(String value) => selectedNegotiable.value = value;
 
+  void getBrands() async {
+    try {
+      _isLoadingBrands.value = true;
+      List<String> brands = await _vehicleRepository.getMakers();
+      if (brands.length > 0) {
+        List<S2Choice<String>> options = S2Choice.listFrom<String, dynamic>(
+          source: brands,
+          value: (index, item) => item,
+          title: (index, item) => item,
+        );
+        _brands.assignAll(options);
+      }
+    } catch (err) {
+      print(err);
+    } finally {
+      _isLoadingBrands.value = false;
+    }
+  }
+
+  void getModels(String brand) async {
+    try {
+      _isLoadingModels.value = true;
+      List<String> models = await _vehicleRepository.getModels(brand);
+      if (models.length > 0) {
+        List<S2Choice<String>> options = S2Choice.listFrom<String, dynamic>(
+          source: models,
+          value: (index, item) => item,
+          title: (index, item) => item,
+        );
+        _models.assignAll(options);
+      }
+    } catch (err) {
+      print(err);
+    } finally {
+      _isLoadingModels.value = false;
+    }
+  }
+
+  void setBrand(String value) {
+    if (value != '' && value != selectedBrand.value) {
+      getModels(value);
+    }
+    selectedBrand.value = value;
+  }
+
+  void setModel(String value) => selectedModel.value = value;
+
   void findOne() async {
     _isLoading.value = true;
     try {
@@ -107,8 +166,8 @@ class EditAdController extends GetxController {
       selectedCondition.value = response.condition;
       selectedNegotiable.value = response.negotiable;
       registeredDate.value = response.registered;
-      _searchController.setBrand(response.make);
-      _searchController.setModel(response.model);
+      setBrand(response.make);
+      setModel(response.model);
 
       var date = DateTime.parse(response.registered.toString());
       formattedRegisteredDate.value = '${date.day}/${date.month}/${date.year}';
@@ -119,12 +178,7 @@ class EditAdController extends GetxController {
     }
   }
 
-  void edit({
-    List<File> photos,
-    List<String> photosToRemove,
-    String brand,
-    String model,
-  }) async {
+  void edit({List<File> photos, List<String> photosToRemove}) async {
     _isSaving.value = true;
     try {
       await _productRepository.edit(
@@ -133,8 +187,8 @@ class EditAdController extends GetxController {
         photosToRemove: photosToRemove,
         title: title.value.text,
         description: description.value.text,
-        brand: brand,
-        model: model,
+        brand: selectedBrand.value,
+        model: selectedModel.value,
         year: year.value.text,
         color: selectedColor.value,
         engineDisplacement: engineDisplacement.value.text,

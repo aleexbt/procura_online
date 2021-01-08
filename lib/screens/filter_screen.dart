@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:procura_online/controllers/home_controller.dart';
-import 'package:procura_online/controllers/search_controller.dart';
 import 'package:procura_online/widgets/gradient_button.dart';
 import 'package:procura_online/widgets/select_option.dart';
 
 class FilterScreen extends StatelessWidget {
   final HomeController _homeController = Get.find();
-  final SearchController _searchController = Get.find();
 
   @override
   Widget build(BuildContext context) {
@@ -17,7 +15,7 @@ class FilterScreen extends StatelessWidget {
         title: Text('Filter results'),
         actions: [
           FlatButton(
-            onPressed: () => [_searchController.clear(), _homeController.doSearch(), Get.back()],
+            onPressed: () => [_homeController.clear(), _homeController.findAll(), Get.back()],
             child: Text(
               'CLEAR',
               style: TextStyle(fontWeight: FontWeight.bold),
@@ -39,6 +37,25 @@ class FilterScreen extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
+                          'Category',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        SizedBox(height: 10),
+                        Obx(
+                          () => SelectOption(
+                            placeholder: 'Select one',
+                            modalTitle: 'Categories',
+                            selectText: 'Select a category',
+                            value: _homeController.categoryValue,
+                            choiceItems: _homeController.categoryOptions,
+                            onChange: (state) =>
+                                _homeController.changeCategory(name: state.valueTitle, value: state.value),
+                          ),
+                        ),
+                        SizedBox(height: 20),
+                        Text(
                           'Brands',
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
@@ -48,13 +65,13 @@ class FilterScreen extends StatelessWidget {
                         Obx(
                           () => SelectOption(
                             enableFilter: true,
-                            isLoading: _searchController.isLoadingBrands,
+                            isLoading: _homeController.isLoadingBrands,
                             placeholder: 'Select one',
                             modalTitle: 'Brands',
                             selectText: 'Select a brand',
-                            value: _searchController.selectedBrand,
-                            choiceItems: _searchController.brands,
-                            onChange: (state) => _searchController.setBrand(state.value),
+                            value: _homeController.selectedBrand.value,
+                            choiceItems: _homeController.brands,
+                            onChange: (state) => _homeController.setBrand(state.value),
                           ),
                         ),
                         SizedBox(height: 20),
@@ -67,14 +84,14 @@ class FilterScreen extends StatelessWidget {
                         SizedBox(height: 10),
                         Obx(
                           () => SelectOption(
-                            isLoading: _searchController.isLoadingModels,
-                            isDisabled: _searchController.selectedBrand == '',
+                            isLoading: _homeController.isLoadingModels,
+                            isDisabled: _homeController.selectedBrand.value == '',
                             placeholder: 'Select one',
                             modalTitle: 'Models',
                             selectText: 'Select a model',
-                            value: _searchController.selectedModel,
-                            choiceItems: _searchController.models,
-                            onChange: (state) => _searchController.setModel(state.value),
+                            value: _homeController.selectedModel.value,
+                            choiceItems: _homeController.models,
+                            onChange: (state) => _homeController.setModel(state.value),
                           ),
                         ),
                       ],

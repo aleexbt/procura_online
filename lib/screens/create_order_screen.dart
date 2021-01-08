@@ -6,12 +6,10 @@ import 'package:get/get.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 import 'package:procura_online/controllers/orders_controller.dart';
-import 'package:procura_online/controllers/search_controller.dart';
 import 'package:procura_online/models/upload_media_model.dart';
 import 'package:procura_online/widgets/gradient_button.dart';
 import 'package:procura_online/widgets/select_option.dart';
 import 'package:procura_online/widgets/text_input.dart';
-import 'package:smart_select/smart_select.dart';
 
 class CreateOrderScreen extends StatefulWidget {
   @override
@@ -19,14 +17,8 @@ class CreateOrderScreen extends StatefulWidget {
 }
 
 class _CreateOrderScreenState extends State<CreateOrderScreen> {
-  final SearchController _searchController = Get.find();
   final OrdersController _ordersController = Get.find();
   final _formKey = GlobalKey<FormState>();
-  final TextEditingController _mpn = TextEditingController();
-  final TextEditingController _note = TextEditingController();
-  final TextEditingController _year = TextEditingController();
-  final TextEditingController _engineDisplacement = TextEditingController();
-  final TextEditingController _numberOfDoors = TextEditingController();
 
   final _scaffoldKey = GlobalKey<ScaffoldState>();
 
@@ -63,14 +55,6 @@ class _CreateOrderScreenState extends State<CreateOrderScreen> {
     }
   }
 
-  String selectedFuel = '';
-  List<S2Choice<String>> fuelOptions = [
-    S2Choice<String>(value: 'gas', title: 'Gasoline'),
-    S2Choice<String>(value: 'diesel', title: 'Diesel'),
-    S2Choice<String>(value: 'hybrid', title: 'Hybrid'),
-    S2Choice<String>(value: 'electric', title: 'Electric'),
-  ];
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -103,7 +87,7 @@ class _CreateOrderScreenState extends State<CreateOrderScreen> {
                         ),
                         SizedBox(height: 10),
                         CustomTextInput(
-                          controller: _mpn,
+                          controller: _ordersController.mpn.value,
                           fillColor: Colors.grey[200],
                           hintText: 'Enter the MPN',
                           textCapitalization: TextCapitalization.sentences,
@@ -122,7 +106,7 @@ class _CreateOrderScreenState extends State<CreateOrderScreen> {
                         ),
                         SizedBox(height: 10),
                         CustomTextInput(
-                          controller: _note,
+                          controller: _ordersController.note.value,
                           fillColor: Colors.grey[200],
                           hintText: 'Enter a note',
                           textCapitalization: TextCapitalization.sentences,
@@ -143,18 +127,18 @@ class _CreateOrderScreenState extends State<CreateOrderScreen> {
                         SizedBox(height: 10),
                         Obx(
                           () => SelectOption(
-                            isLoading: _searchController.isLoadingBrands,
+                            isLoading: _ordersController.isLoadingBrands,
                             placeholder: 'Select one',
                             modalTitle: 'Brands',
                             selectText: 'Select a brand',
-                            value: _searchController.selectedBrand,
-                            choiceItems: _searchController.brands,
-                            onChange: (state) => _searchController.setBrand(state.value),
+                            value: _ordersController.selectedBrand.value,
+                            choiceItems: _ordersController.brands,
+                            onChange: (state) => _ordersController.setBrand(state.value),
                           ),
                         ),
                         Obx(
                           () => Visibility(
-                            visible: _searchController.selectedBrand.isEmpty && submitted,
+                            visible: _ordersController.selectedBrand.value.isEmpty && submitted,
                             child: Padding(
                               padding: const EdgeInsets.only(left: 12, top: 5),
                               child: Text(
@@ -174,19 +158,19 @@ class _CreateOrderScreenState extends State<CreateOrderScreen> {
                         SizedBox(height: 10),
                         Obx(
                           () => SelectOption(
-                            isLoading: _searchController.isLoadingModels,
-                            isDisabled: _searchController.selectedBrand == '',
+                            isLoading: _ordersController.isLoadingModels,
+                            isDisabled: _ordersController.selectedBrand.value == '',
                             placeholder: 'Select one',
                             modalTitle: 'Models',
                             selectText: 'Select a model',
-                            value: _searchController.selectedModel,
-                            choiceItems: _searchController.models,
-                            onChange: (state) => _searchController.setModel(state.value),
+                            value: _ordersController.selectedModel.value,
+                            choiceItems: _ordersController.models,
+                            onChange: (state) => _ordersController.setModel(state.value),
                           ),
                         ),
                         Obx(
                           () => Visibility(
-                            visible: _searchController.selectedModel.isEmpty && submitted,
+                            visible: _ordersController.selectedModel.value.isEmpty && submitted,
                             child: Padding(
                               padding: const EdgeInsets.only(left: 12, top: 5),
                               child: Text(
@@ -205,7 +189,7 @@ class _CreateOrderScreenState extends State<CreateOrderScreen> {
                         ),
                         SizedBox(height: 10),
                         CustomTextInput(
-                          controller: _year,
+                          controller: _ordersController.year.value,
                           fillColor: Colors.grey[200],
                           hintText: 'Enter the year',
                           keyboardType: TextInputType.number,
@@ -225,7 +209,7 @@ class _CreateOrderScreenState extends State<CreateOrderScreen> {
                         ),
                         SizedBox(height: 10),
                         CustomTextInput(
-                          controller: _engineDisplacement,
+                          controller: _ordersController.engineDisplacement.value,
                           fillColor: Colors.grey[200],
                           hintText: 'Enter the engine displacement',
                           validator: (value) {
@@ -243,7 +227,7 @@ class _CreateOrderScreenState extends State<CreateOrderScreen> {
                         ),
                         SizedBox(height: 10),
                         CustomTextInput(
-                          controller: _numberOfDoors,
+                          controller: _ordersController.numberOfDoors.value,
                           fillColor: Colors.grey[200],
                           hintText: 'Enter the number of doors',
                           keyboardType: TextInputType.number,
@@ -265,12 +249,12 @@ class _CreateOrderScreenState extends State<CreateOrderScreen> {
                         SelectOption(
                           modalTitle: 'Fuel',
                           selectText: 'Select a fuel type',
-                          value: selectedFuel,
-                          choiceItems: fuelOptions,
-                          onChange: (state) => setState(() => selectedFuel = state.value),
+                          value: _ordersController.selectedFuel.value,
+                          choiceItems: _ordersController.fuelOptions,
+                          onChange: (state) => _ordersController.setFuel(state.value),
                         ),
                         Visibility(
-                          visible: selectedFuel.isEmpty && submitted,
+                          visible: _ordersController.selectedFuel.value.isEmpty && submitted,
                           child: Padding(
                             padding: const EdgeInsets.only(left: 12, top: 5),
                             child: Text(
@@ -281,27 +265,18 @@ class _CreateOrderScreenState extends State<CreateOrderScreen> {
                         ),
                         SizedBox(height: 20),
                         GradientButton(
-                            text: 'Create order',
-                            onPressed: () {
-                              setState(() => submitted = true);
-                              if (_formKey.currentState.validate() &&
-                                  _searchController.selectedBrand.isNotEmpty &&
-                                  _searchController.selectedModel.isNotEmpty &&
-                                  selectedFuel.isNotEmpty) {
-                                FocusScope.of(context).unfocus();
-                                _ordersController.createOrder(
-                                  images: imagesUrl,
-                                  mpn: _mpn.text,
-                                  note: _note.text,
-                                  brand: _searchController.selectedBrand,
-                                  model: _searchController.selectedModel,
-                                  year: _year.text,
-                                  engineDisplacement: _engineDisplacement.text,
-                                  numberOfDoors: _numberOfDoors.text,
-                                  fuelType: selectedFuel,
-                                );
-                              }
-                            }),
+                          text: 'Create order',
+                          onPressed: () {
+                            setState(() => submitted = true);
+                            if (_formKey.currentState.validate() &&
+                                _ordersController.selectedBrand.value.isNotEmpty &&
+                                _ordersController.selectedModel.value.isNotEmpty &&
+                                _ordersController.selectedFuel.value.isNotEmpty) {
+                              FocusScope.of(context).unfocus();
+                              _ordersController.createOrder(images: imagesUrl);
+                            }
+                          },
+                        ),
                       ],
                     ),
                   ),
