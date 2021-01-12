@@ -18,6 +18,7 @@ class ForgotPasswordScreen extends StatelessWidget {
       statusBarColor: Colors.blue,
     ));
     return Scaffold(
+      backgroundColor: Colors.blue,
       body: SafeArea(
         child: Obx(
           () => ModalProgressHUD(
@@ -33,81 +34,92 @@ class ForgotPasswordScreen extends StatelessWidget {
                     colors: [Colors.blue, Colors.blue[900]],
                   ),
                 ),
-                child: SingleChildScrollView(
-                  child: Padding(
-                    padding: const EdgeInsets.all(35.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Column(
+                child: Stack(
+                  children: [
+                    SingleChildScrollView(
+                      child: Padding(
+                        padding: const EdgeInsets.all(35.0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Padding(
-                              padding: const EdgeInsets.only(top: 120, left: 80, right: 80, bottom: 40),
-                              child: Image.asset(
-                                'assets/images/logo.png',
-                                width: 200,
-                              ),
-                            ),
-                            Text(
-                              'Forgot password',
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 22,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ],
-                        ),
-                        SizedBox(height: 50),
-                        Column(
-                          children: [
-                            Form(
-                              key: _formKey,
-                              child: CustomTextInput(
-                                controller: _email,
-                                prefixIcon: Icon(
-                                  Icons.mail,
-                                  color: Colors.white,
+                            Column(
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.only(top: 120, left: 80, right: 80, bottom: 40),
+                                  child: Image.asset(
+                                    'assets/images/logo.png',
+                                    width: 200,
+                                  ),
                                 ),
-                                hintText: 'Email',
-                                hintStyle: TextStyle(color: Colors.white),
-                                keyboardType: TextInputType.emailAddress,
-                                errorBorderColor: Colors.white54,
-                                errorTextColor: Colors.white,
-                                validator: (value) {
-                                  if (value.isEmpty) {
-                                    return 'Your email address cannot be empty.';
-                                  }
-                                  return null;
-                                },
-                              ),
+                                Text(
+                                  'Forgot password',
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 22,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            SizedBox(height: 50),
+                            Column(
+                              children: [
+                                Form(
+                                  key: _formKey,
+                                  child: CustomTextInput(
+                                    controller: _email,
+                                    prefixIcon: Icon(
+                                      Icons.mail,
+                                      color: Colors.white,
+                                    ),
+                                    hintText: 'Email',
+                                    hintStyle: TextStyle(color: Colors.white),
+                                    keyboardType: TextInputType.emailAddress,
+                                    errorBorderColor: Colors.white54,
+                                    errorTextColor: Colors.white,
+                                    validator: (value) {
+                                      if (value.isEmpty) {
+                                        return 'Your email address cannot be empty.';
+                                      }
+                                      return null;
+                                    },
+                                  ),
+                                ),
+                              ],
+                            ),
+                            SizedBox(height: 50),
+                            Column(
+                              children: [
+                                LargeButton(
+                                  text: 'Reset password',
+                                  onPressed: () {
+                                    if (_formKey.currentState.validate()) {
+                                      FocusScope.of(context).unfocus();
+                                      _userController.passwordReset(_email.text);
+                                    }
+                                  },
+                                ),
+                                SizedBox(height: 25),
+                                GestureDetector(
+                                  behavior: HitTestBehavior.translucent,
+                                  onTap: () => Get.back(),
+                                  child: Text('Back to Login', style: kSmallText),
+                                ),
+                              ],
                             ),
                           ],
                         ),
-                        SizedBox(height: 50),
-                        Column(
-                          children: [
-                            LargeButton(
-                              text: 'Reset password',
-                              onPressed: () {
-                                if (_formKey.currentState.validate()) {
-                                  FocusScope.of(context).unfocus();
-                                  _userController.passwordReset(_email.text);
-                                }
-                              },
-                            ),
-                            SizedBox(height: 25),
-                            GestureDetector(
-                              behavior: HitTestBehavior.translucent,
-                              onTap: () => Get.back(),
-                              child: Text('Back to Login', style: kSmallText),
-                            ),
-                          ],
-                        ),
-                      ],
+                      ),
                     ),
-                  ),
+                    Padding(
+                      padding: EdgeInsets.only(left: 5, top: 5),
+                      child: IconButton(
+                        icon: Icon(Icons.arrow_back, color: Colors.white),
+                        onPressed: () => Get.back(),
+                      ),
+                    ),
+                  ],
                 ),
               )),
         ),

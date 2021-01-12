@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:intl/intl.dart';
+import 'package:procura_online/controllers/ads_listing_controller.dart';
 import 'package:procura_online/models/product_model.dart';
 import 'package:procura_online/repositories/product_repository.dart';
 import 'package:procura_online/repositories/vehicle_repository.dart';
@@ -12,7 +12,9 @@ import 'package:smart_select/smart_select.dart';
 class EditAdController extends GetxController {
   final ProductRepository _productRepository = Get.find();
   final VehicleRepository _vehicleRepository = Get.find();
+  final AdsListingController _adsListingController = Get.find();
   final String productId = Get.parameters['id'];
+  final Product product = Get.arguments;
 
   @override
   void onInit() {
@@ -21,21 +23,17 @@ class EditAdController extends GetxController {
     super.onInit();
   }
 
-  final currency = NumberFormat('##,###,00', 'pt_BR');
-  // final currency = NumberFormat.currency(locale: 'pt_PT', symbol: 'EUR', decimalDigits: 1);
-  RxBool _isLoading = false.obs;
+  RxBool _isLoading = true.obs;
   RxBool _isSaving = false.obs;
   RxBool _isAdEdited = false.obs;
   RxBool _isLoadingBrands = false.obs;
   RxBool _isLoadingModels = false.obs;
-  Rx<Product> _product = Product().obs;
 
   bool get isLoading => _isLoading.value;
   bool get isSaving => _isSaving.value;
   bool get isAdEdited => _isAdEdited.value;
   bool get isLoadingBrands => _isLoadingBrands.value;
   bool get isLoadingModels => _isLoadingModels.value;
-  Product get product => _product.value;
 
   Rx<TextEditingController> title = TextEditingController().obs;
   Rx<TextEditingController> description = TextEditingController().obs;
@@ -150,8 +148,8 @@ class EditAdController extends GetxController {
   void findOne() async {
     _isLoading.value = true;
     try {
-      Product response = await _productRepository.findOne(productId);
-      _product.value = response;
+      Product response = product;
+      // _product.value = response;
       title.value.text = response.title;
       description.value.text = response.description;
       year.value.text = response.year;
@@ -225,6 +223,38 @@ class EditAdController extends GetxController {
     } finally {
       _isSaving.value = false;
       _isAdEdited.value = false;
+    }
+  }
+
+  void delete() async {
+    _isSaving.value = true;
+    try {
+      bool response = await _productRepository.delete(productId);
+      if (!response) {
+        Get.rawSnackbar(
+          message: 'Ops, something went wrong.',
+          backgroundColor: Colors.red,
+          duration: Duration(seconds: 3),
+        );
+      }
+      _adsListingController.findAll();
+      Get.back(closeOverlays: true);
+    } on DioError catch (err) {
+      print(err);
+      Get.rawSnackbar(
+        message: 'Ops, something went wrong.',
+        backgroundColor: Colors.red,
+        duration: Duration(seconds: 3),
+      );
+    } catch (err) {
+      print(err);
+      Get.rawSnackbar(
+        message: 'Ops, something went wrong.',
+        backgroundColor: Colors.red,
+        duration: Duration(seconds: 3),
+      );
+    } finally {
+      _isSaving.value = false;
     }
   }
 }

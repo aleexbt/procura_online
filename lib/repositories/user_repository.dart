@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:dio_http_cache/dio_http_cache.dart';
+import 'package:procura_online/models/listing_model.dart';
 import 'package:procura_online/models/user_model.dart';
 import 'package:procura_online/utils/prefs.dart';
 
@@ -52,5 +53,12 @@ class UserRepository {
     } else {
       return response.data;
     }
+  }
+
+  Future<Listing> adsListing({page = 1}) async {
+    String token = Prefs.getString('token') ?? null;
+    _dio.options.headers["Authorization"] = 'Bearer $token';
+    final response = await _dio.get('/api/v1/user/me/listings', queryParameters: {"page": "$page"});
+    return Listing.fromJson(response.data);
   }
 }

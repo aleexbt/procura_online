@@ -26,7 +26,8 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
 
   @override
   Widget build(BuildContext context) {
-    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light.copyWith(
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+      statusBarBrightness: Brightness.light,
       statusBarColor: Colors.white,
       statusBarIconBrightness: Brightness.dark,
     ));

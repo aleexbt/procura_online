@@ -2,12 +2,16 @@ import 'dart:io';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:file_picker/file_picker.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+import 'package:list_tile_more_customizable/list_tile_more_customizable.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:octo_image/octo_image.dart';
 import 'package:procura_online/controllers/edit_ad_controller.dart';
+import 'package:procura_online/models/product_model.dart';
 import 'package:procura_online/widgets/gradient_button.dart';
 import 'package:procura_online/widgets/select_option.dart';
 import 'package:procura_online/widgets/text_input.dart';
@@ -18,24 +22,29 @@ class EditAdScreen extends StatefulWidget {
 }
 
 class _EditAdScreenState extends State<EditAdScreen> {
+  final Product product = Get.arguments;
   final EditAdController _editAdController = Get.put(EditAdController());
   final _formKey = GlobalKey<FormState>();
 
   @override
   initState() {
+    if (_editAdController.product?.photos?.original != null && _editAdController.product.photos.original.length > 0) {
+      networkImages = Map.from(_editAdController.product?.photos?.original);
+    }
     super.initState();
   }
 
   bool submitted = false;
 
   List<File> images = List<File>();
+  Map<String, dynamic> networkImages;
   List<String> imagesToRemove = List<String>();
 
   void selectImages() async {
     FilePickerResult result = await FilePicker.platform.pickFiles(
-      allowMultiple: true,
-      type: FileType.custom,
-      allowedExtensions: ['jpg', 'jpeg', 'png', 'gif'],
+      allowMultiple: false,
+      type: FileType.image,
+      // allowedExtensions: ['jpg', 'jpeg', 'png', 'gif'],
     );
 
     if (result != null) {
@@ -68,12 +77,72 @@ class _EditAdScreenState extends State<EditAdScreen> {
     }
   }
 
+  Widget _buildBottomPicker(Widget picker) {
+    return Container(
+      height: 215,
+      padding: const EdgeInsets.only(top: 6.0),
+      color: CupertinoColors.white,
+      child: DefaultTextStyle(
+        style: const TextStyle(
+          color: CupertinoColors.black,
+          fontSize: 22.0,
+        ),
+        child: GestureDetector(
+          onTap: () {},
+          child: SafeArea(
+            top: false,
+            child: picker,
+          ),
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text('Edit ad'),
         elevation: 0,
+        actions: [
+          IconButton(
+            icon: Icon(Icons.more_vert),
+            onPressed: () => Get.bottomSheet(
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Container(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      ListTileMoreCustomizable(
+                        leading: Icon(
+                          CupertinoIcons.trash,
+                          color: Colors.black,
+                        ),
+                        title: Text(
+                          "Delete ad",
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontWeight: FontWeight.w400,
+                          ),
+                        ),
+                        horizontalTitleGap: 0,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        onTap: (_) => _editAdController.delete(),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              backgroundColor: Colors.white,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.only(topLeft: Radius.circular(8), topRight: Radius.circular(8)),
+              ),
+            ),
+          ),
+        ],
       ),
       body: GetX<EditAdController>(
           init: _editAdController,
@@ -486,7 +555,29 @@ class _EditAdScreenState extends State<EditAdScreen> {
                                   ),
                                   SizedBox(height: 10),
                                   GestureDetector(
-                                    onTap: () => _selectDate(context),
+                                    onTap: Platform.isAndroid
+                                        ? () => _selectDate(context)
+                                        : () {
+                                            showCupertinoModalPopup(
+                                              context: context,
+                                              builder: (BuildContext context) {
+                                                return _buildBottomPicker(
+                                                  CupertinoDatePicker(
+                                                    initialDateTime: DateTime.now(),
+                                                    minimumDate: DateTime(1900, 1),
+                                                    maximumDate: DateTime.now(),
+                                                    minuteInterval: 1,
+                                                    mode: CupertinoDatePickerMode.date,
+                                                    onDateTimeChanged: (DateTime date) {
+                                                      _editAdController.registeredDate.value = date.toString();
+                                                      _editAdController.formattedRegisteredDate.value =
+                                                          '${date.day}/${date.month}/${date.year}';
+                                                    },
+                                                  ),
+                                                );
+                                              },
+                                            );
+                                          },
                                     child: CustomTextInput(
                                       enabled: false,
                                       fillColor: Colors.grey[200],
@@ -537,123 +628,127 @@ class _EditAdScreenState extends State<EditAdScreen> {
             width: double.infinity,
             height: 180,
             child: Center(
-              child: ListView(
+              child: CustomScrollView(
                 scrollDirection: Axis.horizontal,
                 physics: BouncingScrollPhysics(),
-                children: [
-                  ListView.builder(
-                    itemCount: _editAdController.product?.photos?.original?.entries?.length ?? 0,
-                    scrollDirection: Axis.horizontal,
-                    physics: NeverScrollableScrollPhysics(),
-                    shrinkWrap: true,
-                    itemBuilder: (context, index) {
-                      Map<String, dynamic> entry = _editAdController.product.photos.original;
-                      return Padding(
-                        padding: const EdgeInsets.only(right: 8),
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(10),
-                          child: Stack(
-                            children: [
-                              SizedBox(
-                                width: 250,
-                                height: 200,
-                                child: OctoImage(
-                                  image: CachedNetworkImageProvider(entry.values.elementAt(index)),
-                                  placeholderBuilder: OctoPlaceholder.circularProgressIndicator(),
-                                  errorBuilder: OctoError.icon(color: Colors.grey[400]),
-                                  fit: BoxFit.cover,
-                                ),
-                              ),
-                              Positioned(
-                                top: 4,
-                                right: 4,
-                                child: GestureDetector(
-                                  onTap: () {
-                                    setState(() {
-                                      imagesToRemove.add(entry.keys.elementAt(index));
-                                      entry.removeWhere((key, value) => value == entry.values.elementAt(index));
-                                    });
-                                  },
-                                  child: Icon(
-                                    Icons.delete,
-                                    color: Colors.red,
+                slivers: [
+                  SliverList(
+                    delegate: SliverChildBuilderDelegate(
+                      (context, index) {
+                        // Map<String, dynamic> entry = _editAdController.product.photos.original;
+                        return Padding(
+                          padding: const EdgeInsets.only(right: 8),
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(10),
+                            child: Stack(
+                              children: [
+                                SizedBox(
+                                  width: 250,
+                                  height: 200,
+                                  child: OctoImage(
+                                    image: CachedNetworkImageProvider(networkImages.values.elementAt(index)),
+                                    placeholderBuilder: OctoPlaceholder.circularProgressIndicator(),
+                                    errorBuilder: OctoError.icon(color: Colors.grey[400]),
+                                    fit: BoxFit.cover,
                                   ),
                                 ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      );
-                    },
-                  ),
-                  ListView.builder(
-                    shrinkWrap: true,
-                    scrollDirection: Axis.horizontal,
-                    itemCount: images.length + 1,
-                    physics: NeverScrollableScrollPhysics(),
-                    itemBuilder: (context, index) {
-                      Map<String, dynamic> entry = _editAdController.product?.photos?.original ?? {"": ""};
-                      if (index == images.length) {
-                        return images.length + entry.length < 5
-                            ? GestureDetector(
-                                onTap: selectImages,
-                                behavior: HitTestBehavior.translucent,
-                                child: Container(
-                                  width: 220,
-                                  height: 180,
-                                  decoration: BoxDecoration(
-                                    border: Border.all(color: Colors.blue),
-                                    borderRadius: BorderRadius.circular(10),
-                                  ),
-                                  child: Center(
-                                    child: Column(
-                                      mainAxisAlignment: MainAxisAlignment.center,
-                                      children: [
-                                        Icon(
-                                          Icons.camera_alt_outlined,
-                                          size: 50,
-                                          color: Colors.blue,
-                                        ),
-                                        Text('Select a picture'),
-                                      ],
+                                Positioned(
+                                  top: 4,
+                                  right: 4,
+                                  child: GestureDetector(
+                                    onTap: () {
+                                      setState(() {
+                                        imagesToRemove.add(networkImages.keys.elementAt(index));
+                                        networkImages.removeWhere(
+                                            (key, value) => value == networkImages.values.elementAt(index));
+                                      });
+                                    },
+                                    child: Icon(
+                                      Icons.delete,
+                                      color: Colors.red,
                                     ),
                                   ),
                                 ),
-                              )
-                            : Container();
-                      }
-                      return Padding(
-                        padding: const EdgeInsets.only(right: 8.0),
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(10),
-                          child: Stack(
-                            children: [
-                              SizedBox(
-                                width: 250,
-                                height: 200,
-                                child: Image.file(
-                                  File(images[index].path),
+                              ],
+                            ),
+                          ),
+                        );
+                      },
+                      childCount: networkImages?.length ?? 0,
+                    ),
+                  ),
+                  SliverList(
+                    delegate: SliverChildBuilderDelegate(
+                      (context, index) {
+                        int ni = networkImages?.length ?? 0;
+                        int count = images.length + ni;
+                        if (index == images.length) {
+                          return count < 5
+                              ? Padding(
+                                  padding: EdgeInsets.only(left: count == 0 ? Get.size.width / 2 - 118 : 0),
+                                  child: GestureDetector(
+                                    onTap: selectImages,
+                                    behavior: HitTestBehavior.translucent,
+                                    child: Container(
+                                      width: 220,
+                                      height: 180,
+                                      decoration: BoxDecoration(
+                                        border: Border.all(color: Colors.blue),
+                                        borderRadius: BorderRadius.circular(10),
+                                      ),
+                                      child: Center(
+                                        child: Column(
+                                          mainAxisAlignment: MainAxisAlignment.center,
+                                          children: [
+                                            Icon(
+                                              Icons.camera_alt_outlined,
+                                              size: 50,
+                                              color: Colors.blue,
+                                            ),
+                                            Text('Select a picture'),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                )
+                              : Container();
+                        }
+                        return Padding(
+                          padding: const EdgeInsets.only(right: 8.0),
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(10),
+                            child: Stack(
+                              children: [
+                                SizedBox(
                                   width: 250,
                                   height: 200,
-                                  fit: BoxFit.cover,
+                                  child: Image.file(
+                                    File(images[index].path),
+                                    width: 250,
+                                    height: 200,
+                                    fit: BoxFit.cover,
+                                  ),
                                 ),
-                              ),
-                              Positioned(
-                                top: 4,
-                                right: 4,
-                                child: GestureDetector(
-                                    onTap: () {
-                                      setState(() {
-                                        images.removeAt(index);
-                                      });
-                                    },
-                                    child: Icon(Icons.delete, color: Colors.red)),
-                              ),
-                            ],
+                                Positioned(
+                                  top: 4,
+                                  right: 4,
+                                  child: GestureDetector(
+                                      behavior: HitTestBehavior.translucent,
+                                      onTap: () {
+                                        setState(() {
+                                          images.removeAt(index);
+                                        });
+                                      },
+                                      child: Icon(Icons.delete, color: Colors.red)),
+                                ),
+                              ],
+                            ),
                           ),
-                        ),
-                      );
-                    },
+                        );
+                      },
+                      childCount: images.length + 1,
+                    ),
                   ),
                 ],
               ),

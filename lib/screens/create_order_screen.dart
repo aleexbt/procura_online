@@ -33,8 +33,8 @@ class _CreateOrderScreenState extends State<CreateOrderScreen> {
 
   void selectImages() async {
     FilePickerResult result = await FilePicker.platform.pickFiles(
-      type: FileType.custom,
-      allowedExtensions: ['jpg', 'jpeg', 'png', 'gif'],
+      type: FileType.image,
+      // allowedExtensions: ['jpg', 'jpeg', 'png', 'gif'],
     );
 
     if (result != null) {

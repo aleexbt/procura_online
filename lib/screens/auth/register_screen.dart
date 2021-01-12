@@ -39,100 +39,109 @@ class RegisterScreen extends StatelessWidget {
                   colors: [Colors.blue, Colors.blue[900]],
                 ),
               ),
-              child: SingleChildScrollView(
-                child: Padding(
-                  padding: const EdgeInsets.all(35.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Column(
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.only(top: 50, left: 80, right: 80, bottom: 40),
-                            child: Image.asset(
-                              'assets/images/logo.png',
-                              width: 200,
+              child: Stack(children: [
+                SingleChildScrollView(
+                  child: Padding(
+                    padding: const EdgeInsets.all(35.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Column(
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.only(top: 50, left: 80, right: 80, bottom: 40),
+                              child: Image.asset(
+                                'assets/images/logo.png',
+                                width: 200,
+                              ),
                             ),
-                          ),
-                          Text(
-                            'Sign Up',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 22,
-                              fontWeight: FontWeight.bold,
+                            Text(
+                              'Sign Up',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 22,
+                                fontWeight: FontWeight.bold,
+                              ),
                             ),
-                          ),
-                          SizedBox(height: 40),
-                          CustomTextInput(
-                            controller: _name,
-                            hintText: 'Full name',
-                            hintStyle: TextStyle(color: Colors.white),
-                            textCapitalization: TextCapitalization.sentences,
-                          ),
-                          SizedBox(height: 10),
-                          CustomTextInput(
-                            controller: _email,
-                            hintText: 'Email',
-                            hintStyle: TextStyle(color: Colors.white),
-                            keyboardType: TextInputType.emailAddress,
-                          ),
-                          SizedBox(height: 10),
-                          CustomTextInput(
-                            controller: _phone,
-                            hintText: 'Phone',
-                            hintStyle: TextStyle(color: Colors.white),
-                            keyboardType: TextInputType.phone,
-                          ),
-                          SizedBox(height: 10),
-                          CustomTextInput(
-                            controller: _address,
-                            hintText: 'Address',
-                            hintStyle: TextStyle(color: Colors.white),
-                            textCapitalization: TextCapitalization.sentences,
-                          ),
-                          SizedBox(height: 10),
-                          CustomTextInput(
-                            controller: _postcode,
-                            hintText: 'Postcode',
-                            hintStyle: TextStyle(color: Colors.white),
-                            keyboardType: TextInputType.number,
-                          ),
-                          SizedBox(height: 10),
-                          CustomTextInput(
-                            controller: _password,
-                            hintText: 'Password',
-                            hintStyle: TextStyle(color: Colors.white),
-                            obscureText: true,
-                          ),
-                        ],
-                      ),
-                      SizedBox(height: 50),
-                      Column(
-                        children: [
-                          LargeButton(
-                            text: 'Sign Up',
-                            onPressed: () => _userController.signUp(
-                              name: _name.text,
-                              email: _email.text,
-                              phone: _phone.text,
-                              address: _address.text,
-                              postcode: _postcode.text,
-                              password: _password.text,
+                            SizedBox(height: 40),
+                            CustomTextInput(
+                              controller: _name,
+                              hintText: 'Full name',
+                              hintStyle: TextStyle(color: Colors.white),
+                              textCapitalization: TextCapitalization.sentences,
                             ),
-                          ),
-                          SizedBox(height: 25),
-                          GestureDetector(
-                            behavior: HitTestBehavior.translucent,
-                            onTap: () => Get.back(),
-                            child: Text('Back to login', style: kSmallText),
-                          ),
-                        ],
-                      ),
-                    ],
+                            SizedBox(height: 10),
+                            CustomTextInput(
+                              controller: _email,
+                              hintText: 'Email',
+                              hintStyle: TextStyle(color: Colors.white),
+                              keyboardType: TextInputType.emailAddress,
+                            ),
+                            SizedBox(height: 10),
+                            CustomTextInput(
+                              controller: _phone,
+                              hintText: 'Phone',
+                              hintStyle: TextStyle(color: Colors.white),
+                              keyboardType: TextInputType.phone,
+                            ),
+                            SizedBox(height: 10),
+                            CustomTextInput(
+                              controller: _address,
+                              hintText: 'Address',
+                              hintStyle: TextStyle(color: Colors.white),
+                              textCapitalization: TextCapitalization.sentences,
+                            ),
+                            SizedBox(height: 10),
+                            CustomTextInput(
+                              controller: _postcode,
+                              hintText: 'Postcode',
+                              hintStyle: TextStyle(color: Colors.white),
+                              keyboardType: TextInputType.number,
+                            ),
+                            SizedBox(height: 10),
+                            CustomTextInput(
+                              controller: _password,
+                              hintText: 'Password',
+                              hintStyle: TextStyle(color: Colors.white),
+                              obscureText: true,
+                            ),
+                          ],
+                        ),
+                        SizedBox(height: 50),
+                        Column(
+                          children: [
+                            LargeButton(
+                              text: 'Sign Up',
+                              onPressed: () => _userController.signUp(
+                                name: _name.text,
+                                email: _email.text,
+                                phone: _phone.text,
+                                address: _address.text,
+                                postcode: _postcode.text,
+                                password: _password.text,
+                              ),
+                            ),
+                            SizedBox(height: 25),
+                            GestureDetector(
+                              behavior: HitTestBehavior.translucent,
+                              onTap: () => Get.back(),
+                              child: Text('Back to login', style: kSmallText),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
                   ),
                 ),
-              ),
+                Padding(
+                  padding: EdgeInsets.only(left: 5, top: 5),
+                  child: IconButton(
+                    icon: Icon(Icons.arrow_back, color: Colors.white),
+                    onPressed: () => Get.back(),
+                  ),
+                ),
+              ]),
             ),
           ),
         ),

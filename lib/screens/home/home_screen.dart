@@ -23,7 +23,7 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
   // final SearchController _searchController = Get.find();
   final HomeController _homeController = Get.find();
   final UserController _userController = Get.find();
-  final ScrollController _scrollController = ScrollController();
+  final ScrollController _scrollController = ScrollController(initialScrollOffset: 0.0);
 
   @override
   void initState() {
@@ -40,11 +40,11 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
     super.initState();
   }
 
-  // @override
-  // void dispose() {
-  //   _scrollController.dispose();
-  //   super.dispose();
-  // }
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
 
   Future<void> refresItems() async {
     if (_homeController.isSearch) {
@@ -65,7 +65,8 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light.copyWith(
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+      statusBarBrightness: Brightness.light,
       statusBarColor: Colors.white,
       statusBarIconBrightness: Brightness.dark,
     ));
@@ -114,38 +115,50 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
             ),
           ),
           SizedBox(height: 10),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              FlatButton(
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(25)),
-                color: Colors.grey[200],
-                minWidth: 120,
-                height: 40,
-                onPressed: () => _userController.isLoggedIn ? Get.toNamed('/ad/new') : Get.toNamed('/auth/login'),
-                child: Text('Sell'),
-              ),
-              Obx(
-                () => FlatButton(
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(25)),
-                  color: _homeController.categoryValue == 'vehicles' ? Colors.grey[300] : Colors.grey[200],
-                  minWidth: 120,
-                  height: 40,
-                  onPressed: () => changeCategory(name: 'Vehicles', value: 'vehicles'),
-                  child: Text('Vehicles'),
+          SizedBox(
+            height: 40,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Flexible(
+                  fit: FlexFit.tight,
+                  child: FlatButton(
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(25)),
+                    color: Colors.grey[200],
+                    height: 40,
+                    onPressed: () => _userController.isLoggedIn ? Get.toNamed('/ad/new') : Get.toNamed('/auth/login'),
+                    child: Text('Sell'),
+                  ),
                 ),
-              ),
-              Obx(
-                () => FlatButton(
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(25)),
-                  color: _homeController.categoryValue == 'auto-parts' ? Colors.grey[300] : Colors.grey[200],
-                  minWidth: 120,
-                  height: 40,
-                  onPressed: () => changeCategory(name: 'Auto Parts', value: 'auto-parts'),
-                  child: Text('Auto Parts'),
+                Flexible(
+                  fit: FlexFit.tight,
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 10),
+                    child: Obx(
+                      () => FlatButton(
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(25)),
+                        color: _homeController.categoryValue == 'vehicles' ? Colors.grey[300] : Colors.grey[200],
+                        height: 40,
+                        onPressed: () => changeCategory(name: 'Vehicles', value: 'vehicles'),
+                        child: Text('Vehicles'),
+                      ),
+                    ),
+                  ),
                 ),
-              ),
-            ],
+                Flexible(
+                  fit: FlexFit.tight,
+                  child: Obx(
+                    () => FlatButton(
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(25)),
+                      color: _homeController.categoryValue == 'auto-parts' ? Colors.grey[300] : Colors.grey[200],
+                      height: 40,
+                      onPressed: () => changeCategory(name: 'Auto Parts', value: 'auto-parts'),
+                      child: Text('Auto Parts'),
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ),
           SizedBox(height: 10),
           Expanded(

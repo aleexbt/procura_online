@@ -172,4 +172,12 @@ class ProductRepository {
     print(response.request.uri);
     return Listing.fromJson(response.data);
   }
+
+  Future<bool> delete(String productId) async {
+    String token = Prefs.getString('token') ?? null;
+    _dio.options.headers["Authorization"] = 'Bearer $token';
+    Response response = await _dio.delete('/api/v1/listings/$productId');
+    print('delete product: ${response.request.uri}');
+    return response.data['result'];
+  }
 }

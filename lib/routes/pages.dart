@@ -8,17 +8,19 @@ import 'package:procura_online/screens/auth/forgot_password_screen.dart';
 import 'package:procura_online/screens/auth/login_screen.dart';
 import 'package:procura_online/screens/auth/register_screen.dart';
 import 'package:procura_online/screens/conversations/chat_screen.dart';
-import 'package:procura_online/screens/conversations/conversation_screen_pusher.dart';
+import 'package:procura_online/screens/conversations/conversation_screen.dart';
 import 'package:procura_online/screens/conversations/order_reply_screen.dart';
 import 'package:procura_online/screens/create_order_screen.dart';
 import 'package:procura_online/screens/filter_screen.dart';
 import 'package:procura_online/screens/home/home_screen.dart';
 import 'package:procura_online/screens/product/product_screen.dart';
+import 'package:procura_online/screens/settings/ads_listing_screen.dart';
 import 'package:procura_online/screens/settings/change_password_screen.dart';
 import 'package:procura_online/screens/settings/edit_profile_screen.dart';
 import 'package:procura_online/screens/settings/settings_screen.dart';
 import 'package:procura_online/screens/tests.dart';
 import 'package:procura_online/splash.dart';
+import 'package:procura_online/utils/route_transition_horizontal.dart';
 import 'package:procura_online/widgets/show_photo.dart';
 
 List<GetPage> getPages = [
@@ -45,10 +47,12 @@ List<GetPage> getPages = [
   GetPage(
     name: Routers.register,
     page: () => RegisterScreen(),
+    customTransition: SharedZaxisPageTransitionHorizontal(),
   ),
   GetPage(
     name: Routers.forgotPassword,
     page: () => ForgotPasswordScreen(),
+    customTransition: SharedZaxisPageTransitionHorizontal(),
   ),
   GetPage(
     name: Routers.product,
@@ -61,7 +65,7 @@ List<GetPage> getPages = [
   ),
   GetPage(
     name: Routers.chatConversation,
-    page: () => ConversationScreenPusher(),
+    page: () => ConversationScreen(),
   ),
   GetPage(
     name: Routers.chatReply,
@@ -77,6 +81,14 @@ List<GetPage> getPages = [
     page: () => SettingsScreen(),
   ),
   GetPage(
+    name: Routers.adsListing,
+    page: () => AdsListingScreen(),
+  ),
+  GetPage(
+    name: Routers.adsEdit,
+    page: () => EditAdScreen(),
+  ),
+  GetPage(
     name: Routers.editProfile,
     page: () => EditProfileScreen(),
   ),
@@ -87,10 +99,6 @@ List<GetPage> getPages = [
   GetPage(
     name: Routers.createAd,
     page: () => CreateAdScreen(),
-  ),
-  GetPage(
-    name: Routers.editAd,
-    page: () => EditAdScreen(),
   ),
   GetPage(
     name: Routers.createOrder,

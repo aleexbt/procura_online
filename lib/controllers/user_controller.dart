@@ -6,7 +6,7 @@ import 'package:get/get.dart';
 import 'package:procura_online/controllers/orders_controller.dart';
 import 'package:procura_online/models/user_model.dart';
 import 'package:procura_online/repositories/user_repository.dart';
-// import 'package:procura_online/utils/navigation_helper.dart';
+import 'package:procura_online/utils/navigation_helper.dart';
 import 'package:procura_online/utils/prefs.dart';
 
 import 'chat_controller.dart';
@@ -80,7 +80,7 @@ class UserController extends GetxController with StateMixin<User> {
       Prefs.setBool('isLoggedIn', true);
       Prefs.setString('token', response['token']);
       Prefs.setString('userData', jsonEncode(user));
-      Get.offAllNamed('/');
+      Get.offAllNamed('/app');
     } on DioError catch (err) {
       Map<String, dynamic> errors = err.response.data['errors'];
       List<String> errorList = [];
@@ -170,11 +170,10 @@ class UserController extends GetxController with StateMixin<User> {
     _userData.value = User();
     Prefs.setBool('isLoggedIn', false);
     Prefs.setString('userData', null);
-    // _pageController.animateToPage(0, duration: Duration(milliseconds: 200), curve: Curves.linear);
     Get.delete<OrdersController>(force: true);
     Get.delete<ChatController>(force: true);
-    // Get.delete<HomeController>(force: true);
-    Get.offAllNamed('/');
+    NavKey.pageController.animateToPage(0, duration: Duration(milliseconds: 500), curve: Curves.linear);
+    Get.back();
   }
 
   void updateUserData(

@@ -12,6 +12,9 @@ class Routers {
   static const product = '/product/:id';
   static const showPhotos = '/show-photos';
   static const settings = '/settings';
+  static const adsListing = '/settings/ads';
+  static const adsEdit = '/settings/ads/:id';
+
   static const editProfile = '/settings/edit-profile';
   static const changePassword = '/settings/change-password';
   static const searchFilter = '/search-filter';

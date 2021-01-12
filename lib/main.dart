@@ -6,6 +6,7 @@ import 'package:procura_online/routes/pages.dart';
 import 'package:procura_online/routes/routes.dart';
 import 'package:procura_online/utils/prefs.dart';
 import 'package:procura_online/utils/push_notification.dart';
+import 'package:procura_online/utils/route_transition_vertical.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -25,6 +26,7 @@ class MyApp extends StatelessWidget {
         }
       },
       child: GetMaterialApp(
+        customTransition: SharedZaxisPageTransitionVertical(),
         // smartManagement: SmartManagement.keepFactory,
         initialBinding: AppBindings(),
         initialRoute: Routers.initialRoute,
@@ -36,9 +38,6 @@ class MyApp extends StatelessWidget {
           visualDensity: VisualDensity.adaptivePlatformDensity,
           textTheme: GoogleFonts.openSansTextTheme(
             Theme.of(context).textTheme,
-          ),
-          pageTransitionsTheme: PageTransitionsTheme(
-            builders: const {TargetPlatform.android: ZoomPageTransitionsBuilder()},
           ),
         ),
       ),

@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:file_picker/file_picker.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
@@ -32,8 +33,8 @@ class _CreateAdScreenState extends State<CreateAdScreen> {
   void selectImages() async {
     FilePickerResult result = await FilePicker.platform.pickFiles(
       allowMultiple: true,
-      type: FileType.custom,
-      allowedExtensions: ['jpg', 'jpeg', 'png', 'gif'],
+      type: FileType.image,
+      // allowedExtensions: ['jpg', 'jpeg', 'png', 'gif'],
     );
 
     if (result != null) {
@@ -64,6 +65,27 @@ class _CreateAdScreenState extends State<CreateAdScreen> {
       _createAdController.registeredDate.value = date.toString();
       _createAdController.formattedRegisteredDate.value = '${date.day}/${date.month}/${date.year}';
     }
+  }
+
+  Widget _buildBottomPicker(Widget picker) {
+    return Container(
+      height: 215,
+      padding: const EdgeInsets.only(top: 6.0),
+      color: CupertinoColors.white,
+      child: DefaultTextStyle(
+        style: const TextStyle(
+          color: CupertinoColors.black,
+          fontSize: 22.0,
+        ),
+        child: GestureDetector(
+          onTap: () {},
+          child: SafeArea(
+            top: false,
+            child: picker,
+          ),
+        ),
+      ),
+    );
   }
 
   @override
@@ -482,7 +504,29 @@ class _CreateAdScreenState extends State<CreateAdScreen> {
                                   SizedBox(height: 10),
                                   SizedBox(height: 10),
                                   GestureDetector(
-                                    onTap: () => _selectDate(context),
+                                    onTap: Platform.isAndroid
+                                        ? () => _selectDate(context)
+                                        : () {
+                                            showCupertinoModalPopup(
+                                              context: context,
+                                              builder: (BuildContext context) {
+                                                return _buildBottomPicker(
+                                                  CupertinoDatePicker(
+                                                    initialDateTime: DateTime.now(),
+                                                    minimumDate: DateTime(1900, 1),
+                                                    maximumDate: DateTime.now(),
+                                                    minuteInterval: 1,
+                                                    mode: CupertinoDatePickerMode.date,
+                                                    onDateTimeChanged: (DateTime date) {
+                                                      _createAdController.registeredDate.value = date.toString();
+                                                      _createAdController.formattedRegisteredDate.value =
+                                                          '${date.day}/${date.month}/${date.year}';
+                                                    },
+                                                  ),
+                                                );
+                                              },
+                                            );
+                                          },
                                     child: CustomTextInput(
                                       enabled: false,
                                       fillColor: Colors.grey[200],

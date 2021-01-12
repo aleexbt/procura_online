@@ -79,7 +79,7 @@ class OrderReplyScreen extends StatelessWidget {
               ),
               backgroundColor: Colors.white,
               shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(8),
+                borderRadius: BorderRadius.only(topLeft: Radius.circular(8), topRight: Radius.circular(8)),
               ),
             ),
           ),

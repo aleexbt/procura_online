@@ -25,35 +25,46 @@ class PushNotificationsManager {
   }
 
   Future<void> init() async {
-    // _initLocalNotifications();
-    if (!_initialized) {
-      // For iOS request permission first.
-      _firebaseMessaging.requestNotificationPermissions();
+    try {
+      // _initLocalNotifications();
+      if (!_initialized) {
+        // For iOS request permission first.
+        _firebaseMessaging.requestNotificationPermissions();
 
-      _firebaseMessaging.configure(
-        // Run when the app is already in foreground
-        onMessage: (Map<String, dynamic> response) async {
-          print("onMessage: $response");
-          // _showNotification(response);
-        },
-        // Run when the app is started from closed state
-        onLaunch: (Map<String, dynamic> response) async {
-          print("onLaunch: $response");
-          // _showNotification(response);
-        },
-        // Run when the app is started from background state
-        onResume: (Map<String, dynamic> response) async {
-          print("onResume: $response");
-          // _showNotification(response);
-        },
-        onBackgroundMessage: backgroundMessageHandler,
-      );
+        _firebaseMessaging.configure(
+          // Run when the app is already in foreground
+          onMessage: (Map<String, dynamic> response) async {
+            print("onMessage: $response");
+            // _showNotification(response);
+          },
+          // Run when the app is started from closed state
+          onLaunch: (Map<String, dynamic> response) async {
+            print("onLaunch: $response");
+            // _showNotification(response);
+          },
+          // Run when the app is started from background state
+          onResume: (Map<String, dynamic> response) async {
+            print("onResume: $response");
+            // _showNotification(response);
+          },
+          // onBackgroundMessage: backgroundMessageHandler,
+        );
 
-      // For testing purposes print the Firebase Messaging token
-      String token = await _firebaseMessaging.getToken();
-      print("FirebaseMessaging token: $token");
+        _firebaseMessaging
+            .requestNotificationPermissions(const IosNotificationSettings(sound: true, badge: true, alert: true));
 
-      _initialized = true;
+        _firebaseMessaging.onIosSettingsRegistered.listen((IosNotificationSettings settings) {
+          print(settings);
+        });
+
+        // For testing purposes print the Firebase Messaging token
+        String token = await _firebaseMessaging.getToken();
+        print("FCM token: $token");
+
+        _initialized = true;
+      }
+    } catch (err) {
+      print('FCM ERROR: $err');
     }
   }
 
