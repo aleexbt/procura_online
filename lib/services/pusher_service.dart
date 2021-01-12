@@ -1,63 +1,57 @@
-import 'dart:async';
+import 'dart:convert';
 
-import 'package:flutter/services.dart';
-import 'package:pusher_websocket_flutter/pusher.dart';
+import 'package:get/get.dart';
+import 'package:procura_online/controllers/conversation_controller.dart';
+import 'package:pusher_client/pusher_client.dart';
 
-class PusherService {
-  Event lastEvent;
-  String lastConnectionState;
+class PusherService extends GetxController {
+  final ConversationController _conversationController = Get.find();
+
   Channel channel;
+  PusherEvent event;
 
-  StreamController<String> _eventData = StreamController<String>();
-  Sink get _inEventData => _eventData.sink;
-  Stream get eventStream => _eventData.stream;
-
-  Future<void> initPusher() async {
-    try {
-      await Pusher.init('839c5518f49da7441ab4', PusherOptions(cluster: 'us2'), enableLogging: true);
-      print("Pusher initialized");
-    } on PlatformException catch (e) {
-      print(e.message);
-    }
-  }
+  PusherClient pusher = PusherClient(
+    '839c5518f49da7441ab4',
+    PusherOptions(cluster: 'us2'),
+    enableLogging: true,
+  );
 
   void connectPusher() {
-    Pusher.connect(onConnectionStateChange: (ConnectionStateChange connectionState) async {
-      lastConnectionState = connectionState.currentState;
-      print("Pusher connected");
-    }, onError: (ConnectionError e) {
-      print("Error: ${e.message}");
+    pusher.connect();
+    pusher.onConnectionStateChange((state) {
+      print("previousState: ${state.previousState}, currentState: ${state.currentState}");
+    });
+    pusher.onConnectionError((error) {
+      print("error: ${error.message}");
     });
   }
 
-  Future<void> subscribePusher(String channelName) async {
-    channel = await Pusher.subscribe(channelName);
+  void subscribePusher(String channelName) {
+    channel = pusher.subscribe(channelName);
     print("Pusher subscribed to channel");
   }
 
   void unSubscribePusher(String channelName) {
-    Pusher.unsubscribe(channelName);
+    pusher.unsubscribe(channelName);
     print("Pusher unsubscribed from channel");
   }
 
   void bindEvent(String eventName) {
-    channel.bind(eventName, (last) {
-      final String data = last.data;
-      _inEventData.add(data);
+    channel.bind(eventName, (event) {
+      Map<String, dynamic> json = jsonDecode(event.data);
+      _conversationController.addMessage(json);
     });
     print("Pusher data binded");
   }
 
   void unbindEvent(String eventName) {
     channel.unbind(eventName);
-    _eventData.close();
     print("Pusher data unbinded");
   }
 
   Future<void> firePusher(String channelName, String eventName) async {
-    await initPusher();
     connectPusher();
-    await subscribePusher(channelName);
+    subscribePusher(channelName);
     bindEvent(eventName);
   }
 }
