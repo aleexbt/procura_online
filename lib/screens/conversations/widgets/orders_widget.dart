@@ -10,7 +10,7 @@ class OrdersWidget extends StatelessWidget {
   final ScrollController _scrollController = ScrollController();
 
   Future<void> refresItems() async {
-    return _ordersController.findAll();
+    return _ordersController.findAll(skipLoading: true);
   }
 
   @override

@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:procura_online/controllers/chat_controller.dart';
 import 'package:procura_online/models/message_model.dart';
-import 'package:procura_online/models/messages_model.dart';
+import 'package:procura_online/models/new_conversation_model.dart';
 import 'package:procura_online/repositories/chat_repository.dart';
 import 'package:procura_online/services/pusher_service.dart';
 // import 'package:procura_online/services/pusher_service.dart';
@@ -17,14 +17,13 @@ class ConversationController extends GetxController {
   void onInit() {
     findOne();
     pusherService = PusherService();
-    pusherService.firePusher('public', 'my-event');
     super.onInit();
   }
 
   @override
   void onClose() {
-    pusherService.unbindEvent('my-event');
-    pusherService.unSubscribePusher('my-event');
+    pusherService.unbindEvent('App\\Events\\ConversationEvent');
+    pusherService.unSubscribePusher('App\\Events\\ConversationEvent');
     super.onClose();
   }
 
@@ -34,7 +33,7 @@ class ConversationController extends GetxController {
   RxBool _replyingError = false.obs;
   RxBool _isDeleting = false.obs;
   RxBool _deletingError = false.obs;
-  Rx<Messages> _messages = Messages().obs;
+  Rx<NewConversationModel> _conversation = NewConversationModel().obs;
 
   bool get isLoading => _isLoading.value;
   bool get hasError => _hasError.value;
@@ -42,7 +41,7 @@ class ConversationController extends GetxController {
   bool get replyingError => _replyingError.value;
   bool get isDeleting => _isDeleting.value;
   bool get deletingError => _deletingError.value;
-  Messages get messages => _messages.value;
+  NewConversationModel get conversation => _conversation.value;
 
   Rx<TextEditingController> messageInput = TextEditingController().obs;
 
@@ -50,9 +49,11 @@ class ConversationController extends GetxController {
     _isLoading.value = true;
     _hasError.value = false;
     try {
-      Messages response = await _chatRepository.findOne(chatId);
+      NewConversationModel response = await _chatRepository.findOne(chatId);
       _chatRepository.markMessageAsRead(chatId);
-      _messages.value = response;
+      print('private-conversation.$chatId');
+      pusherService.firePusher('private-conversation.$chatId', 'App\\Events\\ConversationEvent');
+      _conversation.value = response;
     } on DioError catch (err) {
       _hasError.value = true;
       print(err);
@@ -71,28 +72,23 @@ class ConversationController extends GetxController {
     _isReplying.value = true;
     _replyingError.value = false;
     try {
-      Map<String, dynamic> data = {
-        "message": message,
-        "order_id": orderId,
-        "conversation_id": chatId ?? ""
-      };
+      Map<String, dynamic> data = {"message": message, "order_id": orderId, "conversation_id": chatId ?? ""};
       await _chatRepository.replyMessage(data);
-      updateMessages();
+
+      // updateMessages();
     } on DioError catch (err) {
       _replyingError.value = true;
       Get.rawSnackbar(
-          message: 'Ops, something went wrong.',
-          backgroundColor: Colors.red,
-          duration: Duration(seconds: 3));
+          message: 'Ops, something went wrong.', backgroundColor: Colors.red, duration: Duration(seconds: 3));
     } catch (err) {
       _replyingError.value = true;
       print(err);
       Get.rawSnackbar(
-          message: 'Ops, something went wrong.',
-          backgroundColor: Colors.red,
-          duration: Duration(seconds: 3));
+          message: 'Ops, something went wrong.', backgroundColor: Colors.red, duration: Duration(seconds: 3));
     } finally {
+      messageInput.value.clear();
       _isReplying.value = false;
+      _chatController.findAll();
     }
   }
 
@@ -116,38 +112,35 @@ class ConversationController extends GetxController {
     } on DioError catch (err) {
       _deletingError.value = true;
       Get.rawSnackbar(
-          message: 'Ops, something went wrong.',
-          backgroundColor: Colors.red,
-          duration: Duration(seconds: 3));
+          message: 'Ops, something went wrong.', backgroundColor: Colors.red, duration: Duration(seconds: 3));
     } catch (err) {
       _deletingError.value = true;
       Get.rawSnackbar(
-          message: 'Ops, something went wrong.',
-          backgroundColor: Colors.red,
-          duration: Duration(seconds: 3));
+          message: 'Ops, something went wrong.', backgroundColor: Colors.red, duration: Duration(seconds: 3));
     } finally {
       _isDeleting.value = false;
     }
   }
 
-  void updateMessages() async {
-    try {
-      Messages response = await _chatRepository.findOne(chatId);
-      _messages.update((val) {
-        val.messages = response.messages;
-      });
-    } on DioError catch (err) {
-      print(err);
-    } finally {
-      messageInput.value.clear();
-      _isReplying.value = false;
-      _chatController.findAll();
-    }
-  }
+  // void updateMessages() async {
+  //   try {
+  //     Messages response = await _chatRepository.findOne(chatId);
+  //     _messages.update((val) {
+  //       val.messages = response.messages;
+  //     });
+  //   } on DioError catch (err) {
+  //     print(err);
+  //   } finally {
+  //     messageInput.value.clear();
+  //     _isReplying.value = false;
+  //     _chatController.findAll();
+  //   }
+  // }
 
   void addMessage(Map<String, dynamic> data) async {
-    _messages.update((val) {
+    _conversation.update((val) {
       val.messages.add(Message.fromJson(data['message']));
     });
+    _chatController.findAll(skipLoading: true);
   }
 }

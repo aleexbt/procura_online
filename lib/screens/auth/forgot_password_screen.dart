@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:procura_online/controllers/user_controller.dart';
@@ -46,11 +47,14 @@ class ForgotPasswordScreen extends StatelessWidget {
                             Column(
                               children: [
                                 Padding(
-                                  padding: const EdgeInsets.only(top: 120, left: 80, right: 80, bottom: 40),
-                                  child: Image.asset(
-                                    'assets/images/logo.png',
-                                    width: 200,
-                                  ),
+                                  padding: const EdgeInsets.only(
+                                      top: 120,
+                                      left: 80,
+                                      right: 80,
+                                      bottom: 40),
+                                  child: SvgPicture.asset(
+                                      'assets/images/logo_branco.svg',
+                                      width: 100),
                                 ),
                                 Text(
                                   'Forgot password',
@@ -96,7 +100,8 @@ class ForgotPasswordScreen extends StatelessWidget {
                                   onPressed: () {
                                     if (_formKey.currentState.validate()) {
                                       FocusScope.of(context).unfocus();
-                                      _userController.passwordReset(_email.text);
+                                      _userController
+                                          .passwordReset(_email.text);
                                     }
                                   },
                                 ),
@@ -104,7 +109,8 @@ class ForgotPasswordScreen extends StatelessWidget {
                                 GestureDetector(
                                   behavior: HitTestBehavior.translucent,
                                   onTap: () => Get.back(),
-                                  child: Text('Back to Login', style: kSmallText),
+                                  child:
+                                      Text('Back to Login', style: kSmallText),
                                 ),
                               ],
                             ),

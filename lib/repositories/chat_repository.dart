@@ -2,7 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:dio_http_cache/dio_http_cache.dart';
 import 'package:procura_online/models/chats_model.dart';
 import 'package:procura_online/models/message_model.dart';
-import 'package:procura_online/models/messages_model.dart';
+import 'package:procura_online/models/new_conversation_model.dart';
 import 'package:procura_online/utils/prefs.dart';
 
 BaseOptions options = BaseOptions(
@@ -23,11 +23,11 @@ class ChatRepository {
     return Chats.fromJson(response.data);
   }
 
-  Future<Messages> findOne(String chatId) async {
+  Future<NewConversationModel> findOne(String chatId) async {
     String token = Prefs.getString('token') ?? null;
     _dio.options.headers["Authorization"] = 'Bearer $token';
     Response response = await _dio.get('/api/v1/conversation/$chatId');
-    return Messages.fromJson(response.data);
+    return NewConversationModel.fromJson(response.data['data']);
   }
 
   Future<Message> replyMessage(Map<String, dynamic> data) async {

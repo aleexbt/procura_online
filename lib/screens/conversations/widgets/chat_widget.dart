@@ -10,7 +10,7 @@ class ChatWidget extends StatelessWidget {
   final ScrollController _scrollController = ScrollController();
 
   Future<void> refresItems() async {
-    return _chatController.findAll();
+    return _chatController.findAll(skipLoading: true);
   }
 
   @override

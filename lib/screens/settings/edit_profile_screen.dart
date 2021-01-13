@@ -7,6 +7,8 @@ import 'package:procura_online/widgets/text_input.dart';
 
 class EditProfileScreen extends StatelessWidget {
   final UserController _userController = Get.find();
+  final _formKey = GlobalKey<FormState>();
+
   @override
   Widget build(BuildContext context) {
     return GetX<UserController>(
@@ -18,8 +20,10 @@ class EditProfileScreen extends StatelessWidget {
             IconButton(
               icon: Icon(Icons.check, color: Colors.black),
               onPressed: () {
-                FocusScope.of(context).unfocus();
-                _userController.updateUserData();
+                if(_formKey.currentState.validate()) {
+                  FocusScope.of(context).unfocus();
+                  _userController.updateUserData();
+                }
               },
             ),
           ],
@@ -29,100 +33,135 @@ class EditProfileScreen extends StatelessWidget {
           child: SingleChildScrollView(
             child: Padding(
               padding: const EdgeInsets.all(20),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'Full name',
-                    style: TextStyle(color: Colors.blue),
-                  ),
-                  SizedBox(height: 5),
-                  CustomTextInput(
-                    controller: _.name.value..text = _.userData?.name,
-                    fillColor: Colors.grey[200],
-                    hintText: _.userData?.name,
-                    textCapitalization: TextCapitalization.sentences,
-                  ),
-                  SizedBox(height: 10),
-                  Text(
-                    'Email',
-                    style: TextStyle(color: Colors.blue),
-                  ),
-                  SizedBox(height: 5),
-                  CustomTextInput(
-                    controller: _.email.value..text = _.userData?.email,
-                    fillColor: Colors.grey[200],
-                    hintText: _.userData?.email,
-                    keyboardType: TextInputType.emailAddress,
-                  ),
-                  SizedBox(height: 10),
-                  Text(
-                    'Phone',
-                    style: TextStyle(color: Colors.blue),
-                  ),
-                  SizedBox(height: 5),
-                  Obx(
-                    () => CustomTextInput(
-                      controller: _.phone.value..text = _.userData?.phone,
-                      fillColor: Colors.grey[200],
-                      hintText: _.userData?.phone,
-                      keyboardType: TextInputType.phone,
+              child: Form(
+                key: _formKey,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Full name',
+                      style: TextStyle(color: Colors.blue),
                     ),
-                  ),
-                  SizedBox(height: 10),
-                  Text(
-                    'Company',
-                    style: TextStyle(color: Colors.blue),
-                  ),
-                  SizedBox(height: 5),
-                  Obx(
-                    () => CustomTextInput(
-                      controller: _.company.value..text = _.userData?.company,
+                    SizedBox(height: 5),
+                    CustomTextInput(
+                      controller: _.name.value..text = _.userData?.name,
                       fillColor: Colors.grey[200],
-                      hintText: _.userData?.company,
+                      hintText: 'Full name',
+                      textCapitalization: TextCapitalization.sentences,
+                      validator: (value) {
+                        if(value.isEmpty) {
+                          return 'Please enter your name';
+                        }
+                      },
                     ),
-                  ),
-                  SizedBox(height: 10),
-                  Text(
-                    'Account type',
-                    style: TextStyle(color: Colors.blue),
-                  ),
-                  SizedBox(height: 5),
-                  SelectOption(
-                    modalTitle: 'Account type',
-                    selectText: 'Select an option',
-                    value: _.selectedAccountType.value,
-                    choiceItems: _.accountTypeOptions,
-                    onChange: (state) => _.selectedAccountType(state.value),
-                  ),
-                  SizedBox(height: 10),
-                  Text(
-                    'Address',
-                    style: TextStyle(color: Colors.blue),
-                  ),
-                  SizedBox(height: 5),
-                  Obx(
-                    () => CustomTextInput(
-                      controller: _.address.value..text = _.userData?.address,
+                    SizedBox(height: 10),
+                    Text(
+                      'Email',
+                      style: TextStyle(color: Colors.blue),
+                    ),
+                    SizedBox(height: 5),
+                    CustomTextInput(
+                      controller: _.email.value..text = _.userData?.email,
                       fillColor: Colors.grey[200],
-                      hintText: _.userData?.address,
+                      hintText: 'Email address',
+                      keyboardType: TextInputType.emailAddress,
+                      validator: (value) {
+                        if(value.isEmpty) {
+                          return 'Please enter your email';
+                        }
+                      },
                     ),
-                  ),
-                  SizedBox(height: 10),
-                  Text(
-                    'Postcode',
-                    style: TextStyle(color: Colors.blue),
-                  ),
-                  SizedBox(height: 5),
-                  Obx(
-                    () => CustomTextInput(
-                      controller: _.postcode.value..text = _.userData?.postcode,
-                      fillColor: Colors.grey[200],
-                      hintText: _.userData?.postcode,
-                      keyboardType: TextInputType.number,
+                    SizedBox(height: 10),
+                    Text(
+                      'Phone',
+                      style: TextStyle(color: Colors.blue),
                     ),
-                  ),
-                ],
+                    SizedBox(height: 5),
+                    Obx(
+                      () => CustomTextInput(
+                        controller: _.phone.value..text = _.userData?.phone,
+                        fillColor: Colors.grey[200],
+                        hintText: 'Phone number',
+                        keyboardType: TextInputType.phone,
+                        validator: (value) {
+                          if(value.isEmpty) {
+                            return 'Please enter your phone number';
+                          }
+                        },
+                      ),
+                    ),
+                    SizedBox(height: 10),
+                    Text(
+                      'Company',
+                      style: TextStyle(color: Colors.blue),
+                    ),
+                    SizedBox(height: 5),
+                    Obx(
+                      () => CustomTextInput(
+                        controller: _.company.value..text = _.userData?.company,
+                        fillColor: Colors.grey[200],
+                        hintText: 'Company name',
+                        textCapitalization: TextCapitalization.sentences,
+                        validator: (value) {
+                          if(value.isEmpty) {
+                            return 'Please enter your company name';
+                          }
+                        },
+                      ),
+                    ),
+                    SizedBox(height: 10),
+                    Text(
+                      'Account type',
+                      style: TextStyle(color: Colors.blue),
+                    ),
+                    SizedBox(height: 5),
+                    SelectOption(
+                      modalTitle: 'Account type',
+                      selectText: 'Select an option',
+                      value: _.selectedAccountType.value,
+                      choiceItems: _.accountTypeOptions,
+                      onChange: (state) => _.selectedAccountType(state.value),
+                    ),
+                    SizedBox(height: 10),
+                    Text(
+                      'Address',
+                      style: TextStyle(color: Colors.blue),
+                    ),
+                    SizedBox(height: 5),
+                    Obx(
+                      () => CustomTextInput(
+                        controller: _.address.value..text = _.userData?.address,
+                        fillColor: Colors.grey[200],
+                        hintText: 'Full address',
+                        textCapitalization: TextCapitalization.sentences,
+                        validator: (value) {
+                          if(value.isEmpty) {
+                            return 'Please enter your address';
+                          }
+                        },
+                      ),
+                    ),
+                    SizedBox(height: 10),
+                    Text(
+                      'Postcode',
+                      style: TextStyle(color: Colors.blue),
+                    ),
+                    SizedBox(height: 5),
+                    Obx(
+                      () => CustomTextInput(
+                        controller: _.postcode.value..text = _.userData?.postcode,
+                        fillColor: Colors.grey[200],
+                        hintText: 'Postcode',
+                        keyboardType: TextInputType.number,
+                        validator: (value) {
+                          if(value.isEmpty) {
+                            return 'Please enter your postcode';
+                          }
+                        },
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
           ),

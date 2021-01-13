@@ -30,8 +30,8 @@ class ChatController extends GetxController {
   bool get isLastPage => _page.value == _chats.value.meta.lastPage;
   List<Chat> filteredConversations;
 
-  void findAll() async {
-    _isLoading.value = true;
+  void findAll({skipLoading = false}) async {
+    _isLoading.value = !skipLoading;
     _hasError.value = false;
     _page.value = 1;
     try {
@@ -65,12 +65,16 @@ class ChatController extends GetxController {
       print(err);
       _loadingMoreError.value = true;
       Get.rawSnackbar(
-          message: 'Ops, error getting more items.', backgroundColor: Colors.red, duration: Duration(seconds: 3));
+          message: 'Ops, error getting more items.',
+          backgroundColor: Colors.red,
+          duration: Duration(seconds: 3));
     } catch (err) {
       print(err);
       _loadingMoreError.value = true;
       Get.rawSnackbar(
-          message: 'Ops, error getting more items.', backgroundColor: Colors.red, duration: Duration(seconds: 3));
+          message: 'Ops, error getting more items.',
+          backgroundColor: Colors.red,
+          duration: Duration(seconds: 3));
     } finally {
       _isLoadingMore.value = false;
     }
@@ -80,8 +84,12 @@ class ChatController extends GetxController {
     List<Chat> filtered = filteredConversations
         .where(
           (conversation) =>
-              conversation.order.userInfo.name.toLowerCase().contains(term.toLowerCase()) ||
-              conversation.latestMessage.message.toLowerCase().contains(term.toLowerCase()),
+              conversation.order.userInfo.name
+                  .toLowerCase()
+                  .contains(term.toLowerCase()) ||
+              conversation.latestMessage.message
+                  .toLowerCase()
+                  .contains(term.toLowerCase()),
         )
         .toList();
 

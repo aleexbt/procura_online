@@ -1,6 +1,10 @@
 # procura_online
 
+<<<<<<< HEAD
+A new Flutter project.
+=======
 A new Flutter application.
+>>>>>>> 7a00e9d2465866592c2a601dc5d5f83ae4f2084f
 
 ## Getting Started
 

@@ -210,7 +210,6 @@ class UserController extends GetxController with StateMixin<User> {
         'postcode': postcode.value.text
       };
 
-      User response = await _userRepository.update(updateData);
       _userData.update((val) {
         val.name = name.value.text;
         val.email = email.value.text;
@@ -220,6 +219,8 @@ class UserController extends GetxController with StateMixin<User> {
         val.address = address.value.text;
         val.postcode = postcode.value.text;
       });
+
+      User response = await _userRepository.update(updateData);
       Prefs.setString('userData', jsonEncode(response));
       Get.back();
       Get.rawSnackbar(

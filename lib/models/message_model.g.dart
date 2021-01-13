@@ -17,14 +17,11 @@ Message _$MessageFromJson(Map<String, dynamic> json) {
     conversationId: json['conversation_id'],
     humanReadDate: json['human_read_date'] as String,
     daysSectionDate: json['days_section_date'] as String,
-    conversation: json['conversation'] == null
-        ? null
-        : Conversation.fromJson(json['conversation'] as Map<String, dynamic>),
     sender: json['sender'] == null
         ? null
         : User.fromJson(json['sender'] as Map<String, dynamic>),
-    hasAttachments: json['has_attachments'] as bool,
-    media: (json['media'] as List)
+    hasAttachments: json['has_attachments'],
+    media: (json['media_'] as List)
         ?.map((e) =>
             e == null ? null : OrderMedia.fromJson(e as Map<String, dynamic>))
         ?.toList(),
@@ -41,8 +38,7 @@ Map<String, dynamic> _$MessageToJson(Message instance) => <String, dynamic>{
       'conversation_id': instance.conversationId,
       'human_read_date': instance.humanReadDate,
       'days_section_date': instance.daysSectionDate,
-      'conversation': instance.conversation,
       'sender': instance.sender,
       'has_attachments': instance.hasAttachments,
-      'media': instance.media,
+      'media_': instance.media,
     };

@@ -11,9 +11,18 @@ class PusherService {
   String lastConnectionState;
   Channel channel;
 
-  Future<void> initPusher() async {
+  Future<void> initPusher(String channelName) async {
+    print('CHANNEL_NAME: $channelName');
     try {
-      await Pusher.init('839c5518f49da7441ab4', PusherOptions(cluster: 'us2'),
+      await Pusher.init(
+          'cb7f336d45263a9ab275',
+          PusherOptions(
+            cluster: 'eu',
+            auth: PusherAuth(
+              'https://1af570776722.ngrok.io/pusher/auth',
+              headers: {'channel_name': channelName, 'socket_id': Pusher.getSocketId()},
+            ),
+          ),
           enableLogging: true);
       print("Pusher initialized");
     } on PlatformException catch (e) {
@@ -22,8 +31,7 @@ class PusherService {
   }
 
   void connectPusher() {
-    Pusher.connect(
-        onConnectionStateChange: (ConnectionStateChange connectionState) async {
+    Pusher.connect(onConnectionStateChange: (ConnectionStateChange connectionState) async {
       lastConnectionState = connectionState.currentState;
       print("Pusher connected");
     }, onError: (ConnectionError e) {
@@ -56,7 +64,7 @@ class PusherService {
   }
 
   Future<void> firePusher(String channelName, String eventName) async {
-    await initPusher();
+    await initPusher(channelName);
     connectPusher();
     await subscribePusher(channelName);
     bindEvent(eventName);

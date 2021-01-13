@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:procura_online/controllers/user_controller.dart';
@@ -50,11 +51,11 @@ class RegisterScreen extends StatelessWidget {
                         Column(
                           children: [
                             Padding(
-                              padding: const EdgeInsets.only(top: 50, left: 80, right: 80, bottom: 40),
-                              child: Image.asset(
-                                'assets/images/logo.png',
-                                width: 200,
-                              ),
+                              padding: const EdgeInsets.only(
+                                  top: 50, left: 80, right: 80, bottom: 40),
+                              child: SvgPicture.asset(
+                                  'assets/images/logo_branco.svg',
+                                  width: 100),
                             ),
                             Text(
                               'Sign Up',

@@ -32,7 +32,7 @@ class Order {
   bool seen;
   @JsonKey(name: 'human_read_date')
   String humanReadDate;
-  bool sold;
+  dynamic sold;
 
   Order({
     this.id,

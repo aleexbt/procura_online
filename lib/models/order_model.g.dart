@@ -25,7 +25,7 @@ Order _$OrderFromJson(Map<String, dynamic> json) {
     mediaCount: json['media_count'] as String,
     seen: json['seen'] as bool,
     humanReadDate: json['human_read_date'] as String,
-    sold: json['sold'] as bool,
+    sold: json['sold'],
   )..media = (json['media'] as List)
       ?.map((e) =>
           e == null ? null : OrderMedia.fromJson(e as Map<String, dynamic>))

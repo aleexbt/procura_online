@@ -1,7 +1,6 @@
 import 'package:json_annotation/json_annotation.dart';
 import 'package:procura_online/models/user_model.dart';
 
-import 'conversation_model.dart';
 import 'order_media.dart';
 
 part 'message_model.g.dart';
@@ -24,10 +23,10 @@ class Message {
   String humanReadDate;
   @JsonKey(name: 'days_section_date')
   String daysSectionDate;
-  Conversation conversation;
   User sender;
   @JsonKey(name: 'has_attachments')
-  bool hasAttachments;
+  dynamic hasAttachments;
+  @JsonKey(name: 'media_')
   List<OrderMedia> media;
 
   Message({
@@ -40,7 +39,6 @@ class Message {
     this.conversationId,
     this.humanReadDate,
     this.daysSectionDate,
-    this.conversation,
     this.sender,
     this.hasAttachments,
     this.media,

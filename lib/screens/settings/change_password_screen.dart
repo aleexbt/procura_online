@@ -46,7 +46,7 @@ class ChangePasswordScreen extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Enter your current password',
+                      'Current password',
                       style: TextStyle(color: Colors.blue),
                     ),
                     SizedBox(height: 5),
@@ -57,14 +57,14 @@ class ChangePasswordScreen extends StatelessWidget {
                       obscureText: true,
                       validator: (value) {
                         if (value.isEmpty) {
-                          return 'Your current password cannot be empty.';
+                          return 'Please enter your current password';
                         }
                         return null;
                       },
                     ),
                     SizedBox(height: 10),
                     Text(
-                      'Enter your new password',
+                      'New password',
                       style: TextStyle(color: Colors.blue),
                     ),
                     SizedBox(height: 5),
@@ -75,27 +75,27 @@ class ChangePasswordScreen extends StatelessWidget {
                         obscureText: true,
                         validator: (value) {
                           if (value.isEmpty) {
-                            return 'Your new password cannot be empty.';
+                            return 'Please enter a new password';
                           }
                           if (value.length < 8) {
-                            return 'Your password must have at least 8 characters.';
+                            return 'Your new password must have at least 8 characters';
                           }
                           return null;
                         }),
                     SizedBox(height: 10),
                     Text(
-                      'Confirm your new password',
+                      'Confirm password',
                       style: TextStyle(color: Colors.blue),
                     ),
                     SizedBox(height: 5),
                     CustomTextInput(
                         controller: _confirmPassword,
                         fillColor: Colors.grey[200],
-                        hintText: 'Confirm password',
+                        hintText: 'Confirm new password',
                         obscureText: true,
                         validator: (value) {
                           if (value.isEmpty) {
-                            return 'Your confirmation password cannot be empty.';
+                            return 'Please repeat your new password';
                           }
                           if (value != _newPassword.text) {
                             return 'Your passwords didn\'t match, please verify';

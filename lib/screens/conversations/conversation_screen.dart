@@ -63,7 +63,7 @@ class _ConversationScreenState extends State<ConversationScreen> {
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Text(
-                    _conversationController.messages?.messages[0]?.sender?.name,
+                    _.conversation.userOne.name,
                     style: TextStyle(
                       fontSize: 16,
                     ),
@@ -157,7 +157,7 @@ class _ConversationScreenState extends State<ConversationScreen> {
                 ),
               );
             }
-            Order order = _.messages.messages[0].conversation.order;
+            Order order = _.conversation.order;
             return ModalProgressHUD(
               inAsyncCall: _.isDeleting,
               child: Column(
@@ -264,17 +264,17 @@ class _ConversationScreenState extends State<ConversationScreen> {
                             padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
                             child: ListView.builder(
                               shrinkWrap: true,
-                              itemCount: _.messages.messages.length,
+                              itemCount: _.conversation.messages.length,
                               physics: NeverScrollableScrollPhysics(),
                               itemBuilder: (context, index) {
                                 WidgetsBinding.instance.addPostFrameCallback((_) => _scrollToBottom());
-                                var message = _.messages.messages[index];
+                                var message = _.conversation.messages[index];
                                 return Bubble(
-                                  photo: message.hasAttachments ? message.media[0].image : null,
+                                  id: message.id.toString(),
+                                  photos: message.hasAttachments ? message.media : null,
                                   message: message.message,
                                   time: message.humanReadDate,
-                                  delivered: true,
-                                  isMe: _userController.userData.id.toString() == message.userId,
+                                  isMe: _userController.userData.id.toString() == message.userId.toString(),
                                 );
                               },
                             ),
