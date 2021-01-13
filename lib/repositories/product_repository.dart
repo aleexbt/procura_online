@@ -88,6 +88,29 @@ class ProductRepository {
       "photos": photosList
     });
 
+    print({
+      "title": title,
+      "description": description,
+      "make": brand,
+      "model": model,
+      "year": year,
+      "color": color,
+      "engine_displacement": engineDisplacement,
+      "number_of_seats": numberOfSeats,
+      "number_of_doors": numberOfDoors,
+      "fuel_type": fuelType,
+      "engine_power": enginePower,
+      "transmission": transmission,
+      "registered": registered,
+      "mileage": miliage,
+      "condition": condition,
+      "price": price,
+      "negotiable": negotiable,
+      "categories": ["1", "2"],
+      "main_photo": mainPhoto,
+      "photos": photosList
+    });
+
     _dio.options.headers["Authorization"] = 'Bearer $token';
     final Response response = await _dio.post('/api/v1/listings', data: formData);
 

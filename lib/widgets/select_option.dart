@@ -31,7 +31,7 @@ class SelectOption extends StatelessWidget {
   Widget build(BuildContext context) {
     return SmartSelect<String>.single(
       modalConfig: S2ModalConfig(filterAuto: true, useFilter: enableFilter),
-      modalType: S2ModalType.bottomSheet,
+      modalType: S2ModalType.fullPage,
       modalTitle: modalTitle,
       placeholder: placeholder,
       modalHeaderStyle: S2ModalHeaderStyle(

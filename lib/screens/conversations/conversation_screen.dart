@@ -19,7 +19,7 @@ class ConversationScreen extends StatefulWidget {
 
 class _ConversationScreenState extends State<ConversationScreen> {
   final String chatId = Get.parameters['id'];
-  final ConversationController _conversationController = Get.put(ConversationController());
+  final ConversationController _conversationController = Get.find();
   final UserController _userController = Get.find();
   final ScrollController _scrollController = ScrollController();
 
@@ -45,38 +45,36 @@ class _ConversationScreenState extends State<ConversationScreen> {
     return Scaffold(
       appBar: AppBar(
         shadowColor: Colors.transparent,
-        title: GetX<ConversationController>(
-            init: _conversationController,
-            builder: (_) {
-              if (_.isLoading || _.hasError) {
-                return Container();
-              }
-              return Row(
-                children: <Widget>[
-                  ClipOval(
-                    child: Image.network(
-                      'https://mindbodygreen-res.cloudinary.com/images/w_767,q_auto:eco,f_auto,fl_lossy/usr/RetocQT/sarah-fielding.jpg',
-                      width: 30,
-                      height: 30,
-                      fit: BoxFit.cover,
+        title: GetX<ConversationController>(builder: (_) {
+          if (_.isLoading || _.hasError) {
+            return Container();
+          }
+          return Row(
+            children: <Widget>[
+              ClipOval(
+                child: Image.network(
+                  'https://mindbodygreen-res.cloudinary.com/images/w_767,q_auto:eco,f_auto,fl_lossy/usr/RetocQT/sarah-fielding.jpg',
+                  width: 30,
+                  height: 30,
+                  fit: BoxFit.cover,
+                ),
+              ),
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text(
+                    _conversationController.messages?.messages[0]?.sender?.name,
+                    style: TextStyle(
+                      fontSize: 16,
                     ),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
                   ),
-                  Expanded(
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Text(
-                        _conversationController.messages?.messages[0]?.sender?.name,
-                        style: TextStyle(
-                          fontSize: 16,
-                        ),
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                    ),
-                  ),
-                ],
-              );
-            }),
+                ),
+              ),
+            ],
+          );
+        }),
         actions: [
           IconButton(
             icon: Icon(Icons.more_vert),

@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -201,6 +202,8 @@ class EditAdController extends GetxController {
         negotiable: selectedNegotiable.value,
         registered: registeredDate.value,
       );
+      _adsListingController.findAll(skipLoading: true);
+      successDialog(title: 'Success', message: 'Your ad has been updated sucessfully.', dismiss: () => Get.back());
     } on DioError catch (err) {
       print(err);
       try {
@@ -237,7 +240,7 @@ class EditAdController extends GetxController {
           duration: Duration(seconds: 3),
         );
       }
-      _adsListingController.findAll();
+      _adsListingController.findAll(skipLoading: true);
       Get.back(closeOverlays: true);
     } on DioError catch (err) {
       print(err);
@@ -256,5 +259,25 @@ class EditAdController extends GetxController {
     } finally {
       _isSaving.value = false;
     }
+  }
+
+  AwesomeDialog successDialog({String title, String message, Function dismiss}) {
+    return AwesomeDialog(
+      dismissOnTouchOutside: false,
+      dismissOnBackKeyPress: false,
+      context: Get.context,
+      animType: AnimType.BOTTOMSLIDE,
+      headerAnimationLoop: false,
+      dialogType: DialogType.SUCCES,
+      title: title,
+      useRootNavigator: false,
+      padding: EdgeInsets.only(left: 10, right: 10),
+      desc: message,
+      btnOkText: 'OK',
+      btnOkOnPress: () {},
+      onDissmissCallback: dismiss,
+      btnOkIcon: Icons.check_circle,
+      btnOkColor: Colors.blue,
+    )..show();
   }
 }

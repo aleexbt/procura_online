@@ -51,5 +51,10 @@
 	<false/>
 	<key>FirebaseAppDelegateProxyEnabled</key>
     <string>0</string>
+    <key>NSAppTransportSecurity</key>
+        <dict>
+            <key>NSAllowsArbitraryLoads</key>
+            <true/>
+        </dict>
 </dict>
 </plist>

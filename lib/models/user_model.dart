@@ -4,7 +4,7 @@ part 'user_model.g.dart';
 
 @JsonSerializable()
 class User {
-  int id;
+  dynamic id;
   String name;
   String company;
   String type;
@@ -43,7 +43,7 @@ class User {
   @JsonKey(name: 'notifications_frequency')
   String notificationsFrequency;
   String subscribed;
-  String approved;
+  dynamic approved;
   @JsonKey(name: 'last_read_announcements_at')
   String lastReadAnnouncementsAt;
   @JsonKey(name: 'last_login_at')

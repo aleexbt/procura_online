@@ -2,16 +2,17 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:procura_online/controllers/chat_controller.dart';
+import 'package:procura_online/models/message_model.dart';
 import 'package:procura_online/models/messages_model.dart';
 import 'package:procura_online/repositories/chat_repository.dart';
 import 'package:procura_online/services/pusher_service.dart';
+// import 'package:procura_online/services/pusher_service.dart';
 
 class ConversationController extends GetxController {
   final String chatId = Get.parameters['id'];
   final ChatRepository _chatRepository = Get.find();
   final ChatController _chatController = Get.find();
-  PusherService pusherService = PusherService();
-
+  PusherService pusherService;
   @override
   void onInit() {
     findOne();
@@ -70,17 +71,26 @@ class ConversationController extends GetxController {
     _isReplying.value = true;
     _replyingError.value = false;
     try {
-      Map<String, dynamic> data = {"message": message, "order_id": orderId, "conversation_id": chatId ?? ""};
+      Map<String, dynamic> data = {
+        "message": message,
+        "order_id": orderId,
+        "conversation_id": chatId ?? ""
+      };
       await _chatRepository.replyMessage(data);
+      updateMessages();
     } on DioError catch (err) {
       _replyingError.value = true;
       Get.rawSnackbar(
-          message: 'Ops, something went wrong.', backgroundColor: Colors.red, duration: Duration(seconds: 3));
+          message: 'Ops, something went wrong.',
+          backgroundColor: Colors.red,
+          duration: Duration(seconds: 3));
     } catch (err) {
       _replyingError.value = true;
       print(err);
       Get.rawSnackbar(
-          message: 'Ops, something went wrong.', backgroundColor: Colors.red, duration: Duration(seconds: 3));
+          message: 'Ops, something went wrong.',
+          backgroundColor: Colors.red,
+          duration: Duration(seconds: 3));
     } finally {
       _isReplying.value = false;
     }
@@ -106,11 +116,15 @@ class ConversationController extends GetxController {
     } on DioError catch (err) {
       _deletingError.value = true;
       Get.rawSnackbar(
-          message: 'Ops, something went wrong.', backgroundColor: Colors.red, duration: Duration(seconds: 3));
+          message: 'Ops, something went wrong.',
+          backgroundColor: Colors.red,
+          duration: Duration(seconds: 3));
     } catch (err) {
       _deletingError.value = true;
       Get.rawSnackbar(
-          message: 'Ops, something went wrong.', backgroundColor: Colors.red, duration: Duration(seconds: 3));
+          message: 'Ops, something went wrong.',
+          backgroundColor: Colors.red,
+          duration: Duration(seconds: 3));
     } finally {
       _isDeleting.value = false;
     }
@@ -129,5 +143,11 @@ class ConversationController extends GetxController {
       _isReplying.value = false;
       _chatController.findAll();
     }
+  }
+
+  void addMessage(Map<String, dynamic> data) async {
+    _messages.update((val) {
+      val.messages.add(Message.fromJson(data['message']));
+    });
   }
 }

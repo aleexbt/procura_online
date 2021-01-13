@@ -136,8 +136,8 @@ class OrdersController extends GetxController {
 
   void setFuel(String value) => selectedFuel.value = value;
 
-  void findAll() async {
-    _isLoading.value = true;
+  void findAll({skipLoading = false}) async {
+    _isLoading.value = !skipLoading;
     _hasError.value = false;
     _page.value = 1;
     try {
@@ -173,7 +173,9 @@ class OrdersController extends GetxController {
         "attachments": images,
       };
       await _ordersRepository.createOrder(data);
-      successDialog(title: 'Success', message: 'Your order has been published successfully.');
+      findAll(skipLoading: true);
+      successDialog(
+          title: 'Success', message: 'Your order has been published successfully.', dismiss: () => Get.back());
     } on DioError catch (err) {
       print(err);
       _publishingOrderError.value = true;
@@ -289,7 +291,24 @@ class OrdersController extends GetxController {
     }
   }
 
-  AwesomeDialog successDialog({String title, String message}) {
+  void changeFilter({@required String value, @required String name}) {
+    _filter.value = value;
+    _filterName.value = name;
+    findAll();
+  }
+
+  void resetFields() {
+    mpn.value.clear();
+    note.value.clear();
+    selectedBrand.value = '';
+    selectedModel.value = '';
+    year.value.clear();
+    engineDisplacement.value.clear();
+    numberOfDoors.value.clear();
+    selectedFuel.value = '';
+  }
+
+  AwesomeDialog successDialog({String title, String message, Function dismiss}) {
     return AwesomeDialog(
       dismissOnTouchOutside: false,
       dismissOnBackKeyPress: false,
@@ -303,17 +322,9 @@ class OrdersController extends GetxController {
       desc: message,
       btnOkText: 'OK',
       btnOkOnPress: () {},
-      onDissmissCallback: () {
-        Get.back();
-      },
+      onDissmissCallback: dismiss,
       btnOkIcon: Icons.check_circle,
       btnOkColor: Colors.blue,
     )..show();
-  }
-
-  void changeFilter({@required String value, @required String name}) {
-    _filter.value = value;
-    _filterName.value = name;
-    findAll();
   }
 }

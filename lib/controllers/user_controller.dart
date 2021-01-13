@@ -8,6 +8,7 @@ import 'package:procura_online/models/user_model.dart';
 import 'package:procura_online/repositories/user_repository.dart';
 import 'package:procura_online/utils/navigation_helper.dart';
 import 'package:procura_online/utils/prefs.dart';
+import 'package:smart_select/smart_select.dart';
 
 import 'chat_controller.dart';
 
@@ -20,6 +21,34 @@ class UserController extends GetxController with StateMixin<User> {
     super.onInit();
   }
 
+  RxBool _isLoading = false.obs;
+  RxBool _isSaving = false.obs;
+  RxBool _savingError = false.obs;
+  RxBool _isLoggedIn = false.obs;
+  Rx<User> _userData = User().obs;
+  RxString _token = ''.obs;
+
+  bool get isLoading => _isLoading.value;
+  bool get isSaving => _isSaving.value;
+  bool get savingError => _savingError.value;
+  bool get isLoggedIn => _isLoggedIn.value;
+  User get userData => _userData.value;
+  String get token => _token.value;
+
+  Rx<TextEditingController> name = TextEditingController().obs;
+  Rx<TextEditingController> email = TextEditingController().obs;
+  Rx<TextEditingController> phone = TextEditingController().obs;
+  Rx<TextEditingController> company = TextEditingController().obs;
+  Rx<TextEditingController> address = TextEditingController().obs;
+  Rx<TextEditingController> postcode = TextEditingController().obs;
+  RxString selectedAccountType = ''.obs;
+  final List<S2Choice<String>> accountTypeOptions = [
+    S2Choice<String>(value: 'company', title: 'Company'),
+    S2Choice<String>(value: 'personal', title: 'Personal'),
+  ];
+
+  void setAccountType(String value) => selectedAccountType.value = value;
+
   _initSharedPrefs() async {
     try {
       bool isLoggedIn = Prefs.getBool('isLoggedIn') ?? false;
@@ -30,6 +59,7 @@ class UserController extends GetxController with StateMixin<User> {
       if (userData != null) {
         var decoded = jsonDecode(userData) as Map<String, dynamic>;
         _userData.value = User.fromJson(decoded);
+        selectedAccountType.value = decoded['type'];
       }
       if (isLoggedIn) {
         updateUserInfo();
@@ -44,6 +74,7 @@ class UserController extends GetxController with StateMixin<User> {
       User response = await _userRepository.userInfo();
       Prefs.setString('userData', jsonEncode(response));
       _userData.value = response;
+      selectedAccountType.value = response.type;
     } on DioError catch (err) {
       print('Error updating user information.');
     } catch (err) {
@@ -52,16 +83,6 @@ class UserController extends GetxController with StateMixin<User> {
       print('User information updated.');
     }
   }
-
-  RxBool _isLoading = false.obs;
-  RxBool _isLoggedIn = false.obs;
-  Rx<User> _userData = User().obs;
-  RxString _token = ''.obs;
-
-  bool get isLoading => _isLoading.value;
-  bool get isLoggedIn => _isLoggedIn.value;
-  User get userData => _userData.value;
-  String get token => _token.value;
 
   void signIn({String email, String password}) async {
     _isLoading.value = true;
@@ -176,20 +197,46 @@ class UserController extends GetxController with StateMixin<User> {
     Get.back();
   }
 
-  void updateUserData(
-      {String name, String email, String phone, String company, String address, String postcode}) async {
-    _userData.update((val) {
-      val.name = name;
-      val.email = email;
-      val.phone = phone;
-      val.company = company;
-      val.address = address;
-      val.postcode = postcode;
-    });
-    Prefs.setString('userData', jsonEncode(_userData));
-    Get.back();
-    Get.rawSnackbar(
-        message: 'Profile updated successfully.', backgroundColor: Colors.green, duration: Duration(seconds: 3));
+  void updateUserData() async {
+    _isSaving.value = true;
+    try {
+      Map<String, dynamic> updateData = {
+        'name': name.value.text,
+        'email': email.value.text,
+        'phone': phone.value.text,
+        'company': company.value.text,
+        'type': selectedAccountType.value,
+        'address': address.value.text,
+        'postcode': postcode.value.text
+      };
+
+      User response = await _userRepository.update(updateData);
+      _userData.update((val) {
+        val.name = name.value.text;
+        val.email = email.value.text;
+        val.phone = phone.value.text;
+        val.company = company.value.text;
+        val.type = selectedAccountType.value;
+        val.address = address.value.text;
+        val.postcode = postcode.value.text;
+      });
+      Prefs.setString('userData', jsonEncode(response));
+      Get.back();
+      Get.rawSnackbar(
+          message: 'Profile updated successfully.', backgroundColor: Colors.green, duration: Duration(seconds: 3));
+    } on DioError catch (err) {
+      print(err);
+      _savingError.value = true;
+      Get.rawSnackbar(
+          message: 'Ops, error updating profile.', backgroundColor: Colors.red, duration: Duration(seconds: 3));
+    } catch (err) {
+      print(err);
+      _savingError.value = true;
+      Get.rawSnackbar(
+          message: 'Ops, error updating profile.', backgroundColor: Colors.red, duration: Duration(seconds: 3));
+    } finally {
+      _isSaving.value = false;
+    }
   }
 
   void changePassword({@required String currentPass, @required String newPass, @required String confirmPass}) async {

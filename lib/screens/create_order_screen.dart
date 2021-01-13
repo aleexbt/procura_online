@@ -19,11 +19,12 @@ class CreateOrderScreen extends StatefulWidget {
 class _CreateOrderScreenState extends State<CreateOrderScreen> {
   final OrdersController _ordersController = Get.find();
   final _formKey = GlobalKey<FormState>();
-
-  final _scaffoldKey = GlobalKey<ScaffoldState>();
+  FocusNode mainNode;
 
   @override
   initState() {
+    _ordersController.resetFields();
+    mainNode = FocusNode();
     super.initState();
   }
 
@@ -57,8 +58,8 @@ class _CreateOrderScreenState extends State<CreateOrderScreen> {
 
   @override
   Widget build(BuildContext context) {
+    FocusScope.of(context).requestFocus(mainNode);
     return Scaffold(
-      key: _scaffoldKey,
       appBar: AppBar(
         title: Text('Create order'),
         elevation: 0,
@@ -74,213 +75,219 @@ class _CreateOrderScreenState extends State<CreateOrderScreen> {
                 SizedBox(height: 10),
                 Padding(
                   padding: const EdgeInsets.all(15),
-                  child: Form(
-                    key: _formKey,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'MPN',
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
+                  child: Focus(
+                    focusNode: mainNode,
+                    child: Form(
+                      key: _formKey,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'MPN',
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
-                        ),
-                        SizedBox(height: 10),
-                        CustomTextInput(
-                          controller: _ordersController.mpn.value,
-                          fillColor: Colors.grey[200],
-                          hintText: 'Enter the MPN',
-                          textCapitalization: TextCapitalization.sentences,
-                          validator: (value) {
-                            if (value.isEmpty) {
-                              return 'Please enter the MPN';
-                            }
-                          },
-                        ),
-                        SizedBox(height: 20),
-                        Text(
-                          'Note',
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
+                          SizedBox(height: 10),
+                          CustomTextInput(
+                            controller: _ordersController.mpn.value,
+                            fillColor: Colors.grey[200],
+                            hintText: 'Enter the MPN',
+                            textCapitalization: TextCapitalization.sentences,
+                            validator: (value) {
+                              if (value.isEmpty) {
+                                return 'Please enter the MPN';
+                              }
+                            },
                           ),
-                        ),
-                        SizedBox(height: 10),
-                        CustomTextInput(
-                          controller: _ordersController.note.value,
-                          fillColor: Colors.grey[200],
-                          hintText: 'Enter a note',
-                          textCapitalization: TextCapitalization.sentences,
-                          maxLines: 5,
-                          validator: (value) {
-                            if (value.isEmpty) {
-                              return 'Please enter a note';
-                            }
-                          },
-                        ),
-                        SizedBox(height: 20),
-                        Text(
-                          'Brand',
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
+                          SizedBox(height: 20),
+                          Text(
+                            'Note',
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
-                        ),
-                        SizedBox(height: 10),
-                        Obx(
-                          () => SelectOption(
-                            isLoading: _ordersController.isLoadingBrands,
-                            placeholder: 'Select one',
-                            modalTitle: 'Brands',
-                            selectText: 'Select a brand',
-                            value: _ordersController.selectedBrand.value,
-                            choiceItems: _ordersController.brands,
-                            onChange: (state) => _ordersController.setBrand(state.value),
-                            hasError: _ordersController.selectedBrand.value.isEmpty && submitted,
+                          SizedBox(height: 10),
+                          CustomTextInput(
+                            controller: _ordersController.note.value,
+                            fillColor: Colors.grey[200],
+                            hintText: 'Enter a note',
+                            textCapitalization: TextCapitalization.sentences,
+                            maxLines: 5,
+                            validator: (value) {
+                              if (value.isEmpty) {
+                                return 'Please enter a note';
+                              }
+                            },
                           ),
-                        ),
-                        Obx(
-                          () => Visibility(
-                            visible: _ordersController.selectedBrand.value.isEmpty && submitted,
+                          SizedBox(height: 20),
+                          Text(
+                            'Brand',
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          SizedBox(height: 10),
+                          Obx(
+                            () => SelectOption(
+                              enableFilter: true,
+                              isLoading: _ordersController.isLoadingBrands,
+                              placeholder: 'Select one',
+                              modalTitle: 'Brands',
+                              selectText: 'Select a brand',
+                              value: _ordersController.selectedBrand.value,
+                              choiceItems: _ordersController.brands,
+                              onChange: (state) => _ordersController.setBrand(state.value),
+                              hasError: _ordersController.selectedBrand.value.isEmpty && submitted,
+                            ),
+                          ),
+                          Obx(
+                            () => Visibility(
+                              visible: _ordersController.selectedBrand.value.isEmpty && submitted,
+                              child: Padding(
+                                padding: const EdgeInsets.only(left: 12, top: 5),
+                                child: Text(
+                                  'Please select a brand',
+                                  style: TextStyle(color: Colors.red, fontSize: 12),
+                                ),
+                              ),
+                            ),
+                          ),
+                          SizedBox(height: 20),
+                          Text(
+                            'Model',
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          SizedBox(height: 10),
+                          Obx(
+                            () => SelectOption(
+                              enableFilter: true,
+                              isLoading: _ordersController.isLoadingModels,
+                              isDisabled: _ordersController.selectedBrand.value == '',
+                              placeholder: 'Select one',
+                              modalTitle: 'Models',
+                              selectText: 'Select a model',
+                              value: _ordersController.selectedModel.value,
+                              choiceItems: _ordersController.models,
+                              onChange: (state) => _ordersController.setModel(state.value),
+                              hasError: _ordersController.selectedModel.value.isEmpty && submitted,
+                            ),
+                          ),
+                          Obx(
+                            () => Visibility(
+                              visible: _ordersController.selectedModel.value.isEmpty && submitted,
+                              child: Padding(
+                                padding: const EdgeInsets.only(left: 12, top: 5),
+                                child: Text(
+                                  'Please select a model',
+                                  style: TextStyle(color: Colors.red, fontSize: 12),
+                                ),
+                              ),
+                            ),
+                          ),
+                          SizedBox(height: 20),
+                          Text(
+                            'Year',
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          SizedBox(height: 10),
+                          CustomTextInput(
+                            controller: _ordersController.year.value,
+                            fillColor: Colors.grey[200],
+                            hintText: 'Enter the year',
+                            keyboardType: TextInputType.number,
+                            maxLength: 4,
+                            validator: (value) {
+                              if (value.isEmpty) {
+                                return 'Please enter a year';
+                              }
+                            },
+                          ),
+                          SizedBox(height: 20),
+                          Text(
+                            'Engine displacement',
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          SizedBox(height: 10),
+                          CustomTextInput(
+                            controller: _ordersController.engineDisplacement.value,
+                            fillColor: Colors.grey[200],
+                            hintText: 'Enter the engine displacement',
+                            keyboardType: TextInputType.number,
+                            validator: (value) {
+                              if (value.isEmpty) {
+                                return 'Please enter the engine displacement';
+                              }
+                            },
+                          ),
+                          SizedBox(height: 20),
+                          Text(
+                            'Number of doors',
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          SizedBox(height: 10),
+                          CustomTextInput(
+                            controller: _ordersController.numberOfDoors.value,
+                            fillColor: Colors.grey[200],
+                            hintText: 'Enter the number of doors',
+                            keyboardType: TextInputType.number,
+                            maxLength: 4,
+                            validator: (value) {
+                              if (value.isEmpty) {
+                                return 'Please enter the number of doors';
+                              }
+                            },
+                          ),
+                          SizedBox(height: 20),
+                          Text(
+                            'Fuel type',
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          SizedBox(height: 10),
+                          SelectOption(
+                            modalTitle: 'Fuel',
+                            selectText: 'Select a fuel type',
+                            value: _ordersController.selectedFuel.value,
+                            choiceItems: _ordersController.fuelOptions,
+                            onChange: (state) => _ordersController.setFuel(state.value),
+                            hasError: _ordersController.selectedFuel.value.isEmpty && submitted,
+                          ),
+                          Visibility(
+                            visible: _ordersController.selectedFuel.value.isEmpty && submitted,
                             child: Padding(
                               padding: const EdgeInsets.only(left: 12, top: 5),
                               child: Text(
-                                'Please select a brand',
+                                'Please select a fuel type',
                                 style: TextStyle(color: Colors.red, fontSize: 12),
                               ),
                             ),
                           ),
-                        ),
-                        SizedBox(height: 20),
-                        Text(
-                          'Model',
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
+                          SizedBox(height: 20),
+                          GradientButton(
+                            text: 'Create order',
+                            onPressed: () {
+                              setState(() => submitted = true);
+                              if (_formKey.currentState.validate() &&
+                                  _ordersController.selectedBrand.value.isNotEmpty &&
+                                  _ordersController.selectedModel.value.isNotEmpty &&
+                                  _ordersController.selectedFuel.value.isNotEmpty) {
+                                FocusScope.of(context).unfocus();
+                                _ordersController.createOrder(images: imagesUrl);
+                              }
+                            },
                           ),
-                        ),
-                        SizedBox(height: 10),
-                        Obx(
-                          () => SelectOption(
-                            isLoading: _ordersController.isLoadingModels,
-                            isDisabled: _ordersController.selectedBrand.value == '',
-                            placeholder: 'Select one',
-                            modalTitle: 'Models',
-                            selectText: 'Select a model',
-                            value: _ordersController.selectedModel.value,
-                            choiceItems: _ordersController.models,
-                            onChange: (state) => _ordersController.setModel(state.value),
-                            hasError: _ordersController.selectedModel.value.isEmpty && submitted,
-                          ),
-                        ),
-                        Obx(
-                          () => Visibility(
-                            visible: _ordersController.selectedModel.value.isEmpty && submitted,
-                            child: Padding(
-                              padding: const EdgeInsets.only(left: 12, top: 5),
-                              child: Text(
-                                'Please select a model',
-                                style: TextStyle(color: Colors.red, fontSize: 12),
-                              ),
-                            ),
-                          ),
-                        ),
-                        SizedBox(height: 20),
-                        Text(
-                          'Year',
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        SizedBox(height: 10),
-                        CustomTextInput(
-                          controller: _ordersController.year.value,
-                          fillColor: Colors.grey[200],
-                          hintText: 'Enter the year',
-                          keyboardType: TextInputType.number,
-                          maxLength: 4,
-                          validator: (value) {
-                            if (value.isEmpty) {
-                              return 'Please enter a year';
-                            }
-                          },
-                        ),
-                        SizedBox(height: 20),
-                        Text(
-                          'Engine displacement',
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        SizedBox(height: 10),
-                        CustomTextInput(
-                          controller: _ordersController.engineDisplacement.value,
-                          fillColor: Colors.grey[200],
-                          hintText: 'Enter the engine displacement',
-                          validator: (value) {
-                            if (value.isEmpty) {
-                              return 'Please enter the engine displacement';
-                            }
-                          },
-                        ),
-                        SizedBox(height: 20),
-                        Text(
-                          'Number of doors',
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        SizedBox(height: 10),
-                        CustomTextInput(
-                          controller: _ordersController.numberOfDoors.value,
-                          fillColor: Colors.grey[200],
-                          hintText: 'Enter the number of doors',
-                          keyboardType: TextInputType.number,
-                          maxLength: 4,
-                          validator: (value) {
-                            if (value.isEmpty) {
-                              return 'Please enter the number of doors';
-                            }
-                          },
-                        ),
-                        SizedBox(height: 20),
-                        Text(
-                          'Fuel type',
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        SizedBox(height: 10),
-                        SelectOption(
-                          modalTitle: 'Fuel',
-                          selectText: 'Select a fuel type',
-                          value: _ordersController.selectedFuel.value,
-                          choiceItems: _ordersController.fuelOptions,
-                          onChange: (state) => _ordersController.setFuel(state.value),
-                          hasError: _ordersController.selectedFuel.value.isEmpty && submitted,
-                        ),
-                        Visibility(
-                          visible: _ordersController.selectedFuel.value.isEmpty && submitted,
-                          child: Padding(
-                            padding: const EdgeInsets.only(left: 12, top: 5),
-                            child: Text(
-                              'Please select a fuel type',
-                              style: TextStyle(color: Colors.red, fontSize: 12),
-                            ),
-                          ),
-                        ),
-                        SizedBox(height: 20),
-                        GradientButton(
-                          text: 'Create order',
-                          onPressed: () {
-                            setState(() => submitted = true);
-                            if (_formKey.currentState.validate() &&
-                                _ordersController.selectedBrand.value.isNotEmpty &&
-                                _ordersController.selectedModel.value.isNotEmpty &&
-                                _ordersController.selectedFuel.value.isNotEmpty) {
-                              FocusScope.of(context).unfocus();
-                              _ordersController.createOrder(images: imagesUrl);
-                            }
-                          },
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                   ),
                 ),

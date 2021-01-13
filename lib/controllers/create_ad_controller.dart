@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart' hide MultipartFile;
@@ -17,13 +18,11 @@ class CreateAdController extends GetxController {
     super.onInit();
   }
 
-  RxBool _isCreatingAd = false.obs;
-  RxBool _isAdCreated = false.obs;
+  RxBool _isSaving = false.obs;
   RxBool _isLoadingBrands = false.obs;
   RxBool _isLoadingModels = false.obs;
 
-  bool get isCreatingAd => _isCreatingAd.value;
-  bool get isAdCreated => _isAdCreated.value;
+  bool get isSaving => _isSaving.value;
   bool get isLoadingBrands => _isLoadingBrands.value;
   bool get isLoadingModels => _isLoadingModels.value;
 
@@ -138,7 +137,7 @@ class CreateAdController extends GetxController {
   }
 
   void create({List<File> photos}) async {
-    _isCreatingAd.value = true;
+    _isSaving.value = true;
     try {
       await _productRepository.create(
         photos: photos,
@@ -160,7 +159,7 @@ class CreateAdController extends GetxController {
         negotiable: selectedNegotiable.value,
         registered: registeredDate.value,
       );
-      _isAdCreated.value = true;
+      successDialog(title: 'Success', message: 'Your ad has been published successfully.', dismiss: () => Get.back());
     } on DioError catch (err) {
       print(err);
       try {
@@ -181,7 +180,27 @@ class CreateAdController extends GetxController {
         );
       }
     } finally {
-      _isCreatingAd.value = false;
+      _isSaving.value = false;
     }
+  }
+
+  AwesomeDialog successDialog({String title, String message, Function dismiss}) {
+    return AwesomeDialog(
+      dismissOnTouchOutside: false,
+      dismissOnBackKeyPress: false,
+      context: Get.context,
+      animType: AnimType.BOTTOMSLIDE,
+      headerAnimationLoop: false,
+      dialogType: DialogType.SUCCES,
+      title: title,
+      useRootNavigator: false,
+      padding: EdgeInsets.only(left: 10, right: 10),
+      desc: message,
+      btnOkText: 'OK',
+      btnOkOnPress: () {},
+      onDissmissCallback: dismiss,
+      btnOkIcon: Icons.check_circle,
+      btnOkColor: Colors.blue,
+    )..show();
   }
 }

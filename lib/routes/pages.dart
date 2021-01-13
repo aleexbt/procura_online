@@ -1,4 +1,5 @@
 import 'package:get/get.dart';
+import 'package:procura_online/bindings/conversation_bindings.dart';
 import 'package:procura_online/intro.dart';
 import 'package:procura_online/routes/routes.dart';
 import 'package:procura_online/screens/ad/create_ad_screen.dart';
@@ -66,6 +67,7 @@ List<GetPage> getPages = [
   GetPage(
     name: Routers.chatConversation,
     page: () => ConversationScreen(),
+    binding: ConversationBindings(),
   ),
   GetPage(
     name: Routers.chatReply,
@@ -75,6 +77,7 @@ List<GetPage> getPages = [
     name: Routers.searchFilter,
     page: () => FilterScreen(),
     fullscreenDialog: true,
+    transition: Transition.cupertinoDialog,
   ),
   GetPage(
     name: Routers.settings,

@@ -265,26 +265,26 @@ class _ConversationScreenPusherState extends State<ConversationScreenPusher> {
                           Padding(
                             padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
                             child: StreamBuilder(
-                                stream: _.pusherService.eventStream,
+                                // stream: _.pusherService.eventStream,
                                 builder: (context, snapshot) {
-                                  print(snapshot.data);
-                                  return ListView.builder(
-                                    shrinkWrap: true,
-                                    itemCount: _.messages.messages.length,
-                                    physics: NeverScrollableScrollPhysics(),
-                                    itemBuilder: (context, index) {
-                                      WidgetsBinding.instance.addPostFrameCallback((_) => _scrollToBottom());
-                                      var message = _.messages.messages[index];
-                                      return Bubble(
-                                        photo: message.hasAttachments ? message.media[0].image : null,
-                                        message: message.message,
-                                        time: message.humanReadDate,
-                                        delivered: true,
-                                        isMe: _userController.userData.id.toString() == message.userId,
-                                      );
-                                    },
+                              print(snapshot.data);
+                              return ListView.builder(
+                                shrinkWrap: true,
+                                itemCount: _.messages.messages.length,
+                                physics: NeverScrollableScrollPhysics(),
+                                itemBuilder: (context, index) {
+                                  WidgetsBinding.instance.addPostFrameCallback((_) => _scrollToBottom());
+                                  var message = _.messages.messages[index];
+                                  return Bubble(
+                                    photo: message.hasAttachments ? message.media[0].image : null,
+                                    message: message.message,
+                                    time: message.humanReadDate,
+                                    delivered: true,
+                                    isMe: _userController.userData.id.toString() == message.userId,
                                   );
-                                }),
+                                },
+                              );
+                            }),
                           ),
                         ],
                       ),

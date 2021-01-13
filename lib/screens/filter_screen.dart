@@ -84,6 +84,7 @@ class FilterScreen extends StatelessWidget {
                         SizedBox(height: 10),
                         Obx(
                           () => SelectOption(
+                            enableFilter: true,
                             isLoading: _homeController.isLoadingModels,
                             isDisabled: _homeController.selectedBrand.value == '',
                             placeholder: 'Select one',

@@ -8,7 +8,7 @@ part of 'user_model.dart';
 
 User _$UserFromJson(Map<String, dynamic> json) {
   return User(
-    id: json['id'] as int,
+    id: json['id'],
     name: json['name'] as String,
     company: json['company'] as String,
     type: json['type'] as String,
@@ -33,7 +33,7 @@ User _$UserFromJson(Map<String, dynamic> json) {
     balance: json['balance'] as String,
     notificationsFrequency: json['notifications_frequency'] as String,
     subscribed: json['subscribed'] as String,
-    approved: json['approved'] as String,
+    approved: json['approved'],
     lastReadAnnouncementsAt: json['last_read_announcements_at'] as String,
     lastLoginAt: json['last_login_at'] as String,
     lastLoginIp: json['last_login_ip'] as String,

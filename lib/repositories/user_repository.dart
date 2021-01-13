@@ -43,6 +43,13 @@ class UserRepository {
     return response.data;
   }
 
+  Future<User> update(Map<String, dynamic> updateData) async {
+    String token = Prefs.getString('token') ?? null;
+    _dio.options.headers["Authorization"] = 'Bearer $token';
+    final response = await _dio.post('/api/v1/user/me/update', data: updateData);
+    return User.fromJson(response.data);
+  }
+
   Future<void> changePassword(Map<String, dynamic> passwordData) async {
     String token = Prefs.getString('token') ?? null;
     _dio.options.headers["Authorization"] = 'Bearer $token';
