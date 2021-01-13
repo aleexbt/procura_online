@@ -271,7 +271,11 @@ class _ConversationScreenState extends State<ConversationScreen> {
                                 var message = _.conversation.messages[index];
                                 return Bubble(
                                   id: message.id.toString(),
-                                  photos: message.hasAttachments ? message.media : null,
+                                  photos: message.hasAttachments
+                                      ? message.media != null
+                                          ? message.media
+                                          : message.media2
+                                      : null,
                                   message: message.message,
                                   time: message.humanReadDate,
                                   isMe: _userController.userData.id.toString() == message.userId.toString(),

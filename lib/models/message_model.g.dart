@@ -25,6 +25,10 @@ Message _$MessageFromJson(Map<String, dynamic> json) {
         ?.map((e) =>
             e == null ? null : OrderMedia.fromJson(e as Map<String, dynamic>))
         ?.toList(),
+    media2: (json['media'] as List)
+        ?.map((e) =>
+            e == null ? null : OrderMedia.fromJson(e as Map<String, dynamic>))
+        ?.toList(),
   );
 }
 
@@ -41,4 +45,5 @@ Map<String, dynamic> _$MessageToJson(Message instance) => <String, dynamic>{
       'sender': instance.sender,
       'has_attachments': instance.hasAttachments,
       'media_': instance.media,
+      'media': instance.media2,
     };

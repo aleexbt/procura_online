@@ -86,11 +86,12 @@ class Bubble extends StatelessWidget {
           tag: '${photos[0].id}',
           child: SizedBox(
             width: 250,
+            height: 200,
             child: ClipRRect(
               borderRadius: BorderRadius.circular(15),
               child: OctoImage(
                 image: CachedNetworkImageProvider(photos[0].image),
-                placeholderBuilder: OctoPlaceholder.circularProgressIndicator(),
+                placeholderBuilder: OctoPlaceholder.blurHash('LAI#u-9XM[D\$GdIU4oIA-sWFxwRl'),
                 errorBuilder: OctoError.icon(color: Colors.grey[400]),
                 fit: BoxFit.cover,
               ),
@@ -104,8 +105,8 @@ class Bubble extends StatelessWidget {
         child: GridView.builder(
             gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: 2,
-              crossAxisSpacing: 2,
-              mainAxisSpacing: 2,
+              crossAxisSpacing: 4,
+              mainAxisSpacing: 4,
               childAspectRatio: 1.0,
             ),
             shrinkWrap: true,
@@ -128,7 +129,7 @@ class Bubble extends StatelessWidget {
                       width: 250,
                       child: OctoImage(
                         image: CachedNetworkImageProvider(photos[index].image),
-                        placeholderBuilder: OctoPlaceholder.circularProgressIndicator(),
+                        placeholderBuilder: OctoPlaceholder.blurHash('LAI#u-9XM[D\$GdIU4oIA-sWFxwRl'),
                         errorBuilder: OctoError.icon(color: Colors.grey[400]),
                         fit: BoxFit.cover,
                       ),

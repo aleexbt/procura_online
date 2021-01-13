@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:procura_online/controllers/conversation_controller.dart';
@@ -15,15 +16,15 @@ class PusherService {
     print('CHANNEL_NAME: $channelName');
     try {
       await Pusher.init(
-          'cb7f336d45263a9ab275',
-          PusherOptions(
-            cluster: 'eu',
-            auth: PusherAuth(
-              'https://1af570776722.ngrok.io/pusher/auth',
-              headers: {'channel_name': channelName, 'socket_id': Pusher.getSocketId()},
-            ),
+        'cb7f336d45263a9ab275',
+        PusherOptions(
+          cluster: 'eu',
+          auth: PusherAuth(
+            'https://e0f2d168dbe4.ngrok.io/pusher/auth',
+            headers: {'channel_name': channelName, 'socket_id': Pusher.getSocketId()},
           ),
-          enableLogging: true);
+        ),
+      );
       print("Pusher initialized");
     } on PlatformException catch (e) {
       print(e.message);
@@ -52,6 +53,7 @@ class PusherService {
   void bindEvent(String eventName) {
     channel.bind(eventName, (event) {
       final ConversationController _conversationController = Get.find();
+      debugPrint(event.data, wrapWidth: 1024);
       Map<String, dynamic> json = jsonDecode(event.data);
       _conversationController.addMessage(json);
     });

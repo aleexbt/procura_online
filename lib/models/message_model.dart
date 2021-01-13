@@ -28,6 +28,8 @@ class Message {
   dynamic hasAttachments;
   @JsonKey(name: 'media_')
   List<OrderMedia> media;
+  @JsonKey(name: 'media')
+  List<OrderMedia> media2;
 
   Message({
     this.id,
@@ -42,6 +44,7 @@ class Message {
     this.sender,
     this.hasAttachments,
     this.media,
+    this.media2,
   });
 
   factory Message.fromJson(Map<String, dynamic> json) => _$MessageFromJson(json);
