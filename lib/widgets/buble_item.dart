@@ -101,7 +101,7 @@ class Bubble extends StatelessWidget {
       );
     } else {
       return SizedBox(
-        width: 220,
+        width: 250,
         child: GridView.builder(
             gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: 2,
@@ -110,7 +110,7 @@ class Bubble extends StatelessWidget {
               childAspectRatio: 1.0,
             ),
             shrinkWrap: true,
-            physics: BouncingScrollPhysics(),
+            physics: NeverScrollableScrollPhysics(),
             itemCount: photos.length,
             itemBuilder: (context, index) {
               return GestureDetector(
