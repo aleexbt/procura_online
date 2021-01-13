@@ -66,6 +66,23 @@ class _AdsListingScreenState extends State<AdsListingScreen> {
               ),
             );
           }
+          if (_.result.products.length == 0) {
+            return Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text('You don\'t have any ads to show.'),
+                  FlatButton(
+                    onPressed: () => _.findAll(skipLoading: true),
+                    child: Text(
+                      'Check again',
+                      style: TextStyle(color: Colors.blue),
+                    ),
+                  ),
+                ],
+              ),
+            );
+          }
           return RefreshIndicator(
             onRefresh: refresItems,
             child: ListView.builder(
