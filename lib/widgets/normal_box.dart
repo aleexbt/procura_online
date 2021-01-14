@@ -42,7 +42,7 @@ class NormalBox extends StatelessWidget {
                   borderRadius: BorderRadius.vertical(top: Radius.circular(4)),
                   child: OctoImage(
                     image: CachedNetworkImageProvider(image),
-                    placeholderBuilder: OctoPlaceholder.circularProgressIndicator(),
+                    placeholderBuilder: OctoPlaceholder.blurHash('LAI#u-9XM[D\$GdIU4oIA-sWFxwRl'),
                     errorBuilder: OctoError.icon(color: Colors.grey[400]),
                     fit: BoxFit.cover,
                   ),
