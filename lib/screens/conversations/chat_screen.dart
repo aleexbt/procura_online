@@ -72,6 +72,8 @@ class _ChatScreenState extends State<ChatScreen> with AutomaticKeepAliveClientMi
                         onChanged: (value) => _selectedIndex == 0
                             ? _ordersController.filterResults(value)
                             : _chatController.filterResults(value),
+                        textInputAction: TextInputAction.search,
+                        textCapitalization: TextCapitalization.sentences,
                       ),
                     ),
                   ],
