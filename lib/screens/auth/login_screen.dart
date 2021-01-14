@@ -101,14 +101,8 @@ class LoginScreen extends StatelessWidget {
                             Column(
                               children: [
                                 Padding(
-                                  padding: const EdgeInsets.only(
-                                      top: 120,
-                                      left: 80,
-                                      right: 80,
-                                      bottom: 40),
-                                  child: SvgPicture.asset(
-                                      'assets/images/logo_branco.svg',
-                                      width: 100),
+                                  padding: const EdgeInsets.only(top: 120, left: 80, right: 80, bottom: 40),
+                                  child: SvgPicture.asset('assets/images/logo_branco.svg', width: 100),
                                 ),
                                 Text(
                                   'Login',
@@ -138,7 +132,7 @@ class LoginScreen extends StatelessWidget {
                                     errorTextColor: Colors.white,
                                     validator: (value) {
                                       if (value.isEmpty) {
-                                        return 'Your email address cannot be empty.';
+                                        return 'Please enter your email address';
                                       }
                                       return null;
                                     },
@@ -155,9 +149,16 @@ class LoginScreen extends StatelessWidget {
                                     obscureText: true,
                                     errorBorderColor: Colors.white54,
                                     errorTextColor: Colors.white,
+                                    onSubmitted: (value) {
+                                      if (_formKey.currentState.validate()) {
+                                        FocusScope.of(context).unfocus();
+                                        _userController.signIn(
+                                            email: _emailController.text, password: _passwordController.text);
+                                      }
+                                    },
                                     validator: (value) {
                                       if (value.isEmpty) {
-                                        return 'Your password cannot be empty.';
+                                        return 'Please enter your password';
                                       }
                                       return null;
                                     },
@@ -166,8 +167,7 @@ class LoginScreen extends StatelessWidget {
                                   Align(
                                     alignment: Alignment.centerRight,
                                     child: GestureDetector(
-                                      onTap: () =>
-                                          Get.toNamed('/auth/forgot-password'),
+                                      onTap: () => Get.toNamed('/auth/forgot-password'),
                                       behavior: HitTestBehavior.translucent,
                                       child: Text(
                                         'Forgot password?',
@@ -188,8 +188,7 @@ class LoginScreen extends StatelessWidget {
                                     if (_formKey.currentState.validate()) {
                                       FocusScope.of(context).unfocus();
                                       _userController.signIn(
-                                          email: _emailController.text,
-                                          password: _passwordController.text);
+                                          email: _emailController.text, password: _passwordController.text);
                                     }
                                   },
                                 ),
@@ -248,8 +247,7 @@ class LoginScreen extends StatelessWidget {
                                 GestureDetector(
                                   behavior: HitTestBehavior.translucent,
                                   onTap: () => Get.toNamed('/auth/register'),
-                                  child: Text('Not a member? Sign Up',
-                                      style: kSmallText),
+                                  child: Text('Not a member? Sign Up', style: kSmallText),
                                 ),
                               ],
                             ),
