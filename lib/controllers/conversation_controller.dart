@@ -87,6 +87,7 @@ class ConversationController extends GetxController {
           message: 'Ops, something went wrong.', backgroundColor: Colors.red, duration: Duration(seconds: 3));
     } finally {
       messageInput.value.clear();
+      messageInput.value.value = TextEditingValue(selection: TextSelection.collapsed(offset: 0));
       _isReplying.value = false;
       _chatController.findAll();
     }

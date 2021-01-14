@@ -301,11 +301,13 @@ class _ConversationScreenState extends State<ConversationScreen> {
                           //   onPressed: () {},
                           // ),
                           Expanded(
-                            child: TextField(
-                              controller: _conversationController.messageInput.value,
-                              textCapitalization: TextCapitalization.sentences,
-                              decoration: InputDecoration.collapsed(
-                                hintText: "Write your message",
+                            child: Obx(
+                              () => TextField(
+                                controller: _conversationController.messageInput.value,
+                                textCapitalization: TextCapitalization.sentences,
+                                decoration: InputDecoration.collapsed(
+                                  hintText: "Write your message",
+                                ),
                               ),
                             ),
                           ),

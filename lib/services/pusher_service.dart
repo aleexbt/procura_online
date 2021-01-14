@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
 
-import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:procura_online/controllers/conversation_controller.dart';
@@ -20,7 +19,7 @@ class PusherService {
         PusherOptions(
           cluster: 'eu',
           auth: PusherAuth(
-            'https://e0f2d168dbe4.ngrok.io/pusher/auth',
+            'https://xelapps-validation.herokuapp.com/pusher/auth',
             headers: {'channel_name': channelName, 'socket_id': Pusher.getSocketId()},
           ),
         ),
@@ -53,7 +52,7 @@ class PusherService {
   void bindEvent(String eventName) {
     channel.bind(eventName, (event) {
       final ConversationController _conversationController = Get.find();
-      debugPrint(event.data, wrapWidth: 1024);
+      // debugPrint(event.data, wrapWidth: 1024);
       Map<String, dynamic> json = jsonDecode(event.data);
       _conversationController.addMessage(json);
     });
