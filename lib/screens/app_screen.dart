@@ -29,12 +29,6 @@ class _AppScreenState extends State<AppScreen> {
     });
   }
 
-  @override
-  void dispose() {
-    _pageController.dispose();
-    super.dispose();
-  }
-
   final List<Widget> unauthenticatedScreens = [
     HomeScreen(),
     ProtectedRoute(),
