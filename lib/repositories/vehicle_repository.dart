@@ -13,8 +13,9 @@ final _dioCacheManager = DioCacheManager(CacheConfig());
 
 class VehicleRepository {
   Future<List<String>> getMakers() async {
-    Response response = await _dio.get('/api/v1/vehicle/makes');
-    print(response.request.uri);
+    _dio.interceptors.add(_dioCacheManager.interceptor);
+    Options _cacheOptions = buildCacheOptions(Duration(days: 1));
+    Response response = await _dio.get('/api/v1/vehicle/makes', options: _cacheOptions);
     if (response.statusCode == 200) {
       return List<String>.from(response.data);
     } else {
