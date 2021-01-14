@@ -54,13 +54,11 @@ class _AdsListingScreenState extends State<AdsListingScreen> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text('Ops, error retrieving you ads.'),
-                  FlatButton(
+                  Text('Ops, error retrieving your ads.'),
+                  TextButton(
+                    style: TextButton.styleFrom(primary: Colors.blue),
                     onPressed: () => _.findAll(),
-                    child: Text(
-                      'Try again',
-                      style: TextStyle(color: Colors.blue),
-                    ),
+                    child: Text('Try again'),
                   ),
                 ],
               ),
@@ -71,13 +69,11 @@ class _AdsListingScreenState extends State<AdsListingScreen> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text('You don\'t have any ads to show.'),
-                  FlatButton(
+                  Text('You don\'t have any published ad.'),
+                  TextButton(
+                    style: TextButton.styleFrom(primary: Colors.blue),
                     onPressed: () => _.findAll(skipLoading: true),
-                    child: Text(
-                      'Check again',
-                      style: TextStyle(color: Colors.blue),
-                    ),
+                    child: Text('Check again'),
                   ),
                 ],
               ),

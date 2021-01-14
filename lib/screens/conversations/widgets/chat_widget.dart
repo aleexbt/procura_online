@@ -92,12 +92,10 @@ class ChatWidget extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text('Ops, error retrieving your chats.'),
-                  FlatButton(
+                  TextButton(
+                    style: TextButton.styleFrom(primary: Colors.blue),
                     onPressed: () => _.findAll(),
-                    child: Text(
-                      'Try again',
-                      style: TextStyle(color: Colors.blue),
-                    ),
+                    child: Text('Try again'),
                   ),
                 ],
               ),
@@ -109,12 +107,10 @@ class ChatWidget extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text('You don\'t have any conversations to show.'),
-                  FlatButton(
+                  TextButton(
+                    style: TextButton.styleFrom(primary: Colors.blue),
                     onPressed: () => _.findAll(),
-                    child: Text(
-                      'Check again',
-                      style: TextStyle(color: Colors.blue),
-                    ),
+                    child: Text('Check again'),
                   ),
                 ],
               ),

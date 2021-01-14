@@ -187,13 +187,11 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
                               child: Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                  Text('Ops, error while retrieving items.'),
-                                  FlatButton(
+                                  Text('Ops, error while retrieving ads.'),
+                                  TextButton(
+                                    style: TextButton.styleFrom(primary: Colors.blue),
                                     onPressed: () => _.findAll(),
-                                    child: Text(
-                                      'Try again',
-                                      style: TextStyle(color: Colors.blue),
-                                    ),
+                                    child: Text('Try again'),
                                   ),
                                 ],
                               ),

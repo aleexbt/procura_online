@@ -151,15 +151,243 @@ class ProductScreen extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Padding(
-                            padding: const EdgeInsets.only(top: 12, left: 8),
+                            padding: const EdgeInsets.fromLTRB(10, 10, 0, 2),
                             child: Text(
-                              'Product detail',
+                              'Description',
                               style: TextStyle(fontWeight: FontWeight.bold),
                             ),
                           ),
+                          Divider(),
+                          Html(data: _.product.description),
+                        ],
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(5, 10, 5, 2),
+                    child: Container(
+                      constraints: BoxConstraints(minHeight: 60),
+                      width: double.infinity,
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.grey[300],
+                            offset: Offset(2.0, 1.0), //(x,y)
+                            blurRadius: 5.0,
+                          ),
+                        ],
+                        borderRadius: BorderRadius.circular(4),
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.fromLTRB(10, 10, 0, 2),
+                            child: Text(
+                              'Details',
+                              style: TextStyle(fontWeight: FontWeight.bold),
+                            ),
+                          ),
+                          Divider(),
                           Padding(
                             padding: const EdgeInsets.all(12),
-                            child: Html(data: _.product.description),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Expanded(
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      RichText(
+                                        text: TextSpan(
+                                          text: 'Make: ',
+                                          style: TextStyle(
+                                            color: Colors.grey[600],
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                          children: [
+                                            TextSpan(
+                                                text: _.product.make.capitalizeFirst ?? 'Not specified',
+                                                style: TextStyle(
+                                                  color: Colors.grey[600],
+                                                  fontWeight: FontWeight.normal,
+                                                )),
+                                          ],
+                                        ),
+                                      ),
+                                      Divider(height: 30),
+                                      RichText(
+                                        text: TextSpan(
+                                          text: 'Model: ',
+                                          style: TextStyle(
+                                            color: Colors.grey[600],
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                          children: [
+                                            TextSpan(
+                                                text: _.product.model ?? 'Not specified',
+                                                style: TextStyle(
+                                                  color: Colors.grey[600],
+                                                  fontWeight: FontWeight.normal,
+                                                )),
+                                          ],
+                                        ),
+                                      ),
+                                      Divider(height: 30),
+                                      RichText(
+                                        text: TextSpan(
+                                          text: 'Year: ',
+                                          style: TextStyle(
+                                            color: Colors.grey[600],
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                          children: [
+                                            TextSpan(
+                                                text: _.product.year ?? 'Not specified',
+                                                style: TextStyle(
+                                                  color: Colors.grey[600],
+                                                  fontWeight: FontWeight.normal,
+                                                )),
+                                          ],
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                VerticalDivider(),
+                                Expanded(
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      RichText(
+                                        text: TextSpan(
+                                          text: 'Fuel: ',
+                                          style: TextStyle(
+                                            color: Colors.grey[600],
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                          children: [
+                                            TextSpan(
+                                                text: _.product.fuelType.capitalizeFirst ?? 'Not specified',
+                                                style: TextStyle(
+                                                  color: Colors.grey[600],
+                                                  fontWeight: FontWeight.normal,
+                                                )),
+                                          ],
+                                        ),
+                                      ),
+                                      Divider(height: 30),
+                                      RichText(
+                                        text: TextSpan(
+                                          text: 'Milage: ',
+                                          style: TextStyle(
+                                            color: Colors.grey[600],
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                          children: [
+                                            TextSpan(
+                                                text: _.product.mileage ?? 'Not specified',
+                                                style: TextStyle(
+                                                  color: Colors.grey[600],
+                                                  fontWeight: FontWeight.normal,
+                                                )),
+                                          ],
+                                        ),
+                                      ),
+                                      Divider(height: 30),
+                                      RichText(
+                                        text: TextSpan(
+                                          text: 'E. power: ',
+                                          style: TextStyle(
+                                            color: Colors.grey[600],
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                          children: [
+                                            TextSpan(
+                                                text: _.product.enginePower ?? 'Not specified',
+                                                style: TextStyle(
+                                                  color: Colors.grey[600],
+                                                  fontWeight: FontWeight.normal,
+                                                )),
+                                          ],
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                VerticalDivider(),
+                                Expanded(
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      RichText(
+                                        text: TextSpan(
+                                          text: 'Doors: ',
+                                          style: TextStyle(
+                                            color: Colors.grey[600],
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                          children: [
+                                            TextSpan(
+                                                text: _.product.numberOfDoors ?? 'Not specified',
+                                                style: TextStyle(
+                                                  color: Colors.grey[600],
+                                                  fontWeight: FontWeight.normal,
+                                                )),
+                                          ],
+                                        ),
+                                      ),
+                                      Divider(height: 30),
+                                      RichText(
+                                        text: TextSpan(
+                                          text: 'Seats: ',
+                                          style: TextStyle(
+                                            color: Colors.grey[600],
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                          children: [
+                                            TextSpan(
+                                                text: _.product.numberOfSeats ?? 'Not specified',
+                                                style: TextStyle(
+                                                  color: Colors.grey[600],
+                                                  fontWeight: FontWeight.normal,
+                                                )),
+                                          ],
+                                        ),
+                                      ),
+                                      Divider(height: 30),
+                                      RichText(
+                                        text: TextSpan(
+                                          text: 'Color: ',
+                                          style: TextStyle(
+                                            color: Colors.grey[600],
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                          children: [
+                                            TextSpan(
+                                                text: _.product.color ?? 'Not specified',
+                                                style: TextStyle(
+                                                  color: Colors.grey[600],
+                                                  fontWeight: FontWeight.normal,
+                                                )),
+                                          ],
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
                         ],
                       ),
@@ -181,184 +409,52 @@ class ProductScreen extends StatelessWidget {
                         ],
                         borderRadius: BorderRadius.circular(4),
                       ),
-                      child: Padding(
-                        padding: const EdgeInsets.all(20),
-                        child: Column(
-                          children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.fromLTRB(10, 10, 0, 2),
+                            child: Text(
+                              'Publisher',
+                              style: TextStyle(fontWeight: FontWeight.bold),
+                            ),
+                          ),
+                          Divider(),
+                          Padding(
+                            padding: const EdgeInsets.fromLTRB(10, 0, 12, 8),
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      'Brand',
-                                      style: TextStyle(
-                                        color: Colors.grey[400],
-                                      ),
-                                    ),
-                                    Text(
-                                      _.product.make.capitalizeFirst ?? 'Not specified',
-                                      style: TextStyle(
-                                        fontSize: 16,
-                                      ),
-                                    ),
-                                  ],
+                                SizedBox(
+                                  width: 100,
+                                  height: 100,
+                                  child: ClipOval(
+                                    child: Image.network('https://i.pravatar.cc/200'),
+                                  ),
                                 ),
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      'Model',
-                                      style: TextStyle(
-                                        color: Colors.grey[400],
+                                SizedBox(width: 8),
+                                Expanded(
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        'Miriam Alice Teixeira',
+                                        style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                                        overflow: TextOverflow.ellipsis,
                                       ),
-                                    ),
-                                    Text(
-                                      _.product.model ?? 'Not specified',
-                                      style: TextStyle(
-                                        fontSize: 16,
+                                      Text(
+                                        'Travessa São. Lucas, 6 9051-452 Amora',
+                                        overflow: TextOverflow.ellipsis,
                                       ),
-                                    ),
-                                  ],
-                                ),
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      'Year',
-                                      style: TextStyle(
-                                        color: Colors.grey[400],
-                                      ),
-                                    ),
-                                    Text(
-                                      _.product.year ?? 'Not specified',
-                                      style: TextStyle(
-                                        fontSize: 16,
-                                      ),
-                                    ),
-                                  ],
+                                      Text('Porto, Santo Tirso'),
+                                      Text('5025'),
+                                    ],
+                                  ),
                                 ),
                               ],
                             ),
-                            SizedBox(height: 10),
-                            Divider(),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      'Seats',
-                                      style: TextStyle(
-                                        color: Colors.grey[400],
-                                      ),
-                                    ),
-                                    Text(
-                                      _.product.numberOfSeats ?? 'Not specified',
-                                      style: TextStyle(
-                                        fontSize: 16,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      'Doors',
-                                      style: TextStyle(
-                                        color: Colors.grey[400],
-                                      ),
-                                    ),
-                                    Text(
-                                      _.product.numberOfDoors ?? 'Not specified',
-                                      style: TextStyle(
-                                        fontSize: 16,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      'Fuel',
-                                      style: TextStyle(
-                                        color: Colors.grey[400],
-                                      ),
-                                    ),
-                                    Text(
-                                      _.product.fuelType ?? 'Not specified',
-                                      style: TextStyle(
-                                        fontSize: 16,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ],
-                            ),
-                            SizedBox(height: 10),
-                            Divider(),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      'Color',
-                                      style: TextStyle(
-                                        color: Colors.grey[400],
-                                      ),
-                                    ),
-                                    Text(
-                                      _.product.numberOfSeats ?? 'Not specified',
-                                      style: TextStyle(
-                                        fontSize: 16,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      'Mileage',
-                                      style: TextStyle(
-                                        color: Colors.grey[400],
-                                      ),
-                                    ),
-                                    Text(
-                                      _.product.mileage ?? 'Not specified',
-                                      style: TextStyle(
-                                        fontSize: 16,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      'Transmission',
-                                      style: TextStyle(
-                                        color: Colors.grey[400],
-                                      ),
-                                    ),
-                                    Text(
-                                      _.product.transmission ?? 'Not specified',
-                                      style: TextStyle(
-                                        fontSize: 16,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
+                          ),
+                        ],
                       ),
                     ),
                   ),

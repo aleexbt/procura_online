@@ -146,12 +146,10 @@ class _ConversationScreenState extends State<ConversationScreen> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text('Ops, error retrieving message data.'),
-                    FlatButton(
+                    TextButton(
+                      style: TextButton.styleFrom(primary: Colors.blue),
                       onPressed: () => _.findOne(),
-                      child: Text(
-                        'Try again',
-                        style: TextStyle(color: Colors.blue),
-                      ),
+                      child: Text('Try again'),
                     ),
                   ],
                 ),
@@ -238,7 +236,8 @@ class _ConversationScreenState extends State<ConversationScreen> {
                                                         child: Hero(
                                                           tag: 'photo_$index',
                                                           child: OctoImage(
-                                                            image: CachedNetworkImageProvider(order.media[index].thumb),
+                                                            image: CachedNetworkImageProvider(
+                                                                order.media[index]?.thumb ?? ''),
                                                             placeholderBuilder:
                                                                 OctoPlaceholder.circularProgressIndicator(),
                                                             errorBuilder: OctoError.icon(color: Colors.grey[400]),

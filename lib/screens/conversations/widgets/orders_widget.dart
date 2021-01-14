@@ -92,12 +92,10 @@ class OrdersWidget extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text('Ops, error retrieving orders.'),
-                FlatButton(
+                TextButton(
+                  style: TextButton.styleFrom(primary: Colors.blue),
                   onPressed: () => _.findAll(),
-                  child: Text(
-                    'Try again',
-                    style: TextStyle(color: Colors.blue),
-                  ),
+                  child: Text('Try again'),
                 ),
               ],
             ),
@@ -126,12 +124,10 @@ class OrdersWidget extends StatelessWidget {
                     ),
                     textAlign: TextAlign.center,
                   ),
-                  FlatButton(
+                  TextButton(
+                    style: TextButton.styleFrom(primary: Colors.blue),
                     onPressed: () => _.findAll(),
-                    child: Text(
-                      'Check again',
-                      style: TextStyle(color: Colors.blue),
-                    ),
+                    child: Text('Check again'),
                   ),
                 ],
               ),
