@@ -4,7 +4,6 @@ import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:procura_online/controllers/user_controller.dart';
-import 'package:procura_online/utils/colors.dart';
 import 'package:procura_online/widgets/large_button.dart';
 import 'package:procura_online/widgets/text_input.dart';
 
@@ -16,6 +15,7 @@ class RegisterScreen extends StatelessWidget {
   final TextEditingController _address = TextEditingController();
   final TextEditingController _postcode = TextEditingController();
   final TextEditingController _password = TextEditingController();
+  final _formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
@@ -24,6 +24,17 @@ class RegisterScreen extends StatelessWidget {
     ));
 
     return Scaffold(
+      appBar: AppBar(
+        brightness: Brightness.dark,
+        title: Text(
+          'Sign up',
+          style: TextStyle(color: Colors.white),
+        ),
+        centerTitle: true,
+        backgroundColor: Colors.blue,
+        elevation: 0,
+        iconTheme: IconThemeData(color: Colors.white),
+      ),
       backgroundColor: Colors.blue,
       body: SafeArea(
         child: Obx(
@@ -40,109 +51,137 @@ class RegisterScreen extends StatelessWidget {
                   colors: [Colors.blue, Colors.blue[900]],
                 ),
               ),
-              child: Stack(children: [
-                SingleChildScrollView(
-                  child: Padding(
-                    padding: const EdgeInsets.all(35.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Column(
+              child: SingleChildScrollView(
+                child: Padding(
+                  padding: const EdgeInsets.all(35.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Form(
+                        key: _formKey,
+                        child: Column(
                           children: [
                             Padding(
-                              padding: const EdgeInsets.only(
-                                  top: 50, left: 80, right: 80, bottom: 40),
-                              child: SvgPicture.asset(
-                                  'assets/images/logo_branco.svg',
-                                  width: 100),
+                              padding: const EdgeInsets.only(top: 50, left: 80, right: 80, bottom: 40),
+                              child: SvgPicture.asset('assets/images/logo_branco.svg', width: 100),
                             ),
-                            Text(
-                              'Sign Up',
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 22,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            SizedBox(height: 40),
                             CustomTextInput(
                               controller: _name,
                               hintText: 'Full name',
                               hintStyle: TextStyle(color: Colors.white),
                               textCapitalization: TextCapitalization.sentences,
+                              errorBorderColor: Colors.white54,
+                              errorTextColor: Colors.white,
+                              validator: (value) {
+                                if (value.isEmpty) {
+                                  return 'Please enter your name';
+                                }
+                                return null;
+                              },
                             ),
-                            SizedBox(height: 10),
+                            SizedBox(height: 20),
                             CustomTextInput(
                               controller: _email,
                               hintText: 'Email',
                               hintStyle: TextStyle(color: Colors.white),
                               keyboardType: TextInputType.emailAddress,
+                              errorBorderColor: Colors.white54,
+                              errorTextColor: Colors.white,
+                              validator: (value) {
+                                if (value.isEmpty) {
+                                  return 'Please enter your email address';
+                                }
+                                return null;
+                              },
                             ),
-                            SizedBox(height: 10),
+                            SizedBox(height: 20),
                             CustomTextInput(
                               controller: _phone,
                               hintText: 'Phone',
                               hintStyle: TextStyle(color: Colors.white),
                               keyboardType: TextInputType.phone,
+                              errorBorderColor: Colors.white54,
+                              errorTextColor: Colors.white,
+                              validator: (value) {
+                                if (value.isEmpty) {
+                                  return 'Please enter your phone number';
+                                }
+                                return null;
+                              },
                             ),
-                            SizedBox(height: 10),
+                            SizedBox(height: 20),
                             CustomTextInput(
                               controller: _address,
                               hintText: 'Address',
                               hintStyle: TextStyle(color: Colors.white),
                               textCapitalization: TextCapitalization.sentences,
+                              errorBorderColor: Colors.white54,
+                              errorTextColor: Colors.white,
+                              validator: (value) {
+                                if (value.isEmpty) {
+                                  return 'Please enter your address';
+                                }
+                                return null;
+                              },
                             ),
-                            SizedBox(height: 10),
+                            SizedBox(height: 20),
                             CustomTextInput(
                               controller: _postcode,
                               hintText: 'Postcode',
                               hintStyle: TextStyle(color: Colors.white),
                               keyboardType: TextInputType.number,
+                              errorBorderColor: Colors.white54,
+                              errorTextColor: Colors.white,
+                              validator: (value) {
+                                if (value.isEmpty) {
+                                  return 'Please enter your postcode';
+                                }
+                                return null;
+                              },
                             ),
-                            SizedBox(height: 10),
+                            SizedBox(height: 20),
                             CustomTextInput(
                               controller: _password,
                               hintText: 'Password',
                               hintStyle: TextStyle(color: Colors.white),
                               obscureText: true,
+                              errorBorderColor: Colors.white54,
+                              errorTextColor: Colors.white,
+                              validator: (value) {
+                                if (value.isEmpty) {
+                                  return 'Please enter a password';
+                                }
+                                return null;
+                              },
                             ),
                           ],
                         ),
-                        SizedBox(height: 50),
-                        Column(
-                          children: [
-                            LargeButton(
-                              text: 'Sign Up',
-                              onPressed: () => _userController.signUp(
-                                name: _name.text,
-                                email: _email.text,
-                                phone: _phone.text,
-                                address: _address.text,
-                                postcode: _postcode.text,
-                                password: _password.text,
-                              ),
-                            ),
-                            SizedBox(height: 25),
-                            GestureDetector(
-                              behavior: HitTestBehavior.translucent,
-                              onTap: () => Get.back(),
-                              child: Text('Back to login', style: kSmallText),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
+                      ),
+                      SizedBox(height: 20),
+                      Column(
+                        children: [
+                          LargeButton(
+                            text: 'Sign Up',
+                            onPressed: () {
+                              if (_formKey.currentState.validate()) {
+                                _userController.signUp(
+                                  name: _name.text,
+                                  email: _email.text,
+                                  phone: _phone.text,
+                                  address: _address.text,
+                                  postcode: _postcode.text,
+                                  password: _password.text,
+                                );
+                              }
+                            },
+                          ),
+                        ],
+                      ),
+                    ],
                   ),
                 ),
-                Padding(
-                  padding: EdgeInsets.only(left: 5, top: 5),
-                  child: IconButton(
-                    icon: Icon(Icons.arrow_back, color: Colors.white),
-                    onPressed: () => Get.back(),
-                  ),
-                ),
-              ]),
+              ),
             ),
           ),
         ),

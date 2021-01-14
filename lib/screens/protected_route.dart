@@ -23,12 +23,12 @@ class _ProtectedRouteState extends State<ProtectedRoute> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Text('You need to be logged in to view this page.'),
-          FlatButton(
-            onPressed: () => Get.toNamed('/auth/login'),
-            child: Text(
-              'Login',
-              style: TextStyle(color: Colors.blue, fontWeight: FontWeight.w600),
+          TextButton(
+            style: TextButton.styleFrom(
+              textStyle: TextStyle(color: Colors.blue, fontWeight: FontWeight.w600),
             ),
+            onPressed: () => Get.toNamed('/auth/login'),
+            child: Text('Login'),
           )
         ],
       ),
