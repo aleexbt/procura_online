@@ -103,6 +103,7 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
                       onChanged: (value) => _homeController.setSearchTerm(value),
                       onSubmitted: (_) => _homeController.doSearch(),
                       textInputAction: TextInputAction.search,
+                      textCapitalization: TextCapitalization.sentences,
                     ),
                   ),
                   GestureDetector(
