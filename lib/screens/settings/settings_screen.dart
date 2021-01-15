@@ -58,13 +58,6 @@ class _SettingsScreenState extends State<SettingsScreen>
               horizontalTitleGap: 0,
               subtitle: Text('Sign out of your account'),
             ),
-            ListTileMoreCustomizable(
-              onTap: (_) => Get.toNamed('/profile/1'),
-              leading: Icon(CupertinoIcons.power, color: Colors.blue),
-              title: Text('Profile'),
-              horizontalTitleGap: 0,
-              subtitle: Text('View profile'),
-            ),
           ],
         ),
       ),
