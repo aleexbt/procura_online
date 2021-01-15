@@ -46,7 +46,8 @@ class ProductScreen extends StatelessWidget {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        SvgPicture.asset('assets/images/not_found_towing.svg', width: 350),
+                        SvgPicture.asset('assets/images/not_found_towing.svg',
+                            width: 350),
                         SizedBox(height: 20),
                         Text(
                           'Ops, we cannot find this product.',
@@ -74,7 +75,8 @@ class ProductScreen extends StatelessWidget {
                       overlayShadow: true,
                       dotIncreasedColor: Colors.blue,
                       autoplay: false,
-                      images: buildImage(_.product.photos?.original, _.product.mainPhoto?.original),
+                      images: buildImage(_.product.photos?.original,
+                          _.product.mainPhoto?.original),
                     ),
                   ),
                   SizedBox(height: 8),
@@ -197,7 +199,8 @@ class ProductScreen extends StatelessWidget {
                               children: [
                                 Expanded(
                                   child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
                                       RichText(
                                         text: TextSpan(
@@ -209,7 +212,9 @@ class ProductScreen extends StatelessWidget {
                                           ),
                                           children: [
                                             TextSpan(
-                                                text: _.product.make.capitalizeFirst ?? 'Not specified',
+                                                text: _.product.make
+                                                        .capitalizeFirst ??
+                                                    'Not specified',
                                                 style: TextStyle(
                                                   color: Colors.grey[600],
                                                   fontWeight: FontWeight.normal,
@@ -228,7 +233,8 @@ class ProductScreen extends StatelessWidget {
                                           ),
                                           children: [
                                             TextSpan(
-                                                text: _.product.model ?? 'Not specified',
+                                                text: _.product.model ??
+                                                    'Not specified',
                                                 style: TextStyle(
                                                   color: Colors.grey[600],
                                                   fontWeight: FontWeight.normal,
@@ -247,7 +253,8 @@ class ProductScreen extends StatelessWidget {
                                           ),
                                           children: [
                                             TextSpan(
-                                                text: _.product.year ?? 'Not specified',
+                                                text: _.product.year ??
+                                                    'Not specified',
                                                 style: TextStyle(
                                                   color: Colors.grey[600],
                                                   fontWeight: FontWeight.normal,
@@ -261,7 +268,8 @@ class ProductScreen extends StatelessWidget {
                                 VerticalDivider(),
                                 Expanded(
                                   child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
                                       RichText(
                                         text: TextSpan(
@@ -273,7 +281,9 @@ class ProductScreen extends StatelessWidget {
                                           ),
                                           children: [
                                             TextSpan(
-                                                text: _.product.fuelType.capitalizeFirst ?? 'Not specified',
+                                                text: _.product.fuelType
+                                                        .capitalizeFirst ??
+                                                    'Not specified',
                                                 style: TextStyle(
                                                   color: Colors.grey[600],
                                                   fontWeight: FontWeight.normal,
@@ -292,7 +302,8 @@ class ProductScreen extends StatelessWidget {
                                           ),
                                           children: [
                                             TextSpan(
-                                                text: _.product.mileage ?? 'Not specified',
+                                                text: _.product.mileage ??
+                                                    'Not specified',
                                                 style: TextStyle(
                                                   color: Colors.grey[600],
                                                   fontWeight: FontWeight.normal,
@@ -311,7 +322,8 @@ class ProductScreen extends StatelessWidget {
                                           ),
                                           children: [
                                             TextSpan(
-                                                text: _.product.enginePower ?? 'Not specified',
+                                                text: _.product.enginePower ??
+                                                    'Not specified',
                                                 style: TextStyle(
                                                   color: Colors.grey[600],
                                                   fontWeight: FontWeight.normal,
@@ -325,7 +337,8 @@ class ProductScreen extends StatelessWidget {
                                 VerticalDivider(),
                                 Expanded(
                                   child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
                                       RichText(
                                         text: TextSpan(
@@ -337,7 +350,8 @@ class ProductScreen extends StatelessWidget {
                                           ),
                                           children: [
                                             TextSpan(
-                                                text: _.product.numberOfDoors ?? 'Not specified',
+                                                text: _.product.numberOfDoors ??
+                                                    'Not specified',
                                                 style: TextStyle(
                                                   color: Colors.grey[600],
                                                   fontWeight: FontWeight.normal,
@@ -356,7 +370,8 @@ class ProductScreen extends StatelessWidget {
                                           ),
                                           children: [
                                             TextSpan(
-                                                text: _.product.numberOfSeats ?? 'Not specified',
+                                                text: _.product.numberOfSeats ??
+                                                    'Not specified',
                                                 style: TextStyle(
                                                   color: Colors.grey[600],
                                                   fontWeight: FontWeight.normal,
@@ -375,7 +390,8 @@ class ProductScreen extends StatelessWidget {
                                           ),
                                           children: [
                                             TextSpan(
-                                                text: _.product.color ?? 'Not specified',
+                                                text: _.product.color ??
+                                                    'Not specified',
                                                 style: TextStyle(
                                                   color: Colors.grey[600],
                                                   fontWeight: FontWeight.normal,
@@ -395,9 +411,7 @@ class ProductScreen extends StatelessWidget {
                   ),
                   Padding(
                     padding: const EdgeInsets.fromLTRB(5, 10, 5, 80),
-                    child: Container(
-                      constraints: BoxConstraints(minHeight: 60),
-                      width: double.infinity,
+                    child: Ink(
                       decoration: BoxDecoration(
                         color: Colors.white,
                         boxShadow: [
@@ -409,52 +423,60 @@ class ProductScreen extends StatelessWidget {
                         ],
                         borderRadius: BorderRadius.circular(4),
                       ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.fromLTRB(10, 10, 0, 2),
-                            child: Text(
-                              'Publisher',
-                              style: TextStyle(fontWeight: FontWeight.bold),
+                      child: InkWell(
+                        borderRadius: BorderRadius.circular(4),
+                        onTap: () => Get.toNamed('/profile/1'),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.fromLTRB(10, 10, 0, 2),
+                              child: Text(
+                                'Publisher',
+                                style: TextStyle(fontWeight: FontWeight.bold),
+                              ),
                             ),
-                          ),
-                          Divider(),
-                          Padding(
-                            padding: const EdgeInsets.fromLTRB(10, 0, 12, 8),
-                            child: Row(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                SizedBox(
-                                  width: 100,
-                                  height: 100,
-                                  child: ClipOval(
-                                    child: Image.network('https://i.pravatar.cc/200'),
+                            Divider(),
+                            Padding(
+                              padding: const EdgeInsets.fromLTRB(10, 0, 12, 8),
+                              child: Row(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  SizedBox(
+                                    width: 100,
+                                    height: 100,
+                                    child: ClipOval(
+                                      child: Image.network(
+                                          'https://i.pravatar.cc/200'),
+                                    ),
                                   ),
-                                ),
-                                SizedBox(width: 8),
-                                Expanded(
-                                  child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        'Miriam Alice Teixeira',
-                                        style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                                        overflow: TextOverflow.ellipsis,
-                                      ),
-                                      Text(
-                                        'Travessa São. Lucas, 6 9051-452 Amora',
-                                        overflow: TextOverflow.ellipsis,
-                                      ),
-                                      Text('Porto, Santo Tirso'),
-                                      Text('5025'),
-                                    ],
+                                  SizedBox(width: 8),
+                                  Expanded(
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          'Miriam Alice Teixeira',
+                                          style: TextStyle(
+                                              fontSize: 16,
+                                              fontWeight: FontWeight.bold),
+                                          overflow: TextOverflow.ellipsis,
+                                        ),
+                                        Text(
+                                          'Travessa São. Lucas, 6 9051-452 Amora',
+                                          overflow: TextOverflow.ellipsis,
+                                        ),
+                                        Text('Porto, Santo Tirso'),
+                                        Text('5025'),
+                                      ],
+                                    ),
                                   ),
-                                ),
-                              ],
+                                ],
+                              ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
                     ),
                   ),
@@ -511,7 +533,8 @@ class ProductScreen extends StatelessWidget {
                   tag: 'photo_${entry.key}',
                   child: OctoImage(
                     image: CachedNetworkImageProvider(entry.value),
-                    placeholderBuilder: OctoPlaceholder.circularProgressIndicator(),
+                    placeholderBuilder:
+                        OctoPlaceholder.circularProgressIndicator(),
                     errorBuilder: OctoError.icon(color: Colors.grey[400]),
                     fit: BoxFit.cover,
                   ),
@@ -552,7 +575,8 @@ class ProductScreen extends StatelessWidget {
           child: Hero(
             tag: 'photo',
             child: OctoImage(
-              image: CachedNetworkImageProvider('https://source.unsplash.com/600x500/?bmw,audi,volvo'),
+              image: CachedNetworkImageProvider(
+                  'https://source.unsplash.com/600x500/?bmw,audi,volvo'),
               placeholderBuilder: OctoPlaceholder.circularProgressIndicator(),
               errorBuilder: OctoError.icon(color: Colors.grey[400]),
               fit: BoxFit.cover,

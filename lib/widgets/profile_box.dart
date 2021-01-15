@@ -2,21 +2,21 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:octo_image/octo_image.dart';
 
-class FeaturedBox extends StatelessWidget {
+class ProfileBox extends StatelessWidget {
   final String image;
   final String title;
   final String salePrice;
   final String normalPrice;
   final Function onTap;
 
-  const FeaturedBox(
-      {Key key,
-      @required this.image,
-      @required this.title,
-      @required this.salePrice,
-      this.normalPrice,
-      this.onTap})
-      : super(key: key);
+  const ProfileBox({
+    Key key,
+    @required this.image,
+    @required this.title,
+    @required this.salePrice,
+    this.normalPrice,
+    this.onTap,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -25,8 +25,7 @@ class FeaturedBox extends StatelessWidget {
       child: Stack(
         children: [
           Container(
-            width: 250,
-            height: 250,
+            height: 280,
             decoration: BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.circular(4),
@@ -72,12 +71,15 @@ class FeaturedBox extends StatelessWidget {
                             fontSize: 12.0,
                             fontWeight: FontWeight.w600),
                       ),
-                      Text(
-                        '\$21,000',
-                        style: TextStyle(
-                          color: Colors.grey[400],
-                          fontSize: 10,
-                          decoration: TextDecoration.lineThrough,
+                      Visibility(
+                        visible: normalPrice != '0.00',
+                        child: Text(
+                          '\$$normalPrice',
+                          style: TextStyle(
+                            color: Colors.grey[400],
+                            fontSize: 10,
+                            decoration: TextDecoration.lineThrough,
+                          ),
                         ),
                       ),
                     ],

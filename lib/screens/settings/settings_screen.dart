@@ -10,7 +10,8 @@ class SettingsScreen extends StatefulWidget {
   _SettingsScreenState createState() => _SettingsScreenState();
 }
 
-class _SettingsScreenState extends State<SettingsScreen> with AutomaticKeepAliveClientMixin {
+class _SettingsScreenState extends State<SettingsScreen>
+    with AutomaticKeepAliveClientMixin {
   @override
   bool get wantKeepAlive => true;
 
@@ -56,6 +57,13 @@ class _SettingsScreenState extends State<SettingsScreen> with AutomaticKeepAlive
               title: Text('Sign out'),
               horizontalTitleGap: 0,
               subtitle: Text('Sign out of your account'),
+            ),
+            ListTileMoreCustomizable(
+              onTap: (_) => Get.toNamed('/profile/1'),
+              leading: Icon(CupertinoIcons.power, color: Colors.blue),
+              title: Text('Profile'),
+              horizontalTitleGap: 0,
+              subtitle: Text('View profile'),
             ),
           ],
         ),

@@ -22,5 +22,7 @@ class Routers {
   static const editAd = '/ad/edit/:id';
   static const createOrder = '/orders/new';
 
+  static const profile = '/profile/:d';
+
   static const tests = '/tests';
 }

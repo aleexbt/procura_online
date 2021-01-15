@@ -15,6 +15,7 @@ import 'package:procura_online/screens/create_order_screen.dart';
 import 'package:procura_online/screens/filter_screen.dart';
 import 'package:procura_online/screens/home/home_screen.dart';
 import 'package:procura_online/screens/product/product_screen.dart';
+import 'package:procura_online/screens/profile_screen.dart';
 import 'package:procura_online/screens/settings/ads_listing_screen.dart';
 import 'package:procura_online/screens/settings/change_password_screen.dart';
 import 'package:procura_online/screens/settings/edit_profile_screen.dart';
@@ -109,6 +110,10 @@ List<GetPage> getPages = [
   GetPage(
     name: Routers.createOrder,
     page: () => CreateOrderScreen(),
+  ),
+  GetPage(
+    name: Routers.profile,
+    page: () => ProfileScreen(),
   ),
   GetPage(
     name: Routers.tests,
