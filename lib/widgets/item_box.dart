@@ -2,15 +2,19 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:octo_image/octo_image.dart';
 
-class FeaturedBox extends StatelessWidget {
+class ItemBox extends StatelessWidget {
+  final double width;
+  final double height;
   final String image;
   final String title;
   final String salePrice;
   final String normalPrice;
   final Function onTap;
 
-  const FeaturedBox(
+  const ItemBox(
       {Key key,
+      this.width = 250,
+      this.height = 250,
       @required this.image,
       @required this.title,
       @required this.salePrice,
@@ -25,8 +29,8 @@ class FeaturedBox extends StatelessWidget {
       child: Stack(
         children: [
           Container(
-            width: 250,
-            height: 250,
+            width: width,
+            height: height,
             decoration: BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.circular(4),

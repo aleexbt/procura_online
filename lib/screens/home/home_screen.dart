@@ -6,8 +6,7 @@ import 'package:get/get.dart';
 import 'package:procura_online/controllers/home_controller.dart';
 import 'package:procura_online/controllers/user_controller.dart';
 import 'package:procura_online/utils/no_glow_behavior.dart';
-import 'package:procura_online/widgets/featured_box.dart';
-import 'package:procura_online/widgets/normal_box.dart';
+import 'package:procura_online/widgets/item_box.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key key}) : super(key: key);
@@ -16,14 +15,16 @@ class HomeScreen extends StatefulWidget {
   _HomeScreenState createState() => _HomeScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMixin {
+class _HomeScreenState extends State<HomeScreen>
+    with AutomaticKeepAliveClientMixin {
   @override
   bool get wantKeepAlive => true;
 
   // final SearchController _searchController = Get.find();
   final HomeController _homeController = Get.find();
   final UserController _userController = Get.find();
-  final ScrollController _scrollController = ScrollController(initialScrollOffset: 0.0);
+  final ScrollController _scrollController =
+      ScrollController(initialScrollOffset: 0.0);
 
   @override
   void initState() {
@@ -32,7 +33,9 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
       double currentScroll = _scrollController.position.pixels;
       double delta = MediaQuery.of(context).size.height * 0.40;
       if (maxScroll - currentScroll < delta) {
-        if (!_homeController.isLoadingMore && !_homeController.isLastPage && !_homeController.loadingMoreError) {
+        if (!_homeController.isLoadingMore &&
+            !_homeController.isLastPage &&
+            !_homeController.loadingMoreError) {
           _homeController.getNextPage();
         }
       }
@@ -91,16 +94,20 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
                       decoration: InputDecoration(
                         hintText: 'Search',
                         border: const OutlineInputBorder(
-                          borderSide: const BorderSide(color: Colors.transparent, width: 0.0),
+                          borderSide: const BorderSide(
+                              color: Colors.transparent, width: 0.0),
                         ),
                         enabledBorder: const OutlineInputBorder(
-                          borderSide: const BorderSide(color: Colors.transparent, width: 0.0),
+                          borderSide: const BorderSide(
+                              color: Colors.transparent, width: 0.0),
                         ),
                         focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.transparent, width: 0.0),
+                          borderSide:
+                              BorderSide(color: Colors.transparent, width: 0.0),
                         ),
                       ),
-                      onChanged: (value) => _homeController.setSearchTerm(value),
+                      onChanged: (value) =>
+                          _homeController.setSearchTerm(value),
                       onSubmitted: (_) => _homeController.doSearch(),
                       textInputAction: TextInputAction.search,
                       textCapitalization: TextCapitalization.sentences,
@@ -124,10 +131,13 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
                 Flexible(
                   fit: FlexFit.tight,
                   child: FlatButton(
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(25)),
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(25)),
                     color: Colors.grey[200],
                     height: 40,
-                    onPressed: () => _userController.isLoggedIn ? Get.toNamed('/ad/new') : Get.toNamed('/auth/login'),
+                    onPressed: () => _userController.isLoggedIn
+                        ? Get.toNamed('/ad/new')
+                        : Get.toNamed('/auth/login'),
                     child: Text('Sell'),
                   ),
                 ),
@@ -137,10 +147,14 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
                     padding: const EdgeInsets.symmetric(horizontal: 10),
                     child: Obx(
                       () => FlatButton(
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(25)),
-                        color: _homeController.categoryValue == 'vehicles' ? Colors.grey[300] : Colors.grey[200],
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(25)),
+                        color: _homeController.categoryValue == 'vehicles'
+                            ? Colors.grey[300]
+                            : Colors.grey[200],
                         height: 40,
-                        onPressed: () => changeCategory(name: 'Vehicles', value: 'vehicles'),
+                        onPressed: () =>
+                            changeCategory(name: 'Vehicles', value: 'vehicles'),
                         child: Text('Vehicles'),
                       ),
                     ),
@@ -150,10 +164,14 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
                   fit: FlexFit.tight,
                   child: Obx(
                     () => FlatButton(
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(25)),
-                      color: _homeController.categoryValue == 'auto-parts' ? Colors.grey[300] : Colors.grey[200],
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(25)),
+                      color: _homeController.categoryValue == 'auto-parts'
+                          ? Colors.grey[300]
+                          : Colors.grey[200],
                       height: 40,
-                      onPressed: () => changeCategory(name: 'Auto Parts', value: 'auto-parts'),
+                      onPressed: () => changeCategory(
+                          name: 'Auto Parts', value: 'auto-parts'),
                       child: Text('Auto Parts'),
                     ),
                   ),
@@ -189,7 +207,8 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
                                 children: [
                                   Text('Ops, error while retrieving ads.'),
                                   TextButton(
-                                    style: TextButton.styleFrom(primary: Colors.blue),
+                                    style: TextButton.styleFrom(
+                                        primary: Colors.blue),
                                     onPressed: () => _.findAll(),
                                     child: Text('Try again'),
                                   ),
@@ -205,7 +224,9 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
                               child: Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                  SvgPicture.asset('assets/images/by_my_car.svg', width: 280),
+                                  SvgPicture.asset(
+                                      'assets/images/by_my_car.svg',
+                                      width: 280),
                                   SizedBox(height: 20),
                                   Text(
                                     'Oh, looks like we couldn\'t find any results.',
@@ -231,13 +252,17 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
                                 itemBuilder: (context, index) {
                                   return Padding(
                                     padding: const EdgeInsets.only(right: 10),
-                                    child: FeaturedBox(
-                                      image: _.featured[index].mainPhoto?.bigThumb ??
+                                    child: ItemBox(
+                                      width: 250,
+                                      height: 250,
+                                      image: _.featured[index].mainPhoto
+                                              ?.bigThumb ??
                                           'https://source.unsplash.com/600x500/?bmw,audi,volvo',
                                       title: _.featured[index].title ?? 'Title',
                                       salePrice: _.featured[index].price ?? '0',
                                       normalPrice: _.featured[index].oldPrice,
-                                      onTap: () => Get.toNamed('/product/${_homeController.featured[index].id}'),
+                                      onTap: () => Get.toNamed(
+                                          '/product/${_homeController.featured[index].id}'),
                                     ),
                                   );
                                 },
@@ -245,7 +270,8 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
                             ),
                             SizedBox(height: 20),
                             GridView.builder(
-                              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                              gridDelegate:
+                                  SliverGridDelegateWithFixedCrossAxisCount(
                                 crossAxisCount: 2,
                                 crossAxisSpacing: 5,
                                 mainAxisSpacing: 5,
@@ -255,13 +281,16 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
                               physics: BouncingScrollPhysics(),
                               itemCount: _.results?.length ?? 0,
                               itemBuilder: (context, index) {
-                                return NormalBox(
+                                return ItemBox(
+                                  width: 200,
+                                  height: 250,
                                   image: _.results[index].mainPhoto?.thumb ??
                                       'https://source.unsplash.com/600x500/?bmw,audi,volvo?ad=${_.results[index].id}',
                                   title: _.results[index].title,
                                   salePrice: _.results[index].price,
                                   normalPrice: _.results[index].oldPrice,
-                                  onTap: () => Get.toNamed('/product/${_.results[index].id}'),
+                                  onTap: () => Get.toNamed(
+                                      '/product/${_.results[index].id}'),
                                 );
                               },
                             ),

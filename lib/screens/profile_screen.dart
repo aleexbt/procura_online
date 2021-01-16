@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:procura_online/controllers/user_controller.dart';
-import 'package:procura_online/widgets/profile_box.dart';
+import 'package:procura_online/widgets/item_box.dart';
 
 class ProfileScreen extends StatelessWidget {
-  final UserController _userController = Get.find();
-
   @override
   Widget build(BuildContext context) {
     return GetX<UserController>(
@@ -42,7 +40,7 @@ class ProfileScreen extends StatelessWidget {
                         children: [
                           Container(
                             child: Text(
-                              _.userData.name,
+                              _.userData?.name ?? '',
                               style: TextStyle(
                                 fontSize: 22,
                                 fontWeight: FontWeight.bold,
@@ -50,13 +48,15 @@ class ProfileScreen extends StatelessWidget {
                             ),
                           ),
                           Text(
-                              '${_.userData.billingCity} - ${_.userData.billingCountry}'),
+                              '${_.userData?.billingCity ?? ''} - ${_.userData?.billingCountry ?? ''}'),
                           SizedBox(height: 20),
                           ListView(
                             shrinkWrap: true,
                             physics: NeverScrollableScrollPhysics(),
                             children: [
-                              ProfileBox(
+                              ItemBox(
+                                width: double.infinity,
+                                height: 280,
                                 title: 'Carro um dois três',
                                 salePrice: '22000',
                                 normalPrice: '22000',
@@ -64,7 +64,9 @@ class ProfileScreen extends StatelessWidget {
                                     'https://procuraonline-dev.pt/storage/6/conversions/listing-c-6-big_thumb.jpg',
                                 onTap: () => Get.toNamed('/product/1'),
                               ),
-                              ProfileBox(
+                              ItemBox(
+                                width: double.infinity,
+                                height: 280,
                                 title: 'Carro um dois três',
                                 salePrice: '22000',
                                 normalPrice: '22000',
@@ -72,7 +74,9 @@ class ProfileScreen extends StatelessWidget {
                                     'https://procuraonline-dev.pt/storage/6/conversions/listing-c-6-big_thumb.jpg',
                                 onTap: () => Get.toNamed('/product/1'),
                               ),
-                              ProfileBox(
+                              ItemBox(
+                                width: double.infinity,
+                                height: 280,
                                 title: 'Carro um dois três',
                                 salePrice: '22000',
                                 normalPrice: '22000',
@@ -80,7 +84,9 @@ class ProfileScreen extends StatelessWidget {
                                     'https://procuraonline-dev.pt/storage/6/conversions/listing-c-6-big_thumb.jpg',
                                 onTap: () => Get.toNamed('/product/1'),
                               ),
-                              ProfileBox(
+                              ItemBox(
+                                width: double.infinity,
+                                height: 280,
                                 title: 'Carro um dois três',
                                 salePrice: '22000',
                                 normalPrice: '22000',
