@@ -425,7 +425,7 @@ class ProductScreen extends StatelessWidget {
                       ),
                       child: InkWell(
                         borderRadius: BorderRadius.circular(4),
-                        onTap: () => Get.toNamed('/profile/1'),
+                        onTap: () => Get.offNamed('/profile/1'),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [

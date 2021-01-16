@@ -15,7 +15,8 @@ class VehicleRepository {
   Future<List<String>> getMakers() async {
     _dio.interceptors.add(_dioCacheManager.interceptor);
     Options _cacheOptions = buildCacheOptions(Duration(days: 1));
-    Response response = await _dio.get('/api/v1/vehicle/makes', options: _cacheOptions);
+    Response response =
+        await _dio.get('/api/v1/vehicle/makes', options: _cacheOptions);
     if (response.statusCode == 200) {
       return List<String>.from(response.data);
     } else {
@@ -31,5 +32,16 @@ class VehicleRepository {
     } else {
       return [];
     }
+  }
+
+  Future getCategories() async {
+    Response response = await _dio.get('/api/v1/listings/main-categories');
+    return response.data;
+  }
+
+  Future getSubCategories(String catId) async {
+    Response response = await _dio.get('/api/v1/listings/sub-categories',
+        queryParameters: {"category_id": "$catId"});
+    return response.data;
   }
 }

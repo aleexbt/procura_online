@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:procura_online/controllers/user_controller.dart';
@@ -10,6 +12,13 @@ class ProfileScreen extends StatelessWidget {
       builder: (_) {
         return Scaffold(
           appBar: AppBar(
+            automaticallyImplyLeading: false,
+            leading: IconButton(
+              icon: Icon(
+                Platform.isAndroid ? Icons.arrow_back : Icons.arrow_back_ios,
+              ),
+              onPressed: () => Get.offNamed('/app'),
+            ),
             title: Text('Profile'),
             elevation: 0,
           ),
@@ -62,7 +71,10 @@ class ProfileScreen extends StatelessWidget {
                                 normalPrice: '22000',
                                 image:
                                     'https://procuraonline-dev.pt/storage/6/conversions/listing-c-6-big_thumb.jpg',
-                                onTap: () => Get.toNamed('/product/1'),
+                                onTap: () => Get.offNamed(
+                                  '/product/2',
+                                  arguments: {'canPushBack': true},
+                                ),
                               ),
                               ItemBox(
                                 width: double.infinity,

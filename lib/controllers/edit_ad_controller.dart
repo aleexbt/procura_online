@@ -20,6 +20,7 @@ class EditAdController extends GetxController {
   @override
   void onInit() {
     findOne();
+    getCategories();
     getBrands();
     super.onInit();
   }
@@ -33,6 +34,10 @@ class EditAdController extends GetxController {
   bool get isLoading => _isLoading.value;
   bool get isSaving => _isSaving.value;
   bool get isAdEdited => _isAdEdited.value;
+  RxBool _isLoadingCategories = false.obs;
+  RxBool _isLoadingSubCategories = false.obs;
+  bool get isLoadingCategories => _isLoadingCategories.value;
+  bool get isLoadingSubCategories => _isLoadingSubCategories.value;
   bool get isLoadingBrands => _isLoadingBrands.value;
   bool get isLoadingModels => _isLoadingModels.value;
 
@@ -46,11 +51,18 @@ class EditAdController extends GetxController {
   Rx<TextEditingController> numberOfDoors = TextEditingController().obs;
   Rx<TextEditingController> price = TextEditingController().obs;
 
+  RxList<S2Choice<String>> _categories = List<S2Choice<String>>().obs;
+  RxList<S2Choice<String>> _subcategories = List<S2Choice<String>>().obs;
   RxList<S2Choice<String>> _brands = List<S2Choice<String>>().obs;
   RxList<S2Choice<String>> _models = List<S2Choice<String>>().obs;
+
+  List<S2Choice<String>> get categories => _categories;
+  List<S2Choice<String>> get subcategories => _subcategories;
   List<S2Choice<String>> get brands => _brands;
   List<S2Choice<String>> get models => _models;
 
+  RxString selectedCategory = ''.obs;
+  RxString selectedSubCategory = ''.obs;
   RxString selectedBrand = ''.obs;
   RxString selectedModel = ''.obs;
   RxString selectedColor = ''.obs;
@@ -98,6 +110,58 @@ class EditAdController extends GetxController {
   void setTransmission(String value) => selectedTransmission.value = value;
   void setCondition(String value) => selectedCondition.value = value;
   void setNegotiable(String value) => selectedNegotiable.value = value;
+
+  void setCategory(String value) {
+    if (value != '' && value != selectedCategory.value) {
+      getSubCategories();
+    }
+    selectedCategory.value = value;
+  }
+
+  void setSubCategory(String value) => selectedSubCategory.value = value;
+
+  void getCategories() async {
+    _isLoadingCategories.value = true;
+    try {
+      Map<String, dynamic> response = await _vehicleRepository.getCategories();
+      List<S2Choice<String>> catList = List<S2Choice<String>>();
+
+      if (response != null) {
+        response.entries.forEach(
+          (e) => catList.add(
+            S2Choice<String>(value: e.key, title: e.value),
+          ),
+        );
+        _categories.assignAll(catList);
+      }
+    } catch (err) {
+      print(err);
+    } finally {
+      _isLoadingCategories.value = false;
+    }
+  }
+
+  void getSubCategories() async {
+    _isLoadingSubCategories.value = true;
+    try {
+      Map<String, dynamic> response =
+          await _vehicleRepository.getSubCategories(selectedCategory.value);
+      List<S2Choice<String>> catList = List<S2Choice<String>>();
+
+      if (response != null) {
+        response.entries.forEach(
+          (e) => catList.add(
+            S2Choice<String>(value: e.key, title: e.value),
+          ),
+        );
+        _subcategories.assignAll(catList);
+      }
+    } catch (err) {
+      print(err);
+    } finally {
+      _isLoadingSubCategories.value = false;
+    }
+  }
 
   void getBrands() async {
     try {
@@ -166,6 +230,8 @@ class EditAdController extends GetxController {
       selectedCondition.value = response.condition;
       selectedNegotiable.value = response.negotiable;
       registeredDate.value = response.registered;
+      setCategory(response.categories[0].id.toString());
+      setSubCategory(response.categories[0].id.toString());
       setBrand(response.make);
       setModel(response.model);
       DateTime date = DateTime.parse(response.registered.toString());
@@ -203,7 +269,10 @@ class EditAdController extends GetxController {
         registered: registeredDate.value,
       );
       _adsListingController.findAll(skipLoading: true);
-      successDialog(title: 'Success', message: 'Your ad has been updated sucessfully.', dismiss: () => Get.back());
+      successDialog(
+          title: 'Success',
+          message: 'Your ad has been updated sucessfully.',
+          dismiss: () => Get.back());
     } on DioError catch (err) {
       print(err);
       try {
@@ -261,7 +330,8 @@ class EditAdController extends GetxController {
     }
   }
 
-  AwesomeDialog successDialog({String title, String message, Function dismiss}) {
+  AwesomeDialog successDialog(
+      {String title, String message, Function dismiss}) {
     return AwesomeDialog(
       dismissOnTouchOutside: false,
       dismissOnBackKeyPress: false,
