@@ -166,7 +166,7 @@ class _CreateAdScreenState extends State<CreateAdScreen> {
                             () => SelectOption(
                               isLoading: _.isLoadingSubCategories,
                               placeholder: 'Select one',
-                              modalTitle: 'Categories',
+                              modalTitle: 'Subcategories',
                               selectText: 'Select a subcategory',
                               value: _.selectedSubCategory.value,
                               choiceItems: _.subcategories,

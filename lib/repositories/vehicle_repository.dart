@@ -35,13 +35,18 @@ class VehicleRepository {
   }
 
   Future getCategories() async {
-    Response response = await _dio.get('/api/v1/listings/main-categories');
+    _dio.interceptors.add(_dioCacheManager.interceptor);
+    Options _cacheOptions = buildCacheOptions(Duration(days: 1));
+    Response response = await _dio.get('/api/v1/listings/main-categories',
+        options: _cacheOptions);
     return response.data;
   }
 
   Future getSubCategories(String catId) async {
+    _dio.interceptors.add(_dioCacheManager.interceptor);
+    Options _cacheOptions = buildCacheOptions(Duration(days: 1));
     Response response = await _dio.get('/api/v1/listings/sub-categories',
-        queryParameters: {"category_id": "$catId"});
+        queryParameters: {"category_id": "$catId"}, options: _cacheOptions);
     return response.data;
   }
 }

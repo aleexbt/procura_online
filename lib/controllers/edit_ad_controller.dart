@@ -113,7 +113,7 @@ class EditAdController extends GetxController {
 
   void setCategory(String value) {
     if (value != '' && value != selectedCategory.value) {
-      getSubCategories();
+      getSubCategories(value);
     }
     selectedCategory.value = value;
   }
@@ -141,11 +141,11 @@ class EditAdController extends GetxController {
     }
   }
 
-  void getSubCategories() async {
+  void getSubCategories(String catId) async {
     _isLoadingSubCategories.value = true;
     try {
       Map<String, dynamic> response =
-          await _vehicleRepository.getSubCategories(selectedCategory.value);
+          await _vehicleRepository.getSubCategories(catId);
       List<S2Choice<String>> catList = List<S2Choice<String>>();
 
       if (response != null) {
