@@ -126,31 +126,26 @@ class _CreateAdScreenState extends State<CreateAdScreen> {
                             ),
                           ),
                           SizedBox(height: 10),
-                          Obx(
-                            () => SelectOption(
-                              isLoading: _.isLoadingCategories,
-                              placeholder: 'Select one',
-                              modalTitle: 'Categories',
-                              selectText: 'Select a category',
-                              value: _.selectedCategory.value,
-                              choiceItems: _.categories,
-                              onChange: (state) => _.setCategory(state.value),
-                              hasError:
-                                  _.selectedCategory.value.isEmpty && submitted,
-                            ),
+                          SelectOption(
+                            isLoading: _.isLoadingCategories,
+                            placeholder: 'Select one',
+                            modalTitle: 'Categories',
+                            selectText: 'Select a category',
+                            value: _.selectedCategory.value,
+                            choiceItems: _.categories,
+                            onChange: (state) => _.setCategory(state.value),
+                            hasError:
+                                _.selectedCategory.value.isEmpty && submitted,
                           ),
-                          Obx(
-                            () => Visibility(
-                              visible:
-                                  _.selectedCategory.value.isEmpty && submitted,
-                              child: Padding(
-                                padding:
-                                    const EdgeInsets.only(left: 12, top: 5),
-                                child: Text(
-                                  'Please select a category',
-                                  style: TextStyle(
-                                      color: Colors.red, fontSize: 12),
-                                ),
+                          Visibility(
+                            visible:
+                                _.selectedCategory.value.isEmpty && submitted,
+                            child: Padding(
+                              padding: const EdgeInsets.only(left: 12, top: 5),
+                              child: Text(
+                                'Please select a category',
+                                style:
+                                    TextStyle(color: Colors.red, fontSize: 12),
                               ),
                             ),
                           ),
@@ -162,32 +157,26 @@ class _CreateAdScreenState extends State<CreateAdScreen> {
                             ),
                           ),
                           SizedBox(height: 10),
-                          Obx(
-                            () => SelectOption(
-                              isLoading: _.isLoadingSubCategories,
-                              placeholder: 'Select one',
-                              modalTitle: 'Subcategories',
-                              selectText: 'Select a subcategory',
-                              value: _.selectedSubCategory.value,
-                              choiceItems: _.subcategories,
-                              onChange: (state) =>
-                                  _.setSubCategory(state.value),
-                              hasError: _.selectedSubCategory.value.isEmpty &&
-                                  submitted,
-                            ),
+                          SelectOption(
+                            isLoading: _.isLoadingSubCategories,
+                            placeholder: 'Select one',
+                            modalTitle: 'Subcategories',
+                            selectText: 'Select a subcategory',
+                            value: _.selectedSubCategory.value,
+                            choiceItems: _.subcategories,
+                            onChange: (state) => _.setSubCategory(state.value),
+                            hasError: _.selectedSubCategory.value.isEmpty &&
+                                submitted,
                           ),
-                          Obx(
-                            () => Visibility(
-                              visible: _.selectedSubCategory.value.isEmpty &&
-                                  submitted,
-                              child: Padding(
-                                padding:
-                                    const EdgeInsets.only(left: 12, top: 5),
-                                child: Text(
-                                  'Please select a category',
-                                  style: TextStyle(
-                                      color: Colors.red, fontSize: 12),
-                                ),
+                          Visibility(
+                            visible: _.selectedSubCategory.value.isEmpty &&
+                                submitted,
+                            child: Padding(
+                              padding: const EdgeInsets.only(left: 12, top: 5),
+                              child: Text(
+                                'Please select a subcategory',
+                                style:
+                                    TextStyle(color: Colors.red, fontSize: 12),
                               ),
                             ),
                           ),
@@ -238,32 +227,26 @@ class _CreateAdScreenState extends State<CreateAdScreen> {
                             ),
                           ),
                           SizedBox(height: 10),
-                          Obx(
-                            () => SelectOption(
-                              enableFilter: true,
-                              isLoading: _.isLoadingBrands,
-                              placeholder: 'Select one',
-                              modalTitle: 'Brands',
-                              selectText: 'Select a brand',
-                              value: _.selectedBrand.value,
-                              choiceItems: _.brands,
-                              onChange: (state) => _.setBrand(state.value),
-                              hasError:
-                                  _.selectedBrand.value.isEmpty && submitted,
-                            ),
+                          SelectOption(
+                            enableFilter: true,
+                            isLoading: _.isLoadingBrands,
+                            placeholder: 'Select one',
+                            modalTitle: 'Brands',
+                            selectText: 'Select a brand',
+                            value: _.selectedBrand.value,
+                            choiceItems: _.brands,
+                            onChange: (state) => _.setBrand(state.value),
+                            hasError:
+                                _.selectedBrand.value.isEmpty && submitted,
                           ),
-                          Obx(
-                            () => Visibility(
-                              visible:
-                                  _.selectedBrand.value.isEmpty && submitted,
-                              child: Padding(
-                                padding:
-                                    const EdgeInsets.only(left: 12, top: 5),
-                                child: Text(
-                                  'Please select a brand',
-                                  style: TextStyle(
-                                      color: Colors.red, fontSize: 12),
-                                ),
+                          Visibility(
+                            visible: _.selectedBrand.value.isEmpty && submitted,
+                            child: Padding(
+                              padding: const EdgeInsets.only(left: 12, top: 5),
+                              child: Text(
+                                'Please select a brand',
+                                style:
+                                    TextStyle(color: Colors.red, fontSize: 12),
                               ),
                             ),
                           ),
@@ -275,33 +258,27 @@ class _CreateAdScreenState extends State<CreateAdScreen> {
                             ),
                           ),
                           SizedBox(height: 10),
-                          Obx(
-                            () => SelectOption(
-                              enableFilter: true,
-                              isLoading: _.isLoadingModels,
-                              isDisabled: _.selectedBrand.value == '',
-                              placeholder: 'Select one',
-                              modalTitle: 'Models',
-                              selectText: 'Select a model',
-                              value: _.selectedModel.value,
-                              choiceItems: _.models,
-                              onChange: (state) => _.setModel(state.value),
-                              hasError:
-                                  _.selectedModel.value.isEmpty && submitted,
-                            ),
+                          SelectOption(
+                            enableFilter: true,
+                            isLoading: _.isLoadingModels,
+                            isDisabled: _.selectedBrand.value == '',
+                            placeholder: 'Select one',
+                            modalTitle: 'Models',
+                            selectText: 'Select a model',
+                            value: _.selectedModel.value,
+                            choiceItems: _.models,
+                            onChange: (state) => _.setModel(state.value),
+                            hasError:
+                                _.selectedModel.value.isEmpty && submitted,
                           ),
-                          Obx(
-                            () => Visibility(
-                              visible:
-                                  _.selectedModel.value.isEmpty && submitted,
-                              child: Padding(
-                                padding:
-                                    const EdgeInsets.only(left: 12, top: 5),
-                                child: Text(
-                                  'Please select a model',
-                                  style: TextStyle(
-                                      color: Colors.red, fontSize: 12),
-                                ),
+                          Visibility(
+                            visible: _.selectedModel.value.isEmpty && submitted,
+                            child: Padding(
+                              padding: const EdgeInsets.only(left: 12, top: 5),
+                              child: Text(
+                                'Please select a model',
+                                style:
+                                    TextStyle(color: Colors.red, fontSize: 12),
                               ),
                             ),
                           ),
@@ -636,6 +613,8 @@ class _CreateAdScreenState extends State<CreateAdScreen> {
                             onPressed: () {
                               setState(() => submitted = true);
                               if (_formKey.currentState.validate() &&
+                                  _.selectedCategory.value.isNotEmpty &&
+                                  _.selectedSubCategory.value.isNotEmpty &&
                                   _.selectedBrand.value.isNotEmpty &&
                                   _.selectedModel.value.isNotEmpty &&
                                   _.selectedColor.value.isNotEmpty &&

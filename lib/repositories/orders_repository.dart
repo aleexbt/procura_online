@@ -25,15 +25,16 @@ class OrdersRepository {
   Future<Orders> findAll({String filter = 'vazio', int page = 1}) async {
     String token = Prefs.getString('token') ?? null;
     _dio.options.headers["Authorization"] = 'Bearer $token';
-    Response response = await _dio.get('/api/v1/orders', queryParameters: {"filter": "$filter", "page": "$page"});
-    print(response.request.uri);
+    Response response = await _dio.get('/api/v1/orders',
+        queryParameters: {"filter": "$filter", "page": "$page"});
     return Orders.fromJson(response.data);
   }
 
   Future<Message> replyOrder(Map<String, dynamic> data) async {
     String token = Prefs.getString('token') ?? null;
     _dio.options.headers["Authorization"] = 'Bearer $token';
-    Response response = await _dio.post('/api/v1/conversation/send', data: data);
+    Response response =
+        await _dio.post('/api/v1/conversation/send', data: data);
     return response.data['data']['conversation_id'];
   }
 
@@ -69,10 +70,10 @@ class OrdersRepository {
     });
 
     _dio.options.headers["Authorization"] = 'Bearer $token';
-    Response response = await _dio.post('/api/v1/orders/media', data: data, onSendProgress: (sent, total) {
+    Response response = await _dio.post('/api/v1/orders/media', data: data,
+        onSendProgress: (sent, total) {
       _ordersController.uploadImageProgress.value = ((sent / total));
     });
-    print(response.data);
     return UploadMedia.fromJson(response.data);
   }
 }

@@ -222,6 +222,8 @@ class CreateAdController extends GetxController {
         price: price.value.text,
         negotiable: selectedNegotiable.value,
         registered: registeredDate.value,
+        category: selectedCategory.value,
+        subcategory: selectedSubCategory.value,
       );
       successDialog(
           title: 'Success',

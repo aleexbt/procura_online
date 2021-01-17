@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:dio_http_cache/dio_http_cache.dart';
 import 'package:procura_online/models/listing_model.dart';
-// import 'package:get/get.dart';
 import 'package:procura_online/models/product_model.dart';
 import 'package:procura_online/utils/prefs.dart';
 import 'package:uuid/uuid.dart';
@@ -22,7 +21,6 @@ class ProductRepository {
   Future<Listing> findAll({String category = 'listings', int page = 1}) async {
     final Response response =
         await _dio.get('/api/v1/$category', queryParameters: {"page": "$page"});
-    print(response.request.uri);
     return Listing.fromJson(response.data);
   }
 
@@ -96,7 +94,6 @@ class ProductRepository {
     _dio.options.headers["Authorization"] = 'Bearer $token';
     final Response response =
         await _dio.post('/api/v1/listings', data: formData);
-
     return Product.fromJson(response.data);
   }
 
@@ -172,7 +169,6 @@ class ProductRepository {
     _dio.options.headers["Authorization"] = 'Bearer $token';
     final Response response =
         await _dio.post('/api/v1/listings/$id?_method=PATCH', data: formData);
-
     return response.data;
   }
 
@@ -186,7 +182,6 @@ class ProductRepository {
           "model": "$model",
           "page": "$page"
         });
-    print(response.request.uri);
     return Listing.fromJson(response.data);
   }
 

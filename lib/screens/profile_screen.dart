@@ -17,7 +17,7 @@ class ProfileScreen extends StatelessWidget {
               icon: Icon(
                 Platform.isAndroid ? Icons.arrow_back : Icons.arrow_back_ios,
               ),
-              onPressed: () => Get.offNamed('/app'),
+              onPressed: () => Get.offAllNamed('/app'),
             ),
             title: Text('Profile'),
             elevation: 0,

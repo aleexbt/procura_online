@@ -267,6 +267,8 @@ class EditAdController extends GetxController {
         price: price.value.text,
         negotiable: selectedNegotiable.value,
         registered: registeredDate.value,
+        category: selectedCategory.value,
+        subcategory: selectedSubCategory.value,
       );
       _adsListingController.findAll(skipLoading: true);
       successDialog(
