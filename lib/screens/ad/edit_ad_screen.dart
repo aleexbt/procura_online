@@ -226,7 +226,7 @@ class _EditAdScreenState extends State<EditAdScreen> {
                             child: Padding(
                               padding: const EdgeInsets.only(left: 12, top: 5),
                               child: Text(
-                                'Please select a category',
+                                'Please select a subcategory',
                                 style:
                                     TextStyle(color: Colors.red, fontSize: 12),
                               ),
@@ -672,6 +672,8 @@ class _EditAdScreenState extends State<EditAdScreen> {
                             onPressed: () {
                               setState(() => submitted = true);
                               if (_formKey.currentState.validate() &&
+                                  _.selectedCategory.value.isNotEmpty &&
+                                  _.selectedSubCategory.value.isNotEmpty &&
                                   _.selectedBrand.value.isNotEmpty &&
                                   _.selectedModel.value.isNotEmpty &&
                                   _.selectedColor.value.isNotEmpty &&
