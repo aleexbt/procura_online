@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -5,6 +7,7 @@ import 'package:hive/hive.dart';
 import 'package:procura_online/controllers/chat_controller.dart';
 import 'package:procura_online/models/message_model.dart';
 import 'package:procura_online/models/new_conversation_model.dart';
+import 'package:procura_online/models/upload_media_model.dart';
 import 'package:procura_online/repositories/chat_repository.dart';
 import 'package:procura_online/services/pusher_service.dart';
 
@@ -33,6 +36,13 @@ class ConversationController extends GetxController {
   RxBool _replyingError = false.obs;
   RxBool _isDeleting = false.obs;
   RxBool _deletingError = false.obs;
+
+  RxList<File> images = List<File>.empty(growable: true).obs;
+  RxList<String> imagesUrl = List<String>.empty(growable: true).obs;
+
+  RxString currentUploadImage = ''.obs;
+  RxDouble uploadImageProgress = 0.0.obs;
+  RxBool _isUploadingImage = false.obs;
   Rx<NewConversationModel> _conversation = NewConversationModel().obs;
 
   bool get isLoading => _isLoading.value;
@@ -41,9 +51,18 @@ class ConversationController extends GetxController {
   bool get replyingError => _replyingError.value;
   bool get isDeleting => _isDeleting.value;
   bool get deletingError => _deletingError.value;
+  bool get isUploadingImage => _isUploadingImage.value;
   NewConversationModel get conversation => _conversation.value;
 
   Rx<TextEditingController> messageInput = TextEditingController().obs;
+
+  void setImages(List<File> value) => images.addAll(value);
+
+  void removeImage(File value) {
+    images.removeWhere((img) => img == value);
+  }
+
+  void setImagesUrl(String value) => imagesUrl.add(value);
 
   void restoreConversation() async {
     Box<NewConversationModel> box = await Hive.openBox<NewConversationModel>('conversations') ?? null;
@@ -77,14 +96,19 @@ class ConversationController extends GetxController {
     }
   }
 
-  void replyMessage({String message, String orderId, String chatId}) async {
+  void replyMessage({String message, String orderId, String chatId, List<String> photos}) async {
     if (message.isBlank) {
       return;
     }
     _isReplying.value = true;
     _replyingError.value = false;
     try {
-      Map<String, dynamic> data = {"message": message, "order_id": orderId, "conversation_id": chatId ?? ""};
+      Map<String, dynamic> data = {
+        "message": message,
+        "order_id": orderId,
+        "conversation_id": chatId ?? "",
+        "attachments": photos
+      };
       await _chatRepository.replyMessage(data);
     } on DioError catch (err) {
       _replyingError.value = true;
@@ -97,6 +121,8 @@ class ConversationController extends GetxController {
           message: 'Ops, something went wrong.', backgroundColor: Colors.red, duration: Duration(seconds: 3));
     } finally {
       messageInput.value.clear();
+      images.clear();
+      imagesUrl.clear();
       messageInput.value.value = TextEditingValue(selection: TextSelection.collapsed(offset: 0));
       _isReplying.value = false;
       _chatController.findAll();
@@ -153,5 +179,28 @@ class ConversationController extends GetxController {
       val.messages.add(Message.fromJson(data['message']));
     });
     _chatController.findAll(skipLoading: true);
+  }
+
+  Future<UploadMedia> mediaUpload(File photo) async {
+    uploadImageProgress.value = 0.0;
+    _isUploadingImage.value = true;
+    var _result;
+    try {
+      UploadMedia response = await _chatRepository.mediaUpload(photo);
+      _result = response;
+    } on DioError catch (err) {
+      print(err);
+      Get.rawSnackbar(
+          message: 'Ops, error while uploading image', backgroundColor: Colors.red, duration: Duration(seconds: 5));
+    } catch (err) {
+      print(err);
+      Get.rawSnackbar(
+          message: 'Ops, error while uploading image', backgroundColor: Colors.red, duration: Duration(seconds: 5));
+    } finally {
+      _isUploadingImage.value = false;
+      uploadImageProgress.value = 0.0;
+      currentUploadImage.value = '';
+    }
+    return _result;
   }
 }

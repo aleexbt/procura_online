@@ -45,7 +45,7 @@ class Bubble extends StatelessWidget {
             borderRadius: radius,
           ),
           child: Padding(
-            padding: EdgeInsets.only(top: 4.0, bottom: 4.0, right: 4.0),
+            padding: EdgeInsets.all(4),
             child: Column(
               crossAxisAlignment: align,
               children: [

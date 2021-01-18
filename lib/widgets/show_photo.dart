@@ -13,15 +13,26 @@ class _ShowPhotosState extends State<ShowPhotos> {
   final String photoUrl = Get.arguments['photoUrl'];
   final String photoId = Get.arguments['photoId'];
 
+  bool showOverlays = true;
+
   @override
   initState() {
-    SystemChrome.setEnabledSystemUIOverlays([]);
+    // SystemChrome.setEnabledSystemUIOverlays([]);
     SystemChrome.setPreferredOrientations([
       DeviceOrientation.portraitUp,
       DeviceOrientation.landscapeRight,
       DeviceOrientation.landscapeLeft,
     ]);
     super.initState();
+  }
+
+  void changeOverlays() {
+    if (showOverlays) {
+      SystemChrome.setEnabledSystemUIOverlays([]);
+    } else {
+      SystemChrome.setEnabledSystemUIOverlays(SystemUiOverlay.values);
+    }
+    setState(() => showOverlays = !showOverlays);
   }
 
   @override
@@ -36,37 +47,47 @@ class _ShowPhotosState extends State<ShowPhotos> {
 
   @override
   Widget build(BuildContext context) {
-    return Material(
-      child: Container(
-        // color: Colors.white,
-        constraints: BoxConstraints.expand(
-          height: Get.size.height,
-        ),
-        child: Stack(
-          children: [
-            PhotoView(
-              imageProvider: CachedNetworkImageProvider(photoUrl),
-              backgroundDecoration: BoxDecoration(
-                  // color: Colors.white,
-                  ),
-              initialScale: PhotoViewComputedScale.contained * 1.0,
-              minScale: PhotoViewComputedScale.contained * 1.0,
-              maxScale: PhotoViewComputedScale.contained * 4.0,
-              heroAttributes: PhotoViewHeroAttributes(tag: photoId),
-            ),
-            Padding(
-              padding: EdgeInsets.only(left: 5, top: MediaQuery.of(context).padding.top + 15),
-              child: ClipOval(
-                child: Container(
-                  color: Colors.white,
+    return GestureDetector(
+      onTap: () => changeOverlays(),
+      child: Material(
+        color: Colors.white,
+        child: Container(
+          constraints: BoxConstraints.expand(
+            height: Get.size.height,
+          ),
+          child: Stack(
+            children: [
+              PhotoView(
+                imageProvider: CachedNetworkImageProvider(photoUrl),
+                backgroundDecoration: BoxDecoration(
+                  color: Colors.transparent,
+                ),
+                initialScale: PhotoViewComputedScale.contained * 1.0,
+                minScale: PhotoViewComputedScale.contained * 1.0,
+                maxScale: PhotoViewComputedScale.contained * 4.0,
+                heroAttributes: PhotoViewHeroAttributes(tag: photoId),
+              ),
+              Visibility(
+                visible: showOverlays,
+                child: Padding(
+                  padding: EdgeInsets.only(left: 3, top: MediaQuery.of(context).padding.top + 3),
                   child: IconButton(
-                    icon: Icon(Icons.close, size: 33),
+                    icon: ClipOval(
+                      child: Container(
+                        width: 35,
+                        height: 35,
+                        color: Colors.white54,
+                        child: Icon(
+                          Icons.arrow_back,
+                        ),
+                      ),
+                    ),
                     onPressed: () => Get.back(),
                   ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

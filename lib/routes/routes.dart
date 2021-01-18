@@ -11,6 +11,7 @@ class Routers {
   static const forgotPassword = '/auth/forgot-password';
   static const product = '/product/:id';
   static const showPhotos = '/show-photos';
+  static const imagePreview = '/image-preview';
   static const settings = '/settings';
   static const adsListing = '/settings/ads';
   static const adsEdit = '/settings/ads/:id';

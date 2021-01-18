@@ -22,6 +22,7 @@ import 'package:procura_online/screens/settings/edit_profile_screen.dart';
 import 'package:procura_online/screens/settings/settings_screen.dart';
 import 'package:procura_online/screens/tests.dart';
 import 'package:procura_online/splash.dart';
+import 'package:procura_online/widgets/image_preview.dart';
 import 'package:procura_online/widgets/show_photo.dart';
 
 List<GetPage> getPages = [
@@ -63,7 +64,16 @@ List<GetPage> getPages = [
     name: Routers.product,
     page: () => ProductScreen(),
   ),
-  GetPage(name: Routers.showPhotos, page: () => ShowPhotos()),
+  GetPage(
+    name: Routers.showPhotos,
+    page: () => ShowPhotos(),
+    opaque: false,
+  ),
+  GetPage(
+    name: Routers.imagePreview,
+    page: () => ImagePreview(),
+    opaque: false,
+  ),
   GetPage(
     name: Routers.chat,
     page: () => ChatScreen(),
