@@ -95,9 +95,9 @@ class EditAdController extends GetxController {
   ];
 
   List<S2Choice<String>> conditionOptions = [
-    S2Choice<String>(value: 'New', title: 'Novo'),
-    S2Choice<String>(value: 'Used', title: 'Usado'),
-    S2Choice<String>(value: 'Saved', title: 'Salvado'),
+    S2Choice<String>(value: 'new', title: 'Novo'),
+    S2Choice<String>(value: 'used', title: 'Usado'),
+    S2Choice<String>(value: 'saved', title: 'Salvado'),
   ];
 
   List<S2Choice<String>> negotiableOptions = [
@@ -231,7 +231,7 @@ class EditAdController extends GetxController {
       selectedNegotiable.value = response.negotiable;
       registeredDate.value = response.registered;
       setCategory(response.categories[0].id.toString());
-      setSubCategory(response.categories[0].id.toString());
+      setSubCategory(response.categories[1].id.toString());
       setBrand(response.make);
       setModel(response.model);
       DateTime date = DateTime.parse(response.registered.toString());

@@ -3,6 +3,158 @@
 part of 'user_model.dart';
 
 // **************************************************************************
+// TypeAdapterGenerator
+// **************************************************************************
+
+class UserAdapter extends TypeAdapter<User> {
+  @override
+  final int typeId = 0;
+
+  @override
+  User read(BinaryReader reader) {
+    final numOfFields = reader.readByte();
+    final fields = <int, dynamic>{
+      for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
+    };
+    return User(
+      id: fields[0] as dynamic,
+      name: fields[1] as String,
+      company: fields[2] as String,
+      type: fields[3] as String,
+      email: fields[4] as String,
+      phone: fields[5] as String,
+      phoneClicksCount: fields[6] as String,
+      districtId: fields[7] as String,
+      cityId: fields[8] as String,
+      address: fields[9] as String,
+      postcode: fields[10] as String,
+      vatNumber: fields[11] as String,
+      billingCountry: fields[12] as String,
+      billingName: fields[13] as String,
+      billingCity: fields[14] as String,
+      billingAddress: fields[15] as String,
+      billingPostcode: fields[16] as String,
+      billingZip: fields[17] as String,
+      vatId: fields[18] as String,
+      extraBillingInformation: fields[19] as String,
+      slug: fields[20] as String,
+      referredBy: fields[21] as String,
+      balance: fields[22] as String,
+      notificationsFrequency: fields[23] as String,
+      subscribed: fields[24] as String,
+      approved: fields[25] as dynamic,
+      lastReadAnnouncementsAt: fields[26] as String,
+      lastLoginAt: fields[27] as String,
+      lastLoginIp: fields[28] as String,
+      tourStatus: fields[29] as String,
+      emailVerifiedAt: fields[30] as String,
+      createdAt: fields[31] as String,
+      updatedAt: fields[32] as String,
+      deletedAt: fields[33] as String,
+      logo: fields[34] as dynamic,
+      cover: fields[35] as dynamic,
+      referralLink: fields[36] as String,
+      isOnline: fields[37] as bool,
+      media: (fields[38] as List)?.cast<dynamic>(),
+    );
+  }
+
+  @override
+  void write(BinaryWriter writer, User obj) {
+    writer
+      ..writeByte(39)
+      ..writeByte(0)
+      ..write(obj.id)
+      ..writeByte(1)
+      ..write(obj.name)
+      ..writeByte(2)
+      ..write(obj.company)
+      ..writeByte(3)
+      ..write(obj.type)
+      ..writeByte(4)
+      ..write(obj.email)
+      ..writeByte(5)
+      ..write(obj.phone)
+      ..writeByte(6)
+      ..write(obj.phoneClicksCount)
+      ..writeByte(7)
+      ..write(obj.districtId)
+      ..writeByte(8)
+      ..write(obj.cityId)
+      ..writeByte(9)
+      ..write(obj.address)
+      ..writeByte(10)
+      ..write(obj.postcode)
+      ..writeByte(11)
+      ..write(obj.vatNumber)
+      ..writeByte(12)
+      ..write(obj.billingCountry)
+      ..writeByte(13)
+      ..write(obj.billingName)
+      ..writeByte(14)
+      ..write(obj.billingCity)
+      ..writeByte(15)
+      ..write(obj.billingAddress)
+      ..writeByte(16)
+      ..write(obj.billingPostcode)
+      ..writeByte(17)
+      ..write(obj.billingZip)
+      ..writeByte(18)
+      ..write(obj.vatId)
+      ..writeByte(19)
+      ..write(obj.extraBillingInformation)
+      ..writeByte(20)
+      ..write(obj.slug)
+      ..writeByte(21)
+      ..write(obj.referredBy)
+      ..writeByte(22)
+      ..write(obj.balance)
+      ..writeByte(23)
+      ..write(obj.notificationsFrequency)
+      ..writeByte(24)
+      ..write(obj.subscribed)
+      ..writeByte(25)
+      ..write(obj.approved)
+      ..writeByte(26)
+      ..write(obj.lastReadAnnouncementsAt)
+      ..writeByte(27)
+      ..write(obj.lastLoginAt)
+      ..writeByte(28)
+      ..write(obj.lastLoginIp)
+      ..writeByte(29)
+      ..write(obj.tourStatus)
+      ..writeByte(30)
+      ..write(obj.emailVerifiedAt)
+      ..writeByte(31)
+      ..write(obj.createdAt)
+      ..writeByte(32)
+      ..write(obj.updatedAt)
+      ..writeByte(33)
+      ..write(obj.deletedAt)
+      ..writeByte(34)
+      ..write(obj.logo)
+      ..writeByte(35)
+      ..write(obj.cover)
+      ..writeByte(36)
+      ..write(obj.referralLink)
+      ..writeByte(37)
+      ..write(obj.isOnline)
+      ..writeByte(38)
+      ..write(obj.media);
+  }
+
+  @override
+  int get hashCode => typeId.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is UserAdapter &&
+          runtimeType == other.runtimeType &&
+          typeId == other.typeId;
+}
+
+// **************************************************************************
 // JsonSerializableGenerator
 // **************************************************************************
 

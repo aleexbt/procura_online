@@ -3,6 +3,91 @@
 part of 'order_model.dart';
 
 // **************************************************************************
+// TypeAdapterGenerator
+// **************************************************************************
+
+class OrderAdapter extends TypeAdapter<Order> {
+  @override
+  final int typeId = 3;
+
+  @override
+  Order read(BinaryReader reader) {
+    final numOfFields = reader.readByte();
+    final fields = <int, dynamic>{
+      for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
+    };
+    return Order(
+      id: fields[0] as int,
+      userId: fields[1] as String,
+      make: fields[2] as String,
+      model: fields[3] as String,
+      year: fields[4] as String,
+      noteText: fields[5] as String,
+      numberOfDoors: fields[6] as String,
+      fuelType: fields[7] as String,
+      engineDisplacement: fields[8] as String,
+      mpn: fields[9] as String,
+      userInfo: fields[10] as User,
+      makeLogoUrl: fields[11] as String,
+      mediaCount: fields[12] as String,
+      seen: fields[14] as bool,
+      humanReadDate: fields[15] as String,
+      sold: fields[16] as dynamic,
+    )..media = (fields[13] as List)?.cast<OrderMedia>();
+  }
+
+  @override
+  void write(BinaryWriter writer, Order obj) {
+    writer
+      ..writeByte(17)
+      ..writeByte(0)
+      ..write(obj.id)
+      ..writeByte(1)
+      ..write(obj.userId)
+      ..writeByte(2)
+      ..write(obj.make)
+      ..writeByte(3)
+      ..write(obj.model)
+      ..writeByte(4)
+      ..write(obj.year)
+      ..writeByte(5)
+      ..write(obj.noteText)
+      ..writeByte(6)
+      ..write(obj.numberOfDoors)
+      ..writeByte(7)
+      ..write(obj.fuelType)
+      ..writeByte(8)
+      ..write(obj.engineDisplacement)
+      ..writeByte(9)
+      ..write(obj.mpn)
+      ..writeByte(10)
+      ..write(obj.userInfo)
+      ..writeByte(11)
+      ..write(obj.makeLogoUrl)
+      ..writeByte(12)
+      ..write(obj.mediaCount)
+      ..writeByte(13)
+      ..write(obj.media)
+      ..writeByte(14)
+      ..write(obj.seen)
+      ..writeByte(15)
+      ..write(obj.humanReadDate)
+      ..writeByte(16)
+      ..write(obj.sold);
+  }
+
+  @override
+  int get hashCode => typeId.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is OrderAdapter &&
+          runtimeType == other.runtimeType &&
+          typeId == other.typeId;
+}
+
+// **************************************************************************
 // JsonSerializableGenerator
 // **************************************************************************
 

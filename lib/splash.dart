@@ -2,22 +2,32 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
-import 'package:procura_online/utils/prefs.dart';
+import 'package:hive/hive.dart';
+import 'package:procura_online/utils/hive_adapters.dart';
+import 'package:procura_online/utils/push_notification.dart';
 
-class SplashScreen extends StatelessWidget {
-  void init(BuildContext context) async {
-    await precachePicture(
-        SvgPicture.asset('assets/images/by_my_car.svg').pictureProvider,
-        context);
-    await precachePicture(
-        SvgPicture.asset('assets/images/not_found_towing.svg').pictureProvider,
-        context);
-    await precachePicture(
-        SvgPicture.asset('assets/images/success_ad.svg').pictureProvider,
-        context);
+class SplashScreen extends StatefulWidget {
+  @override
+  _SplashScreenState createState() => _SplashScreenState();
+}
 
+class _SplashScreenState extends State<SplashScreen> {
+  @override
+  void initState() {
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light.copyWith(
+      statusBarColor: Colors.blue,
+    ));
+    init();
+    super.initState();
+  }
+
+  void init() async {
+    HiveAdapters.register();
+    await PushNotificationsManager().init();
+    Box prefsBox = await Hive.openBox('prefs');
+    cacheAssets();
     await Future.delayed(Duration(seconds: 1));
-    bool showIntro = Prefs.getBool('showIntro') ?? true;
+    bool showIntro = prefsBox.get('showIntro') ?? true;
     if (showIntro) {
       Get.offNamed('/intro');
     } else {
@@ -25,12 +35,20 @@ class SplashScreen extends StatelessWidget {
     }
   }
 
+  void cacheAssets() async {
+    await precachePicture(
+        SvgPicture.asset('assets/images/by_my_car.svg').pictureProvider,
+        Get.context);
+    await precachePicture(
+        SvgPicture.asset('assets/images/not_found_towing.svg').pictureProvider,
+        Get.context);
+    await precachePicture(
+        SvgPicture.asset('assets/images/success_ad.svg').pictureProvider,
+        Get.context);
+  }
+
   @override
   Widget build(BuildContext context) {
-    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light.copyWith(
-      statusBarColor: Colors.blue,
-    ));
-    init(context);
     return Scaffold(
       body: Container(
         constraints: BoxConstraints(

@@ -79,12 +79,13 @@ class HomeController extends GetxController with StateMixin<Listing> {
     _isLoading.value = !skipLoading;
     _hasError.value = false;
     _page.value = 1;
-    print(_categoryValue.value);
     try {
-      Listing response = await _productRepository.findAll(category: _categoryValue.value, page: page);
+      Listing response = await _productRepository.findAll(
+          category: _categoryValue.value, page: page);
       _results.value = response;
 
-      Iterable<Product> featured = response.products.where((element) => element.featured == "1");
+      Iterable<Product> featured =
+          response.products.where((element) => element.featured == "1");
       _featured.assignAll(featured);
     } on DioError catch (err) {
       print(err);
@@ -120,18 +121,23 @@ class HomeController extends GetxController with StateMixin<Listing> {
     _loadingMoreError.value = false;
     try {
       _page.value = _page.value + 1;
-      Listing response = await _productRepository.findAll(category: _categoryValue.value, page: page);
+      Listing response = await _productRepository.findAll(
+          category: _categoryValue.value, page: page);
       _results.update((val) {
         val.products.addAll(response.products);
       });
     } on DioError catch (err) {
       _loadingMoreError.value = true;
       Get.rawSnackbar(
-          message: 'Ops, error getting more items.', backgroundColor: Colors.red, duration: Duration(seconds: 3));
+          message: 'Ops, error getting more items.',
+          backgroundColor: Colors.red,
+          duration: Duration(seconds: 3));
     } catch (err) {
       _loadingMoreError.value = true;
       Get.rawSnackbar(
-          message: 'Ops, error getting more items.', backgroundColor: Colors.red, duration: Duration(seconds: 3));
+          message: 'Ops, error getting more items.',
+          backgroundColor: Colors.red,
+          duration: Duration(seconds: 3));
     } finally {
       _isLoadingMore.value = false;
     }
@@ -143,18 +149,23 @@ class HomeController extends GetxController with StateMixin<Listing> {
     _loadingMoreError.value = false;
     try {
       _page.value = _page.value + 1;
-      Listing response = await _productRepository.productSearch(_categoryValue.value, _searchTerm.value, page: page);
+      Listing response = await _productRepository
+          .productSearch(_categoryValue.value, _searchTerm.value, page: page);
       _results.update((val) {
         val.products.addAll(response.products);
       });
     } on DioError catch (err) {
       _loadingMoreError.value = true;
       Get.rawSnackbar(
-          message: 'Ops, error getting more items.', backgroundColor: Colors.red, duration: Duration(seconds: 3));
+          message: 'Ops, error getting more items.',
+          backgroundColor: Colors.red,
+          duration: Duration(seconds: 3));
     } catch (err) {
       _loadingMoreError.value = true;
       Get.rawSnackbar(
-          message: 'Ops, error getting more items.', backgroundColor: Colors.red, duration: Duration(seconds: 3));
+          message: 'Ops, error getting more items.',
+          backgroundColor: Colors.red,
+          duration: Duration(seconds: 3));
     } finally {
       _isLoadingMore.value = false;
     }
@@ -166,7 +177,9 @@ class HomeController extends GetxController with StateMixin<Listing> {
     _isLoading.value = !skipLoading;
     _hasError.value = false;
     try {
-      if (_searchTerm.value.isNullOrBlank && selectedBrand.value.isNullOrBlank && selectedModel.value.isNullOrBlank) {
+      if (_searchTerm.value.isNullOrBlank &&
+          selectedBrand.value.isNullOrBlank &&
+          selectedModel.value.isNullOrBlank) {
         _isSearch.value = false;
         Listing response = await _productRepository.findAll(page: page);
         _results.value = response;

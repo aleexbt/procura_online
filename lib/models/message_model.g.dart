@@ -3,6 +3,80 @@
 part of 'message_model.dart';
 
 // **************************************************************************
+// TypeAdapterGenerator
+// **************************************************************************
+
+class MessageAdapter extends TypeAdapter<Message> {
+  @override
+  final int typeId = 1;
+
+  @override
+  Message read(BinaryReader reader) {
+    final numOfFields = reader.readByte();
+    final fields = <int, dynamic>{
+      for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
+    };
+    return Message(
+      id: fields[0] as int,
+      userId: fields[1] as dynamic,
+      message: fields[2] as String,
+      isSeen: fields[3] as dynamic,
+      deletedFromSender: fields[4] as String,
+      deletedFromReceiver: fields[5] as String,
+      conversationId: fields[6] as dynamic,
+      humanReadDate: fields[7] as String,
+      daysSectionDate: fields[8] as String,
+      sender: fields[9] as User,
+      hasAttachments: fields[10] as dynamic,
+      media: (fields[11] as List)?.cast<OrderMedia>(),
+      media2: (fields[12] as List)?.cast<OrderMedia>(),
+    );
+  }
+
+  @override
+  void write(BinaryWriter writer, Message obj) {
+    writer
+      ..writeByte(13)
+      ..writeByte(0)
+      ..write(obj.id)
+      ..writeByte(1)
+      ..write(obj.userId)
+      ..writeByte(2)
+      ..write(obj.message)
+      ..writeByte(3)
+      ..write(obj.isSeen)
+      ..writeByte(4)
+      ..write(obj.deletedFromSender)
+      ..writeByte(5)
+      ..write(obj.deletedFromReceiver)
+      ..writeByte(6)
+      ..write(obj.conversationId)
+      ..writeByte(7)
+      ..write(obj.humanReadDate)
+      ..writeByte(8)
+      ..write(obj.daysSectionDate)
+      ..writeByte(9)
+      ..write(obj.sender)
+      ..writeByte(10)
+      ..write(obj.hasAttachments)
+      ..writeByte(11)
+      ..write(obj.media)
+      ..writeByte(12)
+      ..write(obj.media2);
+  }
+
+  @override
+  int get hashCode => typeId.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is MessageAdapter &&
+          runtimeType == other.runtimeType &&
+          typeId == other.typeId;
+}
+
+// **************************************************************************
 // JsonSerializableGenerator
 // **************************************************************************
 

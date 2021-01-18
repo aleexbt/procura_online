@@ -670,6 +670,9 @@ class _EditAdScreenState extends State<EditAdScreen> {
                           GradientButton(
                             text: 'Save modifications',
                             onPressed: () {
+                              print(_.selectedColor.value);
+                              print(_.selectedFuel.value);
+                              print(_.selectedCondition.value);
                               setState(() => submitted = true);
                               if (_formKey.currentState.validate() &&
                                   _.selectedCategory.value.isNotEmpty &&

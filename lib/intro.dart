@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:hive/hive.dart';
 import 'package:introduction_screen/introduction_screen.dart';
-import 'package:procura_online/utils/prefs.dart';
 
 class OnBoardingPage extends StatefulWidget {
   @override
@@ -12,8 +12,9 @@ class OnBoardingPage extends StatefulWidget {
 class _OnBoardingPageState extends State<OnBoardingPage> {
   final introKey = GlobalKey<IntroductionScreenState>();
 
-  void _onIntroEnd(context) {
-    Prefs.setBool('showIntro', false);
+  void _onIntroEnd(context) async {
+    Box prefsBox = await Hive.openBox('prefs');
+    prefsBox.put('showIntro', false);
     Get.offNamed('/app');
   }
 

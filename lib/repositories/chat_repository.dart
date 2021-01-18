@@ -1,9 +1,9 @@
 import 'package:dio/dio.dart';
 import 'package:dio_http_cache/dio_http_cache.dart';
+import 'package:hive/hive.dart';
 import 'package:procura_online/models/chats_model.dart';
 import 'package:procura_online/models/message_model.dart';
 import 'package:procura_online/models/new_conversation_model.dart';
-import 'package:procura_online/utils/prefs.dart';
 
 BaseOptions options = BaseOptions(
   connectTimeout: 10000,
@@ -17,43 +17,53 @@ final _dioCacheManager = DioCacheManager(CacheConfig());
 
 class ChatRepository {
   Future<Chats> findAll({int page = 1}) async {
-    String token = Prefs.getString('token') ?? null;
+    Box authBox = await Hive.openBox('auth');
+    String token = authBox.get('token') ?? null;
     _dio.options.headers["Authorization"] = 'Bearer $token';
-    Response response = await _dio.get('/api/v1/conversation', queryParameters: {"page": "$page"});
+    Response response = await _dio
+        .get('/api/v1/conversation', queryParameters: {"page": "$page"});
     return Chats.fromJson(response.data);
   }
 
   Future<NewConversationModel> findOne(String chatId) async {
-    String token = Prefs.getString('token') ?? null;
+    Box authBox = await Hive.openBox('auth');
+    String token = authBox.get('token') ?? null;
     _dio.options.headers["Authorization"] = 'Bearer $token';
     Response response = await _dio.get('/api/v1/conversation/$chatId');
     return NewConversationModel.fromJson(response.data['data']);
   }
 
   Future<Message> replyMessage(Map<String, dynamic> data) async {
-    String token = Prefs.getString('token') ?? null;
+    Box authBox = await Hive.openBox('auth');
+    String token = authBox.get('token') ?? null;
     _dio.options.headers["Authorization"] = 'Bearer $token';
-    Response response = await _dio.post('/api/v1/conversation/send', data: data);
+    Response response =
+        await _dio.post('/api/v1/conversation/send', data: data);
     return Message.fromJson(response.data['data']);
   }
 
-  void markMessageAsRead(String chatId) {
-    String token = Prefs.getString('token') ?? null;
+  void markMessageAsRead(String chatId) async {
+    Box authBox = await Hive.openBox('auth');
+    String token = authBox.get('token') ?? null;
     _dio.options.headers["Authorization"] = 'Bearer $token';
     _dio.post('/api/v1/conversation/$chatId/seen');
   }
 
   Future muteConversation(String conversationId) async {
-    String token = Prefs.getString('token') ?? null;
+    Box authBox = await Hive.openBox('auth');
+    String token = authBox.get('token') ?? null;
     _dio.options.headers["Authorization"] = 'Bearer $token';
-    Response response = await _dio.post('/api/v1/conversation/$conversationId/mute');
+    Response response =
+        await _dio.post('/api/v1/conversation/$conversationId/mute');
     return response.data;
   }
 
   Future deleteConversation(String conversationId) async {
-    String token = Prefs.getString('token') ?? null;
+    Box authBox = await Hive.openBox('auth');
+    String token = authBox.get('token') ?? null;
     _dio.options.headers["Authorization"] = 'Bearer $token';
-    Response response = await _dio.delete('/api/v1/conversation/$conversationId');
+    Response response =
+        await _dio.delete('/api/v1/conversation/$conversationId');
     return response.data;
   }
 }

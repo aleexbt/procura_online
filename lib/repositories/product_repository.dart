@@ -2,9 +2,9 @@ import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:dio_http_cache/dio_http_cache.dart';
+import 'package:hive/hive.dart';
 import 'package:procura_online/models/listing_model.dart';
 import 'package:procura_online/models/product_model.dart';
-import 'package:procura_online/utils/prefs.dart';
 import 'package:uuid/uuid.dart';
 
 BaseOptions options = BaseOptions(
@@ -53,7 +53,8 @@ class ProductRepository {
     String category,
     String subcategory,
   }) async {
-    String token = Prefs.getString('token') ?? null;
+    Box authBox = await Hive.openBox('auth');
+    String token = authBox.get('token') ?? null;
     Uuid uuid = Uuid();
     MultipartFile mainPhoto;
     List<MultipartFile> photosList = List<MultipartFile>();
@@ -121,7 +122,8 @@ class ProductRepository {
     String category,
     String subcategory,
   }) async {
-    String token = Prefs.getString('token') ?? null;
+    Box authBox = await Hive.openBox('auth');
+    String token = authBox.get('token') ?? null;
     Uuid uuid = Uuid();
     MultipartFile mainPhoto;
     List<MultipartFile> photosList = List<MultipartFile>();
@@ -186,10 +188,10 @@ class ProductRepository {
   }
 
   Future<bool> delete(String productId) async {
-    String token = Prefs.getString('token') ?? null;
+    Box authBox = await Hive.openBox('auth');
+    String token = authBox.get('token') ?? null;
     _dio.options.headers["Authorization"] = 'Bearer $token';
     Response response = await _dio.delete('/api/v1/listings/$productId');
-    print('delete product: ${response.request.uri}');
     return response.data['result'];
   }
 }

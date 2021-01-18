@@ -26,7 +26,6 @@ class VehicleRepository {
 
   Future<List<String>> getModels(String model) async {
     Response response = await _dio.get('/api/v1/vehicle/makes/$model');
-    print(response.request.uri);
     if (response.statusCode == 200) {
       return List<String>.from(response.data);
     } else {

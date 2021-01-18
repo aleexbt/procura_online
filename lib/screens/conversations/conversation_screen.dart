@@ -101,7 +101,8 @@ class _ConversationScreenState extends State<ConversationScreen> {
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10),
                         ),
-                        onTap: (_) => _conversationController.muteConversation(),
+                        onTap: (_) =>
+                            _conversationController.muteConversation(),
                       ),
                       Divider(),
                       ListTileMoreCustomizable(
@@ -120,7 +121,8 @@ class _ConversationScreenState extends State<ConversationScreen> {
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10),
                         ),
-                        onTap: (_) => _conversationController.deleteConversation(),
+                        onTap: (_) =>
+                            _conversationController.deleteConversation(),
                       ),
                     ],
                   ),
@@ -128,7 +130,8 @@ class _ConversationScreenState extends State<ConversationScreen> {
               ),
               backgroundColor: Colors.white,
               shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.only(topLeft: Radius.circular(8), topRight: Radius.circular(8)),
+                borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(8), topRight: Radius.circular(8)),
               ),
             ),
           ),
@@ -183,9 +186,12 @@ class _ConversationScreenState extends State<ConversationScreen> {
                                       height: 70,
                                       child: ClipOval(
                                         child: OctoImage(
-                                          image: CachedNetworkImageProvider(order.makeLogoUrl),
-                                          placeholderBuilder: OctoPlaceholder.circularProgressIndicator(),
-                                          errorBuilder: OctoError.icon(color: Colors.grey[400]),
+                                          image: CachedNetworkImageProvider(
+                                              order.makeLogoUrl),
+                                          placeholderBuilder: OctoPlaceholder
+                                              .circularProgressIndicator(),
+                                          errorBuilder: OctoError.icon(
+                                              color: Colors.grey[400]),
                                           fit: BoxFit.cover,
                                         ),
                                       ),
@@ -193,7 +199,8 @@ class _ConversationScreenState extends State<ConversationScreen> {
                                     SizedBox(width: 10),
                                     Expanded(
                                       child: Column(
-                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
                                         children: [
                                           Text(
                                             '${order.make} ${order.model} ${order.year}',
@@ -207,7 +214,8 @@ class _ConversationScreenState extends State<ConversationScreen> {
                                           Divider(),
                                           Text('Model: ${order.model}'),
                                           Divider(),
-                                          Text('Number of Doors: ${order.numberOfDoors}'),
+                                          Text(
+                                              'Number of Doors: ${order.numberOfDoors}'),
                                           Divider(),
                                           Text('Fuel Type: ${order.fuelType}'),
                                           Divider(),
@@ -215,32 +223,47 @@ class _ConversationScreenState extends State<ConversationScreen> {
                                           Visibility(
                                             visible: order.media.length > 0,
                                             child: Padding(
-                                              padding: const EdgeInsets.only(top: 5),
+                                              padding:
+                                                  const EdgeInsets.only(top: 5),
                                               child: SizedBox(
                                                 height: 40,
                                                 width: 40,
                                                 child: ListView.builder(
-                                                  scrollDirection: Axis.horizontal,
+                                                  scrollDirection:
+                                                      Axis.horizontal,
                                                   itemCount: order.media.length,
-                                                  itemBuilder: (context, index) {
+                                                  itemBuilder:
+                                                      (context, index) {
                                                     return Padding(
-                                                      padding: const EdgeInsets.only(right: 5),
+                                                      padding:
+                                                          const EdgeInsets.only(
+                                                              right: 5),
                                                       child: GestureDetector(
-                                                        onTap: () => Get.toNamed(
+                                                        onTap: () =>
+                                                            Get.toNamed(
                                                           '/show-photos',
                                                           arguments: {
-                                                            "photoId": "photo_$index",
-                                                            "photoUrl": "${order.media[index].image}",
+                                                            "photoId":
+                                                                "photo_$index",
+                                                            "photoUrl":
+                                                                "${order.media[index].image}",
                                                           },
                                                         ),
                                                         child: Hero(
                                                           tag: 'photo_$index',
                                                           child: OctoImage(
                                                             image: CachedNetworkImageProvider(
-                                                                order.media[index]?.thumb ?? ''),
+                                                                order.media[index]
+                                                                        ?.thumb ??
+                                                                    ''),
                                                             placeholderBuilder:
-                                                                OctoPlaceholder.circularProgressIndicator(),
-                                                            errorBuilder: OctoError.icon(color: Colors.grey[400]),
+                                                                OctoPlaceholder
+                                                                    .circularProgressIndicator(),
+                                                            errorBuilder:
+                                                                OctoError.icon(
+                                                                    color: Colors
+                                                                            .grey[
+                                                                        400]),
                                                             fit: BoxFit.cover,
                                                           ),
                                                         ),
@@ -266,7 +289,8 @@ class _ConversationScreenState extends State<ConversationScreen> {
                               itemCount: _.conversation.messages.length,
                               physics: NeverScrollableScrollPhysics(),
                               itemBuilder: (context, index) {
-                                WidgetsBinding.instance.addPostFrameCallback((_) => _scrollToBottom());
+                                WidgetsBinding.instance.addPostFrameCallback(
+                                    (_) => _scrollToBottom());
                                 var message = _.conversation.messages[index];
                                 return Bubble(
                                   id: message.id.toString(),
@@ -277,7 +301,9 @@ class _ConversationScreenState extends State<ConversationScreen> {
                                       : null,
                                   message: message.message,
                                   time: message.humanReadDate,
-                                  isMe: _userController.userData.id.toString() == message.userId.toString(),
+                                  isMe:
+                                      _userController.userData.id.toString() ==
+                                          message.userId.toString(),
                                 );
                               },
                             ),
@@ -302,8 +328,10 @@ class _ConversationScreenState extends State<ConversationScreen> {
                           Expanded(
                             child: Obx(
                               () => TextField(
-                                controller: _conversationController.messageInput.value,
-                                textCapitalization: TextCapitalization.sentences,
+                                controller:
+                                    _conversationController.messageInput.value,
+                                textCapitalization:
+                                    TextCapitalization.sentences,
                                 decoration: InputDecoration.collapsed(
                                   hintText: "Write your message",
                                 ),
@@ -317,7 +345,8 @@ class _ConversationScreenState extends State<ConversationScreen> {
                                     child: SizedBox(
                                       width: 20,
                                       height: 20,
-                                      child: CircularProgressIndicator(strokeWidth: 2.5),
+                                      child: CircularProgressIndicator(
+                                          strokeWidth: 2.5),
                                     ),
                                   )
                                 : IconButton(
