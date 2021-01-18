@@ -3,13 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hive/hive.dart';
 import 'package:procura_online/controllers/chat_controller.dart';
-import 'package:procura_online/database/database_helper.dart';
-import 'package:procura_online/database/messages.dart';
 import 'package:procura_online/models/message_model.dart';
 import 'package:procura_online/models/new_conversation_model.dart';
 import 'package:procura_online/repositories/chat_repository.dart';
 import 'package:procura_online/services/pusher_service.dart';
-// import 'package:procura_online/services/pusher_service.dart';
 
 class ConversationController extends GetxController {
   final String chatId = Get.parameters['id'];
@@ -49,26 +46,25 @@ class ConversationController extends GetxController {
   Rx<TextEditingController> messageInput = TextEditingController().obs;
 
   void restoreConversation() async {
-    Box<NewConversationModel> box =
-        await Hive.openBox<NewConversationModel>('conversations') ?? null;
+    Box<NewConversationModel> box = await Hive.openBox<NewConversationModel>('conversations') ?? null;
     if (box != null && box.get(chatId) != null) {
       _conversation.value = box.get(chatId);
       _isLoading.value = false;
-      pusherService.firePusher(
-          'private-conversation.$chatId', 'App\\Events\\ConversationEvent');
+      findOne(skipLoading: true);
+    } else {
+      findOne();
     }
-    findOne(skipLoading: true);
   }
 
   findOne({skipLoading = false}) async {
     _isLoading.value = !skipLoading;
     _hasError.value = false;
     try {
+      pusherService.firePusher('private-conversation.$chatId', 'App\\Events\\ConversationEvent');
       NewConversationModel response = await _chatRepository.findOne(chatId);
       _chatRepository.markMessageAsRead(chatId);
       _conversation.value = response;
-      Box<NewConversationModel> box =
-          await Hive.openBox<NewConversationModel>('conversations');
+      Box<NewConversationModel> box = await Hive.openBox<NewConversationModel>('conversations');
       box.put(chatId, response);
     } on DioError catch (err) {
       _hasError.value = true;
@@ -82,37 +78,26 @@ class ConversationController extends GetxController {
   }
 
   void replyMessage({String message, String orderId, String chatId}) async {
-    if (message.isNullOrBlank) {
+    if (message.isBlank) {
       return;
     }
     _isReplying.value = true;
     _replyingError.value = false;
     try {
-      Map<String, dynamic> data = {
-        "message": message,
-        "order_id": orderId,
-        "conversation_id": chatId ?? ""
-      };
+      Map<String, dynamic> data = {"message": message, "order_id": orderId, "conversation_id": chatId ?? ""};
       await _chatRepository.replyMessage(data);
-
-      // updateMessages();
     } on DioError catch (err) {
       _replyingError.value = true;
       Get.rawSnackbar(
-          message: 'Ops, something went wrong.',
-          backgroundColor: Colors.red,
-          duration: Duration(seconds: 3));
+          message: 'Ops, something went wrong.', backgroundColor: Colors.red, duration: Duration(seconds: 3));
     } catch (err) {
       _replyingError.value = true;
       print(err);
       Get.rawSnackbar(
-          message: 'Ops, something went wrong.',
-          backgroundColor: Colors.red,
-          duration: Duration(seconds: 3));
+          message: 'Ops, something went wrong.', backgroundColor: Colors.red, duration: Duration(seconds: 3));
     } finally {
       messageInput.value.clear();
-      messageInput.value.value =
-          TextEditingValue(selection: TextSelection.collapsed(offset: 0));
+      messageInput.value.value = TextEditingValue(selection: TextSelection.collapsed(offset: 0));
       _isReplying.value = false;
       _chatController.findAll();
     }
@@ -138,15 +123,11 @@ class ConversationController extends GetxController {
     } on DioError catch (err) {
       _deletingError.value = true;
       Get.rawSnackbar(
-          message: 'Ops, something went wrong.',
-          backgroundColor: Colors.red,
-          duration: Duration(seconds: 3));
+          message: 'Ops, something went wrong.', backgroundColor: Colors.red, duration: Duration(seconds: 3));
     } catch (err) {
       _deletingError.value = true;
       Get.rawSnackbar(
-          message: 'Ops, something went wrong.',
-          backgroundColor: Colors.red,
-          duration: Duration(seconds: 3));
+          message: 'Ops, something went wrong.', backgroundColor: Colors.red, duration: Duration(seconds: 3));
     } finally {
       _isDeleting.value = false;
     }
