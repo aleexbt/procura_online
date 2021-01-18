@@ -29,8 +29,8 @@ class _CreateOrderScreenState extends State<CreateOrderScreen> {
   }
 
   bool submitted = false;
-  List<File> images = List<File>();
-  List<String> imagesUrl = List<String>();
+  List<File> images = List<File>.empty(growable: true);
+  List<String> imagesUrl = List<String>.empty(growable: true);
 
   void selectImages() async {
     FilePickerResult result = await FilePicker.platform.pickFiles(

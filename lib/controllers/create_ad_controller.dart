@@ -41,10 +41,10 @@ class CreateAdController extends GetxController {
   Rx<TextEditingController> numberOfDoors = TextEditingController().obs;
   Rx<TextEditingController> price = TextEditingController().obs;
 
-  RxList<S2Choice<String>> _categories = List<S2Choice<String>>().obs;
-  RxList<S2Choice<String>> _subcategories = List<S2Choice<String>>().obs;
-  RxList<S2Choice<String>> _brands = List<S2Choice<String>>().obs;
-  RxList<S2Choice<String>> _models = List<S2Choice<String>>().obs;
+  RxList<S2Choice<String>> _categories = List<S2Choice<String>>.empty(growable: true).obs;
+  RxList<S2Choice<String>> _subcategories = List<S2Choice<String>>.empty(growable: true).obs;
+  RxList<S2Choice<String>> _brands = List<S2Choice<String>>.empty(growable: true).obs;
+  RxList<S2Choice<String>> _models = List<S2Choice<String>>.empty(growable: true).obs;
 
   List<S2Choice<String>> get categories => _categories;
   List<S2Choice<String>> get subcategories => _subcategories;
@@ -123,7 +123,7 @@ class CreateAdController extends GetxController {
     _isLoadingCategories.value = true;
     try {
       Map<String, dynamic> response = await _vehicleRepository.getCategories();
-      List<S2Choice<String>> catList = List<S2Choice<String>>();
+      List<S2Choice<String>> catList = List<S2Choice<String>>.empty(growable: true);
 
       if (response != null) {
         response.entries.forEach(
@@ -143,9 +143,8 @@ class CreateAdController extends GetxController {
   void getSubCategories(String catId) async {
     _isLoadingSubCategories.value = true;
     try {
-      Map<String, dynamic> response =
-          await _vehicleRepository.getSubCategories(catId);
-      List<S2Choice<String>> catList = List<S2Choice<String>>();
+      Map<String, dynamic> response = await _vehicleRepository.getSubCategories(catId);
+      List<S2Choice<String>> catList = List<S2Choice<String>>.empty(growable: true);
 
       if (response != null) {
         response.entries.forEach(
@@ -225,10 +224,7 @@ class CreateAdController extends GetxController {
         category: selectedCategory.value,
         subcategory: selectedSubCategory.value,
       );
-      successDialog(
-          title: 'Success',
-          message: 'Your ad has been published successfully.',
-          dismiss: () => Get.back());
+      successDialog(title: 'Success', message: 'Your ad has been published successfully.', dismiss: () => Get.back());
     } on DioError catch (err) {
       print(err);
       try {
@@ -253,8 +249,7 @@ class CreateAdController extends GetxController {
     }
   }
 
-  AwesomeDialog successDialog(
-      {String title, String message, Function dismiss}) {
+  AwesomeDialog successDialog({String title, String message, Function dismiss}) {
     return AwesomeDialog(
       dismissOnTouchOutside: false,
       dismissOnBackKeyPress: false,

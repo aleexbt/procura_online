@@ -1,5 +1,4 @@
 import 'package:json_annotation/json_annotation.dart';
-import 'package:procura_online/models/user_model.dart';
 
 import 'message_model.dart';
 import 'order_model.dart';

@@ -19,8 +19,7 @@ final _dioCacheManager = DioCacheManager(CacheConfig());
 
 class ProductRepository {
   Future<Listing> findAll({String category = 'listings', int page = 1}) async {
-    final Response response =
-        await _dio.get('/api/v1/$category', queryParameters: {"page": "$page"});
+    final Response response = await _dio.get('/api/v1/$category', queryParameters: {"page": "$page"});
     return Listing.fromJson(response.data);
   }
 
@@ -57,16 +56,14 @@ class ProductRepository {
     String token = authBox.get('token') ?? null;
     Uuid uuid = Uuid();
     MultipartFile mainPhoto;
-    List<MultipartFile> photosList = List<MultipartFile>();
+    List<MultipartFile> photosList = List<MultipartFile>.empty(growable: true);
 
     if (photos.length > 0) {
       for (File photo in photos) {
-        MultipartFile multipartFile = await MultipartFile.fromFile(photo.path,
-            filename: '${uuid.v4()}.jpg');
+        MultipartFile multipartFile = await MultipartFile.fromFile(photo.path, filename: '${uuid.v4()}.jpg');
         photosList.add(multipartFile);
       }
-      mainPhoto = await MultipartFile.fromFile(photos[0].path,
-          filename: '${uuid.v4()}.jpg');
+      mainPhoto = await MultipartFile.fromFile(photos[0].path, filename: '${uuid.v4()}.jpg');
     }
 
     FormData formData = FormData.fromMap({
@@ -93,8 +90,7 @@ class ProductRepository {
     });
 
     _dio.options.headers["Authorization"] = 'Bearer $token';
-    final Response response =
-        await _dio.post('/api/v1/listings', data: formData);
+    final Response response = await _dio.post('/api/v1/listings', data: formData);
     return Product.fromJson(response.data);
   }
 
@@ -126,16 +122,14 @@ class ProductRepository {
     String token = authBox.get('token') ?? null;
     Uuid uuid = Uuid();
     MultipartFile mainPhoto;
-    List<MultipartFile> photosList = List<MultipartFile>();
+    List<MultipartFile> photosList = List<MultipartFile>.empty(growable: true);
 
     if (photos.length > 0) {
       for (File photo in photos) {
-        MultipartFile multipartFile = await MultipartFile.fromFile(photo.path,
-            filename: '${uuid.v4()}.jpg');
+        MultipartFile multipartFile = await MultipartFile.fromFile(photo.path, filename: '${uuid.v4()}.jpg');
         photosList.add(multipartFile);
       }
-      mainPhoto = await MultipartFile.fromFile(photos[0].path,
-          filename: '${uuid.v4()}.jpg');
+      mainPhoto = await MultipartFile.fromFile(photos[0].path, filename: '${uuid.v4()}.jpg');
     }
 
     if (photosToRemove.length > 0) {
@@ -169,21 +163,14 @@ class ProductRepository {
     });
 
     _dio.options.headers["Authorization"] = 'Bearer $token';
-    final Response response =
-        await _dio.post('/api/v1/listings/$id?_method=PATCH', data: formData);
+    final Response response = await _dio.post('/api/v1/listings/$id?_method=PATCH', data: formData);
     return response.data;
   }
 
-  Future<Listing> productSearch(String category, String term,
-      {int page = 1, String brand, String model}) async {
+  Future<Listing> productSearch(String category, String term, {int page = 1, String brand, String model}) async {
     var cat = category == 'listings' ? 'vehicles' : category;
     final Response response = await _dio.get('/api/v1/search/$cat',
-        queryParameters: {
-          "search": "$term",
-          "makes[0]": "$brand",
-          "model": "$model",
-          "page": "$page"
-        });
+        queryParameters: {"search": "$term", "makes[0]": "$brand", "model": "$model", "page": "$page"});
     return Listing.fromJson(response.data);
   }
 

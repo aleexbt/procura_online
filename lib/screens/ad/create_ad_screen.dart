@@ -24,14 +24,13 @@ class _CreateAdScreenState extends State<CreateAdScreen> {
   initState() {
     var date = DateTime.parse(DateTime.now().toString());
     _createAdController.registeredDate.value = date.toString();
-    _createAdController.formattedRegisteredDate.value =
-        '${date.day}/${date.month}/${date.year}';
+    _createAdController.formattedRegisteredDate.value = '${date.day}/${date.month}/${date.year}';
     mainNode = FocusNode();
     super.initState();
   }
 
   bool submitted = false;
-  List<File> images = List<File>();
+  List<File> images = List<File>.empty(growable: true);
 
   void selectImages() async {
     FilePickerResult result = await FilePicker.platform.pickFiles(
@@ -66,8 +65,7 @@ class _CreateAdScreenState extends State<CreateAdScreen> {
     if (picked != null) {
       var date = DateTime.parse(picked.toString());
       _createAdController.registeredDate.value = date.toString();
-      _createAdController.formattedRegisteredDate.value =
-          '${date.day}/${date.month}/${date.year}';
+      _createAdController.formattedRegisteredDate.value = '${date.day}/${date.month}/${date.year}';
     }
   }
 
@@ -134,18 +132,15 @@ class _CreateAdScreenState extends State<CreateAdScreen> {
                             value: _.selectedCategory.value,
                             choiceItems: _.categories,
                             onChange: (state) => _.setCategory(state.value),
-                            hasError:
-                                _.selectedCategory.value.isEmpty && submitted,
+                            hasError: _.selectedCategory.value.isEmpty && submitted,
                           ),
                           Visibility(
-                            visible:
-                                _.selectedCategory.value.isEmpty && submitted,
+                            visible: _.selectedCategory.value.isEmpty && submitted,
                             child: Padding(
                               padding: const EdgeInsets.only(left: 12, top: 5),
                               child: Text(
                                 'Please select a category',
-                                style:
-                                    TextStyle(color: Colors.red, fontSize: 12),
+                                style: TextStyle(color: Colors.red, fontSize: 12),
                               ),
                             ),
                           ),
@@ -165,18 +160,15 @@ class _CreateAdScreenState extends State<CreateAdScreen> {
                             value: _.selectedSubCategory.value,
                             choiceItems: _.subcategories,
                             onChange: (state) => _.setSubCategory(state.value),
-                            hasError: _.selectedSubCategory.value.isEmpty &&
-                                submitted,
+                            hasError: _.selectedSubCategory.value.isEmpty && submitted,
                           ),
                           Visibility(
-                            visible: _.selectedSubCategory.value.isEmpty &&
-                                submitted,
+                            visible: _.selectedSubCategory.value.isEmpty && submitted,
                             child: Padding(
                               padding: const EdgeInsets.only(left: 12, top: 5),
                               child: Text(
                                 'Please select a subcategory',
-                                style:
-                                    TextStyle(color: Colors.red, fontSize: 12),
+                                style: TextStyle(color: Colors.red, fontSize: 12),
                               ),
                             ),
                           ),
@@ -236,8 +228,7 @@ class _CreateAdScreenState extends State<CreateAdScreen> {
                             value: _.selectedBrand.value,
                             choiceItems: _.brands,
                             onChange: (state) => _.setBrand(state.value),
-                            hasError:
-                                _.selectedBrand.value.isEmpty && submitted,
+                            hasError: _.selectedBrand.value.isEmpty && submitted,
                           ),
                           Visibility(
                             visible: _.selectedBrand.value.isEmpty && submitted,
@@ -245,8 +236,7 @@ class _CreateAdScreenState extends State<CreateAdScreen> {
                               padding: const EdgeInsets.only(left: 12, top: 5),
                               child: Text(
                                 'Please select a brand',
-                                style:
-                                    TextStyle(color: Colors.red, fontSize: 12),
+                                style: TextStyle(color: Colors.red, fontSize: 12),
                               ),
                             ),
                           ),
@@ -268,8 +258,7 @@ class _CreateAdScreenState extends State<CreateAdScreen> {
                             value: _.selectedModel.value,
                             choiceItems: _.models,
                             onChange: (state) => _.setModel(state.value),
-                            hasError:
-                                _.selectedModel.value.isEmpty && submitted,
+                            hasError: _.selectedModel.value.isEmpty && submitted,
                           ),
                           Visibility(
                             visible: _.selectedModel.value.isEmpty && submitted,
@@ -277,8 +266,7 @@ class _CreateAdScreenState extends State<CreateAdScreen> {
                               padding: const EdgeInsets.only(left: 12, top: 5),
                               child: Text(
                                 'Please select a model',
-                                style:
-                                    TextStyle(color: Colors.red, fontSize: 12),
+                                style: TextStyle(color: Colors.red, fontSize: 12),
                               ),
                             ),
                           ),
@@ -316,8 +304,7 @@ class _CreateAdScreenState extends State<CreateAdScreen> {
                             value: _.selectedColor.value,
                             choiceItems: _.colorOptions,
                             onChange: (state) => _.setColor(state.value),
-                            hasError:
-                                _.selectedColor.value.isEmpty && submitted,
+                            hasError: _.selectedColor.value.isEmpty && submitted,
                           ),
                           Visibility(
                             visible: _.selectedColor.value.isEmpty && submitted,
@@ -325,8 +312,7 @@ class _CreateAdScreenState extends State<CreateAdScreen> {
                               padding: const EdgeInsets.only(left: 12, top: 5),
                               child: Text(
                                 'Please select a color',
-                                style:
-                                    TextStyle(color: Colors.red, fontSize: 12),
+                                style: TextStyle(color: Colors.red, fontSize: 12),
                               ),
                             ),
                           ),
@@ -382,18 +368,15 @@ class _CreateAdScreenState extends State<CreateAdScreen> {
                             value: _.selectedTransmission.value,
                             choiceItems: _.transmissionOptions,
                             onChange: (state) => _.setTransmission(state.value),
-                            hasError: _.selectedTransmission.value.isEmpty &&
-                                submitted,
+                            hasError: _.selectedTransmission.value.isEmpty && submitted,
                           ),
                           Visibility(
-                            visible: _.selectedTransmission.value.isEmpty &&
-                                submitted,
+                            visible: _.selectedTransmission.value.isEmpty && submitted,
                             child: Padding(
                               padding: const EdgeInsets.only(left: 12, top: 5),
                               child: Text(
                                 'Please select a transmission type',
-                                style:
-                                    TextStyle(color: Colors.red, fontSize: 12),
+                                style: TextStyle(color: Colors.red, fontSize: 12),
                               ),
                             ),
                           ),
@@ -478,8 +461,7 @@ class _CreateAdScreenState extends State<CreateAdScreen> {
                               padding: const EdgeInsets.only(left: 12, top: 5),
                               child: Text(
                                 'Please select a fuel type',
-                                style:
-                                    TextStyle(color: Colors.red, fontSize: 12),
+                                style: TextStyle(color: Colors.red, fontSize: 12),
                               ),
                             ),
                           ),
@@ -497,18 +479,15 @@ class _CreateAdScreenState extends State<CreateAdScreen> {
                             value: _.selectedCondition.value,
                             choiceItems: _.conditionOptions,
                             onChange: (state) => _.setCondition(state.value),
-                            hasError:
-                                _.selectedCondition.value.isEmpty && submitted,
+                            hasError: _.selectedCondition.value.isEmpty && submitted,
                           ),
                           Visibility(
-                            visible:
-                                _.selectedCondition.value.isEmpty && submitted,
+                            visible: _.selectedCondition.value.isEmpty && submitted,
                             child: Padding(
                               padding: const EdgeInsets.only(left: 12, top: 5),
                               child: Text(
                                 'Please select a condition',
-                                style:
-                                    TextStyle(color: Colors.red, fontSize: 12),
+                                style: TextStyle(color: Colors.red, fontSize: 12),
                               ),
                             ),
                           ),
@@ -546,18 +525,15 @@ class _CreateAdScreenState extends State<CreateAdScreen> {
                             value: _.selectedNegotiable.value,
                             choiceItems: _.negotiableOptions,
                             onChange: (state) => _.setNegotiable(state.value),
-                            hasError:
-                                _.selectedNegotiable.value.isEmpty && submitted,
+                            hasError: _.selectedNegotiable.value.isEmpty && submitted,
                           ),
                           Visibility(
-                            visible:
-                                _.selectedNegotiable.value.isEmpty && submitted,
+                            visible: _.selectedNegotiable.value.isEmpty && submitted,
                             child: Padding(
                               padding: const EdgeInsets.only(left: 12, top: 5),
                               child: Text(
                                 'Please select if is negotiable',
-                                style:
-                                    TextStyle(color: Colors.red, fontSize: 12),
+                                style: TextStyle(color: Colors.red, fontSize: 12),
                               ),
                             ),
                           ),
@@ -585,11 +561,8 @@ class _CreateAdScreenState extends State<CreateAdScreen> {
                                             minuteInterval: 1,
                                             mode: CupertinoDatePickerMode.date,
                                             onDateTimeChanged: (DateTime date) {
-                                              _createAdController.registeredDate
-                                                  .value = date.toString();
-                                              _createAdController
-                                                      .formattedRegisteredDate
-                                                      .value =
+                                              _createAdController.registeredDate.value = date.toString();
+                                              _createAdController.formattedRegisteredDate.value =
                                                   '${date.day}/${date.month}/${date.year}';
                                             },
                                           ),
@@ -600,8 +573,7 @@ class _CreateAdScreenState extends State<CreateAdScreen> {
                             child: CustomTextInput(
                               enabled: false,
                               fillColor: Colors.grey[200],
-                              hintText:
-                                  _.formattedRegisteredDate.value.toString(),
+                              hintText: _.formattedRegisteredDate.value.toString(),
                               keyboardType: TextInputType.number,
                               suffixIcon: Icon(Icons.date_range),
                               maxLength: 8,

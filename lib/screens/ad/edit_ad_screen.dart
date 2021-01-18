@@ -28,8 +28,7 @@ class _EditAdScreenState extends State<EditAdScreen> {
 
   @override
   initState() {
-    if (_editAdController.product?.photos?.original != null &&
-        _editAdController.product.photos.original.length > 0) {
+    if (_editAdController.product?.photos?.original != null && _editAdController.product.photos.original.length > 0) {
       networkImages = Map.from(_editAdController.product?.photos?.original);
     }
     mainNode = FocusNode();
@@ -38,9 +37,9 @@ class _EditAdScreenState extends State<EditAdScreen> {
 
   bool submitted = false;
 
-  List<File> images = List<File>();
+  List<File> images = List<File>.empty(growable: true);
   Map<String, dynamic> networkImages;
-  List<String> imagesToRemove = List<String>();
+  List<String> imagesToRemove = List<String>.empty(growable: true);
 
   void selectImages() async {
     FilePickerResult result = await FilePicker.platform.pickFiles(
@@ -75,8 +74,7 @@ class _EditAdScreenState extends State<EditAdScreen> {
     if (picked != null) {
       var date = DateTime.parse(picked.toString());
       _editAdController.registeredDate.value = date.toString();
-      _editAdController.formattedRegisteredDate.value =
-          '${date.day}/${date.month}/${date.year}';
+      _editAdController.formattedRegisteredDate.value = '${date.day}/${date.month}/${date.year}';
     }
   }
 
@@ -141,8 +139,7 @@ class _EditAdScreenState extends State<EditAdScreen> {
               ),
               backgroundColor: Colors.white,
               shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(8), topRight: Radius.circular(8)),
+                borderRadius: BorderRadius.only(topLeft: Radius.circular(8), topRight: Radius.circular(8)),
               ),
             ),
           ),
@@ -186,18 +183,15 @@ class _EditAdScreenState extends State<EditAdScreen> {
                             value: _.selectedCategory.value,
                             choiceItems: _.categories,
                             onChange: (state) => _.setCategory(state.value),
-                            hasError:
-                                _.selectedCategory.value.isEmpty && submitted,
+                            hasError: _.selectedCategory.value.isEmpty && submitted,
                           ),
                           Visibility(
-                            visible:
-                                _.selectedCategory.value.isEmpty && submitted,
+                            visible: _.selectedCategory.value.isEmpty && submitted,
                             child: Padding(
                               padding: const EdgeInsets.only(left: 12, top: 5),
                               child: Text(
                                 'Please select a category',
-                                style:
-                                    TextStyle(color: Colors.red, fontSize: 12),
+                                style: TextStyle(color: Colors.red, fontSize: 12),
                               ),
                             ),
                           ),
@@ -217,18 +211,15 @@ class _EditAdScreenState extends State<EditAdScreen> {
                             value: _.selectedSubCategory.value,
                             choiceItems: _.subcategories,
                             onChange: (state) => _.setSubCategory(state.value),
-                            hasError: _.selectedSubCategory.value.isEmpty &&
-                                submitted,
+                            hasError: _.selectedSubCategory.value.isEmpty && submitted,
                           ),
                           Visibility(
-                            visible: _.selectedSubCategory.value.isEmpty &&
-                                submitted,
+                            visible: _.selectedSubCategory.value.isEmpty && submitted,
                             child: Padding(
                               padding: const EdgeInsets.only(left: 12, top: 5),
                               child: Text(
                                 'Please select a subcategory',
-                                style:
-                                    TextStyle(color: Colors.red, fontSize: 12),
+                                style: TextStyle(color: Colors.red, fontSize: 12),
                               ),
                             ),
                           ),
@@ -288,18 +279,15 @@ class _EditAdScreenState extends State<EditAdScreen> {
                             value: _.selectedBrand.value,
                             choiceItems: _.brands,
                             onChange: (state) => _.setBrand(state.value),
-                            hasError: _.selectedBrand.value.isNullOrBlank &&
-                                submitted,
+                            hasError: _.selectedBrand.value.isBlank && submitted,
                           ),
                           Visibility(
-                            visible: _.selectedBrand.value.isNullOrBlank &&
-                                submitted,
+                            visible: _.selectedBrand.value.isBlank && submitted,
                             child: Padding(
                               padding: const EdgeInsets.only(left: 12, top: 5),
                               child: Text(
                                 'Please select a brand',
-                                style:
-                                    TextStyle(color: Colors.red, fontSize: 12),
+                                style: TextStyle(color: Colors.red, fontSize: 12),
                               ),
                             ),
                           ),
@@ -321,18 +309,15 @@ class _EditAdScreenState extends State<EditAdScreen> {
                             value: _.selectedModel.value,
                             choiceItems: _.models,
                             onChange: (state) => _.setModel(state.value),
-                            hasError: _.selectedModel.value.isNullOrBlank &&
-                                submitted,
+                            hasError: _.selectedModel.value.isBlank && submitted,
                           ),
                           Visibility(
-                            visible: _.selectedModel.value.isNullOrBlank &&
-                                submitted,
+                            visible: _.selectedModel.value.isBlank && submitted,
                             child: Padding(
                               padding: const EdgeInsets.only(left: 12, top: 5),
                               child: Text(
                                 'Please select a model',
-                                style:
-                                    TextStyle(color: Colors.red, fontSize: 12),
+                                style: TextStyle(color: Colors.red, fontSize: 12),
                               ),
                             ),
                           ),
@@ -370,18 +355,15 @@ class _EditAdScreenState extends State<EditAdScreen> {
                             value: _.selectedColor.value,
                             choiceItems: _.colorOptions,
                             onChange: (state) => _.setColor(state.value),
-                            hasError: _.selectedColor.value.isNullOrBlank &&
-                                submitted,
+                            hasError: _.selectedColor.value.isBlank && submitted,
                           ),
                           Visibility(
-                            visible: _.selectedColor.value.isNullOrBlank &&
-                                submitted,
+                            visible: _.selectedColor.value.isBlank && submitted,
                             child: Padding(
                               padding: const EdgeInsets.only(left: 12, top: 5),
                               child: Text(
                                 'Please select a color',
-                                style:
-                                    TextStyle(color: Colors.red, fontSize: 12),
+                                style: TextStyle(color: Colors.red, fontSize: 12),
                               ),
                             ),
                           ),
@@ -437,20 +419,15 @@ class _EditAdScreenState extends State<EditAdScreen> {
                             value: _.selectedTransmission.value,
                             choiceItems: _.transmissionOptions,
                             onChange: (state) => _.setTransmission(state.value),
-                            hasError:
-                                _.selectedTransmission.value.isNullOrBlank &&
-                                    submitted,
+                            hasError: _.selectedTransmission.value.isBlank && submitted,
                           ),
                           Visibility(
-                            visible:
-                                _.selectedTransmission.value.isNullOrBlank &&
-                                    submitted,
+                            visible: _.selectedTransmission.value.isBlank && submitted,
                             child: Padding(
                               padding: const EdgeInsets.only(left: 12, top: 5),
                               child: Text(
                                 'Please select a transmission type',
-                                style:
-                                    TextStyle(color: Colors.red, fontSize: 12),
+                                style: TextStyle(color: Colors.red, fontSize: 12),
                               ),
                             ),
                           ),
@@ -527,18 +504,15 @@ class _EditAdScreenState extends State<EditAdScreen> {
                             value: _.selectedFuel.value,
                             choiceItems: _.fuelOptions,
                             onChange: (state) => _.setFuel(state.value),
-                            hasError:
-                                _.selectedFuel.value.isNullOrBlank && submitted,
+                            hasError: _.selectedFuel.value.isBlank && submitted,
                           ),
                           Visibility(
-                            visible:
-                                _.selectedFuel.value.isNullOrBlank && submitted,
+                            visible: _.selectedFuel.value.isBlank && submitted,
                             child: Padding(
                               padding: const EdgeInsets.only(left: 12, top: 5),
                               child: Text(
                                 'Please select a fuel type',
-                                style:
-                                    TextStyle(color: Colors.red, fontSize: 12),
+                                style: TextStyle(color: Colors.red, fontSize: 12),
                               ),
                             ),
                           ),
@@ -556,18 +530,15 @@ class _EditAdScreenState extends State<EditAdScreen> {
                             value: _.selectedCondition.value,
                             choiceItems: _.conditionOptions,
                             onChange: (state) => _.setCondition(state.value),
-                            hasError: _.selectedCondition.value.isNullOrBlank &&
-                                submitted,
+                            hasError: _.selectedCondition.value.isBlank && submitted,
                           ),
                           Visibility(
-                            visible: _.selectedCondition.value.isNullOrBlank &&
-                                submitted,
+                            visible: _.selectedCondition.value.isBlank && submitted,
                             child: Padding(
                               padding: const EdgeInsets.only(left: 12, top: 5),
                               child: Text(
                                 'Please select a condition',
-                                style:
-                                    TextStyle(color: Colors.red, fontSize: 12),
+                                style: TextStyle(color: Colors.red, fontSize: 12),
                               ),
                             ),
                           ),
@@ -605,19 +576,15 @@ class _EditAdScreenState extends State<EditAdScreen> {
                             value: _.selectedNegotiable.value,
                             choiceItems: _.negotiableOptions,
                             onChange: (state) => _.setNegotiable(state.value),
-                            hasError:
-                                _.selectedNegotiable.value.isNullOrBlank &&
-                                    submitted,
+                            hasError: _.selectedNegotiable.value.isBlank && submitted,
                           ),
                           Visibility(
-                            visible: _.selectedNegotiable.value.isNullOrBlank &&
-                                submitted,
+                            visible: _.selectedNegotiable.value.isBlank && submitted,
                             child: Padding(
                               padding: const EdgeInsets.only(left: 12, top: 5),
                               child: Text(
                                 'Please select if is negotiable',
-                                style:
-                                    TextStyle(color: Colors.red, fontSize: 12),
+                                style: TextStyle(color: Colors.red, fontSize: 12),
                               ),
                             ),
                           ),
@@ -644,11 +611,8 @@ class _EditAdScreenState extends State<EditAdScreen> {
                                             minuteInterval: 1,
                                             mode: CupertinoDatePickerMode.date,
                                             onDateTimeChanged: (DateTime date) {
-                                              _editAdController.registeredDate
-                                                  .value = date.toString();
-                                              _editAdController
-                                                      .formattedRegisteredDate
-                                                      .value =
+                                              _editAdController.registeredDate.value = date.toString();
+                                              _editAdController.formattedRegisteredDate.value =
                                                   '${date.day}/${date.month}/${date.year}';
                                             },
                                           ),
@@ -659,8 +623,7 @@ class _EditAdScreenState extends State<EditAdScreen> {
                             child: CustomTextInput(
                               enabled: false,
                               fillColor: Colors.grey[200],
-                              hintText:
-                                  _.formattedRegisteredDate.value.toString(),
+                              hintText: _.formattedRegisteredDate.value.toString(),
                               keyboardType: TextInputType.number,
                               suffixIcon: Icon(Icons.date_range),
                               maxLength: 8,
@@ -685,9 +648,7 @@ class _EditAdScreenState extends State<EditAdScreen> {
                                   _.selectedCondition.value.isNotEmpty &&
                                   _.selectedNegotiable.value.isNotEmpty) {
                                 FocusScope.of(context).unfocus();
-                                _editAdController.edit(
-                                    photos: images,
-                                    photosToRemove: imagesToRemove);
+                                _editAdController.edit(photos: images, photosToRemove: imagesToRemove);
                               }
                             },
                           ),
@@ -736,12 +697,9 @@ class _EditAdScreenState extends State<EditAdScreen> {
                                   width: 250,
                                   height: 200,
                                   child: OctoImage(
-                                    image: CachedNetworkImageProvider(
-                                        networkImages.values.elementAt(index)),
-                                    placeholderBuilder: OctoPlaceholder
-                                        .circularProgressIndicator(),
-                                    errorBuilder:
-                                        OctoError.icon(color: Colors.grey[400]),
+                                    image: CachedNetworkImageProvider(networkImages.values.elementAt(index)),
+                                    placeholderBuilder: OctoPlaceholder.circularProgressIndicator(),
+                                    errorBuilder: OctoError.icon(color: Colors.grey[400]),
                                     fit: BoxFit.cover,
                                   ),
                                 ),
@@ -751,13 +709,9 @@ class _EditAdScreenState extends State<EditAdScreen> {
                                   child: GestureDetector(
                                     onTap: () {
                                       setState(() {
-                                        imagesToRemove.add(networkImages.keys
-                                            .elementAt(index));
+                                        imagesToRemove.add(networkImages.keys.elementAt(index));
                                         networkImages.removeWhere(
-                                            (key, value) =>
-                                                value ==
-                                                networkImages.values
-                                                    .elementAt(index));
+                                            (key, value) => value == networkImages.values.elementAt(index));
                                       });
                                     },
                                     child: Icon(
@@ -782,10 +736,7 @@ class _EditAdScreenState extends State<EditAdScreen> {
                         if (index == images.length) {
                           return count < 5
                               ? Padding(
-                                  padding: EdgeInsets.only(
-                                      left: count == 0
-                                          ? Get.size.width / 2 - 118
-                                          : 0),
+                                  padding: EdgeInsets.only(left: count == 0 ? Get.size.width / 2 - 118 : 0),
                                   child: GestureDetector(
                                     onTap: selectImages,
                                     behavior: HitTestBehavior.translucent,
@@ -798,8 +749,7 @@ class _EditAdScreenState extends State<EditAdScreen> {
                                       ),
                                       child: Center(
                                         child: Column(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
+                                          mainAxisAlignment: MainAxisAlignment.center,
                                           children: [
                                             Icon(
                                               Icons.camera_alt_outlined,
@@ -841,8 +791,7 @@ class _EditAdScreenState extends State<EditAdScreen> {
                                           images.removeAt(index);
                                         });
                                       },
-                                      child: Icon(Icons.delete,
-                                          color: Colors.red)),
+                                      child: Icon(Icons.delete, color: Colors.red)),
                                 ),
                               ],
                             ),

@@ -7,7 +7,7 @@ class OrdersModel {
 
   OrdersModel.fromJson(Map<String, dynamic> json) {
     if (json['data'] != null) {
-      order = new List<Order>();
+      order = new List<Order>.empty(growable: true);
       json['data'].forEach((v) {
         order.add(new Order.fromJson(v));
       });
@@ -92,7 +92,7 @@ class Order {
     //   });
     // }
     if (json['media'] != null) {
-      media = new List<Media>();
+      media = new List<Media>.empty(growable: true);
       json['media'].forEach((v) {
         media.add(new Media.fromJson(v));
       });
@@ -124,7 +124,7 @@ class Order {
     //       this.conversations.map((v) => v.toJson()).toList();
     // }
     if (data['media'] != null) {
-      media = new List<Media>();
+      media = new List<Media>.empty(growable: true);
       data['media'].forEach((v) {
         media.add(new Media.fromJson(v));
       });
@@ -349,7 +349,7 @@ class Meta {
     from = json['from'];
     lastPage = json['last_page'];
     if (json['links'] != null) {
-      links = new List<Links>();
+      links = new List<Links>.empty(growable: true);
       json['links'].forEach((v) {
         links.add(new Links.fromJson(v));
       });

@@ -71,8 +71,8 @@ class OrdersController extends GetxController {
   Rx<TextEditingController> engineDisplacement = TextEditingController().obs;
   Rx<TextEditingController> numberOfDoors = TextEditingController().obs;
 
-  RxList<S2Choice<String>> _brands = List<S2Choice<String>>().obs;
-  RxList<S2Choice<String>> _models = List<S2Choice<String>>().obs;
+  RxList<S2Choice<String>> _brands = List<S2Choice<String>>.empty(growable: true).obs;
+  RxList<S2Choice<String>> _models = List<S2Choice<String>>.empty(growable: true).obs;
   List<S2Choice<String>> get brands => _brands;
   List<S2Choice<String>> get models => _models;
 
@@ -192,7 +192,7 @@ class OrdersController extends GetxController {
   }
 
   void replyOrder({String message, String orderId}) async {
-    if (message.isNullOrBlank) {
+    if (message.isBlank) {
       return;
     }
     _isReplyingMsg.value = true;
