@@ -6,12 +6,14 @@ import 'package:procura_online/controllers/orders_controller.dart';
 import 'package:procura_online/models/user_model.dart';
 import 'package:procura_online/repositories/user_repository.dart';
 import 'package:procura_online/utils/navigation_helper.dart';
+import 'package:procura_online/utils/onesignal_notification.dart';
 import 'package:smart_select/smart_select.dart';
 
 import 'chat_controller.dart';
 
 class UserController extends GetxController with StateMixin<User> {
   UserRepository _userRepository = Get.find();
+  NotificationHelper _notificationHelper = NotificationHelper();
 
   @override
   onInit() {
@@ -49,7 +51,7 @@ class UserController extends GetxController with StateMixin<User> {
 
   _initData() async {
     try {
-      Box authBox = await Hive.openBox('auth');
+      Box authBox = await Hive.openBox('auth') ?? null;
       bool isLoggedIn = authBox.get('isLoggedIn') ?? false;
       String token = authBox.get('token') ?? null;
       Box<User> box = await Hive.openBox<User>('userData') ?? null;
@@ -62,6 +64,7 @@ class UserController extends GetxController with StateMixin<User> {
       if (isLoggedIn) {
         updateUserInfo();
       }
+      _notificationHelper.initOneSignal(userId: _userData.value.id.toString());
     } catch (err) {
       print(err);
     }
@@ -102,7 +105,7 @@ class UserController extends GetxController with StateMixin<User> {
       authBox.put('isLoggedIn', true);
       authBox.put('token', response['token']);
       userBox.put(response['user']['id'], User.fromJson(response['user']));
-
+      _notificationHelper.setExternalUserId(userId: response['user']['id'].toString());
       Get.offAllNamed('/app');
     } on DioError catch (err) {
       Map<String, dynamic> errors = err.response.data['errors'];
@@ -148,9 +151,7 @@ class UserController extends GetxController with StateMixin<User> {
       await _userRepository.signUp(registerData);
       Get.back();
       Get.rawSnackbar(
-          message: 'User registered successfully.',
-          backgroundColor: Colors.green,
-          duration: Duration(seconds: 3));
+          message: 'User registered successfully.', backgroundColor: Colors.green, duration: Duration(seconds: 3));
     } on DioError catch (err) {
       Map<String, dynamic> errors = err.response.data['errors'];
       List<String> errorList = [];
@@ -172,10 +173,7 @@ class UserController extends GetxController with StateMixin<User> {
     _isLoading.value = true;
     try {
       String response = await _userRepository.passwordReset(email);
-      Get.rawSnackbar(
-          message: response,
-          backgroundColor: Colors.green,
-          duration: Duration(seconds: 3));
+      Get.rawSnackbar(message: response, backgroundColor: Colors.green, duration: Duration(seconds: 3));
     } on DioError catch (err) {
       Map<String, dynamic> errors = err.response.data['errors'];
       List<String> errorList = [];
@@ -202,8 +200,7 @@ class UserController extends GetxController with StateMixin<User> {
     Get.delete<ChatController>(force: true);
     _isLoggedIn.value = false;
     _userData.value = User();
-    NavKey.pageController.animateToPage(0,
-        duration: Duration(milliseconds: 500), curve: Curves.linear);
+    NavKey.pageController.animateToPage(0, duration: Duration(milliseconds: 500), curve: Curves.linear);
     Get.back();
   }
 
@@ -236,32 +233,23 @@ class UserController extends GetxController with StateMixin<User> {
 
       Get.back();
       Get.rawSnackbar(
-          message: 'Profile updated successfully.',
-          backgroundColor: Colors.green,
-          duration: Duration(seconds: 3));
+          message: 'Profile updated successfully.', backgroundColor: Colors.green, duration: Duration(seconds: 3));
     } on DioError catch (err) {
       print(err);
       _savingError.value = true;
       Get.rawSnackbar(
-          message: 'Ops, error updating profile.',
-          backgroundColor: Colors.red,
-          duration: Duration(seconds: 3));
+          message: 'Ops, error updating profile.', backgroundColor: Colors.red, duration: Duration(seconds: 3));
     } catch (err) {
       print(err);
       _savingError.value = true;
       Get.rawSnackbar(
-          message: 'Ops, error updating profile.',
-          backgroundColor: Colors.red,
-          duration: Duration(seconds: 3));
+          message: 'Ops, error updating profile.', backgroundColor: Colors.red, duration: Duration(seconds: 3));
     } finally {
       _isSaving.value = false;
     }
   }
 
-  void changePassword(
-      {@required String currentPass,
-      @required String newPass,
-      @required String confirmPass}) async {
+  void changePassword({@required String currentPass, @required String newPass, @required String confirmPass}) async {
     _isLoading.value = true;
     try {
       Map<String, dynamic> passwordData = {
@@ -272,9 +260,7 @@ class UserController extends GetxController with StateMixin<User> {
       await _userRepository.changePassword(passwordData);
       Get.back();
       Get.rawSnackbar(
-          message: 'Password changed successfully.',
-          backgroundColor: Colors.green,
-          duration: Duration(seconds: 3));
+          message: 'Password changed successfully.', backgroundColor: Colors.green, duration: Duration(seconds: 3));
     } on DioError catch (err) {
       Map<String, dynamic> errors = err.response.data['errors'];
       List<String> errorList = [];
