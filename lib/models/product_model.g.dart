@@ -41,9 +41,9 @@ Product _$ProductFromJson(Map<String, dynamic> json) {
     mainPhoto: json['main_photo'] == null
         ? null
         : MainPhoto.fromJson(json['main_photo'] as Map<String, dynamic>),
-    photos: json['photos'] == null
+    gallery: json['gallery'] == null
         ? null
-        : Photos.fromJson(json['photos'] as Map<String, dynamic>) ?? [],
+        : Photos.fromJson(json['gallery'] as Map<String, dynamic>) ?? [],
   );
 }
 
@@ -85,7 +85,7 @@ Map<String, dynamic> _$ProductToJson(Product instance) {
   }
 
   writeNotNull('main_photo', instance.mainPhoto);
-  writeNotNull('photos', instance.photos);
+  writeNotNull('gallery', instance.gallery);
   return val;
 }
 

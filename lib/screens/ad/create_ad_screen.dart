@@ -5,7 +5,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
+import 'package:percent_indicator/circular_percent_indicator.dart';
 import 'package:procura_online/controllers/create_ad_controller.dart';
+import 'package:procura_online/models/upload_media_model.dart';
 import 'package:procura_online/widgets/gradient_button.dart';
 import 'package:procura_online/widgets/select_option.dart';
 import 'package:procura_online/widgets/text_input.dart';
@@ -30,26 +32,32 @@ class _CreateAdScreenState extends State<CreateAdScreen> {
   }
 
   bool submitted = false;
-  List<File> images = List<File>.empty(growable: true);
 
   void selectImages() async {
     FilePickerResult result = await FilePicker.platform.pickFiles(
       allowMultiple: true,
       type: FileType.image,
-      // allowedExtensions: ['jpg', 'jpeg', 'png', 'gif'],
     );
 
     if (result != null) {
       List<File> files = result.paths.map((path) => File(path)).toList();
+      _createAdController.setImages(files);
 
-      if (files.length > 5) {
-        List<File> limitedSelect = files.sublist(0, 5);
-        setState(() => images.addAll(limitedSelect));
-      } else {
-        setState(() => images.addAll(files));
+      if (_createAdController.mainPhoto.isEmpty) {
+        UploadMedia mainPhoto = await _createAdController.mediaUpload(files[0]);
+        if (mainPhoto != null) {
+          _createAdController.setMainImageUrl(mainPhoto.name);
+        }
       }
-      if (images.length >= 5) {
-        setState(() => images = images.sublist(0, 5));
+
+      for (File photo in files) {
+        _createAdController.currentUploadImage.value = photo.path;
+        UploadMedia media = await _createAdController.mediaUpload(photo);
+        if (media != null) {
+          _createAdController.setImagesUrl(media.name);
+        } else {
+          _createAdController.removeImage(photo);
+        }
       }
     }
   }
@@ -105,7 +113,7 @@ class _CreateAdScreenState extends State<CreateAdScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                images.length == 0 ? selectImage() : selectedImages(),
+                _.images.length == 0 ? selectImage() : selectedImages(),
                 SizedBox(height: 10),
                 Padding(
                   padding: const EdgeInsets.all(15),
@@ -154,6 +162,7 @@ class _CreateAdScreenState extends State<CreateAdScreen> {
                           SizedBox(height: 10),
                           SelectOption(
                             isLoading: _.isLoadingSubCategories,
+                            isDisabled: _.selectedCategory.value == '',
                             placeholder: 'Select one',
                             modalTitle: 'Subcategories',
                             selectText: 'Select a subcategory',
@@ -595,7 +604,7 @@ class _CreateAdScreenState extends State<CreateAdScreen> {
                                   _.selectedCondition.value.isNotEmpty &&
                                   _.selectedNegotiable.value.isNotEmpty) {
                                 FocusScope.of(context).unfocus();
-                                _createAdController.create(photos: images);
+                                _createAdController.create();
                               }
                             },
                           ),
@@ -655,6 +664,7 @@ class _CreateAdScreenState extends State<CreateAdScreen> {
   }
 
   Widget selectedImages() {
+    CreateAdController _createAdController = Get.find();
     return Stack(
       children: [
         Container(
@@ -671,11 +681,11 @@ class _CreateAdScreenState extends State<CreateAdScreen> {
               child: ListView.builder(
                 shrinkWrap: true,
                 scrollDirection: Axis.horizontal,
-                itemCount: images.length + 1,
+                itemCount: _createAdController.images.length + 1,
                 physics: BouncingScrollPhysics(),
                 itemBuilder: (context, index) {
-                  if (index == images.length) {
-                    return images.length < 5
+                  if (index == _createAdController.images.length) {
+                    return _createAdController.images.length < 5
                         ? GestureDetector(
                             onTap: selectImages,
                             behavior: HitTestBehavior.translucent,
@@ -713,7 +723,7 @@ class _CreateAdScreenState extends State<CreateAdScreen> {
                             width: 250,
                             height: 200,
                             child: Image.file(
-                              File(images[index].path),
+                              File(_createAdController.images[index].path),
                               width: 250,
                               height: 200,
                               fit: BoxFit.cover,
@@ -723,13 +733,39 @@ class _CreateAdScreenState extends State<CreateAdScreen> {
                             top: 4,
                             right: 4,
                             child: GestureDetector(
-                                behavior: HitTestBehavior.opaque,
-                                onTap: () {
-                                  setState(() {
-                                    images.removeAt(index);
-                                  });
-                                },
+                                behavior: HitTestBehavior.translucent,
+                                onTap: () => _createAdController.removeImageByIndex(index),
                                 child: Icon(Icons.delete, color: Colors.red)),
+                          ),
+                          Obx(
+                            () => Visibility(
+                              visible: _createAdController.isUploadingImage &&
+                                  _createAdController.currentUploadImage.value ==
+                                      _createAdController.images[index].path,
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(5),
+                                child: Container(
+                                  width: 250,
+                                  height: 200,
+                                  color: Colors.grey.withOpacity(0.8),
+                                  child: Center(
+                                    child: CircularPercentIndicator(
+                                      radius: 60.0,
+                                      lineWidth: 5.0,
+                                      percent: _createAdController.uploadImageProgress.value,
+                                      center: Text(
+                                        '${(_createAdController.uploadImageProgress.value * 100).round()}%',
+                                        style: TextStyle(
+                                          color: Colors.white,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                      progressColor: Colors.blue,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
                           ),
                         ],
                       ),

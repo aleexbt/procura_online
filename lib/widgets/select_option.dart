@@ -39,16 +39,16 @@ class SelectOption extends StatelessWidget {
         iconTheme: IconThemeData(color: Colors.black),
       ),
       tileBuilder: (context, state) {
-        return GestureDetector(
-          onTap: isLoading || isDisabled ? null : () => state.showModal(),
-          behavior: HitTestBehavior.translucent,
-          child: Container(
-            height: 60,
-            decoration: BoxDecoration(
-              color: Colors.grey[200],
-              border: hasError ? Border.all(color: Colors.red) : null,
-              borderRadius: BorderRadius.circular(4),
-            ),
+        return Ink(
+          height: 60,
+          decoration: BoxDecoration(
+            color: Colors.grey[200],
+            border: hasError ? Border.all(color: Colors.red) : null,
+            borderRadius: BorderRadius.circular(4),
+          ),
+          child: InkWell(
+            onTap: isLoading || isDisabled ? null : () => state.showModal(),
+            borderRadius: BorderRadius.circular(4),
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 12),
               child: Row(
@@ -63,8 +63,12 @@ class SelectOption extends StatelessWidget {
                         style: TextStyle(fontSize: 16),
                       ),
                       Text(
-                        state.valueTitle ?? placeholder,
-                        style: TextStyle(fontSize: 12, color: Colors.grey[600]),
+                        state.valueTitle?.toUpperCase() ?? placeholder,
+                        style: TextStyle(
+                          fontSize: 12,
+                          color: state.valueTitle != null ? Colors.blue : Colors.grey[600],
+                          fontWeight: state.valueTitle != null ? FontWeight.bold : FontWeight.normal,
+                        ),
                       )
                     ],
                   ),

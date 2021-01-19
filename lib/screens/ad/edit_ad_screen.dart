@@ -28,8 +28,8 @@ class _EditAdScreenState extends State<EditAdScreen> {
 
   @override
   initState() {
-    if (_editAdController.product?.photos?.original != null && _editAdController.product.photos.original.length > 0) {
-      networkImages = Map.from(_editAdController.product?.photos?.original);
+    if (_editAdController.product?.gallery?.original != null && _editAdController.product.gallery.original.length > 0) {
+      networkImages = Map.from(_editAdController.product?.gallery?.original);
     }
     mainNode = FocusNode();
     super.initState();
