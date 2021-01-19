@@ -5,8 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hive/hive.dart';
 import 'package:procura_online/controllers/chat_controller.dart';
+import 'package:procura_online/models/conversation_model.dart';
 import 'package:procura_online/models/message_model.dart';
-import 'package:procura_online/models/new_conversation_model.dart';
 import 'package:procura_online/models/upload_media_model.dart';
 import 'package:procura_online/repositories/chat_repository.dart';
 import 'package:procura_online/services/pusher_service.dart';
@@ -43,7 +43,7 @@ class ConversationController extends GetxController {
   RxString currentUploadImage = ''.obs;
   RxDouble uploadImageProgress = 0.0.obs;
   RxBool _isUploadingImage = false.obs;
-  Rx<NewConversationModel> _conversation = NewConversationModel().obs;
+  Rx<Conversation> _conversation = Conversation().obs;
 
   bool get isLoading => _isLoading.value;
   bool get hasError => _hasError.value;
@@ -52,7 +52,7 @@ class ConversationController extends GetxController {
   bool get isDeleting => _isDeleting.value;
   bool get deletingError => _deletingError.value;
   bool get isUploadingImage => _isUploadingImage.value;
-  NewConversationModel get conversation => _conversation.value;
+  Conversation get conversation => _conversation.value;
 
   Rx<TextEditingController> messageInput = TextEditingController().obs;
 
@@ -65,7 +65,7 @@ class ConversationController extends GetxController {
   void setImagesUrl(String value) => imagesUrl.add(value);
 
   void restoreConversation() async {
-    Box<NewConversationModel> box = await Hive.openBox<NewConversationModel>('conversations') ?? null;
+    Box<Conversation> box = await Hive.openBox<Conversation>('conversations') ?? null;
     if (box != null && box.get(chatId) != null) {
       _conversation.value = box.get(chatId);
       _isLoading.value = false;
@@ -80,10 +80,10 @@ class ConversationController extends GetxController {
     _hasError.value = false;
     try {
       pusherService.firePusher('private-conversation.$chatId', 'App\\Events\\ConversationEvent');
-      NewConversationModel response = await _chatRepository.findOne(chatId);
+      Conversation response = await _chatRepository.findOne(chatId);
       _chatRepository.markMessageAsRead(chatId);
       _conversation.value = response;
-      Box<NewConversationModel> box = await Hive.openBox<NewConversationModel>('conversations');
+      Box<Conversation> box = await Hive.openBox<Conversation>('conversations');
       box.put(chatId, response);
     } on DioError catch (err) {
       _hasError.value = true;

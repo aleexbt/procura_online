@@ -36,15 +36,11 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   void cacheAssets() async {
-    await precachePicture(
-        SvgPicture.asset('assets/images/by_my_car.svg').pictureProvider,
-        Get.context);
-    await precachePicture(
-        SvgPicture.asset('assets/images/not_found_towing.svg').pictureProvider,
-        Get.context);
-    await precachePicture(
-        SvgPicture.asset('assets/images/success_ad.svg').pictureProvider,
-        Get.context);
+    await precachePicture(SvgPicture.asset('assets/images/slider_one.svg').pictureProvider, Get.context);
+    await precachePicture(SvgPicture.asset('assets/images/slider_two.svg').pictureProvider, Get.context);
+    await precachePicture(SvgPicture.asset('assets/images/slider_three.svg').pictureProvider, Get.context);
+    await precachePicture(SvgPicture.asset('assets/images/by_my_car.svg').pictureProvider, Get.context);
+    await precachePicture(SvgPicture.asset('assets/images/not_found_towing.svg').pictureProvider, Get.context);
   }
 
   @override

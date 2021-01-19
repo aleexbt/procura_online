@@ -6,8 +6,8 @@ import 'package:get/instance_manager.dart';
 import 'package:hive/hive.dart';
 import 'package:procura_online/controllers/conversation_controller.dart';
 import 'package:procura_online/models/chats_model.dart';
+import 'package:procura_online/models/conversation_model.dart';
 import 'package:procura_online/models/message_model.dart';
-import 'package:procura_online/models/new_conversation_model.dart';
 import 'package:procura_online/models/upload_media_model.dart';
 import 'package:uuid/uuid.dart';
 
@@ -30,12 +30,12 @@ class ChatRepository {
     return Chats.fromJson(response.data);
   }
 
-  Future<NewConversationModel> findOne(String chatId) async {
+  Future<Conversation> findOne(String chatId) async {
     Box authBox = await Hive.openBox('auth');
     String token = authBox.get('token') ?? null;
     _dio.options.headers["Authorization"] = 'Bearer $token';
     Response response = await _dio.get('/api/v1/conversation/$chatId');
-    return NewConversationModel.fromJson(response.data['data']);
+    return Conversation.fromJson(response.data['data']);
   }
 
   Future<Message> replyMessage(Map<String, dynamic> data) async {

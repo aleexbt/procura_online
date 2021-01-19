@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:hive/hive.dart';
 import 'package:introduction_screen/introduction_screen.dart';
@@ -20,7 +21,7 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
 
   Widget _buildImage(String assetName) {
     return Align(
-      child: Image.asset('assets/images/$assetName.png', width: 350.0),
+      child: SvgPicture.asset('assets/images/$assetName.svg', width: 350),
       alignment: Alignment.bottomCenter,
     );
   }

@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:octo_image/octo_image.dart';
 import 'package:procura_online/models/order_media.dart';
-import 'package:procura_online/widgets/text_widget.dart';
 
 class Bubble extends StatelessWidget {
   Bubble({
@@ -51,9 +50,9 @@ class Bubble extends StatelessWidget {
               children: [
                 photosGallery(photos),
                 photos != null ? SizedBox(height: 5) : Container(width: 0, height: 0),
-                TextWidget(
-                  text: message,
-                  colorText: isMe ? Colors.white : Colors.black,
+                Text(
+                  message,
+                  style: TextStyle(color: isMe ? Colors.white : Colors.black),
                 ),
               ],
             ),
@@ -61,9 +60,9 @@ class Bubble extends StatelessWidget {
         ),
         Padding(
           padding: const EdgeInsets.all(4.0),
-          child: TextWidget(
-            text: time,
-            colorText: Colors.grey,
+          child: Text(
+            time,
+            style: TextStyle(color: Colors.grey),
           ),
         ),
       ],
