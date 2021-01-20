@@ -4,8 +4,8 @@
 <dict>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
-	<key>CFBundleDisplayName</key>
-	<string>Procura Online</string>
+    <key>CFBundleDisplayName</key>
+    <string>Procura Online</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
@@ -21,14 +21,19 @@
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleVersion</key>
-	<string>$(CURRENT_PROJECT_VERSION)</string>
+	<string>$(FLUTTER_BUILD_NUMBER)</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
-	<key>NSPhotoLibraryUsageDescription</key>
-	<string>Permission needed to pick a photo from gallery.</string>
+    <key>NSPhotoLibraryUsageDescription</key>
+    <string>Permission needed to pick a photo from gallery.</string>
+    <key>UIBackgroundModes</key>
+    <array>
+        <string>Permission needed to pick a photo from gallery.</string>
+        <string>fetch</string>
+        <string>remote-notification</string>
+    </array>
 	<key>UIBackgroundModes</key>
 	<array>
-		<string>Permission needed to pick a photo from gallery.</string>
 		<string>fetch</string>
 		<string>remote-notification</string>
 	</array>
@@ -39,6 +44,8 @@
 	<key>UISupportedInterfaceOrientations</key>
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>
+		<string>UIInterfaceOrientationLandscapeLeft</string>
+		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
 	<key>UISupportedInterfaceOrientations~ipad</key>
 	<array>
@@ -49,12 +56,5 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
-	<key>FirebaseAppDelegateProxyEnabled</key>
-    <string>0</string>
-    <key>NSAppTransportSecurity</key>
-        <dict>
-            <key>NSAllowsArbitraryLoads</key>
-            <true/>
-        </dict>
 </dict>
 </plist>

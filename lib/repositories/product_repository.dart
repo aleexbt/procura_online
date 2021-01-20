@@ -11,7 +11,7 @@ import 'package:procura_online/models/upload_media_model.dart';
 import 'package:uuid/uuid.dart';
 
 BaseOptions options = BaseOptions(
-  connectTimeout: 800000,
+  connectTimeout: 10000,
   receiveTimeout: 3000,
   baseUrl: 'https://procuraonline-dev.pt',
   headers: {"Accept": "application/json", "Content-Type": "application/json"},

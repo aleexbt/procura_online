@@ -5,7 +5,7 @@ import 'package:procura_online/models/listing_model.dart';
 import 'package:procura_online/models/user_model.dart';
 
 BaseOptions options = BaseOptions(
-  connectTimeout: 8000,
+  connectTimeout: 10000,
   receiveTimeout: 3000,
   baseUrl: 'https://procuraonline-dev.pt',
   headers: {"Accept": "application/json", "Content-Type": "application/json"},
@@ -49,8 +49,7 @@ class UserRepository {
     Box authBox = await Hive.openBox('auth');
     String token = authBox.get('token') ?? null;
     _dio.options.headers["Authorization"] = 'Bearer $token';
-    final response =
-        await _dio.post('/api/v1/user/me/update', data: updateData);
+    final response = await _dio.post('/api/v1/user/me/update', data: updateData);
     return User.fromJson(response.data);
   }
 
@@ -58,8 +57,7 @@ class UserRepository {
     Box authBox = await Hive.openBox('auth');
     String token = authBox.get('token') ?? null;
     _dio.options.headers["Authorization"] = 'Bearer $token';
-    final response =
-        await _dio.post('/api/v1/change-password', data: passwordData);
+    final response = await _dio.post('/api/v1/change-password', data: passwordData);
 
     if (response.statusCode != 200) {
       return null;
@@ -72,8 +70,7 @@ class UserRepository {
     Box authBox = await Hive.openBox('auth');
     String token = authBox.get('token') ?? null;
     _dio.options.headers["Authorization"] = 'Bearer $token';
-    final response = await _dio
-        .get('/api/v1/user/me/listings', queryParameters: {"page": "$page"});
+    final response = await _dio.get('/api/v1/user/me/listings', queryParameters: {"page": "$page"});
     return Listing.fromJson(response.data);
   }
 }

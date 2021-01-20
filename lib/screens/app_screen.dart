@@ -8,6 +8,7 @@ import 'package:procura_online/screens/conversations/chat_screen.dart';
 import 'package:procura_online/screens/protected_route.dart';
 import 'package:procura_online/screens/settings/settings_screen.dart';
 import 'package:procura_online/utils/navigation_helper.dart';
+import 'package:procura_online/utils/onesignal_notification.dart';
 
 import 'home/home_screen.dart';
 
@@ -18,10 +19,20 @@ class AppScreen extends StatefulWidget {
 
 class _AppScreenState extends State<AppScreen> {
   // final PageController _pageController = PageController();
+  NotificationHelper _notificationHelper = NotificationHelper();
   PageController _pageController = NavKey.pageController;
   final UserController _userController = Get.find();
   int _selectedIndex = 0;
   int productCount = 0;
+
+  @override
+  void initState() {
+    _notificationHelper.initOneSignal();
+    if (_userController.userData?.id != null) {
+      _notificationHelper.setExternalUserId(userId: _userController.userData?.id?.toString());
+    }
+    super.initState();
+  }
 
   void onPageChanged(int index) {
     setState(() {

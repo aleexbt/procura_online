@@ -49,52 +49,10 @@ PODS:
   - file_picker (0.0.1):
     - DKImagePickerController/PhotoGallery
     - Flutter
-  - Firebase/CoreOnly (6.33.0):
-    - FirebaseCore (= 6.10.3)
-  - Firebase/Messaging (6.33.0):
-    - Firebase/CoreOnly
-    - FirebaseMessaging (~> 4.7.0)
-  - firebase_core (0.5.3):
-    - Firebase/CoreOnly (~> 6.33.0)
-    - Flutter
-  - firebase_messaging (7.0.3):
-    - Firebase/CoreOnly (~> 6.33.0)
-    - Firebase/Messaging (~> 6.33.0)
-    - firebase_core
-    - Flutter
-  - FirebaseCore (6.10.3):
-    - FirebaseCoreDiagnostics (~> 1.6)
-    - GoogleUtilities/Environment (~> 6.7)
-    - GoogleUtilities/Logger (~> 6.7)
-  - FirebaseCoreDiagnostics (1.7.0):
-    - GoogleDataTransport (~> 7.4)
-    - GoogleUtilities/Environment (~> 6.7)
-    - GoogleUtilities/Logger (~> 6.7)
-    - nanopb (~> 1.30906.0)
-  - FirebaseInstallations (1.7.0):
-    - FirebaseCore (~> 6.10)
-    - GoogleUtilities/Environment (~> 6.7)
-    - GoogleUtilities/UserDefaults (~> 6.7)
-    - PromisesObjC (~> 1.2)
-  - FirebaseInstanceID (4.8.0):
-    - FirebaseCore (~> 6.10)
-    - FirebaseInstallations (~> 1.6)
-    - GoogleUtilities/Environment (~> 6.7)
-    - GoogleUtilities/UserDefaults (~> 6.7)
-  - FirebaseMessaging (4.7.1):
-    - FirebaseCore (~> 6.10)
-    - FirebaseInstanceID (~> 4.7)
-    - GoogleUtilities/AppDelegateSwizzler (~> 6.7)
-    - GoogleUtilities/Environment (~> 6.7)
-    - GoogleUtilities/Reachability (~> 6.7)
-    - GoogleUtilities/UserDefaults (~> 6.7)
-    - Protobuf (>= 3.9.2, ~> 3.9)
   - Flutter (1.0.0)
   - flutter_facebook_auth (1.0.0):
     - FBSDKCoreKit (~> 8.2.0)
     - FBSDKLoginKit (~> 8.2.0)
-    - Flutter
-  - flutter_keyboard_visibility (0.0.1):
     - Flutter
   - flutter_local_notifications (0.0.1):
     - Flutter
@@ -104,29 +62,10 @@ PODS:
   - google_sign_in (0.0.1):
     - Flutter
     - GoogleSignIn (~> 5.0)
-  - GoogleDataTransport (7.5.1):
-    - nanopb (~> 1.30906.0)
   - GoogleSignIn (5.0.2):
     - AppAuth (~> 1.2)
     - GTMAppAuth (~> 1.0)
     - GTMSessionFetcher/Core (~> 1.1)
-  - GoogleUtilities/AppDelegateSwizzler (6.7.2):
-    - GoogleUtilities/Environment
-    - GoogleUtilities/Logger
-    - GoogleUtilities/Network
-  - GoogleUtilities/Environment (6.7.2):
-    - PromisesObjC (~> 1.2)
-  - GoogleUtilities/Logger (6.7.2):
-    - GoogleUtilities/Environment
-  - GoogleUtilities/Network (6.7.2):
-    - GoogleUtilities/Logger
-    - "GoogleUtilities/NSData+zlib"
-    - GoogleUtilities/Reachability
-  - "GoogleUtilities/NSData+zlib (6.7.2)"
-  - GoogleUtilities/Reachability (6.7.2):
-    - GoogleUtilities/Logger
-  - GoogleUtilities/UserDefaults (6.7.2):
-    - GoogleUtilities/Logger
   - GTMAppAuth (1.1.0):
     - AppAuth/Core (~> 1.4)
     - GTMSessionFetcher (~> 1.4)
@@ -135,23 +74,12 @@ PODS:
   - GTMSessionFetcher/Core (1.5.0)
   - GTMSessionFetcher/Full (1.5.0):
     - GTMSessionFetcher/Core (= 1.5.0)
-  - image_picker (0.0.1):
+  - OneSignal (2.16.1)
+  - onesignal_flutter (2.6.2):
     - Flutter
-  - nanopb (1.30906.0):
-    - nanopb/decode (= 1.30906.0)
-    - nanopb/encode (= 1.30906.0)
-  - nanopb/decode (1.30906.0)
-  - nanopb/encode (1.30906.0)
+    - OneSignal (= 2.16.1)
   - path_provider (0.0.1):
     - Flutter
-  - "permission_handler (5.0.1+1)":
-    - Flutter
-  - phone_number (0.8.0):
-    - Flutter
-    - PhoneNumberKit/PhoneNumberKitCore (= 3.3.1)
-  - PhoneNumberKit/PhoneNumberKitCore (3.3.1)
-  - PromisesObjC (1.2.12)
-  - Protobuf (3.14.0)
   - pusher_websocket_flutter (0.1.1):
     - Flutter
     - PusherSwift (= 7.0.0)
@@ -164,8 +92,6 @@ PODS:
     - SDWebImage/Core (= 5.10.2)
   - SDWebImage/Core (5.10.2)
   - share (0.0.1):
-    - Flutter
-  - shared_preferences (0.0.1):
     - Flutter
   - sqflite (0.0.2):
     - Flutter
@@ -181,20 +107,15 @@ PODS:
 
 DEPENDENCIES:
   - file_picker (from `.symlinks/plugins/file_picker/ios`)
-  - firebase_core (from `.symlinks/plugins/firebase_core/ios`)
-  - firebase_messaging (from `.symlinks/plugins/firebase_messaging/ios`)
   - Flutter (from `Flutter`)
   - flutter_facebook_auth (from `.symlinks/plugins/flutter_facebook_auth/ios`)
-  - flutter_keyboard_visibility (from `.symlinks/plugins/flutter_keyboard_visibility/ios`)
   - flutter_local_notifications (from `.symlinks/plugins/flutter_local_notifications/ios`)
   - google_sign_in (from `.symlinks/plugins/google_sign_in/ios`)
-  - image_picker (from `.symlinks/plugins/image_picker/ios`)
+  - OneSignal (< 3.0, >= 2.9.3)
+  - onesignal_flutter (from `.symlinks/plugins/onesignal_flutter/ios`)
   - path_provider (from `.symlinks/plugins/path_provider/ios`)
-  - permission_handler (from `.symlinks/plugins/permission_handler/ios`)
-  - phone_number (from `.symlinks/plugins/phone_number/ios`)
   - pusher_websocket_flutter (from `.symlinks/plugins/pusher_websocket_flutter/ios`)
   - share (from `.symlinks/plugins/share/ios`)
-  - shared_preferences (from `.symlinks/plugins/shared_preferences/ios`)
   - sqflite (from `.symlinks/plugins/sqflite/ios`)
   - video_player (from `.symlinks/plugins/video_player/ios`)
   - wakelock (from `.symlinks/plugins/wakelock/ios`)
@@ -208,22 +129,11 @@ SPEC REPOS:
     - DKPhotoGallery
     - FBSDKCoreKit
     - FBSDKLoginKit
-    - Firebase
-    - FirebaseCore
-    - FirebaseCoreDiagnostics
-    - FirebaseInstallations
-    - FirebaseInstanceID
-    - FirebaseMessaging
     - FMDB
-    - GoogleDataTransport
     - GoogleSignIn
-    - GoogleUtilities
     - GTMAppAuth
     - GTMSessionFetcher
-    - nanopb
-    - PhoneNumberKit
-    - PromisesObjC
-    - Protobuf
+    - OneSignal
     - PusherSwift
     - ReachabilitySwift
     - SDWebImage
@@ -233,34 +143,22 @@ SPEC REPOS:
 EXTERNAL SOURCES:
   file_picker:
     :path: ".symlinks/plugins/file_picker/ios"
-  firebase_core:
-    :path: ".symlinks/plugins/firebase_core/ios"
-  firebase_messaging:
-    :path: ".symlinks/plugins/firebase_messaging/ios"
   Flutter:
     :path: Flutter
   flutter_facebook_auth:
     :path: ".symlinks/plugins/flutter_facebook_auth/ios"
-  flutter_keyboard_visibility:
-    :path: ".symlinks/plugins/flutter_keyboard_visibility/ios"
   flutter_local_notifications:
     :path: ".symlinks/plugins/flutter_local_notifications/ios"
   google_sign_in:
     :path: ".symlinks/plugins/google_sign_in/ios"
-  image_picker:
-    :path: ".symlinks/plugins/image_picker/ios"
+  onesignal_flutter:
+    :path: ".symlinks/plugins/onesignal_flutter/ios"
   path_provider:
     :path: ".symlinks/plugins/path_provider/ios"
-  permission_handler:
-    :path: ".symlinks/plugins/permission_handler/ios"
-  phone_number:
-    :path: ".symlinks/plugins/phone_number/ios"
   pusher_websocket_flutter:
     :path: ".symlinks/plugins/pusher_websocket_flutter/ios"
   share:
     :path: ".symlinks/plugins/share/ios"
-  shared_preferences:
-    :path: ".symlinks/plugins/shared_preferences/ios"
   sqflite:
     :path: ".symlinks/plugins/sqflite/ios"
   video_player:
@@ -278,39 +176,22 @@ SPEC CHECKSUMS:
   FBSDKCoreKit: 4afd6ff53d8133a433dbcda44451c9498f8c6ce4
   FBSDKLoginKit: 7181765f2524d7ebf82d9629066c8e6caafc99d0
   file_picker: 3e6c3790de664ccf9b882732d9db5eaf6b8d4eb1
-  Firebase: 8db6f2d1b2c5e2984efba4949a145875a8f65fe5
-  firebase_core: 5d6a02f3d85acd5f8321c2d6d62877626a670659
-  firebase_messaging: 0aea2cd5885b65e19ede58ee3507f485c992cc75
-  FirebaseCore: d889d9e12535b7f36ac8bfbf1713a0836a3012cd
-  FirebaseCoreDiagnostics: 770ac5958e1372ce67959ae4b4f31d8e127c3ac1
-  FirebaseInstallations: 466c7b4d1f58fe16707693091da253726a731ed2
-  FirebaseInstanceID: bd3ffc24367f901a43c063b36c640b345a4a5dd1
-  FirebaseMessaging: 5eca4ef173de76253352511aafef774caa1cba2a
   Flutter: 0e3d915762c693b495b44d77113d4970485de6ec
   flutter_facebook_auth: bad08a3d465e7b7ba9d8468a9dc7df3f69c136b8
-  flutter_keyboard_visibility: 0339d06371254c3eb25eeb90ba8d17dca8f9c069
   flutter_local_notifications: 0c0b1ae97e741e1521e4c1629a459d04b9aec743
   FMDB: 2ce00b547f966261cd18927a3ddb07cb6f3db82a
   google_sign_in: 6bd214b9c154f881422f5fe27b66aaa7bbd580cc
-  GoogleDataTransport: f56af7caa4ed338dc8e138a5d7c5973e66440833
   GoogleSignIn: 7137d297ddc022a7e0aa4619c86d72c909fa7213
-  GoogleUtilities: 7f2f5a07f888cdb145101d6042bc4422f57e70b3
   GTMAppAuth: 197a8dabfea5d665224aa00d17f164fc2248dab9
   GTMSessionFetcher: b3503b20a988c4e20cc189aa798fd18220133f52
-  image_picker: 9c3312491f862b28d21ecd8fdf0ee14e601b3f09
-  nanopb: 59317e09cf1f1a0af72f12af412d54edf52603fc
+  OneSignal: 5f6514ec2b931306eb067acb124afbb2e49970af
+  onesignal_flutter: 260bb95c0a2d791c990c7bd8749525c9834d43fc
   path_provider: abfe2b5c733d04e238b0d8691db0cfd63a27a93c
-  permission_handler: eac8e15b4a1a3fba55b761d19f3f4e6b005d15b6
-  phone_number: 0c59d1ce0ceaf822e4507d9b60b2300754e8633e
-  PhoneNumberKit: ff153d5e299f6da566cb73c6aa71e354933b2932
-  PromisesObjC: 3113f7f76903778cf4a0586bd1ab89329a0b7b97
-  Protobuf: 0cde852566359049847168e51bd1c690e0f70056
   pusher_websocket_flutter: ff9a11e48f24d2297bf0d143c99119106cd2d81b
   PusherSwift: d15d6290be0b0b57fd9ac80b03661a6ba24623ec
   ReachabilitySwift: 408477d1b6ed9779dba301953171e017c31241f3
   SDWebImage: b969dcfc02c40a5da71eac0b03b8f1a0c794a86f
   share: 0b2c3e82132f5888bccca3351c504d0003b3b410
-  shared_preferences: af6bfa751691cdc24be3045c43ec037377ada40d
   sqflite: 6d358c025f5b867b29ed92fc697fd34924e11904
   Starscream: ef3ece99d765eeccb67de105bfa143f929026cf5
   SwiftyGif: e466e86c660d343357ab944a819a101c4127cb40
@@ -318,6 +199,6 @@ SPEC CHECKSUMS:
   wakelock: bfc7955c418d0db797614075aabbc58a39ab5107
   webview_flutter: d2b4d6c66968ad042ad94cbb791f5b72b4678a96
 
-PODFILE CHECKSUM: 3a4acbd1be67cc40bed2919991ebb9d6e042cfa8
+PODFILE CHECKSUM: e48fbf13b8cf0f32e80dc2a99d3d7b85c6b65aed
 
 COCOAPODS: 1.10.0

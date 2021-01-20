@@ -64,7 +64,6 @@ class UserController extends GetxController with StateMixin<User> {
       if (isLoggedIn) {
         updateUserInfo();
       }
-      _notificationHelper.initOneSignal(userId: _userData.value.id.toString());
     } catch (err) {
       print(err);
     }

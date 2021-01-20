@@ -1,6 +1,5 @@
 name: procura_online
-description: A new Flutter application.
-publish_to: "none"
+description: Procura Online App
 version: 1.0.0+1
 
 environment:
@@ -9,14 +8,11 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  cupertino_icons: ^1.0.2
+  cupertino_icons: ^1.0.0
   get: ^3.24.0
-  #shared_preferences: ^0.5.12+4
   share: ^0.6.5+4
   google_sign_in: ^4.5.6
   flutter_facebook_auth: ^1.0.2+2
-  #sqflite: ^1.3.2+1
-  #path_provider: ^1.6.24
   modal_progress_hud: ^0.1.3
   file_picker: ^2.1.5+1
   smart_select: ^4.3.2
@@ -26,12 +22,11 @@ dependencies:
   flutter_html: ^1.2.0
   flutter_svg: ^0.19.0
   flutter_speed_dial: ^1.2.5
-  #flutter_form_builder: ^4.1.0
   google_fonts: ^1.1.1
   shimmer: ^1.1.2
   uuid: ^2.2.2
   intl: ^0.16.1
-  firebase_messaging: ^7.0.3
+  onesignal_flutter: ^2.6.2
   flutter_local_notifications: ^3.0.3
   introduction_screen: ^1.0.9
   badges: ^1.1.6
@@ -39,7 +34,6 @@ dependencies:
   cached_network_image: ^2.5.0
   octo_image: ^0.3.0
   photo_view: ^0.10.3
-  extended_image: ^1.5.0-dev
   carousel_pro: ^1.0.0
   percent_indicator: ^2.1.9
   awesome_dialog: ^1.3.1
@@ -48,7 +42,6 @@ dependencies:
   animations: ^1.1.2
   hive: ^1.4.4+1
   hive_flutter: ^0.3.1
-  onesignal_flutter: ^2.6.2
 
 dev_dependencies:
   flutter_test:
@@ -56,9 +49,6 @@ dev_dependencies:
   build_runner: ^1.0.0
   json_serializable: ^3.5.1
   hive_generator: ^0.8.2
-
-dependency_overrides:
-  extended_image: 1.5.0-dev
 
 flutter:
   uses-material-design: true

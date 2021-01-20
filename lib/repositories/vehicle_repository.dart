@@ -2,7 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:dio_http_cache/dio_http_cache.dart';
 
 BaseOptions options = BaseOptions(
-  connectTimeout: 8000,
+  connectTimeout: 10000,
   receiveTimeout: 3000,
   baseUrl: 'https://procuraonline-dev.pt',
   headers: {"Accept": "application/json", "Content-Type": "application/json"},
@@ -15,8 +15,7 @@ class VehicleRepository {
   Future<List<String>> getMakers() async {
     _dio.interceptors.add(_dioCacheManager.interceptor);
     Options _cacheOptions = buildCacheOptions(Duration(days: 1));
-    Response response =
-        await _dio.get('/api/v1/vehicle/makes', options: _cacheOptions);
+    Response response = await _dio.get('/api/v1/vehicle/makes', options: _cacheOptions);
     if (response.statusCode == 200) {
       return List<String>.from(response.data);
     } else {
@@ -36,8 +35,7 @@ class VehicleRepository {
   Future getCategories() async {
     _dio.interceptors.add(_dioCacheManager.interceptor);
     Options _cacheOptions = buildCacheOptions(Duration(days: 1));
-    Response response = await _dio.get('/api/v1/listings/main-categories',
-        options: _cacheOptions);
+    Response response = await _dio.get('/api/v1/listings/main-categories', options: _cacheOptions);
     return response.data;
   }
 

@@ -4,7 +4,6 @@ import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:hive/hive.dart';
 import 'package:procura_online/utils/hive_adapters.dart';
-import 'package:procura_online/utils/push_notification.dart';
 
 class SplashScreen extends StatefulWidget {
   @override
@@ -23,7 +22,7 @@ class _SplashScreenState extends State<SplashScreen> {
 
   void init() async {
     HiveAdapters.register();
-    await PushNotificationsManager().init();
+    // await PushNotificationsManager().init();
     Box prefsBox = await Hive.openBox('prefs');
     cacheAssets();
     await Future.delayed(Duration(seconds: 1));
