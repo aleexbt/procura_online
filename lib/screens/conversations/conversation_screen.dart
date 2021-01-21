@@ -89,7 +89,9 @@ class _ConversationScreenState extends State<ConversationScreen> {
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Text(
-                    _.conversation.userTwo.name,
+                    _.conversation.userOne.id == _userController.userData?.id
+                        ? _.conversation.userTwo.name
+                        : _.conversation.userOne.name,
                     style: TextStyle(
                       fontSize: 16,
                     ),
