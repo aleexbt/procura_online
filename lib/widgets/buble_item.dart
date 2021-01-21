@@ -52,7 +52,7 @@ class Bubble extends StatelessWidget {
                 photos != null ? SizedBox(height: 5) : Container(width: 0, height: 0),
                 Text(
                   message,
-                  style: TextStyle(color: isMe ? Colors.white : Colors.black),
+                  style: TextStyle(color: isMe ? Colors.white : Colors.black, fontSize: 12),
                 ),
               ],
             ),
@@ -62,7 +62,7 @@ class Bubble extends StatelessWidget {
           padding: const EdgeInsets.all(4.0),
           child: Text(
             time,
-            style: TextStyle(color: Colors.grey),
+            style: TextStyle(color: Colors.grey, fontSize: 11),
           ),
         ),
       ],
