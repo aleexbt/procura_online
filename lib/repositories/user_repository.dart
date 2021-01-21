@@ -3,23 +3,23 @@ import 'package:dio_http_cache/dio_http_cache.dart';
 import 'package:hive/hive.dart';
 import 'package:procura_online/models/listing_model.dart';
 import 'package:procura_online/models/user_model.dart';
+import 'package:procura_online/services/dio_client.dart';
 
-BaseOptions options = BaseOptions(
-  connectTimeout: 10000,
-  receiveTimeout: 3000,
-  baseUrl: 'https://procuraonline-dev.pt',
-  headers: {"Accept": "application/json", "Content-Type": "application/json"},
-);
+DioClient _dio = DioClient();
 
-Dio _dio = Dio(options);
+Future<void> setToken() async {
+  Box authBox = await Hive.openBox('auth') ?? null;
+  String token = authBox.get('token') ?? null;
+  if (token != null) {
+    _dio = DioClient(token: token);
+  }
+}
+
 final _dioCacheManager = DioCacheManager(CacheConfig());
 
 class UserRepository {
   Future<User> userInfo() async {
-    // String token = Prefs.getString('token') ?? null;
-    Box authBox = await Hive.openBox('auth');
-    String token = authBox.get('token') ?? null;
-    _dio.options.headers["Authorization"] = 'Bearer $token';
+    await setToken();
     Response response = await _dio.get('/api/v1/user');
     return User.fromJson(response.data);
   }
@@ -46,17 +46,13 @@ class UserRepository {
   }
 
   Future<User> update(Map<String, dynamic> updateData) async {
-    Box authBox = await Hive.openBox('auth');
-    String token = authBox.get('token') ?? null;
-    _dio.options.headers["Authorization"] = 'Bearer $token';
+    await setToken();
     final response = await _dio.post('/api/v1/user/me/update', data: updateData);
     return User.fromJson(response.data);
   }
 
   Future<void> changePassword(Map<String, dynamic> passwordData) async {
-    Box authBox = await Hive.openBox('auth');
-    String token = authBox.get('token') ?? null;
-    _dio.options.headers["Authorization"] = 'Bearer $token';
+    await setToken();
     final response = await _dio.post('/api/v1/change-password', data: passwordData);
 
     if (response.statusCode != 200) {
@@ -67,9 +63,7 @@ class UserRepository {
   }
 
   Future<Listing> adsListing({page = 1}) async {
-    Box authBox = await Hive.openBox('auth');
-    String token = authBox.get('token') ?? null;
-    _dio.options.headers["Authorization"] = 'Bearer $token';
+    await setToken();
     final response = await _dio.get('/api/v1/user/me/listings', queryParameters: {"page": "$page"});
     return Listing.fromJson(response.data);
   }

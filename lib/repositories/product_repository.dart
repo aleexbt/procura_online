@@ -8,16 +8,19 @@ import 'package:procura_online/controllers/create_ad_controller.dart';
 import 'package:procura_online/models/listing_model.dart';
 import 'package:procura_online/models/product_model.dart';
 import 'package:procura_online/models/upload_media_model.dart';
+import 'package:procura_online/services/dio_client.dart';
 import 'package:uuid/uuid.dart';
 
-BaseOptions options = BaseOptions(
-  connectTimeout: 10000,
-  receiveTimeout: 3000,
-  baseUrl: 'https://procuraonline-dev.pt',
-  headers: {"Accept": "application/json", "Content-Type": "application/json"},
-);
+DioClient _dio = DioClient();
 
-Dio _dio = Dio(options);
+Future<void> setToken() async {
+  Box authBox = await Hive.openBox('auth') ?? null;
+  String token = authBox.get('token') ?? null;
+  if (token != null) {
+    _dio = DioClient(token: token);
+  }
+}
+
 final _dioCacheManager = DioCacheManager(CacheConfig());
 
 class ProductRepository {
@@ -34,9 +37,7 @@ class ProductRepository {
   }
 
   Future<Product> create(Map<String, dynamic> data) async {
-    Box authBox = await Hive.openBox('auth');
-    String token = authBox.get('token') ?? null;
-    _dio.options.headers["Authorization"] = 'Bearer $token';
+    await setToken();
     Response response = await _dio.post('/api/v1/listings', data: data);
     return Product.fromJson(response.data);
   }
@@ -65,8 +66,6 @@ class ProductRepository {
     String category,
     String subcategory,
   }) async {
-    Box authBox = await Hive.openBox('auth');
-    String token = authBox.get('token') ?? null;
     Uuid uuid = Uuid();
     MultipartFile mainPhoto;
     List<MultipartFile> photosList = List<MultipartFile>.empty(growable: true);
@@ -81,7 +80,7 @@ class ProductRepository {
 
     if (photosToRemove.length > 0) {
       photosToRemove.forEach((element) {
-        _dio.options.headers["Authorization"] = 'Bearer $token';
+        setToken();
         _dio.delete('/api/v1/listings/$id/photos/$element');
       });
     }
@@ -109,7 +108,7 @@ class ProductRepository {
       "categories": [category, subcategory]
     });
 
-    _dio.options.headers["Authorization"] = 'Bearer $token';
+    await setToken();
     final Response response = await _dio.post('/api/v1/listings/$id?_method=PATCH', data: formData);
     return response.data;
   }
@@ -122,17 +121,13 @@ class ProductRepository {
   }
 
   Future<bool> delete(String productId) async {
-    Box authBox = await Hive.openBox('auth');
-    String token = authBox.get('token') ?? null;
-    _dio.options.headers["Authorization"] = 'Bearer $token';
+    await setToken();
     Response response = await _dio.delete('/api/v1/listings/$productId');
     return response.data['result'];
   }
 
   Future<UploadMedia> mediaUpload(File photo) async {
     CreateAdController _createAdController = Get.find();
-    Box authBox = await Hive.openBox('auth');
-    String token = authBox.get('token') ?? null;
     Uuid uuid = Uuid();
 
     FormData data = FormData.fromMap({
@@ -142,7 +137,7 @@ class ProductRepository {
       ),
     });
 
-    _dio.options.headers["Authorization"] = 'Bearer $token';
+    await setToken();
     Response response = await _dio.post('/api/v1/listings/media', data: data, onSendProgress: (sent, total) {
       _createAdController.uploadImageProgress.value = ((sent / total));
     });

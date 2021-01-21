@@ -9,63 +9,51 @@ import 'package:procura_online/models/message_model.dart';
 import 'package:procura_online/models/order_model.dart';
 import 'package:procura_online/models/orders_model.dart';
 import 'package:procura_online/models/upload_media_model.dart';
+import 'package:procura_online/services/dio_client.dart';
 import 'package:uuid/uuid.dart';
 
-BaseOptions options = BaseOptions(
-  connectTimeout: 10000,
-  receiveTimeout: 3000,
-  baseUrl: 'https://procuraonline-dev.pt',
-  headers: {"Accept": "application/json", "Content-Type": "application/json"},
-);
+DioClient _dio = DioClient();
 
-Dio _dio = Dio(options);
+Future<void> setToken() async {
+  Box authBox = await Hive.openBox('auth') ?? null;
+  String token = authBox.get('token') ?? null;
+  if (token != null) {
+    DioClient(token: token);
+  }
+}
+
 final _dioCacheManager = DioCacheManager(CacheConfig());
 
 class OrdersRepository {
   Future<Orders> findAll({String filter = 'vazio', int page = 1}) async {
-    Box authBox = await Hive.openBox('auth');
-    String token = authBox.get('token') ?? null;
-    _dio.options.headers["Authorization"] = 'Bearer $token';
-    Response response = await _dio.get('/api/v1/orders',
-        queryParameters: {"filter": "$filter", "page": "$page"});
+    await setToken();
+    Response response = await _dio.get('/api/v1/orders', queryParameters: {"filter": "$filter", "page": "$page"});
     return Orders.fromJson(response.data);
   }
 
   Future<Message> replyOrder(Map<String, dynamic> data) async {
-    Box authBox = await Hive.openBox('auth');
-    String token = authBox.get('token') ?? null;
-    _dio.options.headers["Authorization"] = 'Bearer $token';
-    Response response =
-        await _dio.post('/api/v1/conversation/send', data: data);
+    await setToken();
+    Response response = await _dio.post('/api/v1/conversation/send', data: data);
     return response.data['data']['conversation_id'];
   }
 
   void markOrderAsRead(String orderId) async {
-    Box authBox = await Hive.openBox('auth');
-    String token = authBox.get('token') ?? null;
-    _dio.options.headers["Authorization"] = 'Bearer $token';
+    await setToken();
     _dio.get('/api/v1/orders/seen/$orderId');
   }
 
   void markOrderAsSold(String orderId) async {
-    Box authBox = await Hive.openBox('auth');
-    String token = authBox.get('token') ?? null;
-    _dio.options.headers["Authorization"] = 'Bearer $token';
+    await setToken();
     _dio.get('/api/v1/orders/$orderId/sold');
   }
 
   Future<Order> createOrder(Map<String, dynamic> data) async {
-    Box authBox = await Hive.openBox('auth');
-    String token = authBox.get('token') ?? null;
-    _dio.options.headers["Authorization"] = 'Bearer $token';
     Response response = await _dio.post('/api/v1/orders', data: data);
     return Order.fromJson(response.data);
   }
 
   Future<UploadMedia> mediaUpload(File photo) async {
     OrdersController _ordersController = Get.find();
-    Box authBox = await Hive.openBox('auth');
-    String token = authBox.get('token') ?? null;
     Uuid uuid = Uuid();
 
     FormData data = FormData.fromMap({
@@ -75,9 +63,8 @@ class OrdersRepository {
       ),
     });
 
-    _dio.options.headers["Authorization"] = 'Bearer $token';
-    Response response = await _dio.post('/api/v1/orders/media', data: data,
-        onSendProgress: (sent, total) {
+    await setToken();
+    Response response = await _dio.post('/api/v1/orders/media', data: data, onSendProgress: (sent, total) {
       _ordersController.uploadImageProgress.value = ((sent / total));
     });
     return UploadMedia.fromJson(response.data);
