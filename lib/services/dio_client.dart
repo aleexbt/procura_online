@@ -28,12 +28,13 @@ class DioClient {
     }
     if (kDebugMode) {
       _dio.interceptors.add(LogInterceptor(
-          responseBody: false,
-          error: true,
-          requestHeader: true,
-          responseHeader: false,
-          request: false,
-          requestBody: false));
+        responseBody: false,
+        error: true,
+        requestHeader: false,
+        responseHeader: false,
+        request: false,
+        requestBody: false,
+      ));
     }
   }
 

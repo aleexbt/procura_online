@@ -28,7 +28,7 @@ class MessageAdapter extends TypeAdapter<Message> {
       daysSectionDate: fields[8] as String,
       sender: fields[9] as User,
       hasAttachments: fields[10] as dynamic,
-      media: (fields[11] as List)?.cast<OrderMedia>(),
+      media: (fields[11] as List)?.cast<MessageMedia>(),
       media2: (fields[12] as List)?.cast<OrderMedia>(),
     );
   }
@@ -97,7 +97,7 @@ Message _$MessageFromJson(Map<String, dynamic> json) {
     hasAttachments: json['has_attachments'],
     media: (json['media_'] as List)
         ?.map((e) =>
-            e == null ? null : OrderMedia.fromJson(e as Map<String, dynamic>))
+            e == null ? null : MessageMedia.fromJson(e as Map<String, dynamic>))
         ?.toList(),
     media2: (json['media'] as List)
         ?.map((e) =>

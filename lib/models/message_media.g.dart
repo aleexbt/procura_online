@@ -1,35 +1,38 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'order_media.dart';
+part of 'message_media.dart';
 
 // **************************************************************************
 // TypeAdapterGenerator
 // **************************************************************************
 
-class OrderMediaAdapter extends TypeAdapter<OrderMedia> {
+class MessageMediaAdapter extends TypeAdapter<MessageMedia> {
   @override
-  final int typeId = 4;
+  final int typeId = 5;
 
   @override
-  OrderMedia read(BinaryReader reader) {
+  MessageMedia read(BinaryReader reader) {
     final numOfFields = reader.readByte();
     final fields = <int, dynamic>{
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
-    return OrderMedia(
+    return MessageMedia(
       id: fields[0] as int,
-      fileName: fields[1] as String,
+      thumb: fields[1] as String,
+      image: fields[2] as String,
     );
   }
 
   @override
-  void write(BinaryWriter writer, OrderMedia obj) {
+  void write(BinaryWriter writer, MessageMedia obj) {
     writer
-      ..writeByte(2)
+      ..writeByte(3)
       ..writeByte(0)
       ..write(obj.id)
       ..writeByte(1)
-      ..write(obj.fileName);
+      ..write(obj.thumb)
+      ..writeByte(2)
+      ..write(obj.image);
   }
 
   @override
@@ -38,7 +41,7 @@ class OrderMediaAdapter extends TypeAdapter<OrderMedia> {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is OrderMediaAdapter &&
+      other is MessageMediaAdapter &&
           runtimeType == other.runtimeType &&
           typeId == other.typeId;
 }
@@ -47,15 +50,17 @@ class OrderMediaAdapter extends TypeAdapter<OrderMedia> {
 // JsonSerializableGenerator
 // **************************************************************************
 
-OrderMedia _$OrderMediaFromJson(Map<String, dynamic> json) {
-  return OrderMedia(
+MessageMedia _$MessageMediaFromJson(Map<String, dynamic> json) {
+  return MessageMedia(
     id: json['id'] as int,
-    fileName: json['file_name'] as String,
+    thumb: json['thumb'] as String,
+    image: json['image'] as String,
   );
 }
 
-Map<String, dynamic> _$OrderMediaToJson(OrderMedia instance) =>
+Map<String, dynamic> _$MessageMediaToJson(MessageMedia instance) =>
     <String, dynamic>{
       'id': instance.id,
-      'file_name': instance.fileName,
+      'thumb': instance.thumb,
+      'image': instance.image,
     };

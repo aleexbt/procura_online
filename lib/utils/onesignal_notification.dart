@@ -32,7 +32,6 @@ class NotificationHelper {
     OneSignal.shared.setInFocusDisplayType(OSNotificationDisplayType.notification);
 
     if (userId != null) {
-      print('SET_EXTERNAL_USER_ID');
       OneSignal.shared.setExternalUserId(userId);
     }
   }

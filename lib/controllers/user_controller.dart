@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hive/hive.dart';
+import 'package:onesignal_flutter/onesignal_flutter.dart';
 import 'package:procura_online/controllers/orders_controller.dart';
 import 'package:procura_online/models/user_model.dart';
 import 'package:procura_online/repositories/user_repository.dart';
@@ -105,6 +106,7 @@ class UserController extends GetxController with StateMixin<User> {
       authBox.put('token', response['token']);
       userBox.put(response['user']['id'], User.fromJson(response['user']));
       _notificationHelper.setExternalUserId(userId: response['user']['id'].toString());
+      setPushToken();
       Get.offAllNamed('/app');
     } on DioError catch (err) {
       Map<String, dynamic> errors = err.response.data['errors'];
@@ -275,5 +277,11 @@ class UserController extends GetxController with StateMixin<User> {
     } finally {
       _isLoading.value = false;
     }
+  }
+
+  void setPushToken() async {
+    OSPermissionSubscriptionState player = await OneSignal.shared.getPermissionSubscriptionState();
+    String playerId = player.subscriptionStatus.userId.toString();
+    _userRepository.setPushToken(playerId);
   }
 }

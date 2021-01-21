@@ -1,5 +1,5 @@
-import 'package:json_annotation/json_annotation.dart';
 import 'package:hive/hive.dart';
+import 'package:json_annotation/json_annotation.dart';
 
 part 'order_media.g.dart';
 
@@ -8,14 +8,12 @@ part 'order_media.g.dart';
 class OrderMedia {
   @HiveField(0)
   int id;
+  @JsonKey(name: 'file_name')
   @HiveField(1)
-  String thumb;
-  @HiveField(2)
-  String image;
+  String fileName;
 
-  OrderMedia({this.id, this.thumb, this.image});
+  OrderMedia({this.id, this.fileName});
 
-  factory OrderMedia.fromJson(Map<String, dynamic> json) =>
-      _$OrderMediaFromJson(json);
+  factory OrderMedia.fromJson(Map<String, dynamic> json) => _$OrderMediaFromJson(json);
   Map<String, dynamic> toJson() => _$OrderMediaToJson(this);
 }

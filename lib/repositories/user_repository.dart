@@ -67,4 +67,10 @@ class UserRepository {
     final response = await _dio.get('/api/v1/user/me/listings', queryParameters: {"page": "$page"});
     return Listing.fromJson(response.data);
   }
+
+  Future setPushToken(String playerId) async {
+    await setToken();
+    final response = await _dio.post('/api/v1/set-token');
+    return response.data;
+  }
 }

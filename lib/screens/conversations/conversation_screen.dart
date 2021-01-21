@@ -12,6 +12,7 @@ import 'package:octo_image/octo_image.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 import 'package:procura_online/controllers/conversation_controller.dart';
 import 'package:procura_online/controllers/user_controller.dart';
+import 'package:procura_online/models/message_media.dart';
 import 'package:procura_online/models/order_model.dart';
 import 'package:procura_online/models/upload_media_model.dart';
 import 'package:procura_online/widgets/buble_item.dart';
@@ -258,14 +259,15 @@ class _ConversationScreenState extends State<ConversationScreen> {
                                                           '/show-photos',
                                                           arguments: {
                                                             "photoId": "photo_$index",
-                                                            "photoUrl": "${order.media[index].image}",
+                                                            "photoUrl":
+                                                                "https://procuraonline-dev.pt/storage/${order.media[index].fileName}",
                                                           },
                                                         ),
                                                         child: Hero(
                                                           tag: 'photo_$index',
                                                           child: OctoImage(
                                                             image: CachedNetworkImageProvider(
-                                                                order.media[index]?.thumb ?? ''),
+                                                                'https://procuraonline-dev.pt/storage/21/${order.media[index]?.fileName}'),
                                                             placeholderBuilder:
                                                                 OctoPlaceholder.circularProgressIndicator(),
                                                             errorBuilder: OctoError.icon(color: Colors.grey[400]),

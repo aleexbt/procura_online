@@ -2,7 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:octo_image/octo_image.dart';
-import 'package:procura_online/models/order_media.dart';
+import 'package:procura_online/models/message_media.dart';
 
 class Bubble extends StatelessWidget {
   Bubble({
@@ -14,7 +14,7 @@ class Bubble extends StatelessWidget {
   });
 
   final String id, message, time;
-  final List<OrderMedia> photos;
+  final List<MessageMedia> photos;
   final isMe;
 
   @override
@@ -52,7 +52,7 @@ class Bubble extends StatelessWidget {
                 photos != null ? SizedBox(height: 5) : Container(width: 0, height: 0),
                 Text(
                   message,
-                  style: TextStyle(color: isMe ? Colors.white : Colors.black, fontSize: 12),
+                  style: TextStyle(color: isMe ? Colors.white : Colors.black),
                 ),
               ],
             ),
@@ -62,14 +62,14 @@ class Bubble extends StatelessWidget {
           padding: const EdgeInsets.all(4.0),
           child: Text(
             time,
-            style: TextStyle(color: Colors.grey, fontSize: 11),
+            style: TextStyle(color: Colors.grey),
           ),
         ),
       ],
     );
   }
 
-  Widget photosGallery(List<OrderMedia> photos) {
+  Widget photosGallery(List<MessageMedia> photos) {
     if (photos == null) {
       return Container(width: 0, height: 0);
     } else if (photos.length == 1) {

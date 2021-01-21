@@ -1,5 +1,6 @@
-import 'package:json_annotation/json_annotation.dart';
 import 'package:hive/hive.dart';
+import 'package:json_annotation/json_annotation.dart';
+import 'package:procura_online/models/message_media.dart';
 import 'package:procura_online/models/user_model.dart';
 
 import 'order_media.dart';
@@ -41,7 +42,7 @@ class Message {
   dynamic hasAttachments;
   @JsonKey(name: 'media_')
   @HiveField(11)
-  List<OrderMedia> media;
+  List<MessageMedia> media;
   @JsonKey(name: 'media')
   @HiveField(12)
   List<OrderMedia> media2;
@@ -62,7 +63,6 @@ class Message {
     this.media2,
   });
 
-  factory Message.fromJson(Map<String, dynamic> json) =>
-      _$MessageFromJson(json);
+  factory Message.fromJson(Map<String, dynamic> json) => _$MessageFromJson(json);
   Map<String, dynamic> toJson() => _$MessageToJson(this);
 }

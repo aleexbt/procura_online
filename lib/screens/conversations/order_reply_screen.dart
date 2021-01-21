@@ -156,13 +156,15 @@ class OrderReplyScreen extends StatelessWidget {
                                                   '/show-photos',
                                                   arguments: {
                                                     "photoId": "photo_$index",
-                                                    "photoUrl": "${order.media[index].image}",
+                                                    "photoUrl":
+                                                        "https://procuraonline-dev.pt/storage/21/${order.media[index].fileName}",
                                                   },
                                                 ),
                                                 child: Hero(
                                                   tag: 'photo_$index',
                                                   child: OctoImage(
-                                                    image: CachedNetworkImageProvider(order.media[index].thumb),
+                                                    image: CachedNetworkImageProvider(
+                                                        'https://procuraonline-dev.pt/storage/21/${order.media[index].fileName}'),
                                                     placeholderBuilder: OctoPlaceholder.circularProgressIndicator(),
                                                     errorBuilder: OctoError.icon(color: Colors.grey[400]),
                                                     fit: BoxFit.cover,
