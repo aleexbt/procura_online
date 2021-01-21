@@ -18,7 +18,7 @@ Future<void> setToken() async {
   Box authBox = await Hive.openBox('auth') ?? null;
   String token = authBox.get('token') ?? null;
   if (token != null) {
-    DioClient(token: token);
+    _dio = DioClient(token: token);
   }
 }
 
