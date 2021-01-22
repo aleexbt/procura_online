@@ -27,6 +27,7 @@ class ConversationController extends GetxController {
   void onClose() {
     pusherService.unbindEvent('App\\Events\\ConversationEvent');
     pusherService.unSubscribePusher('App\\Events\\ConversationEvent');
+    // pusherService.pusher.disconnect();
     super.onClose();
   }
 

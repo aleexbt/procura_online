@@ -12,7 +12,6 @@ import 'package:octo_image/octo_image.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 import 'package:procura_online/controllers/conversation_controller.dart';
 import 'package:procura_online/controllers/user_controller.dart';
-import 'package:procura_online/models/message_media.dart';
 import 'package:procura_online/models/order_model.dart';
 import 'package:procura_online/models/upload_media_model.dart';
 import 'package:procura_online/widgets/buble_item.dart';
@@ -260,14 +259,14 @@ class _ConversationScreenState extends State<ConversationScreen> {
                                                           arguments: {
                                                             "photoId": "photo_$index",
                                                             "photoUrl":
-                                                                "https://procuraonline-dev.pt/storage/${order.media[index].fileName}",
+                                                                "https://procuraonline-dev.pt/storage/${order.media[index].id}/${order.media[index].fileName}",
                                                           },
                                                         ),
                                                         child: Hero(
                                                           tag: 'photo_$index',
                                                           child: OctoImage(
                                                             image: CachedNetworkImageProvider(
-                                                                'https://procuraonline-dev.pt/storage/21/${order.media[index]?.fileName}'),
+                                                                'https://procuraonline-dev.pt/storage/${order.media[index].id}/${order.media[index]?.fileName}'),
                                                             placeholderBuilder:
                                                                 OctoPlaceholder.circularProgressIndicator(),
                                                             errorBuilder: OctoError.icon(color: Colors.grey[400]),
@@ -299,6 +298,7 @@ class _ConversationScreenState extends State<ConversationScreen> {
                                 WidgetsBinding.instance.addPostFrameCallback((_) => _scrollToBottom());
                                 var message = _.conversation.messages[index];
                                 return Bubble(
+                                  pushed: message.hasAttachments && message.media != null ? false : true,
                                   id: message.id.toString(),
                                   photos: message.hasAttachments
                                       ? message.media != null

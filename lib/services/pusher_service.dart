@@ -1,56 +1,61 @@
 import 'dart:async';
 import 'dart:convert';
 
-import 'package:flutter/services.dart';
+import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
-import 'package:hive/hive.dart';
 import 'package:procura_online/controllers/conversation_controller.dart';
-import 'package:pusher_websocket_flutter/pusher.dart';
+import 'package:pusher_client/pusher_client.dart';
 
 class PusherService {
-  Event lastEvent;
+  PusherEvent lastEvent;
   String lastConnectionState;
   Channel channel;
+  PusherClient pusher;
+  String socketId = '';
 
   Future<void> initPusher(String channelName) async {
-    try {
-      Box authBox = await Hive.openBox('auth') ?? null;
-      String token = authBox.get('token') ?? null;
-      await Pusher.init(
-        'cb7f336d45263a9ab275',
-        PusherOptions(
-          cluster: 'eu',
-          auth: PusherAuth(
-            'https://xelapps-validation.herokuapp.com/pusher/auth',
-            headers: {'Authorization': 'Bearer $token', 'channel_name': channelName, 'socket_id': Pusher.getSocketId()},
-          ),
+    print('INIT_PUSHER_START');
+    // Box authBox = await Hive.openBox('auth') ?? null;
+    // String token = authBox.get('token') ?? null;
+    pusher = PusherClient(
+      'cb7f336d45263a9ab275',
+      PusherOptions(
+        cluster: 'eu',
+        auth: PusherAuth(
+          'https://xelapps-validation.herokuapp.com/pusher/auth',
+          headers: {'channel_name': '$channelName', 'socket_id': '$socketId'},
         ),
-        enableLogging: true,
-      );
-    } on PlatformException catch (e) {
-      print(e.message);
-    }
+      ),
+      enableLogging: true,
+      autoConnect: true,
+    );
+    print('PUSHER_INIT_END');
   }
 
   void connectPusher() {
-    Pusher.connect(onConnectionStateChange: (ConnectionStateChange connectionState) async {
-      lastConnectionState = connectionState.currentState;
-      print('CONNECTION_STATE: ${connectionState.currentState}');
-    }, onError: (ConnectionError e) {
-      print("Error: ${e.message}");
+    // pusher.connect();
+    socketId = pusher.getSocketId();
+    print('SOCKET_ID_fim: $socketId');
+    pusher.onConnectionStateChange((state) {
+      print("previousState: ${state.previousState}, currentState: ${state.currentState}");
+    });
+    pusher.onConnectionError((error) {
+      print("error: ${error.message}");
     });
   }
 
-  Future<void> subscribePusher(String channelName) async {
-    channel = await Pusher.subscribe(channelName);
+  void subscribePusher(String channelName) {
+    channel = pusher.subscribe(channelName);
   }
 
   void unSubscribePusher(String channelName) {
-    Pusher.unsubscribe(channelName);
+    pusher.unsubscribe(channelName);
   }
 
   void bindEvent(String eventName) {
-    channel.bind(eventName, (event) {
+    channel.bind(eventName, (PusherEvent event) {
+      print('EVENT_RECEIVED');
+      debugPrint(event.data, wrapWidth: 1024);
       final ConversationController _conversationController = Get.find();
       Map<String, dynamic> json = jsonDecode(event.data);
       _conversationController.addMessage(json);
@@ -62,9 +67,10 @@ class PusherService {
   }
 
   Future<void> firePusher(String channelName, String eventName) async {
+    print('FIRE_PUSHER');
     await initPusher(channelName);
     connectPusher();
-    await subscribePusher(channelName);
+    subscribePusher(channelName);
     bindEvent(eventName);
   }
 }

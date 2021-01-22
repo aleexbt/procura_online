@@ -70,7 +70,7 @@ class UserRepository {
 
   Future setPushToken(String playerId) async {
     await setToken();
-    final response = await _dio.post('/api/v1/set-token');
+    final response = await _dio.post('/api/v1/set-token', data: {"token": "$playerId"});
     return response.data;
   }
 }

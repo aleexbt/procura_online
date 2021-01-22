@@ -282,6 +282,7 @@ class UserController extends GetxController with StateMixin<User> {
   void setPushToken() async {
     OSPermissionSubscriptionState player = await OneSignal.shared.getPermissionSubscriptionState();
     String playerId = player.subscriptionStatus.userId.toString();
+    print('PLAYER_ID: $playerId');
     _userRepository.setPushToken(playerId);
   }
 }

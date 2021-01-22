@@ -4,7 +4,6 @@ PODS:
     - AppAuth/ExternalUserAgent (= 1.4.0)
   - AppAuth/Core (1.4.0)
   - AppAuth/ExternalUserAgent (1.4.0)
-  - CryptoSwift (0.15.0)
   - DKImagePickerController/Core (4.3.2):
     - DKImagePickerController/ImageDataManager
     - DKImagePickerController/Resource
@@ -80,23 +79,24 @@ PODS:
     - OneSignal (= 2.16.1)
   - path_provider (0.0.1):
     - Flutter
-  - pusher_websocket_flutter (0.1.1):
+  - pusher_client (1.1.2):
     - Flutter
-    - PusherSwift (= 7.0.0)
-  - PusherSwift (7.0.0):
-    - CryptoSwift (~> 0.9)
-    - ReachabilitySwift (= 4.3.0)
-    - Starscream (~> 3.0.5)
-  - ReachabilitySwift (4.3.0)
+    - PusherSwiftWithEncryption (~> 8.0.0)
+  - PusherSwiftWithEncryption (8.0.0):
+    - ReachabilitySwift (~> 5.0)
+    - Sodium (= 0.8.0)
+    - Starscream (~> 3.1)
+  - ReachabilitySwift (5.0.0)
   - SDWebImage (5.10.2):
     - SDWebImage/Core (= 5.10.2)
   - SDWebImage/Core (5.10.2)
   - share (0.0.1):
     - Flutter
+  - Sodium (0.8.0)
   - sqflite (0.0.2):
     - Flutter
     - FMDB (>= 2.7.5)
-  - Starscream (3.0.6)
+  - Starscream (3.1.1)
   - SwiftyGif (5.3.0)
   - video_player (0.0.1):
     - Flutter
@@ -114,7 +114,7 @@ DEPENDENCIES:
   - OneSignal (< 3.0, >= 2.9.3)
   - onesignal_flutter (from `.symlinks/plugins/onesignal_flutter/ios`)
   - path_provider (from `.symlinks/plugins/path_provider/ios`)
-  - pusher_websocket_flutter (from `.symlinks/plugins/pusher_websocket_flutter/ios`)
+  - pusher_client (from `.symlinks/plugins/pusher_client/ios`)
   - share (from `.symlinks/plugins/share/ios`)
   - sqflite (from `.symlinks/plugins/sqflite/ios`)
   - video_player (from `.symlinks/plugins/video_player/ios`)
@@ -124,7 +124,6 @@ DEPENDENCIES:
 SPEC REPOS:
   trunk:
     - AppAuth
-    - CryptoSwift
     - DKImagePickerController
     - DKPhotoGallery
     - FBSDKCoreKit
@@ -134,9 +133,10 @@ SPEC REPOS:
     - GTMAppAuth
     - GTMSessionFetcher
     - OneSignal
-    - PusherSwift
+    - PusherSwiftWithEncryption
     - ReachabilitySwift
     - SDWebImage
+    - Sodium
     - Starscream
     - SwiftyGif
 
@@ -155,8 +155,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/onesignal_flutter/ios"
   path_provider:
     :path: ".symlinks/plugins/path_provider/ios"
-  pusher_websocket_flutter:
-    :path: ".symlinks/plugins/pusher_websocket_flutter/ios"
+  pusher_client:
+    :path: ".symlinks/plugins/pusher_client/ios"
   share:
     :path: ".symlinks/plugins/share/ios"
   sqflite:
@@ -170,7 +170,6 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   AppAuth: 31bcec809a638d7bd2f86ea8a52bd45f6e81e7c7
-  CryptoSwift: 769f58a9e89f64e8796c2e59ce5f002dc81a2438
   DKImagePickerController: b5eb7f7a388e4643264105d648d01f727110fc3d
   DKPhotoGallery: fdfad5125a9fdda9cc57df834d49df790dbb4179
   FBSDKCoreKit: 4afd6ff53d8133a433dbcda44451c9498f8c6ce4
@@ -187,13 +186,14 @@ SPEC CHECKSUMS:
   OneSignal: 5f6514ec2b931306eb067acb124afbb2e49970af
   onesignal_flutter: 260bb95c0a2d791c990c7bd8749525c9834d43fc
   path_provider: abfe2b5c733d04e238b0d8691db0cfd63a27a93c
-  pusher_websocket_flutter: ff9a11e48f24d2297bf0d143c99119106cd2d81b
-  PusherSwift: d15d6290be0b0b57fd9ac80b03661a6ba24623ec
-  ReachabilitySwift: 408477d1b6ed9779dba301953171e017c31241f3
+  pusher_client: dbf99c67dce9c73aa2048b9c015106a0bdaf8f24
+  PusherSwiftWithEncryption: e8626abf1067a7e1b06afde720934fe1872498e3
+  ReachabilitySwift: 985039c6f7b23a1da463388634119492ff86c825
   SDWebImage: b969dcfc02c40a5da71eac0b03b8f1a0c794a86f
   share: 0b2c3e82132f5888bccca3351c504d0003b3b410
+  Sodium: 63c0ca312a932e6da481689537d4b35568841bdc
   sqflite: 6d358c025f5b867b29ed92fc697fd34924e11904
-  Starscream: ef3ece99d765eeccb67de105bfa143f929026cf5
+  Starscream: 4bb2f9942274833f7b4d296a55504dcfc7edb7b0
   SwiftyGif: e466e86c660d343357ab944a819a101c4127cb40
   video_player: 9cc823b1d9da7e8427ee591e8438bfbcde500e6e
   wakelock: bfc7955c418d0db797614075aabbc58a39ab5107
@@ -201,4 +201,4 @@ SPEC CHECKSUMS:
 
 PODFILE CHECKSUM: e48fbf13b8cf0f32e80dc2a99d3d7b85c6b65aed
 
-COCOAPODS: 1.10.0
+COCOAPODS: 1.10.1
