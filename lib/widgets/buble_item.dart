@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:octo_image/octo_image.dart';
 import 'package:procura_online/models/message_media.dart';
-import 'package:procura_online/models/order_media.dart';
 
 class Bubble extends StatelessWidget {
   Bubble({
@@ -12,13 +11,11 @@ class Bubble extends StatelessWidget {
     this.message,
     this.time,
     this.isMe,
-    this.pushed,
   });
 
   final String id, message, time;
   final List<dynamic> photos;
   final isMe;
-  final bool pushed;
 
   @override
   Widget build(BuildContext context) {
@@ -51,21 +48,21 @@ class Bubble extends StatelessWidget {
             child: Column(
               crossAxisAlignment: align,
               children: [
-                pushed ? photosGalleryOrder(photos) : photosGallery(photos),
+                photos != null ? photosGallery(photos) : Container(width: 0, height: 0),
                 photos != null ? SizedBox(height: 5) : Container(width: 0, height: 0),
                 Text(
                   message,
-                  style: TextStyle(color: isMe ? Colors.white : Colors.black),
+                  style: TextStyle(color: isMe ? Colors.white : Colors.black, fontSize: 12),
                 ),
               ],
             ),
           ),
         ),
         Padding(
-          padding: const EdgeInsets.all(4.0),
+          padding: EdgeInsets.only(left: isMe ? 0 : 10, right: isMe ? 10 : 0, bottom: 4),
           child: Text(
             time,
-            style: TextStyle(color: Colors.grey),
+            style: TextStyle(color: Colors.grey, fontSize: 11),
           ),
         ),
       ],
@@ -73,8 +70,6 @@ class Bubble extends StatelessWidget {
   }
 
   Widget photosGallery(List<MessageMedia> photos) {
-    print('gallerrrt');
-    print(photos);
     if (photos == null) {
       return Container(width: 0, height: 0);
     } else if (photos.length == 1) {
@@ -133,81 +128,6 @@ class Bubble extends StatelessWidget {
                       width: 250,
                       child: OctoImage(
                         image: CachedNetworkImageProvider(photos[index].image),
-                        placeholderBuilder: OctoPlaceholder.blurHash('LAI#u-9XM[D\$GdIU4oIA-sWFxwRl'),
-                        errorBuilder: OctoError.icon(color: Colors.grey[400]),
-                        fit: BoxFit.cover,
-                      ),
-                    ),
-                  ),
-                ),
-              );
-            }),
-      );
-    }
-  }
-
-  Widget photosGalleryOrder(List<OrderMedia> photos) {
-    print('ORDERS GALLERY');
-    if (photos == null) {
-      return Container(width: 0, height: 0);
-    } else if (photos.length == 1) {
-      return GestureDetector(
-        onTap: () => Get.toNamed(
-          '/show-photos',
-          arguments: {
-            "photoId": "${photos[0].id}",
-            "photoUrl": "https://procuraonline-dev.pt/storage/${photos[0].id}/${photos[0].fileName}",
-          },
-        ),
-        child: Hero(
-          tag: '${photos[0].id}',
-          child: SizedBox(
-            width: 250,
-            height: 200,
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(15),
-              child: OctoImage(
-                image: CachedNetworkImageProvider(
-                    'https://procuraonline-dev.pt/storage/${photos[0].id}/${photos[0].fileName}'),
-                placeholderBuilder: OctoPlaceholder.blurHash('LAI#u-9XM[D\$GdIU4oIA-sWFxwRl'),
-                errorBuilder: OctoError.icon(color: Colors.grey[400]),
-                fit: BoxFit.cover,
-              ),
-            ),
-          ),
-        ),
-      );
-    } else {
-      return SizedBox(
-        width: 250,
-        child: GridView.builder(
-            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 2,
-              crossAxisSpacing: 4,
-              mainAxisSpacing: 4,
-              childAspectRatio: 1.0,
-            ),
-            shrinkWrap: true,
-            physics: NeverScrollableScrollPhysics(),
-            itemCount: photos.length,
-            itemBuilder: (context, index) {
-              return GestureDetector(
-                onTap: () => Get.toNamed(
-                  '/show-photos',
-                  arguments: {
-                    "photoId": "${photos[index].id}",
-                    "photoUrl": "https://procuraonline-dev.pt/storage/${photos[index].id}/${photos[index].fileName}",
-                  },
-                ),
-                child: Hero(
-                  tag: '${photos[index].id}',
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(15),
-                    child: SizedBox(
-                      width: 250,
-                      child: OctoImage(
-                        image: CachedNetworkImageProvider(
-                            'https://procuraonline-dev.pt/storage/${photos[index].id}/${photos[index].fileName}'),
                         placeholderBuilder: OctoPlaceholder.blurHash('LAI#u-9XM[D\$GdIU4oIA-sWFxwRl'),
                         errorBuilder: OctoError.icon(color: Colors.grey[400]),
                         fit: BoxFit.cover,

@@ -17,7 +17,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      behavior: HitTestBehavior.opaque,
+      behavior: HitTestBehavior.translucent,
       onTap: () {
         FocusScopeNode currentFocus = FocusScope.of(context);
         if (!currentFocus.hasPrimaryFocus && currentFocus.focusedChild != null) {
@@ -30,6 +30,7 @@ class MyApp extends StatelessWidget {
         initialBinding: AppBindings(),
         initialRoute: Routers.initialRoute,
         getPages: getPages,
+        popGesture: true,
         debugShowCheckedModeBanner: false,
         title: 'Procura Online',
         theme: ThemeData(

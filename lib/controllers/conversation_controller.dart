@@ -27,7 +27,6 @@ class ConversationController extends GetxController {
   void onClose() {
     pusherService.unbindEvent('App\\Events\\ConversationEvent');
     pusherService.unSubscribePusher('App\\Events\\ConversationEvent');
-    // pusherService.pusher.disconnect();
     super.onClose();
   }
 
@@ -160,20 +159,19 @@ class ConversationController extends GetxController {
     }
   }
 
-  // void updateMessages() async {
-  //   try {
-  //     Messages response = await _chatRepository.findOne(chatId);
-  //     _messages.update((val) {
-  //       val.messages = response.messages;
-  //     });
-  //   } on DioError catch (err) {
-  //     print(err);
-  //   } finally {
-  //     messageInput.value.clear();
-  //     _isReplying.value = false;
-  //     _chatController.findAll();
-  //   }
-  // }
+  void backgroundUpdateMessages() async {
+    print('BACKGROUND_UPDATE_MESSAGES');
+    try {
+      Conversation response = await _chatRepository.findOne(chatId);
+      _conversation.value = response;
+      Box<Conversation> box = await Hive.openBox<Conversation>('conversations');
+      box.put(chatId, response);
+    } on DioError catch (err) {
+      print(err);
+    } finally {
+      _chatController.findAll();
+    }
+  }
 
   void addMessage(Map<String, dynamic> data) async {
     _conversation.update((val) {

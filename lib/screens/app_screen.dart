@@ -31,6 +31,12 @@ class _AppScreenState extends State<AppScreen> {
     if (_userController.userData?.id != null) {
       _notificationHelper.setExternalUserId(userId: _userController.userData?.id?.toString());
     }
+
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+      statusBarBrightness: Brightness.light,
+      statusBarColor: Colors.red,
+      statusBarIconBrightness: Brightness.dark,
+    ));
     super.initState();
   }
 
@@ -54,11 +60,11 @@ class _AppScreenState extends State<AppScreen> {
 
   @override
   Widget build(BuildContext context) {
-    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
-      statusBarBrightness: Brightness.light,
-      statusBarColor: Colors.white,
-      statusBarIconBrightness: Brightness.dark,
-    ));
+    // SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+    //   statusBarBrightness: Brightness.light,
+    //   statusBarColor: Colors.white,
+    //   statusBarIconBrightness: Brightness.dark,
+    // ));
     return Scaffold(
       body: SafeArea(
         child: PageView(

@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:get/get.dart';
 import 'package:procura_online/bindings/conversation_bindings.dart';
 import 'package:procura_online/intro.dart';
@@ -62,11 +64,13 @@ List<GetPage> getPages = [
   GetPage(
     name: Routers.product,
     page: () => ProductScreen(),
+    transition: Platform.isIOS ? Transition.native : null,
   ),
   GetPage(
     name: Routers.showPhotos,
     page: () => ShowPhotos(),
     opaque: false,
+    transition: Platform.isIOS ? Transition.noTransition : null,
   ),
   // GetPage(
   //   name: Routers.imagePreview,
@@ -81,10 +85,12 @@ List<GetPage> getPages = [
     name: Routers.chatConversation,
     page: () => ConversationScreen(),
     binding: ConversationBindings(),
+    transition: Platform.isIOS ? Transition.native : null,
   ),
   GetPage(
     name: Routers.chatReply,
     page: () => OrderReplyScreen(),
+    transition: Platform.isIOS ? Transition.native : null,
   ),
   GetPage(
     name: Routers.searchFilter,
@@ -99,33 +105,41 @@ List<GetPage> getPages = [
   GetPage(
     name: Routers.adsListing,
     page: () => AdsListingScreen(),
+    transition: Platform.isIOS ? Transition.native : null,
   ),
   GetPage(
     name: Routers.adsEdit,
     page: () => EditAdScreen(),
+    transition: Platform.isIOS ? Transition.native : null,
   ),
   GetPage(
     name: Routers.editProfile,
     page: () => EditProfileScreen(),
+    transition: Platform.isIOS ? Transition.native : null,
   ),
   GetPage(
     name: Routers.changePassword,
     page: () => ChangePasswordScreen(),
+    transition: Platform.isIOS ? Transition.native : null,
   ),
   GetPage(
     name: Routers.createAd,
     page: () => CreateAdScreen(),
+    transition: Platform.isIOS ? Transition.native : null,
   ),
   GetPage(
     name: Routers.createOrder,
     page: () => CreateOrderScreen(),
+    transition: Platform.isIOS ? Transition.native : null,
   ),
   GetPage(
     name: Routers.profile,
     page: () => ProfileScreen(),
+    transition: Platform.isIOS ? Transition.native : null,
   ),
   GetPage(
     name: Routers.tests,
     page: () => TestsScreen(),
+    transition: Platform.isIOS ? Transition.native : null,
   ),
 ];

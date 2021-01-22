@@ -45,11 +45,13 @@ class PusherService {
   }
 
   void subscribePusher(String channelName) {
+    pusher.unsubscribe(channelName);
     channel = pusher.subscribe(channelName);
   }
 
   void unSubscribePusher(String channelName) {
     pusher.unsubscribe(channelName);
+    print('PUSHER_UNSUBSCRIBE');
   }
 
   void bindEvent(String eventName) {
@@ -64,6 +66,7 @@ class PusherService {
 
   void unbindEvent(String eventName) {
     channel.unbind(eventName);
+    print('PUSHER_UNBIND');
   }
 
   Future<void> firePusher(String channelName, String eventName) async {
