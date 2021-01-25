@@ -26,7 +26,6 @@ class MyApp extends StatelessWidget {
       },
       child: GetMaterialApp(
         customTransition: SharedZaxisPageTransitionVertical(),
-        // smartManagement: SmartManagement.keepFactory,
         initialBinding: AppBindings(),
         initialRoute: Routers.initialRoute,
         getPages: getPages,

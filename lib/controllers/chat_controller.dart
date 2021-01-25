@@ -1,17 +1,52 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:hive/hive.dart';
 import 'package:procura_online/models/chat_model.dart';
 import 'package:procura_online/models/chats_model.dart';
+import 'package:procura_online/models/user_model.dart';
 import 'package:procura_online/repositories/chat_repository.dart';
+import 'package:procura_online/services/pusher_service.dart';
 
-class ChatController extends GetxController {
+class ChatController extends GetxController with WidgetsBindingObserver {
   ChatRepository _chatRepository = Get.find();
+  PusherService pusherService;
 
   @override
-  onInit() {
+  void onInit() {
+    pusherService = PusherService();
+    subscribeMessages();
     findAll();
+    WidgetsBinding.instance.addObserver(this);
     super.onInit();
+  }
+
+  @override
+  void onClose() {
+    pusherService.unbindEvent('App\\Events\\ConversationUpdateEvent');
+    pusherService.unSubscribePusher('App\\Events\\ConversationUpdateEvent');
+    WidgetsBinding.instance.removeObserver(this);
+    super.onClose();
+  }
+
+  void subscribeMessages() async {
+    Box<User> box = await Hive.openBox<User>('userData') ?? null;
+    int userId = box.values?.first?.id ?? null;
+    if (userId != null) {
+      pusherService.firePusher('private-update-conversation.$userId', 'App\\Events\\ConversationUpdateEvent');
+      pusherService.firePusher('private-conversation-up', 'App\\Events\\ConversationUpdateEvent');
+    }
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    print(state);
+    if (state == AppLifecycleState.resumed) {
+      subscribeMessages();
+    } else if (state == AppLifecycleState.paused) {
+      pusherService.unbindEvent('App\\Events\\ConversationUpdateEvent');
+      pusherService.unSubscribePusher('App\\Events\\ConversationUpdateEvent');
+    }
   }
 
   RxBool _isLoading = false.obs;
@@ -38,6 +73,14 @@ class ChatController extends GetxController {
       Chats response = await _chatRepository.findAll();
       _chats.value = response;
       filteredConversations = List.from(response.chats);
+
+      // await pusherService.initPusher('private-update-conversation.2');
+      // pusherService.subscribePusher('private-update-conversation.2');
+      // pusherService.bindEvent('App\\Events\\ConversationUpdateEvent');
+      //
+      // await pusherService.initPusher('private-conversation-up');
+      // pusherService.subscribePusher('private-conversation-up');
+      // pusherService.bindEvent('App\\Events\\ConversationUpdateEvent');
     } on DioError catch (err) {
       print(err);
       _hasError.value = true;
@@ -87,5 +130,14 @@ class ChatController extends GetxController {
 
     _chats.value.chats = filtered;
     _chats.refresh();
+  }
+
+  void updateMessages(Map<String, dynamic> data) async {
+    Chat conversation = Chat.fromJson(data);
+    _chats.update((val) {
+      val.chats.removeWhere((chat) => chat.id == conversation.id);
+      val.chats.insert(0, conversation);
+      // val.chats.firstWhere((chat) => chat.id == conversation.id).latestMessage = conversation.latestMessage;
+    });
   }
 }

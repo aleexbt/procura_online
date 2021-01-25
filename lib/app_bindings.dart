@@ -15,9 +15,7 @@ class AppBindings implements Bindings {
     Get.lazyPut(() => OrdersRepository(), fenix: true);
     Get.lazyPut(() => ProductRepository(), fenix: true);
     Get.lazyPut(() => VehicleRepository(), fenix: true);
-
     Get.put(UserController(), permanent: true);
-    // Get.put(SearchController(), permanent: true);
     Get.put(HomeController(), permanent: true);
   }
 }

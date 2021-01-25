@@ -106,7 +106,7 @@ class UserController extends GetxController with StateMixin<User> {
       authBox.put('token', response['token']);
       userBox.put(response['user']['id'], User.fromJson(response['user']));
       _notificationHelper.setExternalUserId(userId: response['user']['id'].toString());
-      setPushToken();
+      // setPushToken();
       Get.offAllNamed('/app');
     } on DioError catch (err) {
       Map<String, dynamic> errors = err.response.data['errors'];
@@ -201,6 +201,7 @@ class UserController extends GetxController with StateMixin<User> {
     Get.delete<ChatController>(force: true);
     _isLoggedIn.value = false;
     _userData.value = User();
+    _notificationHelper.removeExternalUserId();
     NavKey.pageController.animateToPage(0, duration: Duration(milliseconds: 500), curve: Curves.linear);
     Get.back();
   }

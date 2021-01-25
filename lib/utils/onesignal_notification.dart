@@ -22,13 +22,14 @@ class NotificationHelper {
 
       if (data['action'] == 'redirect') {
         if (data['page'] == 'conversation') {
-          String conversationId = data['conversationId'];
+          String conversationId = data['conversationId'].toString();
           Get.toNamed('/chat/conversation/$conversationId');
         }
       }
     });
 
     await OneSignal.shared.init('5d641105-7b40-4b0d-902a-ad3a0b02041a', iOSSettings: settings);
+
     OneSignal.shared.setInFocusDisplayType(OSNotificationDisplayType.notification);
 
     if (userId != null) {
@@ -38,5 +39,9 @@ class NotificationHelper {
 
   void setExternalUserId({@required String userId}) {
     OneSignal.shared.setExternalUserId(userId);
+  }
+
+  void removeExternalUserId() {
+    OneSignal.shared.removeExternalUserId();
   }
 }

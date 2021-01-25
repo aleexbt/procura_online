@@ -11,15 +11,17 @@ import 'package:procura_online/models/upload_media_model.dart';
 import 'package:procura_online/repositories/chat_repository.dart';
 import 'package:procura_online/services/pusher_service.dart';
 
-class ConversationController extends GetxController {
+class ConversationController extends GetxController with WidgetsBindingObserver {
   final String chatId = Get.parameters['id'];
   final ChatRepository _chatRepository = Get.find();
   final ChatController _chatController = Get.find();
   PusherService pusherService;
+
   @override
   void onInit() {
     restoreConversation();
     pusherService = PusherService();
+    WidgetsBinding.instance.addObserver(this);
     super.onInit();
   }
 
@@ -27,7 +29,19 @@ class ConversationController extends GetxController {
   void onClose() {
     pusherService.unbindEvent('App\\Events\\ConversationEvent');
     pusherService.unSubscribePusher('App\\Events\\ConversationEvent');
+    WidgetsBinding.instance.removeObserver(this);
     super.onClose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed) {
+      pusherService.firePusher('private-conversation.$chatId', 'App\\Events\\ConversationEvent');
+      backgroundUpdateMessages();
+    } else if (state == AppLifecycleState.paused) {
+      pusherService.unbindEvent('App\\Events\\ConversationEvent');
+      pusherService.unSubscribePusher('App\\Events\\ConversationEvent');
+    }
   }
 
   RxBool _isLoading = true.obs;
@@ -168,6 +182,8 @@ class ConversationController extends GetxController {
       box.put(chatId, response);
     } on DioError catch (err) {
       print(err);
+    } catch (err) {
+      print(err);
     } finally {
       _chatController.findAll();
     }
@@ -177,7 +193,7 @@ class ConversationController extends GetxController {
     _conversation.update((val) {
       val.messages.add(Message.fromJson(data['message']));
     });
-    _chatController.findAll(skipLoading: true);
+    // _chatController.findAll(skipLoading: true);
   }
 
   Future<UploadMedia> mediaUpload(File photo) async {

@@ -249,7 +249,8 @@ class _LoginScreenState extends State<LoginScreen> {
                           TextButton(
                             style: TextButton.styleFrom(primary: Colors.white),
                             child: Text('Not a member? Sign up'),
-                            onPressed: () => Get.toNamed('/auth/register'),
+                            // onPressed: () => Get.toNamed('/auth/register'),
+                            onPressed: () {},
                           ),
                         ],
                       ),
