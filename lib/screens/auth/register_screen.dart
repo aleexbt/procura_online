@@ -6,7 +6,9 @@ import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:procura_online/controllers/user_controller.dart';
 import 'package:procura_online/widgets/gradient_button.dart';
 import 'package:procura_online/widgets/select_option.dart';
+import 'package:procura_online/widgets/select_option_multi.dart';
 import 'package:procura_online/widgets/text_input.dart';
+import 'package:smart_select/smart_select.dart';
 
 class RegisterScreen extends StatefulWidget {
   @override
@@ -20,12 +22,17 @@ class _RegisterScreenState extends State<RegisterScreen> {
   final TextEditingController _phone = TextEditingController();
   final TextEditingController _password = TextEditingController();
   final TextEditingController _passwordConfirmation = TextEditingController();
-
+  final TextEditingController _company = TextEditingController();
   final TextEditingController _address = TextEditingController();
   final TextEditingController _postcode = TextEditingController();
   final _formKey = GlobalKey<FormState>();
 
+  bool submittedStep1 = false;
+  bool submittedStep2 = false;
+  bool submittedStep3 = false;
   int currentStep = 0;
+  bool isLoadingDistricts = false;
+  bool isLoadingCities = false;
 
   List<Widget> steps() {
     return [
@@ -34,6 +41,36 @@ class _RegisterScreenState extends State<RegisterScreen> {
       stepThree(),
     ];
   }
+
+  String selectedAccountType = '';
+  final List<S2Choice<String>> accountType = [
+    S2Choice<String>(value: 'company', title: 'Company'),
+    S2Choice<String>(value: 'personal', title: 'Personal'),
+  ];
+
+  List<dynamic> selectedSkills = [];
+  final List<S2Choice> skills = [
+    S2Choice<int>(value: 1, title: 'Workshop'),
+    S2Choice<int>(value: 2, title: 'Car stand'),
+    S2Choice<int>(value: 3, title: 'Scrap'),
+    S2Choice<int>(value: 4, title: 'Other'),
+  ];
+
+  int selectedDistrict;
+  final List<S2Choice> districts = [
+    S2Choice<int>(value: 1, title: 'Dis. 1'),
+    S2Choice<int>(value: 2, title: 'Dis. 2'),
+    S2Choice<int>(value: 3, title: 'Dis. 3'),
+    S2Choice<int>(value: 4, title: 'Dis. 4'),
+  ];
+
+  int selectedCity;
+  final List<S2Choice> cities = [
+    S2Choice<int>(value: 1, title: 'City 1'),
+    S2Choice<int>(value: 2, title: 'City 2'),
+    S2Choice<int>(value: 3, title: 'City 3'),
+    S2Choice<int>(value: 4, title: 'City 4'),
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -62,7 +99,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
               child: Padding(
                 padding: const EdgeInsets.all(15.0),
                 child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Form(
@@ -90,22 +126,36 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                 onPressed: () {
                                   setState(() {
                                     if (currentStep == 0) {
-                                    } else if (currentStep == 1) {}
-                                    currentStep = currentStep + 1;
+                                      setState(() => submittedStep1 = true);
+                                      if (_formKey.currentState.validate()) {
+                                        currentStep = currentStep + 1;
+                                      }
+                                    } else if (currentStep == 1) {
+                                      setState(() => submittedStep2 = true);
+                                      if (_formKey.currentState.validate() &&
+                                          selectedAccountType.isNotEmpty &&
+                                          selectedSkills.isNotEmpty) {
+                                        currentStep = currentStep + 1;
+                                      }
+                                    }
                                   });
                                 },
                               )
                             : GradientButton(
                                 text: 'Sign up',
                                 onPressed: () {
-                                  if (_formKey.currentState.validate()) {
+                                  setState(() => submittedStep3 = true);
+                                  if (_formKey.currentState.validate() &&
+                                      selectedDistrict != null &&
+                                      selectedCity != null) {
                                     _userController.signUp(
                                       name: _name.text,
                                       email: _email.text,
                                       phone: _phone.text,
+                                      password: _password.text,
+                                      company: _company.text,
                                       address: _address.text,
                                       postcode: _postcode.text,
-                                      password: _password.text,
                                     );
                                   }
                                 },
@@ -142,6 +192,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
   Widget stepOne() {
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         CustomTextInput(
           controller: _name,
@@ -211,16 +262,29 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
   Widget stepTwo() {
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         SelectOption(
           modalTitle: 'Account type',
           selectText: 'Account type',
-          value: _userController.selectedAccountType.value,
-          choiceItems: _userController.accountTypeOptions,
-          onChange: (state) => _userController.selectedAccountType(state.value),
+          value: selectedAccountType,
+          choiceItems: accountType,
+          onChange: (state) => setState(() => selectedAccountType = state.value),
+          hasError: selectedAccountType.isEmpty && submittedStep2,
+        ),
+        Visibility(
+          visible: selectedAccountType.isEmpty && submittedStep2,
+          child: Padding(
+            padding: const EdgeInsets.only(left: 12, top: 5),
+            child: Text(
+              'Please select an account type',
+              style: TextStyle(color: Colors.red, fontSize: 12),
+            ),
+          ),
         ),
         SizedBox(height: 20),
         CustomTextInput(
+          controller: _company,
           fillColor: Colors.grey[200],
           hintText: 'Company',
           textCapitalization: TextCapitalization.sentences,
@@ -232,15 +296,23 @@ class _RegisterScreenState extends State<RegisterScreen> {
           },
         ),
         SizedBox(height: 20),
-        CustomTextInput(
-          fillColor: Colors.grey[200],
-          hintText: 'Skills',
-          validator: (value) {
-            if (value.isEmpty) {
-              return 'Please enter your skills';
-            }
-            return null;
-          },
+        SelectOptionMulti(
+          modalTitle: 'Skills',
+          selectText: 'Skills',
+          value: selectedSkills,
+          choiceItems: skills,
+          onChange: (state) => setState(() => selectedSkills = state.value),
+          hasError: selectedSkills.isEmpty && submittedStep2,
+        ),
+        Visibility(
+          visible: selectedSkills.isEmpty && submittedStep2,
+          child: Padding(
+            padding: const EdgeInsets.only(left: 12, top: 5),
+            child: Text(
+              'Please select at least one skill',
+              style: TextStyle(color: Colors.red, fontSize: 12),
+            ),
+          ),
         ),
       ],
     );
@@ -248,21 +320,44 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
   Widget stepThree() {
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         SelectOption(
           modalTitle: 'District',
           selectText: 'District',
-          value: _userController.selectedAccountType.value,
-          choiceItems: _userController.accountTypeOptions,
-          onChange: (state) => _userController.selectedAccountType(state.value),
+          value: selectedDistrict,
+          choiceItems: districts,
+          onChange: (state) => setState(() => selectedDistrict = int.parse(state.value)),
+          hasError: selectedDistrict == null && submittedStep3,
+        ),
+        Visibility(
+          visible: selectedDistrict == null && submittedStep3,
+          child: Padding(
+            padding: const EdgeInsets.only(left: 12, top: 5),
+            child: Text(
+              'Please select a district',
+              style: TextStyle(color: Colors.red, fontSize: 12),
+            ),
+          ),
         ),
         SizedBox(height: 20),
         SelectOption(
           modalTitle: 'City',
           selectText: 'City',
-          value: _userController.selectedAccountType.value,
-          choiceItems: _userController.accountTypeOptions,
-          onChange: (state) => _userController.selectedAccountType(state.value),
+          value: selectedCity,
+          choiceItems: cities,
+          onChange: (state) => setState(() => selectedCity = int.parse(state.value)),
+          hasError: selectedCity == null && submittedStep3,
+        ),
+        Visibility(
+          visible: selectedCity == null && submittedStep3,
+          child: Padding(
+            padding: const EdgeInsets.only(left: 12, top: 5),
+            child: Text(
+              'Please select a city',
+              style: TextStyle(color: Colors.red, fontSize: 12),
+            ),
+          ),
         ),
         SizedBox(height: 20),
         CustomTextInput(
@@ -284,202 +379,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
           validator: (value) {
             if (value.isEmpty) {
               return 'Please enter your postcode';
-            }
-            return null;
-          },
-        ),
-      ],
-    );
-  }
-}
-
-class RegisterStepOne extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
-        CustomTextInput(
-          fillColor: Colors.grey[200],
-          hintText: 'Full name',
-          hintStyle: TextStyle(color: Colors.white),
-          textCapitalization: TextCapitalization.sentences,
-          errorBorderColor: Colors.white54,
-          errorTextColor: Colors.white,
-          validator: (value) {
-            if (value.isEmpty) {
-              return 'Please enter your name';
-            }
-            return null;
-          },
-        ),
-        SizedBox(height: 20),
-        CustomTextInput(
-          hintText: 'Email',
-          hintStyle: TextStyle(color: Colors.white),
-          keyboardType: TextInputType.emailAddress,
-          errorBorderColor: Colors.white54,
-          errorTextColor: Colors.white,
-          validator: (value) {
-            if (value.isEmpty) {
-              return 'Please enter your email address';
-            }
-            return null;
-          },
-        ),
-        SizedBox(height: 20),
-        CustomTextInput(
-          hintText: 'Phone',
-          hintStyle: TextStyle(color: Colors.white),
-          keyboardType: TextInputType.phone,
-          errorBorderColor: Colors.white54,
-          errorTextColor: Colors.white,
-          validator: (value) {
-            if (value.isEmpty) {
-              return 'Please enter your phone number';
-            }
-            return null;
-          },
-        ),
-        SizedBox(height: 20),
-        CustomTextInput(
-          hintText: 'Password',
-          hintStyle: TextStyle(color: Colors.white),
-          textCapitalization: TextCapitalization.sentences,
-          errorBorderColor: Colors.white54,
-          errorTextColor: Colors.white,
-          validator: (value) {
-            if (value.isEmpty) {
-              return 'Please enter a password';
-            }
-            return null;
-          },
-        ),
-        SizedBox(height: 20),
-        CustomTextInput(
-          hintText: 'Confirm password',
-          hintStyle: TextStyle(color: Colors.white),
-          textCapitalization: TextCapitalization.sentences,
-          errorBorderColor: Colors.white54,
-          errorTextColor: Colors.white,
-          validator: (value) {
-            if (value.isEmpty) {
-              return 'Please confirm your password';
-            }
-            return null;
-          },
-        ),
-      ],
-    );
-  }
-}
-
-class RegisterStepTwo extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
-        CustomTextInput(
-          hintText: 'Account type',
-          hintStyle: TextStyle(color: Colors.white),
-          textCapitalization: TextCapitalization.sentences,
-          errorBorderColor: Colors.white54,
-          errorTextColor: Colors.white,
-          validator: (value) {
-            if (value.isEmpty) {
-              return 'Please enter your name';
-            }
-            return null;
-          },
-        ),
-        SizedBox(height: 20),
-        CustomTextInput(
-          hintText: 'Company',
-          hintStyle: TextStyle(color: Colors.white),
-          keyboardType: TextInputType.emailAddress,
-          errorBorderColor: Colors.white54,
-          errorTextColor: Colors.white,
-          validator: (value) {
-            if (value.isEmpty) {
-              return 'Please enter your email address';
-            }
-            return null;
-          },
-        ),
-        SizedBox(height: 20),
-        CustomTextInput(
-          hintText: 'Skills',
-          hintStyle: TextStyle(color: Colors.white),
-          keyboardType: TextInputType.phone,
-          errorBorderColor: Colors.white54,
-          errorTextColor: Colors.white,
-          validator: (value) {
-            if (value.isEmpty) {
-              return 'Please enter your phone number';
-            }
-            return null;
-          },
-        ),
-      ],
-    );
-  }
-}
-
-class RegisterStepThree extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
-        CustomTextInput(
-          hintText: 'District',
-          hintStyle: TextStyle(color: Colors.white),
-          textCapitalization: TextCapitalization.sentences,
-          errorBorderColor: Colors.white54,
-          errorTextColor: Colors.white,
-          validator: (value) {
-            if (value.isEmpty) {
-              return 'Please enter your name';
-            }
-            return null;
-          },
-        ),
-        SizedBox(height: 20),
-        CustomTextInput(
-          hintText: 'City',
-          hintStyle: TextStyle(color: Colors.white),
-          keyboardType: TextInputType.emailAddress,
-          errorBorderColor: Colors.white54,
-          errorTextColor: Colors.white,
-          validator: (value) {
-            if (value.isEmpty) {
-              return 'Please enter your email address';
-            }
-            return null;
-          },
-        ),
-        SizedBox(height: 20),
-        CustomTextInput(
-          hintText: 'Address',
-          hintStyle: TextStyle(color: Colors.white),
-          keyboardType: TextInputType.phone,
-          errorBorderColor: Colors.white54,
-          errorTextColor: Colors.white,
-          validator: (value) {
-            if (value.isEmpty) {
-              return 'Please enter your phone number';
-            }
-            return null;
-          },
-        ),
-        SizedBox(height: 20),
-        CustomTextInput(
-          hintText: 'Postcode',
-          hintStyle: TextStyle(color: Colors.white),
-          keyboardType: TextInputType.phone,
-          errorBorderColor: Colors.white54,
-          errorTextColor: Colors.white,
-          validator: (value) {
-            if (value.isEmpty) {
-              return 'Please enter your phone number';
             }
             return null;
           },

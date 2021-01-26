@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:smart_select/smart_select.dart';
 
-enum Type { single, multiple }
-
-class SelectOption extends StatelessWidget {
+class SelectOptionMulti extends StatelessWidget {
   final bool isLoading;
   final bool isDisabled;
   final bool hasError;
@@ -11,11 +9,11 @@ class SelectOption extends StatelessWidget {
   final String modalTitle;
   final String placeholder;
   final String selectText;
-  final dynamic value;
-  final List<S2Choice> choiceItems;
-  final Function(S2SingleState) onChange;
+  final List value;
+  final List<S2Choice<dynamic>> choiceItems;
+  final Function(S2MultiState<dynamic>) onChange;
 
-  const SelectOption({
+  const SelectOptionMulti({
     Key key,
     this.isLoading = false,
     this.isDisabled = false,
@@ -31,7 +29,7 @@ class SelectOption extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SmartSelect.single(
+    return SmartSelect.multiple(
       modalConfig: S2ModalConfig(filterAuto: true, useFilter: enableFilter),
       modalType: S2ModalType.fullPage,
       modalTitle: modalTitle,
@@ -65,7 +63,7 @@ class SelectOption extends StatelessWidget {
                         style: TextStyle(fontSize: 16),
                       ),
                       Text(
-                        state.valueTitle?.toUpperCase() ?? placeholder,
+                        state.valueTitle?.join(', ') ?? placeholder,
                         style: TextStyle(
                           fontSize: 12,
                           color: state.valueTitle != null ? Colors.blue : Colors.grey[600],

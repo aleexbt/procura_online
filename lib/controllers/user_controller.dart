@@ -125,28 +125,33 @@ class UserController extends GetxController with StateMixin<User> {
     }
   }
 
-  void signUp(
-      {String name,
-      String email,
-      String phone,
-      String password,
-      String type,
-      String company,
-      String address,
-      String postcode}) async {
+  void signUp({
+    String name,
+    String email,
+    String phone,
+    String password,
+    String type,
+    String company,
+    List<int> skills,
+    int district,
+    int city,
+    String address,
+    String postcode,
+  }) async {
     _isLoading.value = true;
     try {
       Map<String, dynamic> registerData = {
-        "name": name ?? "TEST 1",
-        "email": email ?? "alex@gmail.com",
-        "phone": phone ?? "+55123456789",
-        "password": password ?? "12345678",
-        "type": "personal",
-        "company": "Acme Inc",
-        "district_id": 1,
-        "city_id": 1,
-        "address": address ?? "Example Address",
-        "postcode": postcode ?? "90210"
+        "name": name,
+        "email": email,
+        "phone": phone,
+        "password": password,
+        "type": type,
+        "company": company,
+        "skills": skills,
+        "district_id": district,
+        "city_id": city,
+        "address": address,
+        "postcode": postcode,
       };
 
       await _userRepository.signUp(registerData);
