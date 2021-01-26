@@ -31,8 +31,16 @@ class _RegisterScreenState extends State<RegisterScreen> {
   bool submittedStep2 = false;
   bool submittedStep3 = false;
   int currentStep = 0;
-  bool isLoadingDistricts = false;
-  bool isLoadingCities = false;
+
+  int selectedDistrict;
+  int selectedCity;
+
+  @override
+  void initState() {
+    _userController.getSkills();
+    _userController.getDistricts();
+    super.initState();
+  }
 
   List<Widget> steps() {
     return [
@@ -54,22 +62,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
     S2Choice<int>(value: 2, title: 'Car stand'),
     S2Choice<int>(value: 3, title: 'Scrap'),
     S2Choice<int>(value: 4, title: 'Other'),
-  ];
-
-  int selectedDistrict;
-  final List<S2Choice> districts = [
-    S2Choice<int>(value: 1, title: 'Dis. 1'),
-    S2Choice<int>(value: 2, title: 'Dis. 2'),
-    S2Choice<int>(value: 3, title: 'Dis. 3'),
-    S2Choice<int>(value: 4, title: 'Dis. 4'),
-  ];
-
-  int selectedCity;
-  final List<S2Choice> cities = [
-    S2Choice<int>(value: 1, title: 'City 1'),
-    S2Choice<int>(value: 2, title: 'City 2'),
-    S2Choice<int>(value: 3, title: 'City 3'),
-    S2Choice<int>(value: 4, title: 'City 4'),
   ];
 
   @override
@@ -97,7 +89,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
             inAsyncCall: _userController.isLoading,
             child: SingleChildScrollView(
               child: Padding(
-                padding: const EdgeInsets.all(15.0),
+                padding: const EdgeInsets.all(20),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -153,7 +145,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                       email: _email.text,
                                       phone: _phone.text,
                                       password: _password.text,
+                                      type: selectedAccountType,
                                       company: _company.text,
+                                      skills: selectedSkills,
+                                      district: selectedDistrict,
+                                      city: selectedCity,
                                       address: _address.text,
                                       postcode: _postcode.text,
                                     );
@@ -216,6 +212,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
             if (value.isEmpty) {
               return 'Please enter your email address';
             }
+            if (!GetUtils.isEmail(value)) {
+              return 'Please enter a valid email address';
+            }
             return null;
           },
         ),
@@ -237,9 +236,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
           controller: _password,
           fillColor: Colors.grey[200],
           hintText: 'Password',
+          obscureText: true,
           validator: (value) {
             if (value.isEmpty) {
               return 'Please enter a password';
+            }
+            if (value.length < 8) {
+              return 'Your password must have at least 8 characters';
             }
             return null;
           },
@@ -249,9 +252,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
           controller: _passwordConfirmation,
           fillColor: Colors.grey[200],
           hintText: 'Confirm password',
+          obscureText: true,
           validator: (value) {
             if (value.isEmpty) {
               return 'Please confirm your password';
+            }
+            if (value != _password.text) {
+              return 'Your passwords didn\'t match, please verify';
             }
             return null;
           },
@@ -267,6 +274,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
         SelectOption(
           modalTitle: 'Account type',
           selectText: 'Account type',
+          modalType: S2ModalType.bottomSheet,
           value: selectedAccountType,
           choiceItems: accountType,
           onChange: (state) => setState(() => selectedAccountType = state.value),
@@ -296,13 +304,17 @@ class _RegisterScreenState extends State<RegisterScreen> {
           },
         ),
         SizedBox(height: 20),
-        SelectOptionMulti(
-          modalTitle: 'Skills',
-          selectText: 'Skills',
-          value: selectedSkills,
-          choiceItems: skills,
-          onChange: (state) => setState(() => selectedSkills = state.value),
-          hasError: selectedSkills.isEmpty && submittedStep2,
+        Obx(
+          () => SelectOptionMulti(
+            isLoading: _userController.isLoadingSkills,
+            modalTitle: 'Skills',
+            selectText: 'Skills',
+            modalType: S2ModalType.bottomSheet,
+            value: selectedSkills,
+            choiceItems: _userController.skills,
+            onChange: (state) => setState(() => selectedSkills = state.value),
+            hasError: selectedSkills.isEmpty && submittedStep2,
+          ),
         ),
         Visibility(
           visible: selectedSkills.isEmpty && submittedStep2,
@@ -322,13 +334,18 @@ class _RegisterScreenState extends State<RegisterScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        SelectOption(
-          modalTitle: 'District',
-          selectText: 'District',
-          value: selectedDistrict,
-          choiceItems: districts,
-          onChange: (state) => setState(() => selectedDistrict = int.parse(state.value)),
-          hasError: selectedDistrict == null && submittedStep3,
+        Obx(
+          () => SelectOption(
+            isLoading: _userController.isLoadingDistricts,
+            modalTitle: 'District',
+            selectText: 'District',
+            modalType: S2ModalType.bottomSheet,
+            value: selectedDistrict,
+            choiceItems: _userController.districts,
+            onChange: (state) =>
+                [setState(() => selectedDistrict = state.value), _userController.getCities(state.value)],
+            hasError: selectedDistrict == null && submittedStep3,
+          ),
         ),
         Visibility(
           visible: selectedDistrict == null && submittedStep3,
@@ -341,13 +358,18 @@ class _RegisterScreenState extends State<RegisterScreen> {
           ),
         ),
         SizedBox(height: 20),
-        SelectOption(
-          modalTitle: 'City',
-          selectText: 'City',
-          value: selectedCity,
-          choiceItems: cities,
-          onChange: (state) => setState(() => selectedCity = int.parse(state.value)),
-          hasError: selectedCity == null && submittedStep3,
+        Obx(
+          () => SelectOption(
+            isLoading: _userController.isLoadingCities,
+            isDisabled: selectedDistrict == null,
+            modalTitle: 'City',
+            selectText: 'City',
+            value: selectedCity,
+            modalType: S2ModalType.bottomSheet,
+            choiceItems: _userController.cities,
+            onChange: (state) => setState(() => selectedCity = state.value),
+            hasError: selectedCity == null && submittedStep3,
+          ),
         ),
         Visibility(
           visible: selectedCity == null && submittedStep3,
@@ -361,6 +383,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
         ),
         SizedBox(height: 20),
         CustomTextInput(
+          controller: _address,
           fillColor: Colors.grey[200],
           hintText: 'Address',
           textCapitalization: TextCapitalization.sentences,
@@ -373,6 +396,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
         ),
         SizedBox(height: 20),
         CustomTextInput(
+          controller: _postcode,
           fillColor: Colors.grey[200],
           hintText: 'Postcode',
           keyboardType: TextInputType.number,

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:smart_select/smart_select.dart';
 
 enum Type { single, multiple }
@@ -14,6 +15,7 @@ class SelectOption extends StatelessWidget {
   final dynamic value;
   final List<S2Choice> choiceItems;
   final Function(S2SingleState) onChange;
+  final S2ModalType modalType;
 
   const SelectOption({
     Key key,
@@ -27,13 +29,19 @@ class SelectOption extends StatelessWidget {
     @required this.value,
     @required this.choiceItems,
     @required this.onChange,
+    this.modalType = S2ModalType.fullPage,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+      statusBarBrightness: Brightness.light,
+      statusBarColor: Colors.white,
+      statusBarIconBrightness: Brightness.dark,
+    ));
     return SmartSelect.single(
       modalConfig: S2ModalConfig(filterAuto: true, useFilter: enableFilter),
-      modalType: S2ModalType.fullPage,
+      modalType: modalType,
       modalTitle: modalTitle,
       placeholder: placeholder,
       modalHeaderStyle: S2ModalHeaderStyle(

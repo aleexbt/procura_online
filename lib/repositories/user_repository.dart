@@ -73,4 +73,19 @@ class UserRepository {
     final response = await _dio.post('/api/v1/set-token', data: {"token": "$playerId"});
     return response.data;
   }
+
+  Future<List> getSkills() async {
+    final response = await _dio.get('/api/v1/skills');
+    return response.data;
+  }
+
+  Future<List> getDistricts() async {
+    final response = await _dio.get('/api/v1/districts');
+    return response.data;
+  }
+
+  Future<List> getCities(int districtId) async {
+    final response = await _dio.get('/api/v1/cities', queryParameters: {"district_id": "$districtId"});
+    return response.data;
+  }
 }

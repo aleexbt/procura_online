@@ -12,6 +12,7 @@ class SelectOptionMulti extends StatelessWidget {
   final List value;
   final List<S2Choice<dynamic>> choiceItems;
   final Function(S2MultiState<dynamic>) onChange;
+  final S2ModalType modalType;
 
   const SelectOptionMulti({
     Key key,
@@ -25,13 +26,14 @@ class SelectOptionMulti extends StatelessWidget {
     @required this.value,
     @required this.choiceItems,
     @required this.onChange,
+    this.modalType = S2ModalType.fullPage,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return SmartSelect.multiple(
       modalConfig: S2ModalConfig(filterAuto: true, useFilter: enableFilter),
-      modalType: S2ModalType.fullPage,
+      modalType: modalType,
       modalTitle: modalTitle,
       placeholder: placeholder,
       modalHeaderStyle: S2ModalHeaderStyle(

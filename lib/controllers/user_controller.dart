@@ -24,6 +24,9 @@ class UserController extends GetxController with StateMixin<User> {
 
   RxBool _isLoading = false.obs;
   RxBool _isSaving = false.obs;
+  RxBool _isLoadingSkills = false.obs;
+  RxBool _isLoadingDistricts = false.obs;
+  RxBool _isLoadingCities = false.obs;
   RxBool _savingError = false.obs;
   RxBool _isLoggedIn = false.obs;
   Rx<User> _userData = User().obs;
@@ -31,6 +34,9 @@ class UserController extends GetxController with StateMixin<User> {
 
   bool get isLoading => _isLoading.value;
   bool get isSaving => _isSaving.value;
+  bool get isLoadingSkills => _isLoadingSkills.value;
+  bool get isLoadingDistricts => _isLoadingDistricts.value;
+  bool get isLoadingCities => _isLoadingCities.value;
   bool get savingError => _savingError.value;
   bool get isLoggedIn => _isLoggedIn.value;
   User get userData => _userData.value;
@@ -42,6 +48,15 @@ class UserController extends GetxController with StateMixin<User> {
   Rx<TextEditingController> company = TextEditingController().obs;
   Rx<TextEditingController> address = TextEditingController().obs;
   Rx<TextEditingController> postcode = TextEditingController().obs;
+
+  RxList<S2Choice<int>> _skills = List<S2Choice<int>>.empty(growable: true).obs;
+  RxList<S2Choice<int>> _districts = List<S2Choice<int>>.empty(growable: true).obs;
+  RxList<S2Choice<int>> _cities = List<S2Choice<int>>.empty(growable: true).obs;
+
+  List<S2Choice<int>> get skills => _skills;
+  List<S2Choice<int>> get districts => _districts;
+  List<S2Choice<int>> get cities => _cities;
+
   RxString selectedAccountType = ''.obs;
   final List<S2Choice<String>> accountTypeOptions = [
     S2Choice<String>(value: 'company', title: 'Company'),
@@ -94,20 +109,25 @@ class UserController extends GetxController with StateMixin<User> {
       };
 
       var response = await _userRepository.signIn(loginData);
-      User user = User.fromJson(response['user']);
-      Box<User> userBox = await Hive.openBox<User>('userData');
-      Box authBox = await Hive.openBox('auth');
 
-      _isLoggedIn.value = true;
-      _token.value = response['token'];
-      _userData.value = user;
+      if (response['message'] != null) {
+        Get.rawSnackbar(message: response['message'], backgroundColor: Colors.red, duration: Duration(seconds: 3));
+      } else {
+        User user = User.fromJson(response['user']);
+        Box<User> userBox = await Hive.openBox<User>('userData');
+        Box authBox = await Hive.openBox('auth');
 
-      authBox.put('isLoggedIn', true);
-      authBox.put('token', response['token']);
-      userBox.put(response['user']['id'], User.fromJson(response['user']));
-      _notificationHelper.setExternalUserId(userId: response['user']['id'].toString());
-      // setPushToken();
-      Get.offAllNamed('/app');
+        _isLoggedIn.value = true;
+        _token.value = response['token'];
+        _userData.value = user;
+
+        authBox.put('isLoggedIn', true);
+        authBox.put('token', response['token']);
+        userBox.put(response['user']['id'], User.fromJson(response['user']));
+        _notificationHelper.setExternalUserId(userId: response['user']['id'].toString());
+        // setPushToken();
+        Get.offAllNamed('/app');
+      }
     } on DioError catch (err) {
       Map<String, dynamic> errors = err.response.data['errors'];
       List<String> errorList = [];
@@ -120,6 +140,9 @@ class UserController extends GetxController with StateMixin<User> {
           message: errorList.join('\n'),
           backgroundColor: Colors.red,
           duration: Duration(seconds: 3 + errorList.length));
+    } catch (err) {
+      Get.rawSnackbar(
+          message: 'Ops, something went wrong.', backgroundColor: Colors.red, duration: Duration(seconds: 3));
     } finally {
       _isLoading.value = false;
     }
@@ -132,7 +155,7 @@ class UserController extends GetxController with StateMixin<User> {
     String password,
     String type,
     String company,
-    List<int> skills,
+    List skills,
     int district,
     int city,
     String address,
@@ -152,6 +175,7 @@ class UserController extends GetxController with StateMixin<User> {
         "city_id": city,
         "address": address,
         "postcode": postcode,
+        "plan_id": 1,
       };
 
       await _userRepository.signUp(registerData);
@@ -290,5 +314,62 @@ class UserController extends GetxController with StateMixin<User> {
     String playerId = player.subscriptionStatus.userId.toString();
     print('PLAYER_ID: $playerId');
     _userRepository.setPushToken(playerId);
+  }
+
+  void getSkills() async {
+    _isLoadingSkills.value = true;
+    try {
+      List response = await _userRepository.getSkills();
+      List<S2Choice<int>> skillsList = List<S2Choice<int>>.empty(growable: true);
+
+      if (response != null) {
+        response.forEach((skill) {
+          skillsList.add(S2Choice<int>(value: skill['id'], title: skill['name']));
+        });
+        _skills.assignAll(skillsList);
+      }
+    } catch (err) {
+      print(err);
+    } finally {
+      _isLoadingSkills.value = false;
+    }
+  }
+
+  void getDistricts() async {
+    _isLoadingDistricts.value = true;
+    try {
+      List response = await _userRepository.getDistricts();
+      List<S2Choice<int>> districtsList = List<S2Choice<int>>.empty(growable: true);
+
+      if (response != null) {
+        response.forEach((district) {
+          districtsList.add(S2Choice<int>(value: district['id'], title: district['name']));
+        });
+        _districts.assignAll(districtsList);
+      }
+    } catch (err) {
+      print(err);
+    } finally {
+      _isLoadingDistricts.value = false;
+    }
+  }
+
+  void getCities(int districtId) async {
+    _isLoadingCities.value = true;
+    try {
+      List response = await _userRepository.getCities(districtId);
+      List<S2Choice<int>> citiesList = List<S2Choice<int>>.empty(growable: true);
+
+      if (response != null) {
+        response.forEach((city) {
+          citiesList.add(S2Choice<int>(value: city['id'], title: city['name']));
+        });
+        _cities.assignAll(citiesList);
+      }
+    } catch (err) {
+      print(err);
+    } finally {
+      _isLoadingCities.value = false;
+    }
   }
 }

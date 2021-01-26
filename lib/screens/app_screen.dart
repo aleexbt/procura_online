@@ -1,4 +1,3 @@
-import 'package:badges/badges.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -89,15 +88,16 @@ class _AppScreenState extends State<AppScreen> {
             label: 'Home',
           ),
           BottomNavigationBarItem(
-            icon: Badge(
-              badgeColor: Colors.blue,
-              badgeContent: Text(
-                '20',
-                style: TextStyle(color: Colors.white, fontSize: 7),
-              ),
-              child: Icon(CupertinoIcons.chat_bubble_fill),
-              animationType: BadgeAnimationType.scale,
-            ),
+            // icon: Badge(
+            //   badgeColor: Colors.blue,
+            //   badgeContent: Text(
+            //     '20',
+            //     style: TextStyle(color: Colors.white, fontSize: 7),
+            //   ),
+            //   child: Icon(CupertinoIcons.chat_bubble_fill),
+            //   animationType: BadgeAnimationType.scale,
+            // ),
+            icon: Icon(CupertinoIcons.chat_bubble_fill),
             label: 'Chat',
           ),
           // BottomNavigationBarItem(
