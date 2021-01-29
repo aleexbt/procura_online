@@ -2,7 +2,6 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:list_tile_more_customizable/list_tile_more_customizable.dart';
 import 'package:octo_image/octo_image.dart';
 import 'package:procura_online/controllers/orders_controller.dart';
 import 'package:procura_online/models/order_model.dart';
@@ -45,45 +44,45 @@ class OrderReplyScreen extends StatelessWidget {
             )
           ],
         ),
-        actions: [
-          IconButton(
-            icon: Icon(Icons.more_vert),
-            onPressed: () => Get.bottomSheet(
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Container(
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      ListTileMoreCustomizable(
-                        leading: Icon(
-                          CupertinoIcons.archivebox,
-                          color: Colors.black,
-                        ),
-                        title: Text(
-                          "Mark as sold",
-                          style: TextStyle(
-                            color: Colors.black,
-                            fontWeight: FontWeight.w400,
-                          ),
-                        ),
-                        horizontalTitleGap: 0,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        onTap: (_) => _ordersController.markOrderAsSold(orderId),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-              backgroundColor: Colors.white,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.only(topLeft: Radius.circular(8), topRight: Radius.circular(8)),
-              ),
-            ),
-          ),
-        ],
+        // actions: [
+        //   IconButton(
+        //     icon: Icon(Icons.more_vert),
+        //     onPressed: () => Get.bottomSheet(
+        //       Padding(
+        //         padding: const EdgeInsets.all(8.0),
+        //         child: Container(
+        //           child: Column(
+        //             mainAxisSize: MainAxisSize.min,
+        //             children: [
+        //               ListTileMoreCustomizable(
+        //                 leading: Icon(
+        //                   CupertinoIcons.archivebox,
+        //                   color: Colors.black,
+        //                 ),
+        //                 title: Text(
+        //                   "Mark as sold",
+        //                   style: TextStyle(
+        //                     color: Colors.black,
+        //                     fontWeight: FontWeight.w400,
+        //                   ),
+        //                 ),
+        //                 horizontalTitleGap: 0,
+        //                 shape: RoundedRectangleBorder(
+        //                   borderRadius: BorderRadius.circular(10),
+        //                 ),
+        //                 onTap: (_) => _ordersController.markOrderAsSold(orderId),
+        //               ),
+        //             ],
+        //           ),
+        //         ),
+        //       ),
+        //       backgroundColor: Colors.white,
+        //       shape: RoundedRectangleBorder(
+        //         borderRadius: BorderRadius.only(topLeft: Radius.circular(8), topRight: Radius.circular(8)),
+        //       ),
+        //     ),
+        //   ),
+        // ],
       ),
       body: SafeArea(
         child: Column(
@@ -111,7 +110,7 @@ class OrderReplyScreen extends StatelessWidget {
                                 child: ClipOval(
                                   child: OctoImage(
                                     image: CachedNetworkImageProvider(order.makeLogoUrl),
-                                    placeholderBuilder: OctoPlaceholder.circularProgressIndicator(),
+                                    placeholderBuilder: OctoPlaceholder.blurHash('LAI#u-9XM[D\$GdIU4oIA-sWFxwRl'),
                                     errorBuilder: OctoError.icon(color: Colors.grey[400]),
                                     fit: BoxFit.cover,
                                   ),
@@ -145,7 +144,6 @@ class OrderReplyScreen extends StatelessWidget {
                                         padding: const EdgeInsets.only(top: 5),
                                         child: SizedBox(
                                           height: 40,
-                                          width: 40,
                                           child: ListView.builder(
                                             scrollDirection: Axis.horizontal,
                                             itemCount: order.media.length,
@@ -156,16 +154,14 @@ class OrderReplyScreen extends StatelessWidget {
                                                   onTap: () => Get.toNamed(
                                                     '/show-photos',
                                                     arguments: {
-                                                      "photoId": "photo_$index",
-                                                      "photoUrl":
-                                                          "https://procuraonline-dev.pt/storage/21/${order.media[index].fileName}",
+                                                      "photoId": "${order.media[index].id}",
+                                                      "photoUrl": "${order.media[index].image}",
                                                     },
                                                   ),
                                                   child: Hero(
-                                                    tag: 'photo_$index',
+                                                    tag: '${order.media[index].id}',
                                                     child: OctoImage(
-                                                      image: CachedNetworkImageProvider(
-                                                          'https://procuraonline-dev.pt/storage/21/${order.media[index].fileName}'),
+                                                      image: CachedNetworkImageProvider('${order.media[index].image}'),
                                                       placeholderBuilder: OctoPlaceholder.circularProgressIndicator(),
                                                       errorBuilder: OctoError.icon(color: Colors.grey[400]),
                                                       fit: BoxFit.cover,

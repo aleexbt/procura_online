@@ -208,7 +208,8 @@ class _ConversationScreenState extends State<ConversationScreen> {
                                         child: ClipOval(
                                           child: OctoImage(
                                             image: CachedNetworkImageProvider(order.makeLogoUrl),
-                                            placeholderBuilder: OctoPlaceholder.circularProgressIndicator(),
+                                            placeholderBuilder:
+                                                OctoPlaceholder.blurHash('LAI#u-9XM[D\$GdIU4oIA-sWFxwRl'),
                                             errorBuilder: OctoError.icon(color: Colors.grey[400]),
                                             fit: BoxFit.cover,
                                           ),
@@ -242,7 +243,6 @@ class _ConversationScreenState extends State<ConversationScreen> {
                                                 padding: const EdgeInsets.only(top: 5),
                                                 child: SizedBox(
                                                   height: 40,
-                                                  width: 40,
                                                   child: ListView.builder(
                                                     scrollDirection: Axis.horizontal,
                                                     itemCount: order.media.length,
@@ -253,16 +253,15 @@ class _ConversationScreenState extends State<ConversationScreen> {
                                                           onTap: () => Get.toNamed(
                                                             '/show-photos',
                                                             arguments: {
-                                                              "photoId": "photo_$index",
-                                                              "photoUrl":
-                                                                  "https://procuraonline-dev.pt/storage/${order.media[index].id}/${order.media[index].fileName}",
+                                                              "photoId": "${order.media[index].id}",
+                                                              "photoUrl": "${order.media[index].image}",
                                                             },
                                                           ),
                                                           child: Hero(
-                                                            tag: 'photo_$index',
+                                                            tag: '${order.media[index].id}',
                                                             child: OctoImage(
                                                               image: CachedNetworkImageProvider(
-                                                                  'https://procuraonline-dev.pt/storage/${order.media[index].id}/${order.media[index]?.fileName}'),
+                                                                  '${order.media[index].image}'),
                                                               placeholderBuilder:
                                                                   OctoPlaceholder.circularProgressIndicator(),
                                                               errorBuilder: OctoError.icon(color: Colors.grey[400]),

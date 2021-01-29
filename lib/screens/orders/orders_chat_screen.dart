@@ -5,16 +5,17 @@ import 'package:list_tile_more_customizable/list_tile_more_customizable.dart';
 import 'package:procura_online/controllers/chat_controller.dart';
 import 'package:procura_online/controllers/orders_controller.dart';
 import 'package:procura_online/repositories/chat_repository.dart';
-import 'package:procura_online/screens/conversations/widgets/chat_widget.dart';
-import 'package:procura_online/screens/conversations/widgets/orders_widget.dart';
 import 'package:procura_online/utils/no_glow_behavior.dart';
 
-class ChatScreen extends StatefulWidget {
+import 'widgets/chat_widget.dart';
+import 'widgets/orders_widget.dart';
+
+class OrdersAndChatScreen extends StatefulWidget {
   @override
-  _ChatScreenState createState() => _ChatScreenState();
+  _OrdersAndChatScreenState createState() => _OrdersAndChatScreenState();
 }
 
-class _ChatScreenState extends State<ChatScreen> with AutomaticKeepAliveClientMixin {
+class _OrdersAndChatScreenState extends State<OrdersAndChatScreen> with AutomaticKeepAliveClientMixin {
   @override
   bool get wantKeepAlive => true;
 
@@ -26,7 +27,6 @@ class _ChatScreenState extends State<ChatScreen> with AutomaticKeepAliveClientMi
   final ChatController _chatController = Get.put(ChatController(), permanent: true);
 
   int _selectedIndex = 0;
-  bool _fabDisabled = false;
 
   void onPageChanged(int index) {
     setState(() {
@@ -108,7 +108,7 @@ class _ChatScreenState extends State<ChatScreen> with AutomaticKeepAliveClientMi
                                           color: Colors.black,
                                         ),
                                         title: Text(
-                                          "Unread",
+                                          'Unread',
                                           style: TextStyle(
                                             color: Colors.black,
                                             fontWeight: FontWeight.w400,
@@ -130,7 +130,7 @@ class _ChatScreenState extends State<ChatScreen> with AutomaticKeepAliveClientMi
                                           color: Colors.black,
                                         ),
                                         title: Text(
-                                          "Read",
+                                          'Read',
                                           style: TextStyle(
                                             color: Colors.black,
                                             fontWeight: FontWeight.w400,
@@ -150,7 +150,7 @@ class _ChatScreenState extends State<ChatScreen> with AutomaticKeepAliveClientMi
                                           color: Colors.black,
                                         ),
                                         title: Text(
-                                          "Sent",
+                                          'Sent',
                                           style: TextStyle(
                                             color: Colors.black,
                                             fontWeight: FontWeight.w400,
@@ -170,7 +170,7 @@ class _ChatScreenState extends State<ChatScreen> with AutomaticKeepAliveClientMi
                                           color: Colors.black,
                                         ),
                                         title: Text(
-                                          "All",
+                                          'All',
                                           style: TextStyle(
                                             color: Colors.black,
                                             fontWeight: FontWeight.w400,
@@ -246,16 +246,24 @@ class _ChatScreenState extends State<ChatScreen> with AutomaticKeepAliveClientMi
           ],
         ),
       ),
-      floatingActionButton: AnimatedOpacity(
-        opacity: _selectedIndex == 0 ? 1.0 : 0.0,
-        duration: Duration(milliseconds: 300),
-        onEnd: () => setState(() => _fabDisabled = !_fabDisabled),
-        child: !_fabDisabled
+      floatingActionButton: AnimatedSwitcher(
+        duration: Duration(milliseconds: 200),
+        transitionBuilder: (Widget child, Animation<double> animation) {
+          final scaleTween = TweenSequence([
+            TweenSequenceItem(tween: Tween(begin: 0.1, end: 1.0), weight: 1),
+          ]);
+          return ScaleTransition(
+            scale: scaleTween.animate(animation),
+            child: child,
+          );
+        },
+        child: _selectedIndex == 0
             ? FloatingActionButton(
+                key: UniqueKey(),
                 onPressed: () => Get.toNamed('/orders/new'),
                 child: Icon(Icons.add),
               )
-            : Container(),
+            : null,
       ),
     );
   }

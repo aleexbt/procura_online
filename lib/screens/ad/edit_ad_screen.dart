@@ -10,8 +10,10 @@ import 'package:get/get.dart';
 import 'package:list_tile_more_customizable/list_tile_more_customizable.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:octo_image/octo_image.dart';
+import 'package:percent_indicator/circular_percent_indicator.dart';
 import 'package:procura_online/controllers/edit_ad_controller.dart';
 import 'package:procura_online/models/product_model.dart';
+import 'package:procura_online/models/upload_media_model.dart';
 import 'package:procura_online/widgets/gradient_button.dart';
 import 'package:procura_online/widgets/select_option.dart';
 import 'package:procura_online/widgets/text_input.dart';
@@ -32,6 +34,9 @@ class _EditAdScreenState extends State<EditAdScreen> {
     if (_editAdController.product?.gallery?.original != null && _editAdController.product.gallery.original.length > 0) {
       networkImages = Map.from(_editAdController.product?.gallery?.original);
     }
+    if (_editAdController.product?.mainPhoto?.bigThumb != null) {
+      mainImage = _editAdController.product.mainPhoto.bigThumb;
+    }
     mainNode = FocusNode();
     super.initState();
   }
@@ -40,64 +45,53 @@ class _EditAdScreenState extends State<EditAdScreen> {
 
   List<File> images = List<File>.empty(growable: true);
   Map<String, dynamic> networkImages;
+  String mainImage;
   List<String> imagesToRemove = List<String>.empty(growable: true);
 
-  void selectImages() async {
+  void selectMainPhoto() async {
     FilePickerResult result = await FilePicker.platform.pickFiles(
       allowMultiple: false,
       type: FileType.image,
-      // allowedExtensions: ['jpg', 'jpeg', 'png', 'gif'],
+    );
+
+    if (result != null) {
+      File file = result.paths.map((path) => File(path)).first;
+
+      _editAdController.setMainImage(file.path);
+      _editAdController.currentUploadImage.value = _editAdController.mainPhoto.value;
+
+      UploadMedia mainPhoto = await _editAdController.mediaUpload(file);
+      if (mainPhoto != null) {
+        _editAdController.setMainImageUrl(mainPhoto.name);
+      } else {
+        setState(() {
+          _editAdController.mainPhoto.value = '';
+        });
+      }
+    }
+  }
+
+  void selectMore() async {
+    print('======== SELECT MORE ATIVADO ==========');
+    FilePickerResult result = await FilePicker.platform.pickFiles(
+      allowMultiple: true,
+      type: FileType.image,
     );
 
     if (result != null) {
       List<File> files = result.paths.map((path) => File(path)).toList();
+      _editAdController.setImages(files);
 
-      if (files.length > 5) {
-        List<File> limitedSelect = files.sublist(0, 5);
-        setState(() => images.addAll(limitedSelect));
-      } else {
-        setState(() => images.addAll(files));
-      }
-      if (images.length >= 5) {
-        setState(() => images = images.sublist(0, 5));
+      for (File photo in files) {
+        _editAdController.currentUploadImage.value = photo.path;
+        UploadMedia media = await _editAdController.mediaUpload(photo);
+        if (media != null) {
+          _editAdController.setImagesUrl(media.name);
+        } else {
+          _editAdController.removeImage(photo);
+        }
       }
     }
-  }
-
-  Future<void> _selectDate(BuildContext context) async {
-    final DateTime picked = await showDatePicker(
-      context: context,
-      initialDate: DateTime.now(),
-      firstDate: DateTime(1900, 1),
-      lastDate: DateTime.now(),
-      initialDatePickerMode: DatePickerMode.day,
-    );
-    if (picked != null) {
-      var date = DateTime.parse(picked.toString());
-      _editAdController.registeredDate.value = date.toString();
-      _editAdController.formattedRegisteredDate.value = '${date.day}/${date.month}/${date.year}';
-    }
-  }
-
-  Widget _buildBottomPicker(Widget picker) {
-    return Container(
-      height: 215,
-      padding: const EdgeInsets.only(top: 6.0),
-      color: CupertinoColors.white,
-      child: DefaultTextStyle(
-        style: const TextStyle(
-          color: CupertinoColors.black,
-          fontSize: 22.0,
-        ),
-        child: GestureDetector(
-          onTap: () {},
-          child: SafeArea(
-            top: false,
-            child: picker,
-          ),
-        ),
-      ),
-    );
   }
 
   @override
@@ -158,8 +152,18 @@ class _EditAdScreenState extends State<EditAdScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  loadImages(),
-                  SizedBox(height: 10),
+                  Container(
+                    width: double.infinity,
+                    height: 180,
+                    decoration: BoxDecoration(
+                      color: Colors.grey[200],
+                      borderRadius: BorderRadius.only(
+                        bottomLeft: Radius.circular(12),
+                        bottomRight: Radius.circular(12),
+                      ),
+                    ),
+                    child: photos(),
+                  ),
                   Padding(
                     padding: const EdgeInsets.all(15),
                     child: Focus(
@@ -608,10 +612,9 @@ class _EditAdScreenState extends State<EditAdScreen> {
                                   onConfirm: (date) {
                                     _editAdController.registeredDate.value = date.toString();
                                     _editAdController.formattedRegisteredDate.value =
-                                    '${date.day}/${date.month}/${date.year}';
+                                        '${date.day}/${date.month}/${date.year}';
                                   },
-                                  currentTime:
-                                  DateTime.parse(_editAdController.registeredDate.value) ?? DateTime.now(),
+                                  currentTime: DateTime.parse(_editAdController.registeredDate.value) ?? DateTime.now(),
                                 ),
                               },
                               child: CustomTextInput(
@@ -660,148 +663,262 @@ class _EditAdScreenState extends State<EditAdScreen> {
     );
   }
 
-  Widget loadImages() {
-    return Stack(
-      children: [
-        Container(
-          width: double.infinity,
-          height: 200,
-          decoration: BoxDecoration(color: Colors.grey[200]),
-        ),
-        Padding(
-          padding: const EdgeInsets.all(10),
-          child: Container(
-            width: double.infinity,
-            height: 180,
-            child: Center(
-              child: CustomScrollView(
-                scrollDirection: Axis.horizontal,
-                physics: BouncingScrollPhysics(),
-                slivers: [
-                  SliverList(
-                    delegate: SliverChildBuilderDelegate(
-                      (context, index) {
-                        // Map<String, dynamic> entry = _editAdController.product.photos.original;
-                        return Padding(
-                          padding: const EdgeInsets.only(right: 8),
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(10),
-                            child: Stack(
-                              children: [
-                                SizedBox(
-                                  width: 250,
-                                  height: 200,
-                                  child: OctoImage(
-                                    image: CachedNetworkImageProvider(networkImages.values.elementAt(index)),
-                                    placeholderBuilder: OctoPlaceholder.circularProgressIndicator(),
-                                    errorBuilder: OctoError.icon(color: Colors.grey[400]),
-                                    fit: BoxFit.cover,
-                                  ),
-                                ),
-                                Positioned(
-                                  top: 4,
-                                  right: 4,
-                                  child: GestureDetector(
-                                    onTap: () {
-                                      setState(() {
-                                        imagesToRemove.add(networkImages.keys.elementAt(index));
-                                        networkImages.removeWhere(
-                                            (key, value) => value == networkImages.values.elementAt(index));
-                                      });
-                                    },
-                                    child: Icon(
-                                      Icons.delete,
-                                      color: Colors.red,
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        );
-                      },
-                      childCount: networkImages?.length ?? 0,
+  Widget mainPhoto() {
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(10),
+      child: mainImage.isNotEmpty ?? null
+          ? Stack(
+              children: [
+                SizedBox(
+                  width: 200,
+                  height: 180,
+                  child: OctoImage(
+                    image: CachedNetworkImageProvider(mainImage),
+                    placeholderBuilder: OctoPlaceholder.circularProgressIndicator(),
+                    errorBuilder: OctoError.icon(color: Colors.grey[400]),
+                    width: 200,
+                    fit: BoxFit.cover,
+                  ),
+                ),
+                Positioned(
+                  top: 4,
+                  right: 4,
+                  child: GestureDetector(
+                    behavior: HitTestBehavior.translucent,
+                    onTap: () {
+                      setState(() {
+                        mainImage = '';
+                      });
+                    },
+                    child: Icon(
+                      Icons.delete,
+                      color: Colors.red,
                     ),
                   ),
-                  SliverList(
-                    delegate: SliverChildBuilderDelegate(
-                      (context, index) {
-                        int ni = networkImages?.length ?? 0;
-                        int count = images.length + ni;
-                        if (index == images.length) {
-                          return count < 5
-                              ? Padding(
-                                  padding: EdgeInsets.only(left: count == 0 ? Get.size.width / 2 - 118 : 0),
-                                  child: GestureDetector(
-                                    onTap: selectImages,
-                                    behavior: HitTestBehavior.translucent,
-                                    child: Container(
-                                      width: 220,
-                                      height: 180,
-                                      decoration: BoxDecoration(
-                                        border: Border.all(color: Colors.blue),
-                                        borderRadius: BorderRadius.circular(10),
-                                      ),
-                                      child: Center(
-                                        child: Column(
-                                          mainAxisAlignment: MainAxisAlignment.center,
-                                          children: [
-                                            Icon(
-                                              Icons.camera_alt_outlined,
-                                              size: 50,
-                                              color: Colors.blue,
-                                            ),
-                                            Text('Select a picture'),
-                                          ],
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                )
-                              : Container();
-                        }
-                        return Padding(
-                          padding: const EdgeInsets.only(right: 8.0),
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(10),
-                            child: Stack(
-                              children: [
-                                SizedBox(
-                                  width: 250,
-                                  height: 200,
-                                  child: Image.file(
-                                    File(images[index].path),
-                                    width: 250,
-                                    height: 200,
-                                    fit: BoxFit.cover,
-                                  ),
-                                ),
-                                Positioned(
-                                  top: 4,
-                                  right: 4,
-                                  child: GestureDetector(
-                                      behavior: HitTestBehavior.translucent,
-                                      onTap: () {
-                                        setState(() {
-                                          images.removeAt(index);
-                                        });
-                                      },
-                                      child: Icon(Icons.delete, color: Colors.red)),
-                                ),
-                              ],
-                            ),
-                          ),
-                        );
-                      },
-                      childCount: images.length + 1,
-                    ),
+                ),
+              ],
+            )
+          : GestureDetector(
+              onTap: selectMainPhoto,
+              behavior: HitTestBehavior.translucent,
+              child: Container(
+                width: 200,
+                height: 180,
+                decoration: BoxDecoration(
+                  border: Border.all(color: Colors.blue),
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(
+                        Icons.camera_alt_outlined,
+                        size: 50,
+                        color: Colors.blue,
+                      ),
+                      Text('Main photo'),
+                    ],
                   ),
-                ],
+                ),
               ),
             ),
-          ),
+    );
+  }
+
+  Widget networkGallery() {
+    return networkImages != null
+        ? ListView.builder(
+            shrinkWrap: true,
+            scrollDirection: Axis.horizontal,
+            itemCount: networkImages.length,
+            physics: NeverScrollableScrollPhysics(),
+            itemBuilder: (context, index) {
+              return Padding(
+                padding: const EdgeInsets.only(right: 8),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(10),
+                  child: Stack(
+                    children: [
+                      SizedBox(
+                        width: 200,
+                        height: 180,
+                        child: OctoImage(
+                          image: CachedNetworkImageProvider(networkImages.values.elementAt(index)),
+                          placeholderBuilder: OctoPlaceholder.circularProgressIndicator(),
+                          errorBuilder: OctoError.icon(color: Colors.grey[400]),
+                          width: 200,
+                          height: 180,
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                      Positioned(
+                        top: 4,
+                        right: 4,
+                        child: GestureDetector(
+                          onTap: () {
+                            setState(() {
+                              imagesToRemove.add(networkImages.keys.elementAt(index));
+                              networkImages.removeWhere((key, value) => value == networkImages.values.elementAt(index));
+                            });
+                          },
+                          child: Icon(
+                            Icons.delete,
+                            color: Colors.red,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              );
+            },
+          )
+        : Container();
+  }
+
+  Widget localGallery() {
+    return Obx(
+      () => _editAdController.images.length > 0
+          ? ListView.builder(
+              shrinkWrap: true,
+              scrollDirection: Axis.horizontal,
+              itemCount: _editAdController.images.length,
+              physics: NeverScrollableScrollPhysics(),
+              itemBuilder: (context, index) {
+                return Padding(
+                  padding: const EdgeInsets.only(right: 8.0),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(10),
+                    child: Stack(
+                      children: [
+                        SizedBox(
+                          width: 200,
+                          height: 180,
+                          child: Image.file(
+                            File(_editAdController.images[index].path),
+                            width: 200,
+                            height: 180,
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                        Positioned(
+                          top: 4,
+                          right: 4,
+                          child: GestureDetector(
+                              behavior: HitTestBehavior.translucent,
+                              onTap: () => _editAdController.removeImageByIndex(index),
+                              child: Icon(Icons.delete, color: Colors.red)),
+                        ),
+                        Obx(
+                          () => Visibility(
+                            visible: _editAdController.isUploadingImage &&
+                                _editAdController.currentUploadImage.value == _editAdController.images[index].path,
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(5),
+                              child: Container(
+                                width: 200,
+                                height: 180,
+                                color: Colors.grey.withOpacity(0.8),
+                                child: Center(
+                                  child: CircularPercentIndicator(
+                                    radius: 60.0,
+                                    lineWidth: 5.0,
+                                    percent: _editAdController.uploadImageProgress.value,
+                                    center: Text(
+                                      '${(_editAdController.uploadImageProgress.value * 100).round()}%',
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                    progressColor: Colors.blue,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                );
+              },
+            )
+          : Container(),
+    );
+  }
+
+  Widget photos() {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: SizedBox(
+        height: 140,
+        child: CustomScrollView(
+          scrollDirection: Axis.horizontal,
+          physics: BouncingScrollPhysics(),
+          slivers: [
+            SliverList(
+              delegate: SliverChildBuilderDelegate(
+                (context, index) {
+                  return mainPhoto();
+                },
+                childCount: 1,
+              ),
+            ),
+            SliverList(
+              delegate: SliverChildBuilderDelegate(
+                (context, index) {
+                  return Padding(
+                    padding: const EdgeInsets.only(left: 10),
+                    child: networkGallery(),
+                  );
+                },
+                childCount: 1,
+              ),
+            ),
+            SliverList(
+              delegate: SliverChildBuilderDelegate(
+                (context, index) {
+                  return Padding(
+                    padding: const EdgeInsets.only(left: 10),
+                    child: localGallery(),
+                  );
+                },
+                childCount: 1,
+              ),
+            ),
+            SliverFillRemaining(
+              hasScrollBody: false,
+              child: GestureDetector(
+                behavior: HitTestBehavior.translucent,
+                onTap: selectMore,
+                child: Padding(
+                  padding: const EdgeInsets.all(15),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(
+                        Icons.add_a_photo,
+                        color: Colors.grey[400],
+                        size: 35,
+                      ),
+                      Text(
+                        'ADD MORE',
+                        style: TextStyle(
+                          color: Colors.grey[400],
+                          fontSize: 12,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ],
         ),
-      ],
+      ),
     );
   }
 }

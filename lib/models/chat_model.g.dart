@@ -9,10 +9,10 @@ part of 'chat_model.dart';
 Chat _$ChatFromJson(Map<String, dynamic> json) {
   return Chat(
     id: json['id'] as int,
-    orderId: json['order_id'] as String,
-    userOne: json['user_one'] as String,
-    userTwo: json['user_two'] as String,
-    status: json['status'] as String,
+    orderId: json['order_id'],
+    userOne: json['user_one'],
+    userTwo: json['user_two'],
+    status: json['status'],
     mute: json['mute'] as bool,
     humanReadDate: json['human_read_date'] as String,
     secondUser: json['second_user'] as String,

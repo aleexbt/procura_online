@@ -26,7 +26,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   final TextEditingController _address = TextEditingController();
   final TextEditingController _postcode = TextEditingController();
   final _formKey = GlobalKey<FormState>();
-
+  FocusNode mainNode;
   bool submittedStep1 = false;
   bool submittedStep2 = false;
   bool submittedStep3 = false;
@@ -39,6 +39,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   void initState() {
     _userController.getSkills();
     _userController.getDistricts();
+    mainNode = FocusNode();
     super.initState();
   }
 
@@ -69,6 +70,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light.copyWith(
       statusBarColor: Colors.blue,
     ));
+    FocusScope.of(context).requestFocus(mainNode);
 
     return Scaffold(
       appBar: AppBar(
@@ -93,20 +95,23 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Form(
-                      key: _formKey,
-                      child: Column(
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.only(top: 50, left: 80, right: 80, bottom: 40),
-                            child: SvgPicture.asset(
-                              'assets/images/logo_branco.svg',
-                              width: 100,
-                              color: Colors.blue,
+                    Focus(
+                      focusNode: mainNode,
+                      child: Form(
+                        key: _formKey,
+                        child: Column(
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.only(top: 50, left: 80, right: 80, bottom: 40),
+                              child: SvgPicture.asset(
+                                'assets/images/logo_branco.svg',
+                                width: 100,
+                                color: Colors.blue,
+                              ),
                             ),
-                          ),
-                          steps()[currentStep],
-                        ],
+                            steps()[currentStep],
+                          ],
+                        ),
                       ),
                     ),
                     SizedBox(height: 20),

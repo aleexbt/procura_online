@@ -29,6 +29,7 @@ class CreateAdController extends GetxController {
   RxList<File> images = List<File>.empty(growable: true).obs;
   RxList<String> imagesUrl = List<String>.empty(growable: true).obs;
   RxString mainPhoto = ''.obs;
+  RxString mainPhotoUrl = ''.obs;
   RxString currentUploadImage = ''.obs;
   RxDouble uploadImageProgress = 0.0.obs;
   RxBool _isUploadingImage = false.obs;
@@ -113,14 +114,11 @@ class CreateAdController extends GetxController {
   void removeImageByIndex(int value) {
     images.removeAt(value);
     imagesUrl.removeAt(value);
-
-    if (images.length == 0) {
-      mainPhoto.value = '';
-    }
   }
 
   void setImagesUrl(String value) => imagesUrl.add(value);
-  void setMainImageUrl(String value) => mainPhoto.value = value;
+  void setMainImageUrl(String value) => mainPhotoUrl.value = value;
+  void setMainImage(String value) => mainPhoto.value = value;
 
   void setColor(String value) => selectedColor.value = value;
   void setFuel(String value) => selectedFuel.value = value;
@@ -247,7 +245,7 @@ class CreateAdController extends GetxController {
         "condition": selectedCondition.value,
         "price": price.value.text,
         "negotiable": selectedNegotiable.value,
-        "main_photo": mainPhoto.value,
+        "main_photo": mainPhotoUrl.value,
         "gallery": imagesUrl,
         "categories": [selectedCategory.value, selectedSubCategory.value],
       };

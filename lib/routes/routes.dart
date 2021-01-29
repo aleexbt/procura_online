@@ -16,14 +16,13 @@ class Routers {
   static const adsListing = '/settings/ads';
   static const adsEdit = '/settings/ads/:id';
 
-  static const editProfile = '/settings/edit-profile';
+  static const editProfile = '/settings/account/profile';
+  static const editBilling = '/settings/account/billing';
   static const changePassword = '/settings/change-password';
   static const searchFilter = '/search-filter';
   static const createAd = '/ad/new';
   static const editAd = '/ad/edit/:id';
   static const createOrder = '/orders/new';
 
-  static const profile = '/profile/:d';
-
-  static const tests = '/tests';
+  static const profile = '/profile/:id';
 }

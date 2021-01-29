@@ -432,29 +432,8 @@ class ProductScreen extends StatelessWidget {
   List buildImage(Map<String, dynamic> photos, String mainPhoto) {
     List images = [];
 
-    if (photos != null) {
-      images = photos.entries
-          .map((entry) => GestureDetector(
-                onTap: () => Get.toNamed(
-                  '/show-photos',
-                  arguments: {
-                    "photoId": "photo_${entry.key}",
-                    "photoUrl": "${entry.value}",
-                  },
-                ),
-                child: Hero(
-                  tag: 'photo_${entry.key}',
-                  child: OctoImage(
-                    image: CachedNetworkImageProvider(entry.value),
-                    placeholderBuilder: OctoPlaceholder.circularProgressIndicator(),
-                    errorBuilder: OctoError.icon(color: Colors.grey[400]),
-                    fit: BoxFit.cover,
-                  ),
-                ),
-              ))
-          .toList();
-    } else if (mainPhoto != null) {
-      images = [
+    if (mainPhoto != null) {
+      images.add(
         GestureDetector(
           onTap: () => Get.toNamed(
             '/show-photos',
@@ -467,15 +446,40 @@ class ProductScreen extends StatelessWidget {
             tag: 'photo',
             child: OctoImage(
               image: CachedNetworkImageProvider(mainPhoto),
-              placeholderBuilder: OctoPlaceholder.circularProgressIndicator(),
+              placeholderBuilder: OctoPlaceholder.blurHash('LAI#u-9XM[D\$GdIU4oIA-sWFxwRl'),
               errorBuilder: OctoError.icon(color: Colors.grey[400]),
               fit: BoxFit.cover,
             ),
           ),
-        )
-      ];
-    } else {
-      images = [
+        ),
+      );
+    }
+
+    if (photos != null) {
+      images.addAll(photos.entries
+          .map((entry) => GestureDetector(
+                onTap: () => Get.toNamed(
+                  '/show-photos',
+                  arguments: {
+                    "photoId": "photo_${entry.key}",
+                    "photoUrl": "${entry.value}",
+                  },
+                ),
+                child: Hero(
+                  tag: 'photo_${entry.key}',
+                  child: OctoImage(
+                    image: CachedNetworkImageProvider(entry.value),
+                    placeholderBuilder: OctoPlaceholder.blurHash('LAI#u-9XM[D\$GdIU4oIA-sWFxwRl'),
+                    errorBuilder: OctoError.icon(color: Colors.grey[400]),
+                    fit: BoxFit.cover,
+                  ),
+                ),
+              ))
+          .toList());
+    }
+
+    if (mainPhoto == null && photos == null) {
+      images.add(
         GestureDetector(
           onTap: () => Get.toNamed(
             '/show-photos',
@@ -488,13 +492,13 @@ class ProductScreen extends StatelessWidget {
             tag: 'photo',
             child: OctoImage(
               image: CachedNetworkImageProvider('https://source.unsplash.com/600x500/?bmw,audi,volvo'),
-              placeholderBuilder: OctoPlaceholder.circularProgressIndicator(),
+              placeholderBuilder: OctoPlaceholder.blurHash('LAI#u-9XM[D\$GdIU4oIA-sWFxwRl'),
               errorBuilder: OctoError.icon(color: Colors.grey[400]),
               fit: BoxFit.cover,
             ),
           ),
-        )
-      ];
+        ),
+      );
     }
     return images;
   }

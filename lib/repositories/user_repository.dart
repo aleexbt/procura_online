@@ -45,9 +45,15 @@ class UserRepository {
     return response.data;
   }
 
-  Future<User> update(Map<String, dynamic> updateData) async {
+  Future<User> updateProfile(Map<String, dynamic> updateData) async {
     await setToken();
     final response = await _dio.post('/api/v1/user/me/update', data: updateData);
+    return User.fromJson(response.data);
+  }
+
+  Future<User> updateBilling(Map<String, dynamic> updateData) async {
+    await setToken();
+    final response = await _dio.post('/api/v1/user/me/billing/update', data: updateData);
     return User.fromJson(response.data);
   }
 

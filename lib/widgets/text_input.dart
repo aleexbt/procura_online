@@ -24,6 +24,7 @@ class CustomTextInput extends StatelessWidget {
   final Function validator;
   final Color errorTextColor;
   final Color errorBorderColor;
+  final Function onEditingComplete;
 
   const CustomTextInput({
     Key key,
@@ -49,6 +50,7 @@ class CustomTextInput extends StatelessWidget {
     this.validator,
     this.errorTextColor = Colors.red,
     this.errorBorderColor = Colors.red,
+    this.onEditingComplete,
   }) : super(key: key);
 
   @override
@@ -63,6 +65,7 @@ class CustomTextInput extends StatelessWidget {
       textInputAction: textInputAction,
       maxLines: maxLines,
       initialValue: initialValue,
+      onEditingComplete: onEditingComplete,
       decoration: InputDecoration(
         hintText: hintText,
         hintStyle: hintStyle,

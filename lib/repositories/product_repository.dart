@@ -5,6 +5,7 @@ import 'package:dio_http_cache/dio_http_cache.dart';
 import 'package:get/instance_manager.dart';
 import 'package:hive/hive.dart';
 import 'package:procura_online/controllers/create_ad_controller.dart';
+import 'package:procura_online/controllers/edit_ad_controller.dart';
 import 'package:procura_online/models/listing_model.dart';
 import 'package:procura_online/models/product_model.dart';
 import 'package:procura_online/models/upload_media_model.dart';
@@ -42,74 +43,17 @@ class ProductRepository {
     return Product.fromJson(response.data);
   }
 
-  Future edit({
-    String id,
-    List<File> photos,
-    List<String> photosToRemove,
-    String title,
-    String description,
-    String brand,
-    String model,
-    String year,
-    String color,
-    String engineDisplacement,
-    String enginePower,
-    String transmission,
-    String miliage,
-    String numberOfSeats,
-    String numberOfDoors,
-    String fuelType,
-    String condition,
-    String price,
-    String negotiable,
-    String registered,
-    String category,
-    String subcategory,
-  }) async {
-    Uuid uuid = Uuid();
-    MultipartFile mainPhoto;
-    List<MultipartFile> photosList = List<MultipartFile>.empty(growable: true);
-
-    if (photos.length > 0) {
-      for (File photo in photos) {
-        MultipartFile multipartFile = await MultipartFile.fromFile(photo.path, filename: '${uuid.v4()}.jpg');
-        photosList.add(multipartFile);
-      }
-      mainPhoto = await MultipartFile.fromFile(photos[0].path, filename: '${uuid.v4()}.jpg');
-    }
+  Future edit({String id, Map<String, dynamic> data, List<String> photosToRemove}) async {
+    await setToken();
 
     if (photosToRemove.length > 0) {
-      photosToRemove.forEach((element) {
+      photosToRemove.forEach((photoId) {
         setToken();
-        _dio.delete('/api/v1/listings/$id/photos/$element');
+        _dio.delete('/api/v1/listings/$id/photos/$photoId');
       });
     }
 
-    FormData formData = FormData.fromMap({
-      "title": title,
-      "description": description,
-      "make": brand,
-      "model": model,
-      "year": year,
-      "color": color,
-      "engine_displacement": engineDisplacement,
-      "number_of_seats": numberOfSeats,
-      "number_of_doors": numberOfDoors,
-      "fuel_type": fuelType,
-      "engine_power": enginePower,
-      "transmission": transmission,
-      "registered": registered,
-      "mileage": miliage,
-      "condition": condition,
-      "price": price,
-      "negotiable": negotiable,
-      "main_photo": mainPhoto,
-      "photos": photosList,
-      "categories": [category, subcategory]
-    });
-
-    await setToken();
-    final Response response = await _dio.post('/api/v1/listings/$id?_method=PATCH', data: formData);
+    final Response response = await _dio.post('/api/v1/listings/$id?_method=PATCH', data: data);
     return response.data;
   }
 
@@ -140,6 +84,24 @@ class ProductRepository {
     await setToken();
     Response response = await _dio.post('/api/v1/listings/media', data: data, onSendProgress: (sent, total) {
       _createAdController.uploadImageProgress.value = ((sent / total));
+    });
+    return UploadMedia.fromJson(response.data);
+  }
+
+  Future<UploadMedia> mediaUploadEditor(File photo) async {
+    EditAdController _editAdController = Get.find();
+    Uuid uuid = Uuid();
+
+    FormData data = FormData.fromMap({
+      "file": await MultipartFile.fromFile(
+        photo.path,
+        filename: '${uuid.v4()}.jpg',
+      ),
+    });
+
+    await setToken();
+    Response response = await _dio.post('/api/v1/listings/media', data: data, onSendProgress: (sent, total) {
+      _editAdController.uploadImageProgress.value = ((sent / total));
     });
     return UploadMedia.fromJson(response.data);
   }

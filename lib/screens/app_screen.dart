@@ -3,13 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:procura_online/controllers/user_controller.dart';
-import 'package:procura_online/screens/conversations/chat_screen.dart';
 import 'package:procura_online/screens/protected_route.dart';
 import 'package:procura_online/screens/settings/settings_screen.dart';
 import 'package:procura_online/utils/navigation_helper.dart';
 import 'package:procura_online/utils/onesignal_notification.dart';
 
-import 'home/home_screen.dart';
+import 'home_screen.dart';
+import 'orders/orders_chat_screen.dart';
 
 class AppScreen extends StatefulWidget {
   @override
@@ -27,6 +27,7 @@ class _AppScreenState extends State<AppScreen> {
   @override
   void initState() {
     _notificationHelper.initOneSignal();
+    _notificationHelper.initLocalNotifications();
     if (_userController.userData?.id != null) {
       _notificationHelper.setExternalUserId(userId: _userController.userData?.id?.toString());
     }
@@ -53,7 +54,7 @@ class _AppScreenState extends State<AppScreen> {
 
   final List<Widget> authenticatedScreeens = [
     HomeScreen(),
-    ChatScreen(),
+    OrdersAndChatScreen(),
     SettingsScreen(),
   ];
 

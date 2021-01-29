@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:procura_online/controllers/ads_listing_controller.dart';
 import 'package:procura_online/models/product_model.dart';
+import 'package:procura_online/models/upload_media_model.dart';
 import 'package:procura_online/repositories/product_repository.dart';
 import 'package:procura_online/repositories/vehicle_repository.dart';
 import 'package:smart_select/smart_select.dart';
@@ -31,6 +32,14 @@ class EditAdController extends GetxController {
   RxBool _isLoadingBrands = false.obs;
   RxBool _isLoadingModels = false.obs;
 
+  RxList<File> images = List<File>.empty(growable: true).obs;
+  RxList<String> imagesUrl = List<String>.empty(growable: true).obs;
+  RxString mainPhoto = ''.obs;
+  RxString mainPhotoUrl = ''.obs;
+  RxString currentUploadImage = ''.obs;
+  RxDouble uploadImageProgress = 0.0.obs;
+  RxBool _isUploadingImage = false.obs;
+
   bool get isLoading => _isLoading.value;
   bool get isSaving => _isSaving.value;
   bool get isAdEdited => _isAdEdited.value;
@@ -40,6 +49,7 @@ class EditAdController extends GetxController {
   bool get isLoadingSubCategories => _isLoadingSubCategories.value;
   bool get isLoadingBrands => _isLoadingBrands.value;
   bool get isLoadingModels => _isLoadingModels.value;
+  bool get isUploadingImage => _isUploadingImage.value;
 
   Rx<TextEditingController> title = TextEditingController().obs;
   Rx<TextEditingController> description = TextEditingController().obs;
@@ -104,6 +114,21 @@ class EditAdController extends GetxController {
     S2Choice<String>(value: '1', title: 'Yes'),
     S2Choice<String>(value: '0', title: 'No'),
   ];
+
+  void setImages(List<File> value) => images.addAll(value);
+
+  void removeImage(File value) {
+    images.removeWhere((img) => img == value);
+  }
+
+  void removeImageByIndex(int value) {
+    images.removeAt(value);
+    imagesUrl.removeAt(value);
+  }
+
+  void setImagesUrl(String value) => imagesUrl.add(value);
+  void setMainImageUrl(String value) => mainPhotoUrl.value = value;
+  void setMainImage(String value) => mainPhoto.value = value;
 
   void setColor(String value) => selectedColor.value = value;
   void setFuel(String value) => selectedFuel.value = value;
@@ -245,30 +270,30 @@ class EditAdController extends GetxController {
   void edit({List<File> photos, List<String> photosToRemove}) async {
     _isSaving.value = true;
     try {
-      await _productRepository.edit(
-        id: productId,
-        photos: photos,
-        photosToRemove: photosToRemove,
-        title: title.value.text,
-        description: description.value.text,
-        brand: selectedBrand.value,
-        model: selectedModel.value,
-        year: year.value.text,
-        color: selectedColor.value,
-        engineDisplacement: engineDisplacement.value.text,
-        enginePower: enginePower.value.text,
-        transmission: selectedTransmission.value,
-        miliage: miliage.value.text,
-        numberOfSeats: numberOfSeats.value.text,
-        numberOfDoors: numberOfDoors.value.text,
-        fuelType: selectedFuel.value,
-        condition: selectedCondition.value,
-        price: price.value.text,
-        negotiable: selectedNegotiable.value,
-        registered: registeredDate.value,
-        category: selectedCategory.value,
-        subcategory: selectedSubCategory.value,
-      );
+      Map<String, dynamic> editData = {
+        "title": title.value.text,
+        "description": description.value.text,
+        "make": selectedBrand.value,
+        "model": selectedModel.value,
+        "year": year.value.text,
+        "color": selectedColor.value,
+        "engine_displacement": engineDisplacement.value.text,
+        "number_of_seats": numberOfSeats.value.text,
+        "number_of_doors": numberOfDoors.value.text,
+        "fuel_type": selectedFuel.value,
+        "engine_power": enginePower.value.text,
+        "transmission": selectedTransmission.value,
+        "registered": registeredDate.value,
+        "mileage": miliage.value.text,
+        "condition": selectedCondition.value,
+        "price": price.value.text,
+        "negotiable": selectedNegotiable.value,
+        "main_photo": mainPhotoUrl.value,
+        "gallery": imagesUrl,
+        "categories": [selectedCategory.value, selectedSubCategory.value],
+      };
+
+      await _productRepository.edit(id: productId, data: editData, photosToRemove: photosToRemove);
       _adsListingController.findAll(skipLoading: true);
       successDialog(title: 'Success', message: 'Your ad has been updated sucessfully.', dismiss: () => Get.back());
     } on DioError catch (err) {
@@ -326,6 +351,29 @@ class EditAdController extends GetxController {
     } finally {
       _isSaving.value = false;
     }
+  }
+
+  Future<UploadMedia> mediaUpload(File photo) async {
+    uploadImageProgress.value = 0.0;
+    _isUploadingImage.value = true;
+    var _result;
+    try {
+      UploadMedia response = await _productRepository.mediaUploadEditor(photo);
+      _result = response;
+    } on DioError catch (err) {
+      print(err);
+      Get.rawSnackbar(
+          message: 'Ops, error while uploading image', backgroundColor: Colors.red, duration: Duration(seconds: 5));
+    } catch (err) {
+      print(err);
+      Get.rawSnackbar(
+          message: 'Ops, error while uploading image', backgroundColor: Colors.red, duration: Duration(seconds: 5));
+    } finally {
+      _isUploadingImage.value = false;
+      uploadImageProgress.value = 0.0;
+      currentUploadImage.value = '';
+    }
+    return _result;
   }
 
   AwesomeDialog successDialog({String title, String message, Function dismiss}) {

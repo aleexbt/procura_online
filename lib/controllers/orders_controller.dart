@@ -43,6 +43,10 @@ class OrdersController extends GetxController {
   RxString _filterName = 'Unread'.obs;
   RxInt _page = 1.obs;
 
+  RxList<File> images = List<File>.empty(growable: true).obs;
+  RxList<String> imagesUrl = List<String>.empty(growable: true).obs;
+  RxString currentUploadImage = ''.obs;
+
   bool get isLoading => _isLoading.value;
   bool get isLoadingMore => _isLoadingMore.value;
   bool get isLoadingBrands => _isLoadingBrands.value;
@@ -86,6 +90,19 @@ class OrdersController extends GetxController {
     S2Choice<String>(value: 'hybrid', title: 'Hybrid'),
     S2Choice<String>(value: 'electric', title: 'Electric'),
   ];
+
+  void setImages(List<File> value) => images.addAll(value);
+
+  void removeImage(File value) {
+    images.removeWhere((img) => img == value);
+  }
+
+  void removeImageByIndex(int value) {
+    images.removeAt(value);
+    imagesUrl.removeAt(value);
+  }
+
+  void setImagesUrl(String value) => imagesUrl.add(value);
 
   void getBrands() async {
     try {
@@ -170,7 +187,7 @@ class OrdersController extends GetxController {
         "number_of_doors": numberOfDoors.value.text,
         "fuel_type": selectedFuel.value,
         "engine_displacement": engineDisplacement.value.text,
-        "attachments": images,
+        "attachments": imagesUrl,
       };
       await _ordersRepository.createOrder(data);
       findAll(skipLoading: true);
@@ -306,6 +323,9 @@ class OrdersController extends GetxController {
     engineDisplacement.value.clear();
     numberOfDoors.value.clear();
     selectedFuel.value = '';
+    images.clear();
+    imagesUrl.clear();
+    currentUploadImage.value = '';
   }
 
   AwesomeDialog successDialog({String title, String message, Function dismiss}) {

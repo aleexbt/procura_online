@@ -8,8 +8,8 @@ class Bubble extends StatelessWidget {
   Bubble({
     this.id,
     this.photos,
-    this.message,
-    this.time,
+    this.message = '',
+    this.time = '',
     this.isMe,
   });
 
@@ -51,7 +51,7 @@ class Bubble extends StatelessWidget {
                 photos != null ? photosGallery(photos) : Container(width: 0, height: 0),
                 photos != null ? SizedBox(height: 5) : Container(width: 0, height: 0),
                 Text(
-                  message,
+                  message ?? '',
                   style: TextStyle(color: isMe ? Colors.white : Colors.black, fontSize: 12),
                 ),
               ],
@@ -61,7 +61,7 @@ class Bubble extends StatelessWidget {
         Padding(
           padding: EdgeInsets.only(left: isMe ? 0 : 10, right: isMe ? 10 : 0, bottom: 4),
           child: Text(
-            time,
+            time ?? '0 minutes ago',
             style: TextStyle(color: Colors.grey, fontSize: 11),
           ),
         ),

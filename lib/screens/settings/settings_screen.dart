@@ -37,11 +37,18 @@ class _SettingsScreenState extends State<SettingsScreen> with AutomaticKeepAlive
         child: Column(
           children: [
             ListTileMoreCustomizable(
-              onTap: (_) => Get.toNamed('/settings/edit-profile'),
+              onTap: (_) => Get.toNamed('/settings/account/profile'),
               leading: Icon(Icons.account_circle_outlined, color: Colors.blue),
               title: Text('Account'),
               horizontalTitleGap: 0,
-              subtitle: Text('Manage your account settings'),
+              subtitle: Text('Edit your profile information'),
+            ),
+            ListTileMoreCustomizable(
+              onTap: (_) => Get.toNamed('/settings/account/billing'),
+              leading: Icon(Icons.article_outlined, color: Colors.blue),
+              title: Text('Billing'),
+              horizontalTitleGap: 0,
+              subtitle: Text('Edit your billing information'),
             ),
             ListTileMoreCustomizable(
               onTap: (_) => Get.toNamed('/settings/change-password'),

@@ -34,7 +34,30 @@ class _CreateAdScreenState extends State<CreateAdScreen> {
 
   bool submitted = false;
 
-  void selectImages() async {
+  void selectMainPhoto() async {
+    FilePickerResult result = await FilePicker.platform.pickFiles(
+      allowMultiple: false,
+      type: FileType.image,
+    );
+
+    if (result != null) {
+      File file = result.paths.map((path) => File(path)).first;
+
+      _createAdController.setMainImage(file.path);
+      _createAdController.currentUploadImage.value = _createAdController.mainPhoto.value;
+
+      UploadMedia mainPhoto = await _createAdController.mediaUpload(file);
+      if (mainPhoto != null) {
+        _createAdController.setMainImageUrl(mainPhoto.name);
+      } else {
+        setState(() {
+          _createAdController.mainPhoto.value = '';
+        });
+      }
+    }
+  }
+
+  void selectMore() async {
     FilePickerResult result = await FilePicker.platform.pickFiles(
       allowMultiple: true,
       type: FileType.image,
@@ -43,13 +66,6 @@ class _CreateAdScreenState extends State<CreateAdScreen> {
     if (result != null) {
       List<File> files = result.paths.map((path) => File(path)).toList();
       _createAdController.setImages(files);
-
-      if (_createAdController.mainPhoto.isEmpty) {
-        UploadMedia mainPhoto = await _createAdController.mediaUpload(files[0]);
-        if (mainPhoto != null) {
-          _createAdController.setMainImageUrl(mainPhoto.name);
-        }
-      }
 
       for (File photo in files) {
         _createAdController.currentUploadImage.value = photo.path;
@@ -77,10 +93,19 @@ class _CreateAdScreenState extends State<CreateAdScreen> {
           child: SafeArea(
             child: SingleChildScrollView(
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  _.images.length == 0 ? selectImage() : selectedImages(),
-                  SizedBox(height: 10),
+                  Container(
+                    width: double.infinity,
+                    height: 180,
+                    decoration: BoxDecoration(
+                      color: Colors.grey[200],
+                      borderRadius: BorderRadius.only(
+                        bottomLeft: Radius.circular(12),
+                        bottomRight: Radius.circular(12),
+                      ),
+                    ),
+                    child: photos(),
+                  ),
                   Padding(
                     padding: const EdgeInsets.all(15),
                     child: Focus(
@@ -580,22 +605,71 @@ class _CreateAdScreenState extends State<CreateAdScreen> {
     );
   }
 
-  Widget selectImage() {
-    return GestureDetector(
-      onTap: selectImages,
-      behavior: HitTestBehavior.translucent,
-      child: Stack(
-        children: [
-          Container(
-            width: double.infinity,
-            height: 200,
-            decoration: BoxDecoration(color: Colors.grey[200]),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(10),
-            child: Center(
+  Widget mainPhoto() {
+    return Obx(
+      () => _createAdController.mainPhoto.value.isNotEmpty
+          ? ClipRRect(
+              borderRadius: BorderRadius.circular(10),
+              child: Stack(
+                children: [
+                  SizedBox(
+                    width: 200,
+                    height: 180,
+                    child: Image.file(
+                      File(_createAdController.mainPhoto.value),
+                      width: 200,
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                  Positioned(
+                    top: 4,
+                    right: 4,
+                    child: GestureDetector(
+                      behavior: HitTestBehavior.translucent,
+                      onTap: () => _createAdController.mainPhoto.value = '',
+                      child: Icon(
+                        Icons.delete,
+                        color: Colors.red,
+                      ),
+                    ),
+                  ),
+                  Obx(
+                    () => Visibility(
+                      visible: _createAdController.isUploadingImage &&
+                          _createAdController.currentUploadImage.value == _createAdController.mainPhoto.value,
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(5),
+                        child: Container(
+                          width: 200,
+                          height: 180,
+                          color: Colors.grey.withOpacity(0.8),
+                          child: Center(
+                            child: CircularPercentIndicator(
+                              radius: 60.0,
+                              lineWidth: 5.0,
+                              percent: _createAdController.uploadImageProgress.value,
+                              center: Text(
+                                '${(_createAdController.uploadImageProgress.value * 100).round()}%',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              progressColor: Colors.blue,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            )
+          : GestureDetector(
+              onTap: selectMainPhoto,
+              behavior: HitTestBehavior.translucent,
               child: Container(
-                width: 220,
+                width: 200,
                 height: 180,
                 decoration: BoxDecoration(
                   border: Border.all(color: Colors.blue),
@@ -610,132 +684,146 @@ class _CreateAdScreenState extends State<CreateAdScreen> {
                         size: 50,
                         color: Colors.blue,
                       ),
-                      Text('Select a picture'),
+                      Text('Main photo'),
                     ],
                   ),
                 ),
               ),
             ),
-          ),
-        ],
-      ),
     );
   }
 
-  Widget selectedImages() {
-    CreateAdController _createAdController = Get.find();
-    return Stack(
-      children: [
-        Container(
-          width: double.infinity,
-          height: 200,
-          decoration: BoxDecoration(color: Colors.grey[200]),
-        ),
-        Padding(
-          padding: const EdgeInsets.all(10),
-          child: Container(
-            width: double.infinity,
-            height: 180,
-            child: Center(
-              child: ListView.builder(
-                shrinkWrap: true,
-                scrollDirection: Axis.horizontal,
-                itemCount: _createAdController.images.length + 1,
-                physics: BouncingScrollPhysics(),
-                itemBuilder: (context, index) {
-                  if (index == _createAdController.images.length) {
-                    return _createAdController.images.length < 5
-                        ? GestureDetector(
-                            onTap: selectImages,
-                            behavior: HitTestBehavior.translucent,
-                            child: Container(
-                              width: 220,
-                              height: 180,
-                              decoration: BoxDecoration(
-                                border: Border.all(color: Colors.blue),
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                              child: Center(
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Icon(
-                                      Icons.camera_alt_outlined,
-                                      size: 50,
-                                      color: Colors.blue,
-                                    ),
-                                    Text('Select a picture'),
-                                  ],
-                                ),
-                              ),
-                            ),
-                          )
-                        : Container();
-                  }
-                  return Padding(
-                    padding: const EdgeInsets.only(right: 8.0),
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(10),
-                      child: Stack(
-                        children: [
-                          SizedBox(
-                            width: 250,
-                            height: 200,
-                            child: Image.file(
-                              File(_createAdController.images[index].path),
-                              width: 250,
-                              height: 200,
-                              fit: BoxFit.cover,
-                            ),
+  Widget gallery() {
+    return Obx(
+      () => _createAdController.images.length > 0
+          ? ListView.builder(
+              shrinkWrap: true,
+              scrollDirection: Axis.horizontal,
+              itemCount: _createAdController.images.length,
+              physics: NeverScrollableScrollPhysics(),
+              itemBuilder: (context, index) {
+                return Padding(
+                  padding: const EdgeInsets.only(right: 8.0),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(10),
+                    child: Stack(
+                      children: [
+                        SizedBox(
+                          width: 200,
+                          height: 180,
+                          child: Image.file(
+                            File(_createAdController.images[index].path),
+                            width: 200,
+                            height: 180,
+                            fit: BoxFit.cover,
                           ),
-                          Positioned(
-                            top: 4,
-                            right: 4,
-                            child: GestureDetector(
-                                behavior: HitTestBehavior.translucent,
-                                onTap: () => _createAdController.removeImageByIndex(index),
-                                child: Icon(Icons.delete, color: Colors.red)),
-                          ),
-                          Obx(
-                            () => Visibility(
-                              visible: _createAdController.isUploadingImage &&
-                                  _createAdController.currentUploadImage.value ==
-                                      _createAdController.images[index].path,
-                              child: ClipRRect(
-                                borderRadius: BorderRadius.circular(5),
-                                child: Container(
-                                  width: 250,
-                                  height: 200,
-                                  color: Colors.grey.withOpacity(0.8),
-                                  child: Center(
-                                    child: CircularPercentIndicator(
-                                      radius: 60.0,
-                                      lineWidth: 5.0,
-                                      percent: _createAdController.uploadImageProgress.value,
-                                      center: Text(
-                                        '${(_createAdController.uploadImageProgress.value * 100).round()}%',
-                                        style: TextStyle(
-                                          color: Colors.white,
-                                          fontWeight: FontWeight.bold,
-                                        ),
+                        ),
+                        Positioned(
+                          top: 4,
+                          right: 4,
+                          child: GestureDetector(
+                              behavior: HitTestBehavior.translucent,
+                              onTap: () => _createAdController.removeImageByIndex(index),
+                              child: Icon(Icons.delete, color: Colors.red)),
+                        ),
+                        Obx(
+                          () => Visibility(
+                            visible: _createAdController.isUploadingImage &&
+                                _createAdController.currentUploadImage.value == _createAdController.images[index].path,
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(5),
+                              child: Container(
+                                width: 200,
+                                height: 180,
+                                color: Colors.grey.withOpacity(0.8),
+                                child: Center(
+                                  child: CircularPercentIndicator(
+                                    radius: 60.0,
+                                    lineWidth: 5.0,
+                                    percent: _createAdController.uploadImageProgress.value,
+                                    center: Text(
+                                      '${(_createAdController.uploadImageProgress.value * 100).round()}%',
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.bold,
                                       ),
-                                      progressColor: Colors.blue,
                                     ),
+                                    progressColor: Colors.blue,
                                   ),
                                 ),
                               ),
                             ),
                           ),
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
-                  );
+                  ),
+                );
+              },
+            )
+          : Container(),
+    );
+  }
+
+  Widget photos() {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: SizedBox(
+        height: 140,
+        child: CustomScrollView(
+          scrollDirection: Axis.horizontal,
+          physics: BouncingScrollPhysics(),
+          slivers: [
+            SliverList(
+              delegate: SliverChildBuilderDelegate(
+                (context, index) {
+                  return mainPhoto();
                 },
+                childCount: 1,
               ),
             ),
-          ),
+            SliverList(
+              delegate: SliverChildBuilderDelegate(
+                (context, index) {
+                  return Padding(
+                    padding: const EdgeInsets.only(left: 10),
+                    child: gallery(),
+                  );
+                },
+                childCount: 1,
+              ),
+            ),
+            SliverFillRemaining(
+              hasScrollBody: false,
+              child: GestureDetector(
+                behavior: HitTestBehavior.translucent,
+                onTap: selectMore,
+                child: Padding(
+                  padding: const EdgeInsets.all(15),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(
+                        Icons.add_a_photo,
+                        color: Colors.grey[400],
+                        size: 35,
+                      ),
+                      Text(
+                        'ADD MORE',
+                        style: TextStyle(
+                          color: Colors.grey[400],
+                          fontSize: 12,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ],
         ),
-      ],
+      ),
     );
   }
 }

@@ -10,19 +10,19 @@ import 'package:procura_online/screens/app_screen.dart';
 import 'package:procura_online/screens/auth/forgot_password_screen.dart';
 import 'package:procura_online/screens/auth/login_screen.dart';
 import 'package:procura_online/screens/auth/register_screen.dart';
-import 'package:procura_online/screens/conversations/chat_screen.dart';
-import 'package:procura_online/screens/conversations/conversation_screen.dart';
-import 'package:procura_online/screens/conversations/order_reply_screen.dart';
 import 'package:procura_online/screens/create_order_screen.dart';
 import 'package:procura_online/screens/filter_screen.dart';
-import 'package:procura_online/screens/home/home_screen.dart';
-import 'package:procura_online/screens/product/product_screen.dart';
+import 'package:procura_online/screens/home_screen.dart';
+import 'package:procura_online/screens/orders/conversation_screen.dart';
+import 'package:procura_online/screens/orders/order_reply_screen.dart';
+import 'package:procura_online/screens/orders/orders_chat_screen.dart';
+import 'package:procura_online/screens/product_screen.dart';
 import 'package:procura_online/screens/profile_screen.dart';
 import 'package:procura_online/screens/settings/ads_listing_screen.dart';
 import 'package:procura_online/screens/settings/change_password_screen.dart';
+import 'package:procura_online/screens/settings/edit_billing_screen.dart';
 import 'package:procura_online/screens/settings/edit_profile_screen.dart';
 import 'package:procura_online/screens/settings/settings_screen.dart';
-import 'package:procura_online/screens/tests.dart';
 import 'package:procura_online/splash.dart';
 import 'package:procura_online/widgets/show_photo.dart';
 
@@ -79,7 +79,7 @@ List<GetPage> getPages = [
   // ),
   GetPage(
     name: Routers.chat,
-    page: () => ChatScreen(),
+    page: () => OrdersAndChatScreen(),
   ),
   GetPage(
     name: Routers.chatConversation,
@@ -118,6 +118,11 @@ List<GetPage> getPages = [
     transition: Platform.isIOS ? Transition.native : null,
   ),
   GetPage(
+    name: Routers.editBilling,
+    page: () => EditBillingScreen(),
+    transition: Platform.isIOS ? Transition.native : null,
+  ),
+  GetPage(
     name: Routers.changePassword,
     page: () => ChangePasswordScreen(),
     transition: Platform.isIOS ? Transition.native : null,
@@ -135,11 +140,6 @@ List<GetPage> getPages = [
   GetPage(
     name: Routers.profile,
     page: () => ProfileScreen(),
-    transition: Platform.isIOS ? Transition.native : null,
-  ),
-  GetPage(
-    name: Routers.tests,
-    page: () => TestsScreen(),
     transition: Platform.isIOS ? Transition.native : null,
   ),
 ];

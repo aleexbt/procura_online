@@ -18,18 +18,21 @@ class OrderMediaAdapter extends TypeAdapter<OrderMedia> {
     };
     return OrderMedia(
       id: fields[0] as int,
-      fileName: fields[1] as String,
+      thumb: fields[1] as String,
+      image: fields[2] as String,
     );
   }
 
   @override
   void write(BinaryWriter writer, OrderMedia obj) {
     writer
-      ..writeByte(2)
+      ..writeByte(3)
       ..writeByte(0)
       ..write(obj.id)
       ..writeByte(1)
-      ..write(obj.fileName);
+      ..write(obj.thumb)
+      ..writeByte(2)
+      ..write(obj.image);
   }
 
   @override
@@ -50,12 +53,14 @@ class OrderMediaAdapter extends TypeAdapter<OrderMedia> {
 OrderMedia _$OrderMediaFromJson(Map<String, dynamic> json) {
   return OrderMedia(
     id: json['id'] as int,
-    fileName: json['file_name'] as String,
+    thumb: json['thumb'] as String,
+    image: json['image'] as String,
   );
 }
 
 Map<String, dynamic> _$OrderMediaToJson(OrderMedia instance) =>
     <String, dynamic>{
       'id': instance.id,
-      'file_name': instance.fileName,
+      'thumb': instance.thumb,
+      'image': instance.image,
     };

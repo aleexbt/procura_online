@@ -17,6 +17,7 @@ class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
+  final FocusScopeNode _node = FocusScopeNode();
 
   @override
   void initState() {
@@ -35,6 +36,7 @@ class _LoginScreenState extends State<LoginScreen> {
       statusBarColor: Colors.white,
       statusBarIconBrightness: Brightness.dark,
     ));
+    _node.dispose();
     super.dispose();
   }
 
@@ -79,6 +81,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final focus = FocusNode();
     return Scaffold(
       appBar: AppBar(
         brightness: Brightness.dark,
@@ -120,65 +123,70 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                       Form(
                         key: _formKey,
-                        child: Column(
-                          children: [
-                            CustomTextInput(
-                              controller: _emailController,
-                              prefixIcon: Icon(
-                                Icons.mail,
-                                color: Colors.white,
-                              ),
-                              hintText: 'Email',
-                              hintStyle: TextStyle(color: Colors.white),
-                              keyboardType: TextInputType.emailAddress,
-                              errorBorderColor: Colors.white54,
-                              errorTextColor: Colors.white,
-                              validator: (value) {
-                                if (value.isEmpty) {
-                                  return 'Please enter your email address';
-                                }
-                                return null;
-                              },
-                            ),
-                            SizedBox(height: 20),
-                            CustomTextInput(
-                              controller: _passwordController,
-                              prefixIcon: Icon(
-                                Icons.lock,
-                                color: Colors.white,
-                              ),
-                              hintText: 'Password',
-                              hintStyle: TextStyle(color: Colors.white),
-                              obscureText: true,
-                              errorBorderColor: Colors.white54,
-                              errorTextColor: Colors.white,
-                              onSubmitted: (value) {
-                                if (_formKey.currentState.validate()) {
-                                  FocusScope.of(context).unfocus();
-                                  _userController.signIn(
-                                      email: _emailController.text, password: _passwordController.text);
-                                }
-                              },
-                              validator: (value) {
-                                if (value.isEmpty) {
-                                  return 'Please enter your password';
-                                }
-                                return null;
-                              },
-                            ),
-                            Align(
-                              alignment: Alignment.centerRight,
-                              child: TextButton(
-                                style: TextButton.styleFrom(
-                                  primary: Colors.white,
-                                  padding: EdgeInsets.all(0),
-                                  visualDensity: VisualDensity.compact,
+                        child: FocusScope(
+                          node: _node,
+                          child: Column(
+                            children: [
+                              CustomTextInput(
+                                controller: _emailController,
+                                prefixIcon: Icon(
+                                  Icons.mail,
+                                  color: Colors.white,
                                 ),
-                                child: Text('Forgot password?'),
-                                onPressed: () => Get.toNamed('/auth/forgot-password'),
+                                hintText: 'Email',
+                                hintStyle: TextStyle(color: Colors.white),
+                                keyboardType: TextInputType.emailAddress,
+                                errorBorderColor: Colors.white54,
+                                errorTextColor: Colors.white,
+                                textInputAction: TextInputAction.next,
+                                onEditingComplete: _node.nextFocus,
+                                validator: (value) {
+                                  if (value.isEmpty) {
+                                    return 'Please enter your email address';
+                                  }
+                                  return null;
+                                },
                               ),
-                            ),
-                          ],
+                              SizedBox(height: 20),
+                              CustomTextInput(
+                                controller: _passwordController,
+                                prefixIcon: Icon(
+                                  Icons.lock,
+                                  color: Colors.white,
+                                ),
+                                hintText: 'Password',
+                                hintStyle: TextStyle(color: Colors.white),
+                                obscureText: true,
+                                errorBorderColor: Colors.white54,
+                                errorTextColor: Colors.white,
+                                onSubmitted: (value) {
+                                  if (_formKey.currentState.validate()) {
+                                    FocusScope.of(context).unfocus();
+                                    _userController.signIn(
+                                        email: _emailController.text, password: _passwordController.text);
+                                  }
+                                },
+                                validator: (value) {
+                                  if (value.isEmpty) {
+                                    return 'Please enter your password';
+                                  }
+                                  return null;
+                                },
+                              ),
+                              Align(
+                                alignment: Alignment.centerRight,
+                                child: TextButton(
+                                  style: TextButton.styleFrom(
+                                    primary: Colors.white,
+                                    padding: EdgeInsets.all(0),
+                                    visualDensity: VisualDensity.compact,
+                                  ),
+                                  child: Text('Forgot password?'),
+                                  onPressed: () => Get.toNamed('/auth/forgot-password'),
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                       SizedBox(height: 20),

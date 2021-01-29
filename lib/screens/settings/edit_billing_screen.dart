@@ -2,10 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:procura_online/controllers/user_controller.dart';
-import 'package:procura_online/widgets/select_option.dart';
 import 'package:procura_online/widgets/text_input.dart';
 
-class EditProfileScreen extends StatelessWidget {
+class EditBillingScreen extends StatelessWidget {
   final UserController _userController = Get.find();
   final _formKey = GlobalKey<FormState>();
 
@@ -14,7 +13,7 @@ class EditProfileScreen extends StatelessWidget {
     return GetX<UserController>(
       builder: (_) => Scaffold(
         appBar: AppBar(
-          title: Text('Edit profile'),
+          title: Text('Edit billing'),
           elevation: 0,
           actions: [
             IconButton(
@@ -22,7 +21,7 @@ class EditProfileScreen extends StatelessWidget {
               onPressed: () {
                 if (_formKey.currentState.validate()) {
                   FocusScope.of(context).unfocus();
-                  _userController.updateProfile();
+                  _userController.updateBilling();
                 }
               },
             ),
@@ -39,45 +38,45 @@ class EditProfileScreen extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Name',
+                      'VAT number',
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
                       ),
                     ),
                     SizedBox(height: 10),
                     CustomTextInput(
-                      controller: _.name.value..text = _.userData?.name,
+                      controller: _.vatNumber.value..text = _.userData?.vatNumber,
                       fillColor: Colors.grey[200],
-                      hintText: 'Enter a name',
+                      hintText: 'Enter a VAT number',
+                      keyboardType: TextInputType.number,
+                      validator: (value) {
+                        if (value.isEmpty) {
+                          return 'Please enter a VAT number';
+                        }
+                      },
+                    ),
+                    SizedBox(height: 20),
+                    Text(
+                      'Billing name',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    SizedBox(height: 10),
+                    CustomTextInput(
+                      controller: _.billingName.value..text = _.userData?.billingName,
+                      fillColor: Colors.grey[200],
+                      hintText: 'Enter a billing name',
                       textCapitalization: TextCapitalization.sentences,
                       validator: (value) {
                         if (value.isEmpty) {
-                          return 'Please enter your name';
+                          return 'Please enter a billing name';
                         }
                       },
                     ),
                     SizedBox(height: 20),
                     Text(
-                      'Email',
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    SizedBox(height: 10),
-                    CustomTextInput(
-                      controller: _.email.value..text = _.userData?.email,
-                      fillColor: Colors.grey[200],
-                      hintText: 'Enter an email address',
-                      keyboardType: TextInputType.emailAddress,
-                      validator: (value) {
-                        if (value.isEmpty) {
-                          return 'Please enter your email address';
-                        }
-                      },
-                    ),
-                    SizedBox(height: 20),
-                    Text(
-                      'Phone',
+                      'Billing country',
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
                       ),
@@ -85,56 +84,20 @@ class EditProfileScreen extends StatelessWidget {
                     SizedBox(height: 10),
                     Obx(
                       () => CustomTextInput(
-                        controller: _.phone.value..text = _.userData?.phone,
+                        controller: _.billingCountry.value..text = _.userData?.billingCountry,
                         fillColor: Colors.grey[200],
-                        hintText: 'Enter a phone number',
-                        keyboardType: TextInputType.phone,
-                        validator: (value) {
-                          if (value.isEmpty) {
-                            return 'Please enter your phone number';
-                          }
-                        },
-                      ),
-                    ),
-                    SizedBox(height: 20),
-                    Text(
-                      'Company',
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    SizedBox(height: 10),
-                    Obx(
-                      () => CustomTextInput(
-                        controller: _.company.value..text = _.userData?.company,
-                        fillColor: Colors.grey[200],
-                        hintText: 'Enter a company name',
+                        hintText: 'Enter a billing country',
                         textCapitalization: TextCapitalization.sentences,
                         validator: (value) {
                           if (value.isEmpty) {
-                            return 'Please enter your company name';
+                            return 'Please enter a billing country';
                           }
                         },
                       ),
                     ),
                     SizedBox(height: 20),
                     Text(
-                      'Account type',
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    SizedBox(height: 10),
-                    SelectOption(
-                      modalTitle: 'Account type',
-                      selectText: 'Select an option',
-                      value: _.selectedAccountType.value,
-                      choiceItems: _.accountTypeOptions,
-                      onChange: (state) => _.selectedAccountType(state.value),
-                    ),
-                    SizedBox(height: 20),
-                    Text(
-                      'Address',
+                      'Billing city',
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
                       ),
@@ -142,20 +105,20 @@ class EditProfileScreen extends StatelessWidget {
                     SizedBox(height: 10),
                     Obx(
                       () => CustomTextInput(
-                        controller: _.address.value..text = _.userData?.address,
+                        controller: _.billingCity.value..text = _.userData?.billingCity,
                         fillColor: Colors.grey[200],
-                        hintText: 'Enter an address',
+                        hintText: 'Enter a billing city',
                         textCapitalization: TextCapitalization.sentences,
                         validator: (value) {
                           if (value.isEmpty) {
-                            return 'Please enter your address';
+                            return 'Please enter a billing city';
                           }
                         },
                       ),
                     ),
                     SizedBox(height: 20),
                     Text(
-                      'Postcode',
+                      'Billing address',
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
                       ),
@@ -163,13 +126,34 @@ class EditProfileScreen extends StatelessWidget {
                     SizedBox(height: 10),
                     Obx(
                       () => CustomTextInput(
-                        controller: _.postcode.value..text = _.userData?.postcode,
+                        controller: _.billingAddress.value..text = _.userData?.billingAddress,
                         fillColor: Colors.grey[200],
-                        hintText: 'Enter a postcode',
+                        hintText: 'Enter a billing address',
+                        textCapitalization: TextCapitalization.sentences,
+                        validator: (value) {
+                          if (value.isEmpty) {
+                            return 'Please enter a billing address';
+                          }
+                        },
+                      ),
+                    ),
+                    SizedBox(height: 20),
+                    Text(
+                      'Billing postcode',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    SizedBox(height: 10),
+                    Obx(
+                      () => CustomTextInput(
+                        controller: _.billingPostcode.value..text = _.userData?.billingPostcode,
+                        fillColor: Colors.grey[200],
+                        hintText: 'Enter a billing postcode',
                         keyboardType: TextInputType.number,
                         validator: (value) {
                           if (value.isEmpty) {
-                            return 'Please enter your postcode';
+                            return 'Please enter a billing postcode';
                           }
                         },
                       ),

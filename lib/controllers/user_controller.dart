@@ -49,6 +49,13 @@ class UserController extends GetxController with StateMixin<User> {
   Rx<TextEditingController> address = TextEditingController().obs;
   Rx<TextEditingController> postcode = TextEditingController().obs;
 
+  Rx<TextEditingController> vatNumber = TextEditingController().obs;
+  Rx<TextEditingController> billingName = TextEditingController().obs;
+  Rx<TextEditingController> billingCountry = TextEditingController().obs;
+  Rx<TextEditingController> billingCity = TextEditingController().obs;
+  Rx<TextEditingController> billingAddress = TextEditingController().obs;
+  Rx<TextEditingController> billingPostcode = TextEditingController().obs;
+
   RxList<S2Choice<int>> _skills = List<S2Choice<int>>.empty(growable: true).obs;
   RxList<S2Choice<int>> _districts = List<S2Choice<int>>.empty(growable: true).obs;
   RxList<S2Choice<int>> _cities = List<S2Choice<int>>.empty(growable: true).obs;
@@ -225,7 +232,7 @@ class UserController extends GetxController with StateMixin<User> {
     Box authBox = await Hive.openBox('auth');
     Box<User> userBox = await Hive.openBox<User>('userData');
     authBox.put('isLoggedIn', false);
-    userBox.put(_userData.value.id, User());
+    userBox.clear();
     Get.delete<OrdersController>(force: true);
     Get.delete<ChatController>(force: true);
     _isLoggedIn.value = false;
@@ -235,7 +242,7 @@ class UserController extends GetxController with StateMixin<User> {
     Get.back();
   }
 
-  void updateUserData() async {
+  void updateProfile() async {
     _isSaving.value = true;
     try {
       Map<String, dynamic> updateData = {
@@ -258,23 +265,70 @@ class UserController extends GetxController with StateMixin<User> {
         val.postcode = postcode.value.text;
       });
 
-      User response = await _userRepository.update(updateData);
+      User response = await _userRepository.updateProfile(updateData);
       Box<User> box = await Hive.openBox<User>('userData');
-      box.put(response.id, response);
+      box.put(response.id.toString(), response);
 
       Get.back();
-      Get.rawSnackbar(
-          message: 'Profile updated successfully.', backgroundColor: Colors.green, duration: Duration(seconds: 3));
     } on DioError catch (err) {
       print(err);
       _savingError.value = true;
       Get.rawSnackbar(
-          message: 'Ops, error updating profile.', backgroundColor: Colors.red, duration: Duration(seconds: 3));
+          message: 'Ops, error updating profile information.',
+          backgroundColor: Colors.red,
+          duration: Duration(seconds: 3));
     } catch (err) {
       print(err);
       _savingError.value = true;
       Get.rawSnackbar(
-          message: 'Ops, error updating profile.', backgroundColor: Colors.red, duration: Duration(seconds: 3));
+          message: 'Ops, error updating profile information..',
+          backgroundColor: Colors.red,
+          duration: Duration(seconds: 3));
+    } finally {
+      _isSaving.value = false;
+    }
+  }
+
+  void updateBilling() async {
+    _isSaving.value = true;
+    try {
+      Map<String, dynamic> updateData = {
+        'vat_number': vatNumber.value.text,
+        'billing_name': billingName.value.text,
+        'billing_country': billingCountry.value.text,
+        'billing_city': billingCity.value.text,
+        'billing_address': billingAddress.value.text,
+        'billing_postcode': billingPostcode.value.text,
+      };
+
+      _userData.update((val) {
+        val.vatNumber = vatNumber.value.text;
+        val.billingName = billingName.value.text;
+        val.billingCountry = billingCountry.value.text;
+        val.billingCity = billingCity.value.text;
+        val.billingAddress = billingAddress.value.text;
+        val.billingPostcode = billingPostcode.value.text;
+      });
+
+      User response = await _userRepository.updateBilling(updateData);
+      Box<User> box = await Hive.openBox<User>('userData');
+      box.put(response.id.toString(), response);
+
+      Get.back();
+    } on DioError catch (err) {
+      print(err);
+      _savingError.value = true;
+      Get.rawSnackbar(
+          message: 'Ops, error updating billing information.',
+          backgroundColor: Colors.red,
+          duration: Duration(seconds: 3));
+    } catch (err) {
+      print(err);
+      _savingError.value = true;
+      Get.rawSnackbar(
+          message: 'Ops, error updating billing information.',
+          backgroundColor: Colors.red,
+          duration: Duration(seconds: 3));
     } finally {
       _isSaving.value = false;
     }

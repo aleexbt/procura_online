@@ -79,6 +79,7 @@ class ConversationController extends GetxController with WidgetsBindingObserver 
   void setImagesUrl(String value) => imagesUrl.add(value);
 
   void restoreConversation() async {
+    print('RESTORE_CONVERSATION_ID: $chatId');
     Box<Conversation> box = await Hive.openBox<Conversation>('conversations') ?? null;
     if (box != null && box.get(chatId) != null) {
       _conversation.value = box.get(chatId);
@@ -157,6 +158,7 @@ class ConversationController extends GetxController with WidgetsBindingObserver 
     _isDeleting.value = true;
     _deletingError.value = false;
     try {
+      Get.back();
       await _chatRepository.deleteConversation(chatId);
       _chatController.findAll();
       Get.back(closeOverlays: true);

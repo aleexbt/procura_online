@@ -9,12 +9,12 @@ part 'chat_model.g.dart';
 class Chat {
   int id;
   @JsonKey(name: 'order_id')
-  String orderId;
+  dynamic orderId;
   @JsonKey(name: 'user_one')
-  String userOne;
+  dynamic userOne;
   @JsonKey(name: 'user_two')
-  String userTwo;
-  String status;
+  dynamic userTwo;
+  dynamic status;
   bool mute;
   @JsonKey(name: 'human_read_date')
   String humanReadDate;

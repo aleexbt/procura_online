@@ -30,9 +30,12 @@ class ChatController extends GetxController with WidgetsBindingObserver {
   }
 
   void subscribeMessages() async {
+    print('CALL_SUBSCRIBE');
     Box<User> box = await Hive.openBox<User>('userData') ?? null;
     int userId = box.values?.first?.id ?? null;
+    print('userId: $userId');
     if (userId != null) {
+      print('BACKGROUND_SUBSCRIBE_MESSAGES');
       pusherService.firePusher('private-update-conversation.$userId', 'App\\Events\\ConversationUpdateEvent');
       pusherService.firePusher('private-conversation-up', 'App\\Events\\ConversationUpdateEvent');
     }
@@ -44,8 +47,12 @@ class ChatController extends GetxController with WidgetsBindingObserver {
     if (state == AppLifecycleState.resumed) {
       subscribeMessages();
     } else if (state == AppLifecycleState.paused) {
-      pusherService.unbindEvent('App\\Events\\ConversationUpdateEvent');
-      pusherService.unSubscribePusher('App\\Events\\ConversationUpdateEvent');
+      try {
+        pusherService.unbindEvent('App\\Events\\ConversationUpdateEvent');
+        pusherService.unSubscribePusher('App\\Events\\ConversationUpdateEvent');
+      } catch (err) {
+        // unbind or unsubscribe error
+      }
     }
   }
 

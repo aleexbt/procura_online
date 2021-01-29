@@ -23,9 +23,15 @@ class _CreateOrderScreenState extends State<CreateOrderScreen> {
 
   @override
   initState() {
-    _ordersController.resetFields();
+    // _ordersController.resetFields();
     mainNode = FocusNode();
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    _ordersController.resetFields();
+    super.dispose();
   }
 
   bool submitted = false;
@@ -35,7 +41,6 @@ class _CreateOrderScreenState extends State<CreateOrderScreen> {
   void selectImages() async {
     FilePickerResult result = await FilePicker.platform.pickFiles(
       type: FileType.image,
-      // allowedExtensions: ['jpg', 'jpeg', 'png', 'gif'],
     );
 
     if (result != null) {
@@ -56,6 +61,28 @@ class _CreateOrderScreenState extends State<CreateOrderScreen> {
     }
   }
 
+  void selectMore() async {
+    FilePickerResult result = await FilePicker.platform.pickFiles(
+      allowMultiple: true,
+      type: FileType.image,
+    );
+
+    if (result != null) {
+      List<File> files = result.paths.map((path) => File(path)).toList();
+      _ordersController.setImages(files);
+
+      for (File photo in files) {
+        _ordersController.currentUploadImage.value = photo.path;
+        UploadMedia media = await _ordersController.mediaUpload(photo);
+        if (media != null) {
+          _ordersController.setImagesUrl(media.name);
+        } else {
+          _ordersController.removeImage(photo);
+        }
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     FocusScope.of(context).requestFocus(mainNode);
@@ -72,8 +99,18 @@ class _CreateOrderScreenState extends State<CreateOrderScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  images.length == 0 ? selectImage() : selectedImages(),
-                  SizedBox(height: 10),
+                  Container(
+                    width: double.infinity,
+                    height: 180,
+                    decoration: BoxDecoration(
+                      color: Colors.grey[200],
+                      borderRadius: BorderRadius.only(
+                        bottomLeft: Radius.circular(12),
+                        bottomRight: Radius.circular(12),
+                      ),
+                    ),
+                    child: photos(),
+                  ),
                   Padding(
                     padding: const EdgeInsets.all(15),
                     child: Focus(
@@ -301,133 +338,48 @@ class _CreateOrderScreenState extends State<CreateOrderScreen> {
     );
   }
 
-  Widget selectImage() {
-    return GestureDetector(
-      onTap: selectImages,
-      behavior: HitTestBehavior.translucent,
-      child: Stack(
-        children: [
-          Container(
-            width: double.infinity,
-            height: 200,
-            decoration: BoxDecoration(color: Colors.grey[200]),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(10),
-            child: Center(
-              child: Container(
-                width: 220,
-                height: 180,
-                decoration: BoxDecoration(
-                  border: Border.all(color: Colors.blue),
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                child: Center(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Icon(
-                        Icons.camera_alt_outlined,
-                        size: 50,
-                        color: Colors.blue,
-                      ),
-                      Text('Select a picture'),
-                    ],
-                  ),
-                ),
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget selectedImages() {
-    return Stack(
-      children: [
-        Container(
-          width: double.infinity,
-          height: 200,
-          decoration: BoxDecoration(color: Colors.grey[200]),
-        ),
-        Padding(
-          padding: const EdgeInsets.all(10),
-          child: Container(
-            width: double.infinity,
-            height: 180,
-            child: Center(
-              child: ListView.builder(
-                shrinkWrap: true,
-                scrollDirection: Axis.horizontal,
-                itemCount: images.length + 1,
-                physics: BouncingScrollPhysics(),
-                itemBuilder: (context, index) {
-                  if (index == images.length) {
-                    return images.length < 5
-                        ? Obx(
-                            () => GestureDetector(
-                              onTap: _ordersController.isUploadingImage ? null : selectImages,
+  Widget gallery() {
+    return Obx(
+      () => _ordersController.images.length > 0
+          ? ListView.builder(
+              shrinkWrap: true,
+              scrollDirection: Axis.horizontal,
+              itemCount: _ordersController.images.length,
+              physics: NeverScrollableScrollPhysics(),
+              itemBuilder: (context, index) {
+                return Padding(
+                  padding: const EdgeInsets.only(right: 8.0),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(10),
+                    child: Stack(
+                      children: [
+                        SizedBox(
+                          width: 200,
+                          height: 180,
+                          child: Image.file(
+                            File(_ordersController.images[index].path),
+                            width: 200,
+                            height: 180,
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                        Positioned(
+                          top: 4,
+                          right: 4,
+                          child: GestureDetector(
                               behavior: HitTestBehavior.translucent,
+                              onTap: () => _ordersController.removeImageByIndex(index),
+                              child: Icon(Icons.delete, color: Colors.red)),
+                        ),
+                        Obx(
+                          () => Visibility(
+                            visible: _ordersController.isUploadingImage &&
+                                _ordersController.currentUploadImage.value == _ordersController.images[index].path,
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(5),
                               child: Container(
-                                width: 220,
+                                width: 200,
                                 height: 180,
-                                decoration: BoxDecoration(
-                                  border: Border.all(color: Colors.blue),
-                                  borderRadius: BorderRadius.circular(10),
-                                ),
-                                child: Center(
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Icon(
-                                        Icons.camera_alt_outlined,
-                                        size: 50,
-                                        color: Colors.blue,
-                                      ),
-                                      Text('Select a picture'),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            ),
-                          )
-                        : Container();
-                  }
-                  return Padding(
-                    padding: const EdgeInsets.only(right: 8.0),
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(10),
-                      child: Stack(
-                        children: [
-                          SizedBox(
-                            width: 250,
-                            height: 200,
-                            child: Image.file(
-                              File(images[index].path),
-                              width: 250,
-                              height: 200,
-                              fit: BoxFit.cover,
-                            ),
-                          ),
-                          Positioned(
-                            top: 4,
-                            right: 4,
-                            child: GestureDetector(
-                                onTap: () {
-                                  setState(() {
-                                    images.removeAt(index);
-                                    imagesUrl.removeAt(index);
-                                  });
-                                },
-                                child: Icon(Icons.delete, color: Colors.red)),
-                          ),
-                          Obx(
-                            () => Visibility(
-                              visible: _ordersController.isUploadingImage && index == images.length - 1,
-                              child: Container(
-                                width: 250,
-                                height: 200,
                                 color: Colors.grey.withOpacity(0.8),
                                 child: Center(
                                   child: CircularPercentIndicator(
@@ -447,16 +399,68 @@ class _CreateOrderScreenState extends State<CreateOrderScreen> {
                               ),
                             ),
                           ),
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
+                  ),
+                );
+              },
+            )
+          : Container(),
+    );
+  }
+
+  Widget photos() {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: SizedBox(
+        height: 140,
+        child: CustomScrollView(
+          scrollDirection: Axis.horizontal,
+          physics: BouncingScrollPhysics(),
+          slivers: [
+            SliverList(
+              delegate: SliverChildBuilderDelegate(
+                (context, index) {
+                  return Padding(
+                    padding: const EdgeInsets.only(left: 10),
+                    child: gallery(),
                   );
                 },
+                childCount: 1,
               ),
             ),
-          ),
+            SliverFillRemaining(
+              hasScrollBody: false,
+              child: GestureDetector(
+                behavior: HitTestBehavior.translucent,
+                onTap: selectMore,
+                child: Padding(
+                  padding: const EdgeInsets.all(15),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(
+                        Icons.add_a_photo,
+                        color: Colors.grey[400],
+                        size: 35,
+                      ),
+                      Text(
+                        'ADD PHOTOS',
+                        style: TextStyle(
+                          color: Colors.grey[400],
+                          fontSize: 12,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ],
         ),
-      ],
+      ),
     );
   }
 }
