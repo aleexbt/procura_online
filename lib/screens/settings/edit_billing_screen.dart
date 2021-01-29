@@ -29,136 +29,138 @@ class EditBillingScreen extends StatelessWidget {
         ),
         body: ModalProgressHUD(
           inAsyncCall: _userController.isSaving,
-          child: SingleChildScrollView(
-            child: Padding(
-              padding: const EdgeInsets.all(20),
-              child: Form(
-                key: _formKey,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'VAT number',
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
+          child: SafeArea(
+            child: SingleChildScrollView(
+              child: Padding(
+                padding: const EdgeInsets.all(20),
+                child: Form(
+                  key: _formKey,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'VAT number',
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
-                    ),
-                    SizedBox(height: 10),
-                    CustomTextInput(
-                      controller: _.vatNumber.value..text = _.userData?.vatNumber,
-                      fillColor: Colors.grey[200],
-                      hintText: 'Enter a VAT number',
-                      keyboardType: TextInputType.number,
-                      validator: (value) {
-                        if (value.isEmpty) {
-                          return 'Please enter a VAT number';
-                        }
-                      },
-                    ),
-                    SizedBox(height: 20),
-                    Text(
-                      'Billing name',
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    SizedBox(height: 10),
-                    CustomTextInput(
-                      controller: _.billingName.value..text = _.userData?.billingName,
-                      fillColor: Colors.grey[200],
-                      hintText: 'Enter a billing name',
-                      textCapitalization: TextCapitalization.sentences,
-                      validator: (value) {
-                        if (value.isEmpty) {
-                          return 'Please enter a billing name';
-                        }
-                      },
-                    ),
-                    SizedBox(height: 20),
-                    Text(
-                      'Billing country',
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    SizedBox(height: 10),
-                    Obx(
-                      () => CustomTextInput(
-                        controller: _.billingCountry.value..text = _.userData?.billingCountry,
+                      SizedBox(height: 10),
+                      CustomTextInput(
+                        controller: _.vatNumber.value..text = _.userData?.vatNumber,
                         fillColor: Colors.grey[200],
-                        hintText: 'Enter a billing country',
-                        textCapitalization: TextCapitalization.sentences,
-                        validator: (value) {
-                          if (value.isEmpty) {
-                            return 'Please enter a billing country';
-                          }
-                        },
-                      ),
-                    ),
-                    SizedBox(height: 20),
-                    Text(
-                      'Billing city',
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    SizedBox(height: 10),
-                    Obx(
-                      () => CustomTextInput(
-                        controller: _.billingCity.value..text = _.userData?.billingCity,
-                        fillColor: Colors.grey[200],
-                        hintText: 'Enter a billing city',
-                        textCapitalization: TextCapitalization.sentences,
-                        validator: (value) {
-                          if (value.isEmpty) {
-                            return 'Please enter a billing city';
-                          }
-                        },
-                      ),
-                    ),
-                    SizedBox(height: 20),
-                    Text(
-                      'Billing address',
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    SizedBox(height: 10),
-                    Obx(
-                      () => CustomTextInput(
-                        controller: _.billingAddress.value..text = _.userData?.billingAddress,
-                        fillColor: Colors.grey[200],
-                        hintText: 'Enter a billing address',
-                        textCapitalization: TextCapitalization.sentences,
-                        validator: (value) {
-                          if (value.isEmpty) {
-                            return 'Please enter a billing address';
-                          }
-                        },
-                      ),
-                    ),
-                    SizedBox(height: 20),
-                    Text(
-                      'Billing postcode',
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    SizedBox(height: 10),
-                    Obx(
-                      () => CustomTextInput(
-                        controller: _.billingPostcode.value..text = _.userData?.billingPostcode,
-                        fillColor: Colors.grey[200],
-                        hintText: 'Enter a billing postcode',
+                        hintText: 'Enter a VAT number',
                         keyboardType: TextInputType.number,
                         validator: (value) {
                           if (value.isEmpty) {
-                            return 'Please enter a billing postcode';
+                            return 'Please enter a VAT number';
                           }
                         },
                       ),
-                    ),
-                  ],
+                      SizedBox(height: 20),
+                      Text(
+                        'Billing name',
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      SizedBox(height: 10),
+                      CustomTextInput(
+                        controller: _.billingName.value..text = _.userData?.billingName,
+                        fillColor: Colors.grey[200],
+                        hintText: 'Enter a billing name',
+                        textCapitalization: TextCapitalization.sentences,
+                        validator: (value) {
+                          if (value.isEmpty) {
+                            return 'Please enter a billing name';
+                          }
+                        },
+                      ),
+                      SizedBox(height: 20),
+                      Text(
+                        'Billing country',
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      SizedBox(height: 10),
+                      Obx(
+                        () => CustomTextInput(
+                          controller: _.billingCountry.value..text = _.userData?.billingCountry,
+                          fillColor: Colors.grey[200],
+                          hintText: 'Enter a billing country',
+                          textCapitalization: TextCapitalization.sentences,
+                          validator: (value) {
+                            if (value.isEmpty) {
+                              return 'Please enter a billing country';
+                            }
+                          },
+                        ),
+                      ),
+                      SizedBox(height: 20),
+                      Text(
+                        'Billing city',
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      SizedBox(height: 10),
+                      Obx(
+                        () => CustomTextInput(
+                          controller: _.billingCity.value..text = _.userData?.billingCity,
+                          fillColor: Colors.grey[200],
+                          hintText: 'Enter a billing city',
+                          textCapitalization: TextCapitalization.sentences,
+                          validator: (value) {
+                            if (value.isEmpty) {
+                              return 'Please enter a billing city';
+                            }
+                          },
+                        ),
+                      ),
+                      SizedBox(height: 20),
+                      Text(
+                        'Billing address',
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      SizedBox(height: 10),
+                      Obx(
+                        () => CustomTextInput(
+                          controller: _.billingAddress.value..text = _.userData?.billingAddress,
+                          fillColor: Colors.grey[200],
+                          hintText: 'Enter a billing address',
+                          textCapitalization: TextCapitalization.sentences,
+                          validator: (value) {
+                            if (value.isEmpty) {
+                              return 'Please enter a billing address';
+                            }
+                          },
+                        ),
+                      ),
+                      SizedBox(height: 20),
+                      Text(
+                        'Billing postcode',
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      SizedBox(height: 10),
+                      Obx(
+                        () => CustomTextInput(
+                          controller: _.billingPostcode.value..text = _.userData?.billingPostcode,
+                          fillColor: Colors.grey[200],
+                          hintText: 'Enter a billing postcode',
+                          keyboardType: TextInputType.number,
+                          validator: (value) {
+                            if (value.isEmpty) {
+                              return 'Please enter a billing postcode';
+                            }
+                          },
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),

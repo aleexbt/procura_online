@@ -72,7 +72,6 @@ class _EditAdScreenState extends State<EditAdScreen> {
   }
 
   void selectMore() async {
-    print('======== SELECT MORE ATIVADO ==========');
     FilePickerResult result = await FilePicker.platform.pickFiles(
       allowMultiple: true,
       type: FileType.image,
@@ -104,31 +103,33 @@ class _EditAdScreenState extends State<EditAdScreen> {
           IconButton(
             icon: Icon(Icons.more_vert),
             onPressed: () => Get.bottomSheet(
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Container(
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      ListTileMoreCustomizable(
-                        leading: Icon(
-                          CupertinoIcons.trash,
-                          color: Colors.black,
-                        ),
-                        title: Text(
-                          "Delete ad",
-                          style: TextStyle(
+              SafeArea(
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Container(
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        ListTileMoreCustomizable(
+                          leading: Icon(
+                            CupertinoIcons.trash,
                             color: Colors.black,
-                            fontWeight: FontWeight.w400,
                           ),
+                          title: Text(
+                            "Delete ad",
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontWeight: FontWeight.w400,
+                            ),
+                          ),
+                          horizontalTitleGap: 0,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          onTap: (_) => _editAdController.delete(),
                         ),
-                        horizontalTitleGap: 0,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        onTap: (_) => _editAdController.delete(),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
               ),

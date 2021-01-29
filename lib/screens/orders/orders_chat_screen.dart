@@ -96,94 +96,76 @@ class _OrdersAndChatScreenState extends State<OrdersAndChatScreen> with Automati
                           ? _pageController.animateToPage(0,
                               duration: Duration(milliseconds: 300), curve: Curves.linear)
                           : Get.bottomSheet(
-                              Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Container(
-                                  child: Column(
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      ListTileMoreCustomizable(
-                                        leading: Icon(
-                                          Icons.visibility_off_outlined,
-                                          color: Colors.black,
-                                        ),
-                                        title: Text(
-                                          'Unread',
-                                          style: TextStyle(
+                              SafeArea(
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Container(
+                                    child: Column(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        ListTileMoreCustomizable(
+                                          leading: Icon(
+                                            Icons.visibility_off_outlined,
                                             color: Colors.black,
-                                            fontWeight: FontWeight.w400,
                                           ),
+                                          title: Text(
+                                            'Unread',
+                                            style: TextStyle(
+                                              color: Colors.black,
+                                              fontWeight: FontWeight.w400,
+                                            ),
+                                          ),
+                                          horizontalTitleGap: 0,
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.circular(10),
+                                          ),
+                                          onTap: (_) => [
+                                            _ordersController.changeFilter(name: 'Unread', value: 'unread'),
+                                            Get.back()
+                                          ],
                                         ),
-                                        horizontalTitleGap: 0,
-                                        shape: RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.circular(10),
-                                        ),
-                                        onTap: (_) => [
-                                          _ordersController.changeFilter(name: 'Unread', value: 'unread'),
-                                          Get.back()
-                                        ],
-                                      ),
-                                      Divider(),
-                                      ListTileMoreCustomizable(
-                                        leading: Icon(
-                                          Icons.visibility_outlined,
-                                          color: Colors.black,
-                                        ),
-                                        title: Text(
-                                          'Read',
-                                          style: TextStyle(
+                                        Divider(),
+                                        ListTileMoreCustomizable(
+                                          leading: Icon(
+                                            Icons.visibility_outlined,
                                             color: Colors.black,
-                                            fontWeight: FontWeight.w400,
                                           ),
+                                          title: Text(
+                                            'Read',
+                                            style: TextStyle(
+                                              color: Colors.black,
+                                              fontWeight: FontWeight.w400,
+                                            ),
+                                          ),
+                                          horizontalTitleGap: 0,
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.circular(10),
+                                          ),
+                                          onTap: (_) =>
+                                              [_ordersController.changeFilter(name: 'Read', value: 'read'), Get.back()],
                                         ),
-                                        horizontalTitleGap: 0,
-                                        shape: RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.circular(10),
-                                        ),
-                                        onTap: (_) =>
-                                            [_ordersController.changeFilter(name: 'Read', value: 'read'), Get.back()],
-                                      ),
-                                      Divider(),
-                                      ListTileMoreCustomizable(
-                                        leading: Icon(
-                                          Icons.send_outlined,
-                                          color: Colors.black,
-                                        ),
-                                        title: Text(
-                                          'Sent',
-                                          style: TextStyle(
+                                        Divider(),
+                                        ListTileMoreCustomizable(
+                                          leading: Icon(
+                                            Icons.send_outlined,
                                             color: Colors.black,
-                                            fontWeight: FontWeight.w400,
                                           ),
-                                        ),
-                                        horizontalTitleGap: 0,
-                                        shape: RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.circular(10),
-                                        ),
-                                        onTap: (_) =>
-                                            [_ordersController.changeFilter(name: 'Sent', value: 'sent'), Get.back()],
-                                      ),
-                                      Divider(),
-                                      ListTileMoreCustomizable(
-                                        leading: Icon(
-                                          Icons.clear,
-                                          color: Colors.black,
-                                        ),
-                                        title: Text(
-                                          'All',
-                                          style: TextStyle(
-                                            color: Colors.black,
-                                            fontWeight: FontWeight.w400,
+                                          title: Text(
+                                            'Sent',
+                                            style: TextStyle(
+                                              color: Colors.black,
+                                              fontWeight: FontWeight.w400,
+                                            ),
                                           ),
+                                          horizontalTitleGap: 0,
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.circular(10),
+                                          ),
+                                          onTap: (_) =>
+                                              [_ordersController.changeFilter(name: 'Sent', value: 'sent'), Get.back()],
                                         ),
-                                        horizontalTitleGap: 0,
-                                        shape: RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.circular(10),
-                                        ),
-                                        onTap: (_) =>
-                                            [_ordersController.changeFilter(name: 'All', value: 'vazio'), Get.back()],
-                                      ),
-                                    ],
+                                      ],
+                                    ),
                                   ),
                                 ),
                               ),
@@ -216,16 +198,16 @@ class _OrdersAndChatScreenState extends State<OrdersAndChatScreen> with Automati
                       ),
                     ),
                   ),
-                  Flexible(
-                    fit: FlexFit.tight,
-                    child: FlatButton(
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(25)),
-                      color: Colors.grey[200],
-                      height: 40,
-                      onPressed: () {},
-                      child: Text('Others'),
-                    ),
-                  ),
+                  // Flexible(
+                  //   fit: FlexFit.tight,
+                  //   child: FlatButton(
+                  //     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(25)),
+                  //     color: Colors.grey[200],
+                  //     height: 40,
+                  //     onPressed: () {},
+                  //     child: Text('Others'),
+                  //   ),
+                  // ),
                 ],
               ),
             ),

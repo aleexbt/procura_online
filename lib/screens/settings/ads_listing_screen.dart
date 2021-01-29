@@ -79,38 +79,40 @@ class _AdsListingScreenState extends State<AdsListingScreen> {
               ),
             );
           }
-          return RefreshIndicator(
-            onRefresh: refresItems,
-            child: ListView.builder(
-              itemCount: _.result.products.length,
-              itemBuilder: (context, index) {
-                return ListTileMoreCustomizable(
-                  onTap: (item) =>
-                      Get.toNamed('/settings/ads/${_.result.products[index].id}', arguments: _.result.products[index]),
-                  leading: _.result.products[index].mainPhoto?.original != null
-                      ? ClipRRect(
-                          borderRadius: BorderRadius.circular(5),
-                          child: SizedBox(
-                            width: 50,
-                            child: OctoImage(
-                              image: CachedNetworkImageProvider(_.result.products[index].mainPhoto?.thumb),
-                              placeholderBuilder: OctoPlaceholder.circularProgressIndicator(),
-                              errorBuilder: OctoError.icon(color: Colors.grey[400]),
-                              fit: BoxFit.cover,
+          return SafeArea(
+            child: RefreshIndicator(
+              onRefresh: refresItems,
+              child: ListView.builder(
+                itemCount: _.result.products.length,
+                itemBuilder: (context, index) {
+                  return ListTileMoreCustomizable(
+                    onTap: (item) =>
+                        Get.toNamed('/settings/ads/${_.result.products[index].id}', arguments: _.result.products[index]),
+                    leading: _.result.products[index].mainPhoto?.original != null
+                        ? ClipRRect(
+                            borderRadius: BorderRadius.circular(5),
+                            child: SizedBox(
+                              width: 50,
+                              child: OctoImage(
+                                image: CachedNetworkImageProvider(_.result.products[index].mainPhoto?.thumb),
+                                placeholderBuilder: OctoPlaceholder.circularProgressIndicator(),
+                                errorBuilder: OctoError.icon(color: Colors.grey[400]),
+                                fit: BoxFit.cover,
+                              ),
                             ),
-                          ),
-                        )
-                      : null,
-                  trailing: Icon(Icons.arrow_forward_ios, color: Colors.blue),
-                  title: Text(_.result.products[index].title),
-                  horizontalTitleGap: 5,
-                  subtitle: Text(
-                    _.result.products[index].description,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                );
-              },
+                          )
+                        : null,
+                    trailing: Icon(Icons.arrow_forward_ios, color: Colors.blue),
+                    title: Text(_.result.products[index].title),
+                    horizontalTitleGap: 5,
+                    subtitle: Text(
+                      _.result.products[index].description,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  );
+                },
+              ),
             ),
           );
         },

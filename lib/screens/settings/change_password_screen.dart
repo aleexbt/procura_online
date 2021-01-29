@@ -36,78 +36,80 @@ class ChangePasswordScreen extends StatelessWidget {
       body: Obx(
         () => ModalProgressHUD(
           inAsyncCall: _userController.isLoading,
-          child: SingleChildScrollView(
-            child: Padding(
-              padding: const EdgeInsets.all(20),
-              child: Form(
-                autovalidateMode: AutovalidateMode.onUserInteraction,
-                key: _formKey,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'Current password',
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
+          child: SafeArea(
+            child: SingleChildScrollView(
+              child: Padding(
+                padding: const EdgeInsets.all(20),
+                child: Form(
+                  autovalidateMode: AutovalidateMode.onUserInteraction,
+                  key: _formKey,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Current password',
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
-                    ),
-                    SizedBox(height: 10),
-                    CustomTextInput(
-                      controller: _currentPassword,
-                      fillColor: Colors.grey[200],
-                      hintText: 'Enter your current password',
-                      obscureText: true,
-                      validator: (value) {
-                        if (value.isEmpty) {
-                          return 'Please enter your current password';
-                        }
-                        return null;
-                      },
-                    ),
-                    SizedBox(height: 20),
-                    Text(
-                      'New password',
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    SizedBox(height: 10),
-                    CustomTextInput(
-                        controller: _newPassword,
+                      SizedBox(height: 10),
+                      CustomTextInput(
+                        controller: _currentPassword,
                         fillColor: Colors.grey[200],
-                        hintText: 'Enter a new password',
+                        hintText: 'Enter your current password',
                         obscureText: true,
                         validator: (value) {
                           if (value.isEmpty) {
-                            return 'Please enter a new password';
-                          }
-                          if (value.length < 8) {
-                            return 'Your new password must have at least 8 characters';
+                            return 'Please enter your current password';
                           }
                           return null;
-                        }),
-                    SizedBox(height: 20),
-                    Text(
-                      'Confirm password',
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
+                        },
                       ),
-                    ),
-                    SizedBox(height: 10),
-                    CustomTextInput(
-                        controller: _confirmPassword,
-                        fillColor: Colors.grey[200],
-                        hintText: 'Confirm the new password',
-                        obscureText: true,
-                        validator: (value) {
-                          if (value.isEmpty) {
-                            return 'Please confirm your new password';
-                          }
-                          if (value != _newPassword.text) {
-                            return 'Your passwords didn\'t match, please verify';
-                          }
-                        }),
-                  ],
+                      SizedBox(height: 20),
+                      Text(
+                        'New password',
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      SizedBox(height: 10),
+                      CustomTextInput(
+                          controller: _newPassword,
+                          fillColor: Colors.grey[200],
+                          hintText: 'Enter a new password',
+                          obscureText: true,
+                          validator: (value) {
+                            if (value.isEmpty) {
+                              return 'Please enter a new password';
+                            }
+                            if (value.length < 8) {
+                              return 'Your new password must have at least 8 characters';
+                            }
+                            return null;
+                          }),
+                      SizedBox(height: 20),
+                      Text(
+                        'Confirm password',
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      SizedBox(height: 10),
+                      CustomTextInput(
+                          controller: _confirmPassword,
+                          fillColor: Colors.grey[200],
+                          hintText: 'Confirm the new password',
+                          obscureText: true,
+                          validator: (value) {
+                            if (value.isEmpty) {
+                              return 'Please confirm your new password';
+                            }
+                            if (value != _newPassword.text) {
+                              return 'Your passwords didn\'t match, please verify';
+                            }
+                          }),
+                    ],
+                  ),
                 ),
               ),
             ),

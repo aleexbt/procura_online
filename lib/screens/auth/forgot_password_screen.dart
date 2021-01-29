@@ -29,8 +29,8 @@ class ForgotPasswordScreen extends StatelessWidget {
         elevation: 0,
         iconTheme: IconThemeData(color: Colors.white),
       ),
-      backgroundColor: Colors.blue,
       body: SafeArea(
+        bottom: false,
         child: Obx(
           () => ModalProgressHUD(
               inAsyncCall: _userController.isLoading,

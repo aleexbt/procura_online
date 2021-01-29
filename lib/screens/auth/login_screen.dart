@@ -94,8 +94,9 @@ class _LoginScreenState extends State<LoginScreen> {
         elevation: 0,
         iconTheme: IconThemeData(color: Colors.white),
       ),
-      backgroundColor: Colors.blue,
+      // backgroundColor: Colors.blue,
       body: SafeArea(
+        bottom: false,
         child: Obx(
           () => ModalProgressHUD(
             inAsyncCall: _userController.isLoading,

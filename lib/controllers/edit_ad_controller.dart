@@ -258,7 +258,7 @@ class EditAdController extends GetxController {
       setSubCategory(response.categories[1].id.toString());
       setBrand(response.make);
       setModel(response.model);
-      DateTime date = DateTime.parse(response.registered.toString());
+      DateTime date = response.registered != null ? DateTime.parse(response.registered.toString()) : DateTime.now();
       formattedRegisteredDate.value = '${date.day}/${date.month}/${date.year}';
     } on DioError catch (err) {
       print(err);

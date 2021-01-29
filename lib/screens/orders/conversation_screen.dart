@@ -102,50 +102,52 @@ class _ConversationScreenState extends State<ConversationScreen> {
           IconButton(
             icon: Icon(Icons.more_vert),
             onPressed: () => Get.bottomSheet(
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Container(
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      ListTileMoreCustomizable(
-                        leading: Icon(
-                          CupertinoIcons.speaker_slash,
-                          color: Colors.black,
-                        ),
-                        title: Text(
-                          "Mute conversation",
-                          style: TextStyle(
+              SafeArea(
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Container(
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        ListTileMoreCustomizable(
+                          leading: Icon(
+                            CupertinoIcons.speaker_slash,
                             color: Colors.black,
-                            fontWeight: FontWeight.w400,
                           ),
+                          title: Text(
+                            "Mute conversation",
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontWeight: FontWeight.w400,
+                            ),
+                          ),
+                          horizontalTitleGap: 0,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          onTap: (_) => _conversationController.muteConversation(),
                         ),
-                        horizontalTitleGap: 0,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        onTap: (_) => _conversationController.muteConversation(),
-                      ),
-                      Divider(),
-                      ListTileMoreCustomizable(
-                        leading: Icon(
-                          CupertinoIcons.delete,
-                          color: Colors.black,
-                        ),
-                        title: Text(
-                          "Delete conversation",
-                          style: TextStyle(
+                        Divider(),
+                        ListTileMoreCustomizable(
+                          leading: Icon(
+                            CupertinoIcons.delete,
                             color: Colors.black,
-                            fontWeight: FontWeight.w400,
                           ),
+                          title: Text(
+                            "Delete conversation",
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontWeight: FontWeight.w400,
+                            ),
+                          ),
+                          horizontalTitleGap: 0,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          onTap: (_) => _conversationController.deleteConversation(),
                         ),
-                        horizontalTitleGap: 0,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        onTap: (_) => _conversationController.deleteConversation(),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
               ),
