@@ -80,7 +80,7 @@ class UserController extends GetxController with StateMixin<User> {
       Box<User> box = await Hive.openBox<User>('userData') ?? null;
       _isLoggedIn.value = isLoggedIn;
       _token.value = token;
-      if (box != null) {
+      if (box.values.isNotEmpty) {
         _userData.value = box.values.first;
         selectedAccountType.value = box.values.first.type;
       }
@@ -88,7 +88,7 @@ class UserController extends GetxController with StateMixin<User> {
         updateUserInfo();
       }
     } catch (err) {
-      print(err);
+      print('INIT_DATA_ERROR');
     }
   }
 
@@ -100,10 +100,10 @@ class UserController extends GetxController with StateMixin<User> {
       _userData.value = response;
       selectedAccountType.value = response.type;
     } on DioError catch (err) {
-      print('Error updating user information.');
+      print('UPDATE_USER_INFO_ERROR');
     } catch (err) {
-      print('Error updating user information.');
-    } finally {}
+      print('UPDATE_USER_INFO_ERROR');
+    }
   }
 
   void signIn({String email, String password}) async {
@@ -148,6 +148,7 @@ class UserController extends GetxController with StateMixin<User> {
           backgroundColor: Colors.red,
           duration: Duration(seconds: 3 + errorList.length));
     } catch (err) {
+      print(err);
       Get.rawSnackbar(
           message: 'Ops, something went wrong.', backgroundColor: Colors.red, duration: Duration(seconds: 3));
     } finally {
@@ -238,7 +239,7 @@ class UserController extends GetxController with StateMixin<User> {
     _isLoggedIn.value = false;
     _userData.value = User();
     _notificationHelper.removeExternalUserId();
-    NavKey.pageController.animateToPage(0, duration: Duration(milliseconds: 500), curve: Curves.linear);
+    NavKey.pageController.jumpToPage(0);
     Get.back();
   }
 

@@ -51,6 +51,12 @@ class ChatRepository {
     return response.data;
   }
 
+  Future unmuteConversation(String conversationId) async {
+    await setToken();
+    Response response = await _dio.post('/api/v1/conversation/$conversationId/unmute');
+    return response.data;
+  }
+
   Future deleteConversation(String conversationId) async {
     await setToken();
     Response response = await _dio.delete('/api/v1/conversation/$conversationId');

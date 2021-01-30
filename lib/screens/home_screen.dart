@@ -15,16 +15,14 @@ class HomeScreen extends StatefulWidget {
   _HomeScreenState createState() => _HomeScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen>
-    with AutomaticKeepAliveClientMixin {
+class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMixin {
   @override
   bool get wantKeepAlive => true;
 
   // final SearchController _searchController = Get.find();
   final HomeController _homeController = Get.find();
   final UserController _userController = Get.find();
-  final ScrollController _scrollController =
-      ScrollController(initialScrollOffset: 0.0);
+  final ScrollController _scrollController = ScrollController(initialScrollOffset: 0.0);
 
   @override
   void initState() {
@@ -33,9 +31,7 @@ class _HomeScreenState extends State<HomeScreen>
       double currentScroll = _scrollController.position.pixels;
       double delta = MediaQuery.of(context).size.height * 0.40;
       if (maxScroll - currentScroll < delta) {
-        if (!_homeController.isLoadingMore &&
-            !_homeController.isLastPage &&
-            !_homeController.loadingMoreError) {
+        if (!_homeController.isLoadingMore && !_homeController.isLastPage && !_homeController.loadingMoreError) {
           _homeController.getNextPage();
         }
       }
@@ -94,20 +90,16 @@ class _HomeScreenState extends State<HomeScreen>
                       decoration: InputDecoration(
                         hintText: 'Search',
                         border: const OutlineInputBorder(
-                          borderSide: const BorderSide(
-                              color: Colors.transparent, width: 0.0),
+                          borderSide: const BorderSide(color: Colors.transparent, width: 0.0),
                         ),
                         enabledBorder: const OutlineInputBorder(
-                          borderSide: const BorderSide(
-                              color: Colors.transparent, width: 0.0),
+                          borderSide: const BorderSide(color: Colors.transparent, width: 0.0),
                         ),
                         focusedBorder: OutlineInputBorder(
-                          borderSide:
-                              BorderSide(color: Colors.transparent, width: 0.0),
+                          borderSide: BorderSide(color: Colors.transparent, width: 0.0),
                         ),
                       ),
-                      onChanged: (value) =>
-                          _homeController.setSearchTerm(value),
+                      onChanged: (value) => _homeController.setSearchTerm(value),
                       onSubmitted: (_) => _homeController.doSearch(),
                       textInputAction: TextInputAction.search,
                       textCapitalization: TextCapitalization.sentences,
@@ -131,13 +123,10 @@ class _HomeScreenState extends State<HomeScreen>
                 Flexible(
                   fit: FlexFit.tight,
                   child: FlatButton(
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(25)),
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(25)),
                     color: Colors.grey[200],
                     height: 40,
-                    onPressed: () => _userController.isLoggedIn
-                        ? Get.toNamed('/ad/new')
-                        : Get.toNamed('/auth/login'),
+                    onPressed: () => _userController.isLoggedIn ? Get.toNamed('/ad/new') : Get.toNamed('/auth/login'),
                     child: Text('Sell'),
                   ),
                 ),
@@ -147,14 +136,10 @@ class _HomeScreenState extends State<HomeScreen>
                     padding: const EdgeInsets.symmetric(horizontal: 10),
                     child: Obx(
                       () => FlatButton(
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(25)),
-                        color: _homeController.categoryValue == 'vehicles'
-                            ? Colors.grey[300]
-                            : Colors.grey[200],
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(25)),
+                        color: _homeController.categoryValue == 'vehicles' ? Colors.grey[300] : Colors.grey[200],
                         height: 40,
-                        onPressed: () =>
-                            changeCategory(name: 'Vehicles', value: 'vehicles'),
+                        onPressed: () => changeCategory(name: 'Vehicles', value: 'vehicles'),
                         child: Text('Vehicles'),
                       ),
                     ),
@@ -164,14 +149,10 @@ class _HomeScreenState extends State<HomeScreen>
                   fit: FlexFit.tight,
                   child: Obx(
                     () => FlatButton(
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(25)),
-                      color: _homeController.categoryValue == 'auto-parts'
-                          ? Colors.grey[300]
-                          : Colors.grey[200],
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(25)),
+                      color: _homeController.categoryValue == 'auto-parts' ? Colors.grey[300] : Colors.grey[200],
                       height: 40,
-                      onPressed: () => changeCategory(
-                          name: 'Auto Parts', value: 'auto-parts'),
+                      onPressed: () => changeCategory(name: 'Auto Parts', value: 'auto-parts'),
                       child: Text('Auto Parts'),
                     ),
                   ),
@@ -207,8 +188,7 @@ class _HomeScreenState extends State<HomeScreen>
                                 children: [
                                   Text('Ops, error while retrieving ads.'),
                                   TextButton(
-                                    style: TextButton.styleFrom(
-                                        primary: Colors.blue),
+                                    style: TextButton.styleFrom(primary: Colors.blue),
                                     onPressed: () => _.findAll(),
                                     child: Text('Try again'),
                                   ),
@@ -224,9 +204,7 @@ class _HomeScreenState extends State<HomeScreen>
                               child: Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                  SvgPicture.asset(
-                                      'assets/images/by_my_car.svg',
-                                      width: 280),
+                                  SvgPicture.asset('assets/images/by_my_car.svg', width: 280),
                                   SizedBox(height: 20),
                                   Text(
                                     'Oh, looks like we couldn\'t find any results.',
@@ -243,7 +221,7 @@ class _HomeScreenState extends State<HomeScreen>
                         return Column(
                           children: [
                             SizedBox(
-                              height: 250,
+                              height: _.featured.length > 0 ? 250 : 0,
                               child: ListView.builder(
                                 scrollDirection: Axis.horizontal,
                                 physics: BouncingScrollPhysics(),
@@ -255,23 +233,20 @@ class _HomeScreenState extends State<HomeScreen>
                                     child: ItemBox(
                                       width: 250,
                                       height: 250,
-                                      image: _.featured[index].mainPhoto
-                                              ?.bigThumb ??
+                                      image: _.featured[index].mainPhoto?.bigThumb ??
                                           'https://source.unsplash.com/600x500/?bmw,audi,volvo',
                                       title: _.featured[index].title ?? 'Title',
                                       salePrice: _.featured[index].price ?? '0',
                                       normalPrice: _.featured[index].oldPrice,
-                                      onTap: () => Get.toNamed(
-                                          '/product/${_homeController.featured[index].id}'),
+                                      onTap: () => Get.toNamed('/product/${_homeController.featured[index].id}'),
                                     ),
                                   );
                                 },
                               ),
                             ),
-                            SizedBox(height: 20),
+                            SizedBox(height: _.featured.length > 0 ? 20 : 0),
                             GridView.builder(
-                              gridDelegate:
-                                  SliverGridDelegateWithFixedCrossAxisCount(
+                              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                                 crossAxisCount: 2,
                                 crossAxisSpacing: 5,
                                 mainAxisSpacing: 5,
@@ -289,8 +264,7 @@ class _HomeScreenState extends State<HomeScreen>
                                   title: _.results[index].title,
                                   salePrice: _.results[index].price,
                                   normalPrice: _.results[index].oldPrice,
-                                  onTap: () => Get.toNamed(
-                                      '/product/${_.results[index].id}'),
+                                  onTap: () => Get.toNamed('/product/${_.results[index].id}'),
                                 );
                               },
                             ),

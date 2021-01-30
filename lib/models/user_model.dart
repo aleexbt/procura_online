@@ -1,5 +1,5 @@
-import 'package:json_annotation/json_annotation.dart';
 import 'package:hive/hive.dart';
+import 'package:json_annotation/json_annotation.dart';
 
 part 'user_model.g.dart';
 
@@ -23,10 +23,10 @@ class User {
   String phoneClicksCount;
   @JsonKey(name: 'district_id')
   @HiveField(7)
-  String districtId;
+  int districtId;
   @JsonKey(name: 'city_id')
   @HiveField(8)
-  String cityId;
+  int cityId;
   @HiveField(9)
   String address;
   @HiveField(10)
@@ -62,16 +62,16 @@ class User {
   String slug;
   @JsonKey(name: 'referred_by')
   @HiveField(21)
-  String referredBy;
+  int referredBy;
   @HiveField(22)
-  String balance;
+  int balance;
   @JsonKey(name: 'notifications_frequency')
   @HiveField(23)
   String notificationsFrequency;
   @HiveField(24)
-  String subscribed;
+  int subscribed;
   @HiveField(25)
-  dynamic approved;
+  int approved;
   @JsonKey(name: 'last_read_announcements_at')
   @HiveField(26)
   String lastReadAnnouncementsAt;
@@ -83,7 +83,7 @@ class User {
   String lastLoginIp;
   @JsonKey(name: 'tour_status')
   @HiveField(29)
-  String tourStatus;
+  int tourStatus;
   @JsonKey(name: 'email_verified_at')
   @HiveField(30)
   String emailVerifiedAt;

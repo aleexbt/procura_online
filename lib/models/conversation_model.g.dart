@@ -18,9 +18,9 @@ class ConversationAdapter extends TypeAdapter<Conversation> {
     };
     return Conversation(
       id: fields[0] as int,
-      orderId: fields[1] as String,
-      status: fields[2] as String,
-      mute: fields[3] as String,
+      orderId: fields[1] as int,
+      status: fields[2] as int,
+      mute: fields[3] as int,
       createdAt: fields[4] as String,
       updatedAt: fields[5] as String,
       humanReadDate: fields[6] as String,
@@ -80,9 +80,9 @@ class ConversationAdapter extends TypeAdapter<Conversation> {
 Conversation _$ConversationFromJson(Map<String, dynamic> json) {
   return Conversation(
     id: json['id'] as int,
-    orderId: json['order_id'] as String,
-    status: json['status'] as String,
-    mute: json['mute'] as String,
+    orderId: json['order_id'] as int,
+    status: json['status'] as int,
+    mute: json['mute'] as int,
     createdAt: json['created_at'] as String,
     updatedAt: json['updated_at'] as String,
     humanReadDate: json['human_read_date'] as String,

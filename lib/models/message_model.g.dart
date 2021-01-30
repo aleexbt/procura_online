@@ -18,12 +18,12 @@ class MessageAdapter extends TypeAdapter<Message> {
     };
     return Message(
       id: fields[0] as int,
-      userId: fields[1] as dynamic,
+      userId: fields[1] as int,
       message: fields[2] as String,
-      isSeen: fields[3] as dynamic,
-      deletedFromSender: fields[4] as String,
-      deletedFromReceiver: fields[5] as String,
-      conversationId: fields[6] as dynamic,
+      isSeen: fields[3] as int,
+      deletedFromSender: fields[4] as int,
+      deletedFromReceiver: fields[5] as int,
+      conversationId: fields[6] as int,
       humanReadDate: fields[7] as String,
       daysSectionDate: fields[8] as String,
       sender: fields[9] as User,
@@ -83,12 +83,12 @@ class MessageAdapter extends TypeAdapter<Message> {
 Message _$MessageFromJson(Map<String, dynamic> json) {
   return Message(
     id: json['id'] as int,
-    userId: json['user_id'],
+    userId: json['user_id'] as int,
     message: json['message'] as String,
-    isSeen: json['is_seen'],
-    deletedFromSender: json['deleted_from_server'] as String,
-    deletedFromReceiver: json['deleted_from_receiver'] as String,
-    conversationId: json['conversation_id'],
+    isSeen: json['is_seen'] as int,
+    deletedFromSender: json['deleted_from_server'] as int,
+    deletedFromReceiver: json['deleted_from_receiver'] as int,
+    conversationId: json['conversation_id'] as int,
     humanReadDate: json['human_read_date'] as String,
     daysSectionDate: json['days_section_date'] as String,
     sender: json['sender'] == null

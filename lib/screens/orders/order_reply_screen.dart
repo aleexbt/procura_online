@@ -2,14 +2,17 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:list_tile_more_customizable/list_tile_more_customizable.dart';
 import 'package:octo_image/octo_image.dart';
 import 'package:procura_online/controllers/orders_controller.dart';
+import 'package:procura_online/controllers/user_controller.dart';
 import 'package:procura_online/models/order_model.dart';
 import 'package:procura_online/repositories/orders_repository.dart';
 
 class OrderReplyScreen extends StatelessWidget {
   final OrdersController _ordersController = Get.find();
   final OrdersRepository _ordersRepository = Get.find();
+  final UserController _userController = Get.find();
   final String orderId = Get.parameters['id'];
   final Order order = Get.arguments;
   final TextEditingController _message = TextEditingController();
@@ -44,45 +47,47 @@ class OrderReplyScreen extends StatelessWidget {
             )
           ],
         ),
-        // actions: [
-        //   IconButton(
-        //     icon: Icon(Icons.more_vert),
-        //     onPressed: () => Get.bottomSheet(
-        //       Padding(
-        //         padding: const EdgeInsets.all(8.0),
-        //         child: Container(
-        //           child: Column(
-        //             mainAxisSize: MainAxisSize.min,
-        //             children: [
-        //               ListTileMoreCustomizable(
-        //                 leading: Icon(
-        //                   CupertinoIcons.archivebox,
-        //                   color: Colors.black,
-        //                 ),
-        //                 title: Text(
-        //                   "Mark as sold",
-        //                   style: TextStyle(
-        //                     color: Colors.black,
-        //                     fontWeight: FontWeight.w400,
-        //                   ),
-        //                 ),
-        //                 horizontalTitleGap: 0,
-        //                 shape: RoundedRectangleBorder(
-        //                   borderRadius: BorderRadius.circular(10),
-        //                 ),
-        //                 onTap: (_) => _ordersController.markOrderAsSold(orderId),
-        //               ),
-        //             ],
-        //           ),
-        //         ),
-        //       ),
-        //       backgroundColor: Colors.white,
-        //       shape: RoundedRectangleBorder(
-        //         borderRadius: BorderRadius.only(topLeft: Radius.circular(8), topRight: Radius.circular(8)),
-        //       ),
-        //     ),
-        //   ),
-        // ],
+        actions: order.userId == _userController.userData.id
+            ? [
+                IconButton(
+                  icon: Icon(Icons.more_vert),
+                  onPressed: () => Get.bottomSheet(
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Container(
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            ListTileMoreCustomizable(
+                              leading: Icon(
+                                CupertinoIcons.archivebox,
+                                color: Colors.black,
+                              ),
+                              title: Text(
+                                "Mark as sold",
+                                style: TextStyle(
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.w400,
+                                ),
+                              ),
+                              horizontalTitleGap: 0,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              onTap: (_) => _ordersController.markOrderAsSold(orderId),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    backgroundColor: Colors.white,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.only(topLeft: Radius.circular(8), topRight: Radius.circular(8)),
+                    ),
+                  ),
+                ),
+              ]
+            : null,
       ),
       body: SafeArea(
         child: Column(
@@ -186,47 +191,50 @@ class OrderReplyScreen extends StatelessWidget {
                 ),
               ),
             ),
-            Container(
-              height: 50,
-              color: Colors.grey[200],
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 10),
-                child: Row(
-                  children: [
-                    // IconButton(
-                    //   icon: Icon(
-                    //     Icons.attachment,
-                    //   ),
-                    //   onPressed: () {},
-                    // ),
-                    Expanded(
-                      child: TextField(
-                        controller: _message,
-                        textCapitalization: TextCapitalization.sentences,
-                        decoration: InputDecoration.collapsed(
-                          hintText: "Write your message",
+            Visibility(
+              visible: order.userId != _userController.userData.id && !order.sold,
+              child: Container(
+                height: 50,
+                color: Colors.grey[200],
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 10),
+                  child: Row(
+                    children: [
+                      // IconButton(
+                      //   icon: Icon(
+                      //     Icons.attachment,
+                      //   ),
+                      //   onPressed: () {},
+                      // ),
+                      Expanded(
+                        child: TextField(
+                          controller: _message,
+                          textCapitalization: TextCapitalization.sentences,
+                          decoration: InputDecoration.collapsed(
+                            hintText: "Write your message",
+                          ),
                         ),
                       ),
-                    ),
-                    Obx(
-                      () => _ordersController.isReplyingMsg
-                          ? Padding(
-                              padding: const EdgeInsets.only(right: 12),
-                              child: SizedBox(
-                                width: 20,
-                                height: 20,
-                                child: CircularProgressIndicator(strokeWidth: 2.5),
+                      Obx(
+                        () => _ordersController.isReplyingMsg
+                            ? Padding(
+                                padding: const EdgeInsets.only(right: 12),
+                                child: SizedBox(
+                                  width: 20,
+                                  height: 20,
+                                  child: CircularProgressIndicator(strokeWidth: 2.5),
+                                ),
+                              )
+                            : IconButton(
+                                icon: Icon(
+                                  Icons.send,
+                                  color: Colors.blue,
+                                ),
+                                onPressed: () => _ordersController.replyOrder(message: _message.text, orderId: orderId),
                               ),
-                            )
-                          : IconButton(
-                              icon: Icon(
-                                Icons.send,
-                                color: Colors.blue,
-                              ),
-                              onPressed: () => _ordersController.replyOrder(message: _message.text, orderId: orderId),
-                            ),
-                    ),
-                  ],
+                      ),
+                    ],
+                  ),
                 ),
               ),
             )

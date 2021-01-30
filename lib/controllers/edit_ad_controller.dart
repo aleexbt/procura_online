@@ -39,6 +39,7 @@ class EditAdController extends GetxController {
   RxString currentUploadImage = ''.obs;
   RxDouble uploadImageProgress = 0.0.obs;
   RxBool _isUploadingImage = false.obs;
+  RxBool mainPhotoChanged = false.obs;
 
   bool get isLoading => _isLoading.value;
   bool get isSaving => _isSaving.value;
@@ -241,18 +242,18 @@ class EditAdController extends GetxController {
       // _product.value = response;
       title.value.text = response.title;
       description.value.text = response.description;
-      year.value.text = response.year;
-      engineDisplacement.value.text = response.engineDisplacement;
-      enginePower.value.text = response.enginePower;
+      year.value.text = response.year.toString();
+      engineDisplacement.value.text = response.engineDisplacement.toString();
+      enginePower.value.text = response.enginePower.toString();
       miliage.value.text = response.mileage;
-      numberOfSeats.value.text = response.numberOfSeats;
-      numberOfDoors.value.text = response.numberOfDoors;
+      numberOfSeats.value.text = response.numberOfSeats.toString();
+      numberOfDoors.value.text = response.numberOfDoors.toString();
       price.value.text = response.price;
       selectedColor.value = response.color;
       selectedFuel.value = response.fuelType;
       selectedTransmission.value = response.transmission;
       selectedCondition.value = response.condition;
-      selectedNegotiable.value = response.negotiable;
+      selectedNegotiable.value = response.negotiable.toString();
       registeredDate.value = response.registered;
       setCategory(response.categories[0].id.toString());
       setSubCategory(response.categories[1].id.toString());

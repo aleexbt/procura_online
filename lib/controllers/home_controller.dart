@@ -83,7 +83,7 @@ class HomeController extends GetxController with StateMixin<Listing> {
       Listing response = await _productRepository.findAll(category: _categoryValue.value, page: page);
       _results.value = response;
 
-      Iterable<Product> featured = response.products.where((element) => element.featured == "1");
+      Iterable<Product> featured = response.products.where((item) => item.featured == 1);
       _featured.assignAll(featured);
     } on DioError catch (err) {
       print(err);

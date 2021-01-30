@@ -6,24 +6,24 @@ part 'product_model.g.dart';
 class Product {
   int id;
   @JsonKey(name: 'user_id')
-  String userId;
+  int userId;
   String title;
   String slug;
   String description;
   String make;
   String model;
-  String year;
+  int year;
   String color;
   @JsonKey(name: 'number_of_seats')
-  String numberOfSeats;
+  int numberOfSeats;
   @JsonKey(name: 'number_of_doors')
-  String numberOfDoors;
+  int numberOfDoors;
   @JsonKey(name: 'fuel_type')
   String fuelType;
   @JsonKey(name: 'engine_displacement')
-  String engineDisplacement;
+  int engineDisplacement;
   @JsonKey(name: 'engine_power')
-  String enginePower;
+  int enginePower;
   String transmission;
   String registered;
   String mileage;
@@ -31,9 +31,9 @@ class Product {
   String price;
   @JsonKey(name: 'old_price')
   String oldPrice;
-  String negotiable;
-  String featured;
-  String approved;
+  int negotiable;
+  int featured;
+  int approved;
   @JsonKey(name: 'views_count')
   String viewsCount;
   @JsonKey(name: 'created_at')

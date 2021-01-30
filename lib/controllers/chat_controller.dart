@@ -80,14 +80,6 @@ class ChatController extends GetxController with WidgetsBindingObserver {
       Chats response = await _chatRepository.findAll();
       _chats.value = response;
       filteredConversations = List.from(response.chats);
-
-      // await pusherService.initPusher('private-update-conversation.2');
-      // pusherService.subscribePusher('private-update-conversation.2');
-      // pusherService.bindEvent('App\\Events\\ConversationUpdateEvent');
-      //
-      // await pusherService.initPusher('private-conversation-up');
-      // pusherService.subscribePusher('private-conversation-up');
-      // pusherService.bindEvent('App\\Events\\ConversationUpdateEvent');
     } on DioError catch (err) {
       print(err);
       _hasError.value = true;

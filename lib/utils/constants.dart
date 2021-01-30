@@ -8,7 +8,6 @@ class Constants {
   static const String LOGIN_WITH_FACEBOOK = 'Login with Facebook';
   static const String LOGIN_WITH_GOOGLE = 'Login with Google';
   static const String NOT_A_MEMBER = 'Not a Member? Sign Up';
-  static const String ERROR_FB_CANCELLED = 'Login canclled by user';
 
   //Sign Up
   static const String CONFIRM_PASSWORD = 'Confirm Password';

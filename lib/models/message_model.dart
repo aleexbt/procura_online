@@ -14,21 +14,21 @@ class Message {
   int id;
   @JsonKey(name: 'user_id')
   @HiveField(1)
-  dynamic userId;
+  int userId;
   @HiveField(2)
   String message;
   @JsonKey(name: 'is_seen')
   @HiveField(3)
-  dynamic isSeen;
+  int isSeen;
   @JsonKey(name: 'deleted_from_server')
   @HiveField(4)
-  String deletedFromSender;
+  int deletedFromSender;
   @JsonKey(name: 'deleted_from_receiver')
   @HiveField(5)
-  String deletedFromReceiver;
+  int deletedFromReceiver;
   @JsonKey(name: 'conversation_id')
   @HiveField(6)
-  dynamic conversationId;
+  int conversationId;
   @JsonKey(name: 'human_read_date')
   @HiveField(7)
   String humanReadDate;

@@ -9,17 +9,17 @@ part 'chat_model.g.dart';
 class Chat {
   int id;
   @JsonKey(name: 'order_id')
-  dynamic orderId;
+  int orderId;
   @JsonKey(name: 'user_one')
-  dynamic userOne;
+  int userOne;
   @JsonKey(name: 'user_two')
-  dynamic userTwo;
-  dynamic status;
+  int userTwo;
+  int status;
   bool mute;
   @JsonKey(name: 'human_read_date')
   String humanReadDate;
   @JsonKey(name: 'second_user')
-  String secondUser;
+  int secondUser;
   Order order;
   @JsonKey(name: 'latest_message')
   Message latestMessage;

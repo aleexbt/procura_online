@@ -66,38 +66,40 @@ class _ConversationScreenState extends State<ConversationScreen> {
     return Scaffold(
       appBar: AppBar(
         shadowColor: Colors.transparent,
-        title: GetX<ConversationController>(builder: (_) {
-          if (_.isLoading || _.hasError) {
-            return Container();
-          }
-          return Row(
-            children: <Widget>[
-              ClipOval(
-                child: Image.network(
-                  'https://mindbodygreen-res.cloudinary.com/images/w_767,q_auto:eco,f_auto,fl_lossy/usr/RetocQT/sarah-fielding.jpg',
-                  width: 30,
-                  height: 30,
-                  fit: BoxFit.cover,
-                ),
-              ),
-              Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Text(
-                    _.conversation.userOne.id == _userController.userData?.id
-                        ? _.conversation.userTwo.name
-                        : _.conversation.userOne.name,
-                    style: TextStyle(
-                      fontSize: 16,
-                    ),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
+        title: GetX<ConversationController>(
+          builder: (_) {
+            if (_.isLoading || _.hasError) {
+              return Container();
+            }
+            return Row(
+              children: <Widget>[
+                ClipOval(
+                  child: Image.network(
+                    'https://mindbodygreen-res.cloudinary.com/images/w_767,q_auto:eco,f_auto,fl_lossy/usr/RetocQT/sarah-fielding.jpg',
+                    width: 30,
+                    height: 30,
+                    fit: BoxFit.cover,
                   ),
                 ),
-              ),
-            ],
-          );
-        }),
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Text(
+                      _.conversation.userOne.id == _userController.userData?.id
+                          ? _.conversation.userTwo.name
+                          : _.conversation.userOne.name,
+                      style: TextStyle(
+                        fontSize: 16,
+                      ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
+                ),
+              ],
+            );
+          },
+        ),
         actions: [
           IconButton(
             icon: Icon(Icons.more_vert),
@@ -111,11 +113,15 @@ class _ConversationScreenState extends State<ConversationScreen> {
                       children: [
                         ListTileMoreCustomizable(
                           leading: Icon(
-                            CupertinoIcons.speaker_slash,
+                            _conversationController.conversation.mute == 0
+                                ? CupertinoIcons.speaker_slash
+                                : CupertinoIcons.speaker_2,
                             color: Colors.black,
                           ),
                           title: Text(
-                            "Mute conversation",
+                            _conversationController.conversation.mute == 0
+                                ? 'Mute conversation'
+                                : 'Unmute conversation',
                             style: TextStyle(
                               color: Colors.black,
                               fontWeight: FontWeight.w400,
@@ -125,7 +131,7 @@ class _ConversationScreenState extends State<ConversationScreen> {
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10),
                           ),
-                          onTap: (_) => _conversationController.muteConversation(),
+                          onTap: (_) => _conversationController.muteConversationToggle(),
                         ),
                         Divider(),
                         ListTileMoreCustomizable(

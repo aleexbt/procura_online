@@ -247,7 +247,7 @@ class ProductScreen extends StatelessWidget {
                                           ),
                                           children: [
                                             TextSpan(
-                                                text: _.product.year ?? 'Not specified',
+                                                text: _.product.year.toString() ?? 'Not specified',
                                                 style: TextStyle(
                                                   color: Colors.grey[600],
                                                   fontWeight: FontWeight.normal,
@@ -292,7 +292,7 @@ class ProductScreen extends StatelessWidget {
                                           ),
                                           children: [
                                             TextSpan(
-                                                text: _.product.mileage ?? 'Not specified',
+                                                text: _.product.mileage.toString() ?? 'Not specified',
                                                 style: TextStyle(
                                                   color: Colors.grey[600],
                                                   fontWeight: FontWeight.normal,
@@ -311,7 +311,7 @@ class ProductScreen extends StatelessWidget {
                                           ),
                                           children: [
                                             TextSpan(
-                                                text: _.product.enginePower ?? 'Not specified',
+                                                text: _.product.enginePower.toString() ?? 'Not specified',
                                                 style: TextStyle(
                                                   color: Colors.grey[600],
                                                   fontWeight: FontWeight.normal,
@@ -337,7 +337,7 @@ class ProductScreen extends StatelessWidget {
                                           ),
                                           children: [
                                             TextSpan(
-                                                text: _.product.numberOfDoors ?? 'Not specified',
+                                                text: _.product.numberOfDoors.toString() ?? 'Not specified',
                                                 style: TextStyle(
                                                   color: Colors.grey[600],
                                                   fontWeight: FontWeight.normal,
@@ -356,7 +356,7 @@ class ProductScreen extends StatelessWidget {
                                           ),
                                           children: [
                                             TextSpan(
-                                                text: _.product.numberOfSeats ?? 'Not specified',
+                                                text: _.product.numberOfSeats.toString() ?? 'Not specified',
                                                 style: TextStyle(
                                                   color: Colors.grey[600],
                                                   fontWeight: FontWeight.normal,

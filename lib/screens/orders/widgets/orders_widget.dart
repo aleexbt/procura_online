@@ -168,12 +168,29 @@ class OrdersWidget extends StatelessWidget {
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                       ),
-                      trailing: Text(
-                        _.orders.orders[index].humanReadDate,
-                        style: TextStyle(
-                          color: Colors.grey[400],
-                          fontSize: 12,
-                        ),
+                      trailing: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        children: [
+                          Text(
+                            _.orders.orders[index].humanReadDate,
+                            style: TextStyle(
+                              color: Colors.grey[400],
+                              fontSize: 12,
+                            ),
+                          ),
+                          Visibility(
+                            visible: _.orders.orders[index].sold,
+                            child: Padding(
+                              padding: const EdgeInsets.only(top: 2),
+                              child: Icon(
+                                Icons.lock,
+                                size: 17,
+                                color: Colors.grey[400],
+                              ),
+                            ),
+                          )
+                        ],
                       ),
                       onTap: () =>
                           Get.toNamed('/chat/new/${_.orders.orders[index].id}', arguments: _.orders.orders[index]),

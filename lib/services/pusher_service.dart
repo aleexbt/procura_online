@@ -41,7 +41,6 @@ class PusherService {
   }
 
   void subscribePusher(String channelName) {
-    // pusher.unsubscribe(channelName);
     channel = pusher.subscribe(channelName);
   }
 

@@ -14,11 +14,11 @@ class Conversation {
   int id;
   @JsonKey(name: 'order_id')
   @HiveField(1)
-  String orderId;
+  int orderId;
   @HiveField(2)
-  String status;
+  int status;
   @HiveField(3)
-  String mute;
+  int mute;
   @JsonKey(name: 'created_at')
   @HiveField(4)
   String createdAt;

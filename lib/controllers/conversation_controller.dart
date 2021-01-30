@@ -144,9 +144,20 @@ class ConversationController extends GetxController with WidgetsBindingObserver 
     }
   }
 
-  void muteConversation() async {
+  void muteConversationToggle() async {
     try {
-      _chatRepository.muteConversation(chatId);
+      int status = _conversation.value.mute;
+      if (status == 0) {
+        _conversation.update((val) {
+          val.mute = 1;
+        });
+        _chatRepository.muteConversation(chatId);
+      } else {
+        _conversation.update((val) {
+          val.mute = 0;
+        });
+        _chatRepository.muteConversation(chatId);
+      }
     } on DioError catch (err) {
       print(err);
     } finally {

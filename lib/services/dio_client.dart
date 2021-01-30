@@ -1,10 +1,9 @@
 import 'dart:io';
 
 import 'package:dio/dio.dart';
-import 'package:flutter/foundation.dart';
 
-const _defaultConnectTimeout = 10000;
-const _defaultReceiveTimeout = 3000;
+const _defaultConnectTimeout = 25000;
+const _defaultReceiveTimeout = 6000;
 
 class DioClient {
   String token;
@@ -26,16 +25,16 @@ class DioClient {
     if (interceptors?.isNotEmpty ?? false) {
       _dio.interceptors.addAll(interceptors);
     }
-    if (kDebugMode) {
-      _dio.interceptors.add(LogInterceptor(
-        responseBody: true,
-        error: true,
-        requestHeader: false,
-        responseHeader: false,
-        request: false,
-        requestBody: false,
-      ));
-    }
+    // if (kDebugMode) {
+    //   _dio.interceptors.add(LogInterceptor(
+    //     responseBody: true,
+    //     error: true,
+    //     requestHeader: false,
+    //     responseHeader: false,
+    //     request: false,
+    //     requestBody: false,
+    //   ));
+    // }
   }
 
   Future<dynamic> get(

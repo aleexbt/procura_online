@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:octo_image/octo_image.dart';
@@ -142,12 +143,29 @@ class ChatWidget extends StatelessWidget {
                     title: Text(
                         '${_.chats.chats[index].order.model} ${_.chats.chats[index].order.year}'), // messages.messages[index].usertwo.name
                     subtitle: Text(_.chats?.chats[index]?.latestMessage?.message ?? ''),
-                    trailing: Text(
-                      _.chats?.chats[index]?.latestMessage?.humanReadDate ?? '',
-                      style: TextStyle(
-                        color: Colors.grey[400],
-                        fontSize: 12,
-                      ),
+                    trailing: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: [
+                        Text(
+                          _.chats?.chats[index]?.latestMessage?.humanReadDate ?? '',
+                          style: TextStyle(
+                            color: Colors.grey[400],
+                            fontSize: 12,
+                          ),
+                        ),
+                        Visibility(
+                          visible: _.chats?.chats[index]?.mute,
+                          child: Padding(
+                            padding: const EdgeInsets.only(top: 2),
+                            child: Icon(
+                              CupertinoIcons.volume_off,
+                              size: 18,
+                              color: Colors.grey[400],
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
                     onTap: () => Get.toNamed('/chat/conversation/${_.chats.chats[index].id}'),
                   );

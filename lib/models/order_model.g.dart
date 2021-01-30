@@ -18,21 +18,21 @@ class OrderAdapter extends TypeAdapter<Order> {
     };
     return Order(
       id: fields[0] as int,
-      userId: fields[1] as String,
+      userId: fields[1] as int,
       make: fields[2] as String,
       model: fields[3] as String,
-      year: fields[4] as String,
+      year: fields[4] as int,
       noteText: fields[5] as String,
-      numberOfDoors: fields[6] as String,
+      numberOfDoors: fields[6] as int,
       fuelType: fields[7] as String,
-      engineDisplacement: fields[8] as String,
+      engineDisplacement: fields[8] as int,
       mpn: fields[9] as String,
       userInfo: fields[10] as User,
       makeLogoUrl: fields[11] as String,
-      mediaCount: fields[12] as String,
+      mediaCount: fields[12] as int,
       seen: fields[14] as bool,
       humanReadDate: fields[15] as String,
-      sold: fields[16] as dynamic,
+      sold: fields[16] as bool,
     )..media = (fields[13] as List)?.cast<OrderMedia>();
   }
 
@@ -94,23 +94,23 @@ class OrderAdapter extends TypeAdapter<Order> {
 Order _$OrderFromJson(Map<String, dynamic> json) {
   return Order(
     id: json['id'] as int,
-    userId: json['user_id'] as String,
+    userId: json['user_id'] as int,
     make: json['make'] as String,
     model: json['model'] as String,
-    year: json['year'] as String,
+    year: json['year'] as int,
     noteText: json['note_text'] as String,
-    numberOfDoors: json['number_of_doors'] as String,
+    numberOfDoors: json['number_of_doors'] as int,
     fuelType: json['fuel_type'] as String,
-    engineDisplacement: json['engine_displacement'] as String,
+    engineDisplacement: json['engine_displacement'] as int,
     mpn: json['mpn'] as String,
     userInfo: json['user_info'] == null
         ? null
         : User.fromJson(json['user_info'] as Map<String, dynamic>),
     makeLogoUrl: json['make_logo_url'] as String,
-    mediaCount: json['media_count'] as String,
+    mediaCount: json['media_count'] as int,
     seen: json['seen'] as bool,
     humanReadDate: json['human_read_date'] as String,
-    sold: json['sold'],
+    sold: json['sold'] as bool,
   )..media = (json['media'] as List)
       ?.map((e) =>
           e == null ? null : OrderMedia.fromJson(e as Map<String, dynamic>))
