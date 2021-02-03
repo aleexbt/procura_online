@@ -112,6 +112,14 @@ class SelectOption extends StatelessWidget {
         activeColor: Colors.blue,
       ),
       value: value,
+      // choiceSubtitleBuilder: (context, choice, sub) => Text('description'),
+      // choiceTitleBuilder: (context, choice, title) => Column(
+      //   crossAxisAlignment: CrossAxisAlignment.start,
+      //   children: [
+      //     Text(choice.title),
+      //     Text('Subtitle'),
+      //   ],
+      // ),
       choiceItems: choiceItems,
       onChange: onChange,
     );

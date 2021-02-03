@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:dio_http_cache/dio_http_cache.dart';
 import 'package:hive/hive.dart';
 import 'package:procura_online/models/listing_model.dart';
+import 'package:procura_online/models/plan_model.dart';
 import 'package:procura_online/models/user_model.dart';
 import 'package:procura_online/services/dio_client.dart';
 
@@ -93,5 +94,21 @@ class UserRepository {
   Future<List> getCities(int districtId) async {
     final response = await _dio.get('/api/v1/cities', queryParameters: {"district_id": "$districtId"});
     return response.data;
+  }
+
+  Future<List<Plan>> getPlans() async {
+    final response = await _dio.get('/api/v1/plans');
+    List<Plan> plans = List<Plan>.from(response.data.map((plan) => Plan.fromJson(plan)));
+    return plans;
+  }
+
+  Future<bool> checkSubscription() async {
+    await setToken();
+    final response = await _dio.get('/api/v1/check-subscription');
+    if (response.data['message'] == 'success') {
+      return true;
+    } else {
+      return false;
+    }
   }
 }

@@ -30,15 +30,18 @@ class _RegisterScreenState extends State<RegisterScreen> {
   bool submittedStep1 = false;
   bool submittedStep2 = false;
   bool submittedStep3 = false;
+  bool submittedStep4 = false;
   int currentStep = 0;
 
   int selectedDistrict;
   int selectedCity;
+  int selectedPlan = 1;
 
   @override
   void initState() {
     _userController.getSkills();
     _userController.getDistricts();
+    _userController.getPlans();
     mainNode = FocusNode();
     super.initState();
   }
@@ -48,6 +51,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
       stepOne(),
       stepTwo(),
       stepThree(),
+      stepFour(),
     ];
   }
 
@@ -117,7 +121,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     SizedBox(height: 20),
                     Column(
                       children: [
-                        currentStep < 2
+                        currentStep < 3
                             ? GradientButton(
                                 text: 'Next',
                                 onPressed: () {
@@ -132,6 +136,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                       if (_formKey.currentState.validate() &&
                                           selectedAccountType.isNotEmpty &&
                                           selectedSkills.isNotEmpty) {
+                                        currentStep = currentStep + 1;
+                                      }
+                                    } else if (currentStep == 2) {
+                                      setState(() => submittedStep3 = true);
+                                      if (selectedAccountType.isNotEmpty) {
                                         currentStep = currentStep + 1;
                                       }
                                     }
@@ -411,6 +420,36 @@ class _RegisterScreenState extends State<RegisterScreen> {
             }
             return null;
           },
+        ),
+      ],
+    );
+  }
+
+  Widget stepFour() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Obx(
+          () => SelectOption(
+            isLoading: _userController.isLoadingPlans,
+            modalTitle: 'Plan',
+            selectText: 'Plan',
+            modalType: S2ModalType.bottomSheet,
+            value: selectedPlan,
+            choiceItems: _userController.plans,
+            onChange: (state) => setState(() => selectedPlan = state.value),
+            hasError: selectedPlan == null && submittedStep4,
+          ),
+        ),
+        Visibility(
+          visible: selectedPlan == null && submittedStep4,
+          child: Padding(
+            padding: const EdgeInsets.only(left: 12, top: 5),
+            child: Text(
+              'Please select a plan',
+              style: TextStyle(color: Colors.red, fontSize: 12),
+            ),
+          ),
         ),
       ],
     );

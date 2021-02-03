@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:hive/hive.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
 import 'package:procura_online/controllers/orders_controller.dart';
+import 'package:procura_online/models/plan_model.dart';
 import 'package:procura_online/models/user_model.dart';
 import 'package:procura_online/repositories/user_repository.dart';
 import 'package:procura_online/utils/navigation_helper.dart';
@@ -24,9 +25,12 @@ class UserController extends GetxController with StateMixin<User> {
 
   RxBool _isLoading = false.obs;
   RxBool _isSaving = false.obs;
+  RxBool _isCheckingSubscription = false.obs;
+  RxBool _subscriptionPass = true.obs;
   RxBool _isLoadingSkills = false.obs;
   RxBool _isLoadingDistricts = false.obs;
   RxBool _isLoadingCities = false.obs;
+  RxBool _isLoadingPlans = false.obs;
   RxBool _savingError = false.obs;
   RxBool _isLoggedIn = false.obs;
   Rx<User> _userData = User().obs;
@@ -34,9 +38,12 @@ class UserController extends GetxController with StateMixin<User> {
 
   bool get isLoading => _isLoading.value;
   bool get isSaving => _isSaving.value;
+  bool get isCheckingSubscription => _isCheckingSubscription.value;
+  bool get subscriptionPass => _subscriptionPass.value;
   bool get isLoadingSkills => _isLoadingSkills.value;
   bool get isLoadingDistricts => _isLoadingDistricts.value;
   bool get isLoadingCities => _isLoadingCities.value;
+  bool get isLoadingPlans => _isLoadingPlans.value;
   bool get savingError => _savingError.value;
   bool get isLoggedIn => _isLoggedIn.value;
   User get userData => _userData.value;
@@ -59,10 +66,12 @@ class UserController extends GetxController with StateMixin<User> {
   RxList<S2Choice<int>> _skills = List<S2Choice<int>>.empty(growable: true).obs;
   RxList<S2Choice<int>> _districts = List<S2Choice<int>>.empty(growable: true).obs;
   RxList<S2Choice<int>> _cities = List<S2Choice<int>>.empty(growable: true).obs;
+  RxList<S2Choice<int>> _plans = List<S2Choice<int>>.empty(growable: true).obs;
 
   List<S2Choice<int>> get skills => _skills;
   List<S2Choice<int>> get districts => _districts;
   List<S2Choice<int>> get cities => _cities;
+  List<S2Choice<int>> get plans => _plans;
 
   RxString selectedAccountType = ''.obs;
   final List<S2Choice<String>> accountTypeOptions = [
@@ -168,6 +177,7 @@ class UserController extends GetxController with StateMixin<User> {
     int city,
     String address,
     String postcode,
+    int plan,
   }) async {
     _isLoading.value = true;
     try {
@@ -183,7 +193,7 @@ class UserController extends GetxController with StateMixin<User> {
         "city_id": city,
         "address": address,
         "postcode": postcode,
-        "plan_id": 1,
+        "plan_id": plan,
       };
 
       await _userRepository.signUp(registerData);
@@ -425,6 +435,38 @@ class UserController extends GetxController with StateMixin<User> {
       print(err);
     } finally {
       _isLoadingCities.value = false;
+    }
+  }
+
+  void getPlans() async {
+    _isLoadingPlans.value = true;
+    try {
+      List<Plan> response = await _userRepository.getPlans();
+      List<S2Choice<int>> plansList = List<S2Choice<int>>.empty(growable: true);
+
+      if (response != null) {
+        response.forEach((plan) {
+          plansList.add(S2Choice<int>(value: plan.id, title: '${plan.name} - ${plan.price} EUR'));
+        });
+        _plans.assignAll(plansList);
+      }
+    } catch (err) {
+      print(err);
+    } finally {
+      _isLoadingPlans.value = false;
+    }
+  }
+
+  void checkSubscription() async {
+    _isCheckingSubscription.value = true;
+    try {
+      bool response = await _userRepository.checkSubscription();
+      _subscriptionPass.value = response;
+    } catch (err) {
+      _subscriptionPass.value = false;
+      print(err);
+    } finally {
+      _isCheckingSubscription.value = false;
     }
   }
 }
