@@ -8,6 +8,7 @@ import 'package:get/get.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 import 'package:procura_online/controllers/create_ad_controller.dart';
+import 'package:procura_online/controllers/user_controller.dart';
 import 'package:procura_online/models/upload_media_model.dart';
 import 'package:procura_online/widgets/gradient_button.dart';
 import 'package:procura_online/widgets/select_option.dart';
@@ -20,6 +21,7 @@ class CreateAdScreen extends StatefulWidget {
 
 class _CreateAdScreenState extends State<CreateAdScreen> {
   final CreateAdController _createAdController = Get.put(CreateAdController());
+  final UserController _userController = Get.find();
   final _formKey = GlobalKey<FormState>();
   FocusNode mainNode;
 
@@ -28,6 +30,7 @@ class _CreateAdScreenState extends State<CreateAdScreen> {
     var date = DateTime.parse(DateTime.now().toString());
     _createAdController.registeredDate.value = date.toString();
     _createAdController.formattedRegisteredDate.value = '${date.day}/${date.month}/${date.year}';
+    _userController.checkSubscription();
     mainNode = FocusNode();
     super.initState();
   }
@@ -89,11 +92,31 @@ class _CreateAdScreenState extends State<CreateAdScreen> {
       body: GetX<CreateAdController>(builder: (_) {
         FocusScope.of(context).requestFocus(mainNode);
         return ModalProgressHUD(
-          inAsyncCall: _.isSaving,
+          inAsyncCall: _.isSaving || _userController.isCheckingSubscription,
           child: SafeArea(
             child: SingleChildScrollView(
               child: Column(
                 children: <Widget>[
+                  Obx(
+                    () => Visibility(
+                      visible: !_userController.subscriptionPass,
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Container(
+                          width: double.infinity,
+                          height: 60,
+                          decoration: BoxDecoration(
+                            border: Border.all(color: Colors.red),
+                            borderRadius: BorderRadius.circular(5),
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Text('WARNING: THIS IS A MESSAGE TO SHOW USER INFO ABOUT SUBSCRIPTION.'),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
                   Container(
                     width: double.infinity,
                     height: 180,
@@ -572,24 +595,28 @@ class _CreateAdScreenState extends State<CreateAdScreen> {
                               ),
                             ),
                             SizedBox(height: 20),
-                            GradientButton(
-                              text: 'Publish ad',
-                              onPressed: () {
-                                setState(() => submitted = true);
-                                if (_formKey.currentState.validate() &&
-                                    _.selectedCategory.value.isNotEmpty &&
-                                    _.selectedSubCategory.value.isNotEmpty &&
-                                    _.selectedBrand.value.isNotEmpty &&
-                                    _.selectedModel.value.isNotEmpty &&
-                                    _.selectedColor.value.isNotEmpty &&
-                                    _.selectedTransmission.value.isNotEmpty &&
-                                    _.selectedFuel.value.isNotEmpty &&
-                                    _.selectedCondition.value.isNotEmpty &&
-                                    _.selectedNegotiable.value.isNotEmpty) {
-                                  FocusScope.of(context).unfocus();
-                                  _createAdController.create();
-                                }
-                              },
+                            Obx(
+                              () => GradientButton(
+                                text: 'Publish ad',
+                                onPressed: !_userController.subscriptionPass
+                                    ? null
+                                    : () {
+                                        setState(() => submitted = true);
+                                        if (_formKey.currentState.validate() &&
+                                            _.selectedCategory.value.isNotEmpty &&
+                                            _.selectedSubCategory.value.isNotEmpty &&
+                                            _.selectedBrand.value.isNotEmpty &&
+                                            _.selectedModel.value.isNotEmpty &&
+                                            _.selectedColor.value.isNotEmpty &&
+                                            _.selectedTransmission.value.isNotEmpty &&
+                                            _.selectedFuel.value.isNotEmpty &&
+                                            _.selectedCondition.value.isNotEmpty &&
+                                            _.selectedNegotiable.value.isNotEmpty) {
+                                          FocusScope.of(context).unfocus();
+                                          _createAdController.create();
+                                        }
+                                      },
+                              ),
                             ),
                           ],
                         ),

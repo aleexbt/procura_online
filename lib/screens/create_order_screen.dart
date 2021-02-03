@@ -6,6 +6,7 @@ import 'package:get/get.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 import 'package:procura_online/controllers/orders_controller.dart';
+import 'package:procura_online/controllers/user_controller.dart';
 import 'package:procura_online/models/upload_media_model.dart';
 import 'package:procura_online/widgets/gradient_button.dart';
 import 'package:procura_online/widgets/select_option.dart';
@@ -18,12 +19,13 @@ class CreateOrderScreen extends StatefulWidget {
 
 class _CreateOrderScreenState extends State<CreateOrderScreen> {
   final OrdersController _ordersController = Get.find();
+  final UserController _userController = Get.find();
   final _formKey = GlobalKey<FormState>();
   FocusNode mainNode;
 
   @override
   initState() {
-    // _ordersController.resetFields();
+    _userController.checkSubscription();
     mainNode = FocusNode();
     super.initState();
   }
@@ -93,12 +95,32 @@ class _CreateOrderScreenState extends State<CreateOrderScreen> {
       ),
       body: Obx(
         () => ModalProgressHUD(
-          inAsyncCall: _ordersController.isPublishingOrder,
+          inAsyncCall: _ordersController.isPublishingOrder || _userController.isCheckingSubscription,
           child: SafeArea(
             child: SingleChildScrollView(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
+                  Obx(
+                    () => Visibility(
+                      visible: !_userController.subscriptionPass,
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Container(
+                          width: double.infinity,
+                          height: 60,
+                          decoration: BoxDecoration(
+                            border: Border.all(color: Colors.red),
+                            borderRadius: BorderRadius.circular(5),
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Text('WARNING: THIS IS A MESSAGE TO SHOW USER INFO ABOUT SUBSCRIPTION.'),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
                   Container(
                     width: double.infinity,
                     height: 180,
@@ -313,16 +335,18 @@ class _CreateOrderScreenState extends State<CreateOrderScreen> {
                             SizedBox(height: 20),
                             GradientButton(
                               text: 'Create order',
-                              onPressed: () {
-                                setState(() => submitted = true);
-                                if (_formKey.currentState.validate() &&
-                                    _ordersController.selectedBrand.value.isNotEmpty &&
-                                    _ordersController.selectedModel.value.isNotEmpty &&
-                                    _ordersController.selectedFuel.value.isNotEmpty) {
-                                  FocusScope.of(context).unfocus();
-                                  _ordersController.createOrder(images: imagesUrl);
-                                }
-                              },
+                              onPressed: !_userController.subscriptionPass
+                                  ? null
+                                  : () {
+                                      setState(() => submitted = true);
+                                      if (_formKey.currentState.validate() &&
+                                          _ordersController.selectedBrand.value.isNotEmpty &&
+                                          _ordersController.selectedModel.value.isNotEmpty &&
+                                          _ordersController.selectedFuel.value.isNotEmpty) {
+                                        FocusScope.of(context).unfocus();
+                                        _ordersController.createOrder(images: imagesUrl);
+                                      }
+                                    },
                             ),
                           ],
                         ),
