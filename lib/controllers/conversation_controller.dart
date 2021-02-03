@@ -112,7 +112,7 @@ class ConversationController extends GetxController with WidgetsBindingObserver 
   }
 
   void replyMessage({String message, String orderId, String chatId, List<String> photos}) async {
-    if (message.isBlank) {
+    if (message.isBlank && photos.isBlank) {
       return;
     }
     _isReplying.value = true;
@@ -125,15 +125,6 @@ class ConversationController extends GetxController with WidgetsBindingObserver 
         "attachments": photos
       };
       await _chatRepository.replyMessage(data);
-    } on DioError catch (err) {
-      _replyingError.value = true;
-      Get.rawSnackbar(
-          message: 'Ops, something went wrong.', backgroundColor: Colors.red, duration: Duration(seconds: 3));
-    } catch (err) {
-      _replyingError.value = true;
-      print(err);
-      Get.rawSnackbar(
-          message: 'Ops, something went wrong.', backgroundColor: Colors.red, duration: Duration(seconds: 3));
     } finally {
       messageInput.value.clear();
       images.clear();
