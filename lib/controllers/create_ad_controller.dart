@@ -6,12 +6,14 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart' hide MultipartFile;
 import 'package:procura_online/models/upload_media_model.dart';
 import 'package:procura_online/repositories/product_repository.dart';
+import 'package:procura_online/repositories/user_repository.dart';
 import 'package:procura_online/repositories/vehicle_repository.dart';
 import 'package:smart_select/smart_select.dart';
 
 class CreateAdController extends GetxController {
   ProductRepository _productRepository = Get.find();
   VehicleRepository _vehicleRepository = Get.find();
+  UserRepository _userRepository = Get.find();
 
   @override
   onInit() {
@@ -25,6 +27,7 @@ class CreateAdController extends GetxController {
   RxBool _isLoadingSubCategories = false.obs;
   RxBool _isLoadingBrands = false.obs;
   RxBool _isLoadingModels = false.obs;
+  RxBool _isCheckingSubscription = false.obs;
 
   RxList<File> images = List<File>.empty(growable: true).obs;
   RxList<String> imagesUrl = List<String>.empty(growable: true).obs;
@@ -40,6 +43,7 @@ class CreateAdController extends GetxController {
   bool get isLoadingBrands => _isLoadingBrands.value;
   bool get isLoadingModels => _isLoadingModels.value;
   bool get isUploadingImage => _isUploadingImage.value;
+  bool get isCheckingSubscription => _isCheckingSubscription.value;
 
   Rx<TextEditingController> title = TextEditingController().obs;
   Rx<TextEditingController> description = TextEditingController().obs;
@@ -70,6 +74,7 @@ class CreateAdController extends GetxController {
   RxString selectedTransmission = ''.obs;
   RxString selectedCondition = ''.obs;
   RxString selectedNegotiable = ''.obs;
+  RxBool isFeatured = false.obs;
   DateTime selectedDate = DateTime.now();
   RxString registeredDate = ''.obs;
   RxString formattedRegisteredDate = ''.obs;
@@ -245,6 +250,7 @@ class CreateAdController extends GetxController {
         "condition": selectedCondition.value,
         "price": price.value.text,
         "negotiable": selectedNegotiable.value,
+        "featured": isFeatured.value,
         "main_photo": mainPhotoUrl.value,
         "gallery": imagesUrl,
         "categories": [selectedCategory.value, selectedSubCategory.value],
@@ -299,6 +305,27 @@ class CreateAdController extends GetxController {
     return _result;
   }
 
+  void setFeatured(bool value) async {
+    if (!value) return;
+    _isCheckingSubscription.value = true;
+    try {
+      bool response = await _userRepository.checkSubscription('listings-featured');
+      if (response) {
+        isFeatured.value = response;
+      } else {
+        errorDialog(
+          title: 'Error',
+          message: 'You can\'t make this ad featured. Please check your subscription plan.',
+        );
+      }
+    } catch (err) {
+      isFeatured.value = false;
+      print(err);
+    } finally {
+      _isCheckingSubscription.value = false;
+    }
+  }
+
   AwesomeDialog successDialog({String title, String message, Function dismiss}) {
     return AwesomeDialog(
       dismissOnTouchOutside: false,
@@ -307,6 +334,26 @@ class CreateAdController extends GetxController {
       animType: AnimType.BOTTOMSLIDE,
       headerAnimationLoop: false,
       dialogType: DialogType.SUCCES,
+      title: title,
+      useRootNavigator: false,
+      padding: EdgeInsets.only(left: 10, right: 10),
+      desc: message,
+      btnOkText: 'OK',
+      btnOkOnPress: () {},
+      onDissmissCallback: dismiss,
+      btnOkIcon: Icons.check_circle,
+      btnOkColor: Colors.blue,
+    )..show();
+  }
+
+  AwesomeDialog errorDialog({String title, String message, Function dismiss}) {
+    return AwesomeDialog(
+      dismissOnTouchOutside: false,
+      dismissOnBackKeyPress: false,
+      context: Get.context,
+      animType: AnimType.BOTTOMSLIDE,
+      headerAnimationLoop: false,
+      dialogType: DialogType.ERROR,
       title: title,
       useRootNavigator: false,
       padding: EdgeInsets.only(left: 10, right: 10),

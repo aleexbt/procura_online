@@ -64,7 +64,7 @@ class User {
   @HiveField(21)
   int referredBy;
   @HiveField(22)
-  int balance;
+  String balance;
   @JsonKey(name: 'notifications_frequency')
   @HiveField(23)
   String notificationsFrequency;

@@ -25,7 +25,7 @@ class _CreateOrderScreenState extends State<CreateOrderScreen> {
 
   @override
   initState() {
-    _userController.checkSubscription();
+    _userController.checkSubscription('order-create');
     mainNode = FocusNode();
     super.initState();
   }
@@ -101,26 +101,6 @@ class _CreateOrderScreenState extends State<CreateOrderScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  Obx(
-                    () => Visibility(
-                      visible: !_userController.subscriptionPass,
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Container(
-                          width: double.infinity,
-                          height: 60,
-                          decoration: BoxDecoration(
-                            border: Border.all(color: Colors.red),
-                            borderRadius: BorderRadius.circular(5),
-                          ),
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Text('WARNING: THIS IS A MESSAGE TO SHOW USER INFO ABOUT SUBSCRIPTION.'),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
                   Container(
                     width: double.infinity,
                     height: 180,
@@ -335,7 +315,7 @@ class _CreateOrderScreenState extends State<CreateOrderScreen> {
                             SizedBox(height: 20),
                             GradientButton(
                               text: 'Create order',
-                              onPressed: !_userController.subscriptionPass
+                              onPressed: !_userController.createOrderPermission
                                   ? null
                                   : () {
                                       setState(() => submitted = true);

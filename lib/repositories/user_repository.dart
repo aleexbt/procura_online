@@ -102,10 +102,10 @@ class UserRepository {
     return plans;
   }
 
-  Future<bool> checkSubscription() async {
+  Future<bool> checkSubscription(String feature) async {
     await setToken();
-    final response = await _dio.get('/api/v1/check-subscription');
-    if (response.data['message'] == 'success') {
+    final response = await _dio.get('/api/v1/check-subscription', queryParameters: {"feature": "$feature"});
+    if (response.data['can'] == 1) {
       return true;
     } else {
       return false;

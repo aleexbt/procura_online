@@ -30,7 +30,7 @@ class _CreateAdScreenState extends State<CreateAdScreen> {
     var date = DateTime.parse(DateTime.now().toString());
     _createAdController.registeredDate.value = date.toString();
     _createAdController.formattedRegisteredDate.value = '${date.day}/${date.month}/${date.year}';
-    _userController.checkSubscription();
+    _userController.checkSubscription('listings');
     mainNode = FocusNode();
     super.initState();
   }
@@ -92,31 +92,11 @@ class _CreateAdScreenState extends State<CreateAdScreen> {
       body: GetX<CreateAdController>(builder: (_) {
         FocusScope.of(context).requestFocus(mainNode);
         return ModalProgressHUD(
-          inAsyncCall: _.isSaving || _userController.isCheckingSubscription,
+          inAsyncCall: _.isSaving || _userController.isCheckingSubscription || _.isCheckingSubscription,
           child: SafeArea(
             child: SingleChildScrollView(
               child: Column(
                 children: <Widget>[
-                  Obx(
-                    () => Visibility(
-                      visible: !_userController.subscriptionPass,
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Container(
-                          width: double.infinity,
-                          height: 60,
-                          decoration: BoxDecoration(
-                            border: Border.all(color: Colors.red),
-                            borderRadius: BorderRadius.circular(5),
-                          ),
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Text('WARNING: THIS IS A MESSAGE TO SHOW USER INFO ABOUT SUBSCRIPTION.'),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
                   Container(
                     width: double.infinity,
                     height: 180,
@@ -568,7 +548,6 @@ class _CreateAdScreenState extends State<CreateAdScreen> {
                               ),
                             ),
                             SizedBox(height: 10),
-                            SizedBox(height: 10),
                             GestureDetector(
                               onTap: () => {
                                 DatePicker.showDatePicker(
@@ -594,11 +573,27 @@ class _CreateAdScreenState extends State<CreateAdScreen> {
                                 maxLength: 8,
                               ),
                             ),
+                            SizedBox(height: 2),
+                            Row(
+                              children: [
+                                Obx(
+                                  () => Checkbox(
+                                    visualDensity: VisualDensity.compact,
+                                    value: _.isFeatured.value,
+                                    onChanged: (value) {
+                                      print('checkbox changed to $value');
+                                      _.setFeatured(value);
+                                    },
+                                  ),
+                                ),
+                                Text('Make this ad featured?'),
+                              ],
+                            ),
                             SizedBox(height: 20),
                             Obx(
                               () => GradientButton(
                                 text: 'Publish ad',
-                                onPressed: !_userController.subscriptionPass
+                                onPressed: !_userController.createAdPermission
                                     ? null
                                     : () {
                                         setState(() => submitted = true);

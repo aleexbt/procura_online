@@ -3,10 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:octo_image/octo_image.dart';
 import 'package:procura_online/controllers/orders_controller.dart';
+import 'package:procura_online/controllers/user_controller.dart';
 import 'package:shimmer/shimmer.dart';
 
 class OrdersWidget extends StatelessWidget {
   final OrdersController _ordersController = Get.find();
+  final UserController _userController = Get.find();
   final ScrollController _scrollController = ScrollController();
 
   Future<void> refresItems() async {
@@ -98,6 +100,17 @@ class OrdersWidget extends StatelessWidget {
                   child: Text('Try again'),
                 ),
               ],
+            ),
+          );
+        }
+        if (!_userController.listOrdersPermission) {
+          return Padding(
+            padding: const EdgeInsets.all(8),
+            child: Center(
+              child: Text(
+                'You can only see orders you sent. Change your subscription plan to see other users orders.',
+                textAlign: TextAlign.center,
+              ),
             ),
           );
         }

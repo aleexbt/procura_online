@@ -4,6 +4,7 @@ import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:procura_online/controllers/user_controller.dart';
 import 'package:procura_online/models/message_model.dart';
 import 'package:procura_online/models/order_model.dart';
 import 'package:procura_online/models/orders_model.dart';
@@ -17,6 +18,7 @@ class OrdersController extends GetxController {
   OrdersRepository _ordersRepository = Get.find();
   ChatRepository _chatRepository = Get.find();
   VehicleRepository _vehicleRepository = Get.find();
+  UserController _userController = Get.find();
 
   @override
   onInit() {
@@ -154,6 +156,12 @@ class OrdersController extends GetxController {
   void setFuel(String value) => selectedFuel.value = value;
 
   void findAll({skipLoading = false}) async {
+    if (filter == 'sent') {
+      _userController.setListOrdersPermission(true);
+    }
+    if (filter != 'sent') {
+      _userController.checkSubscription('orders-access');
+    }
     _isLoading.value = !skipLoading;
     _hasError.value = false;
     _page.value = 1;

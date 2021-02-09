@@ -1,3 +1,4 @@
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -26,7 +27,9 @@ class UserController extends GetxController with StateMixin<User> {
   RxBool _isLoading = false.obs;
   RxBool _isSaving = false.obs;
   RxBool _isCheckingSubscription = false.obs;
-  RxBool _subscriptionPass = true.obs;
+  RxBool _createAdPermission = false.obs;
+  RxBool _createOrderPermission = false.obs;
+  RxBool _listOrdersPermission = false.obs;
   RxBool _isLoadingSkills = false.obs;
   RxBool _isLoadingDistricts = false.obs;
   RxBool _isLoadingCities = false.obs;
@@ -39,7 +42,9 @@ class UserController extends GetxController with StateMixin<User> {
   bool get isLoading => _isLoading.value;
   bool get isSaving => _isSaving.value;
   bool get isCheckingSubscription => _isCheckingSubscription.value;
-  bool get subscriptionPass => _subscriptionPass.value;
+  bool get createAdPermission => _createAdPermission.value;
+  bool get createOrderPermission => _createOrderPermission.value;
+  bool get listOrdersPermission => _listOrdersPermission.value;
   bool get isLoadingSkills => _isLoadingSkills.value;
   bool get isLoadingDistricts => _isLoadingDistricts.value;
   bool get isLoadingCities => _isLoadingCities.value;
@@ -66,12 +71,12 @@ class UserController extends GetxController with StateMixin<User> {
   RxList<S2Choice<int>> _skills = List<S2Choice<int>>.empty(growable: true).obs;
   RxList<S2Choice<int>> _districts = List<S2Choice<int>>.empty(growable: true).obs;
   RxList<S2Choice<int>> _cities = List<S2Choice<int>>.empty(growable: true).obs;
-  RxList<S2Choice<int>> _plans = List<S2Choice<int>>.empty(growable: true).obs;
+  RxList<Plan> _plans = List<Plan>.empty(growable: true).obs;
 
   List<S2Choice<int>> get skills => _skills;
   List<S2Choice<int>> get districts => _districts;
   List<S2Choice<int>> get cities => _cities;
-  List<S2Choice<int>> get plans => _plans;
+  List<Plan> get plans => _plans;
 
   RxString selectedAccountType = ''.obs;
   final List<S2Choice<String>> accountTypeOptions = [
@@ -377,7 +382,6 @@ class UserController extends GetxController with StateMixin<User> {
   void setPushToken() async {
     OSPermissionSubscriptionState player = await OneSignal.shared.getPermissionSubscriptionState();
     String playerId = player.subscriptionStatus.userId.toString();
-    print('PLAYER_ID: $playerId');
     _userRepository.setPushToken(playerId);
   }
 
@@ -442,13 +446,8 @@ class UserController extends GetxController with StateMixin<User> {
     _isLoadingPlans.value = true;
     try {
       List<Plan> response = await _userRepository.getPlans();
-      List<S2Choice<int>> plansList = List<S2Choice<int>>.empty(growable: true);
-
       if (response != null) {
-        response.forEach((plan) {
-          plansList.add(S2Choice<int>(value: plan.id, title: '${plan.name} - ${plan.price} EUR'));
-        });
-        _plans.assignAll(plansList);
+        _plans.assignAll(response);
       }
     } catch (err) {
       print(err);
@@ -457,16 +456,64 @@ class UserController extends GetxController with StateMixin<User> {
     }
   }
 
-  void checkSubscription() async {
+  void checkSubscription(String feature) async {
     _isCheckingSubscription.value = true;
     try {
-      bool response = await _userRepository.checkSubscription();
-      _subscriptionPass.value = response;
+      bool response = await _userRepository.checkSubscription(feature);
+      if (!response) {
+        if (feature == 'listings') {
+          _createAdPermission.value = response;
+          errorDialog(
+            title: 'Error',
+            message: 'You can\'t create a new ad. Please check your subscription plan.',
+            dismiss: () => Get.back(),
+          );
+        } else if (feature == 'listings-featured') {
+          errorDialog(
+            title: 'Error',
+            message: 'You can\'t make this ad featured. Please check your subscription plan.',
+            dismiss: () => Get.back(),
+          );
+        } else if (feature == 'order-create') {
+          _createOrderPermission.value = response;
+          errorDialog(
+            title: 'Error',
+            message: 'You can\'t create a new order. Please check your subscription plan.',
+            dismiss: () => Get.back(),
+          );
+        } else if (feature == 'orders-access') {
+          _listOrdersPermission.value = response;
+        }
+      }
     } catch (err) {
-      _subscriptionPass.value = false;
+      _createAdPermission.value = false;
+      _createOrderPermission.value = false;
+      _listOrdersPermission.value = false;
       print(err);
     } finally {
       _isCheckingSubscription.value = false;
     }
+  }
+
+  void setListOrdersPermission(bool value) => _listOrdersPermission.value = value;
+
+  AwesomeDialog errorDialog({String title, String message, Function dismiss}) {
+    return AwesomeDialog(
+      dismissOnTouchOutside: false,
+      dismissOnBackKeyPress: false,
+      context: Get.context,
+      animType: AnimType.BOTTOMSLIDE,
+      headerAnimationLoop: false,
+      dialogType: DialogType.ERROR,
+      title: title,
+      useRootNavigator: false,
+      padding: EdgeInsets.only(left: 10, right: 10),
+      desc: message,
+      btnOkText: 'OK',
+      btnOkOnPress: () {},
+      onDissmissCallback: dismiss,
+      btnOkIcon: Icons.check_circle,
+      btnOkColor: Colors.blue,
+    )..show();
   }
 }

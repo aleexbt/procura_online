@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:get/get.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:procura_online/controllers/user_controller.dart';
+import 'package:procura_online/models/plan_model.dart';
 import 'package:procura_online/widgets/gradient_button.dart';
 import 'package:procura_online/widgets/select_option.dart';
 import 'package:procura_online/widgets/select_option_multi.dart';
@@ -199,6 +201,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
       ),
     );
   }
+
+  List<String> titles = ["Flutter Swiper is awosome", "Really nice", "Yeap"];
 
   Widget stepOne() {
     return Column(
@@ -429,16 +433,31 @@ class _RegisterScreenState extends State<RegisterScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Obx(
-          () => SelectOption(
-            isLoading: _userController.isLoadingPlans,
-            modalTitle: 'Plan',
-            selectText: 'Plan',
-            modalType: S2ModalType.bottomSheet,
-            value: selectedPlan,
-            choiceItems: _userController.plans,
-            onChange: (state) => setState(() => selectedPlan = state.value),
-            hasError: selectedPlan == null && submittedStep4,
+        // Obx(
+        //   () => SelectOption(
+        //     isLoading: _userController.isLoadingPlans,
+        //     modalTitle: 'Plan',
+        //     selectText: 'Plan',
+        //     modalType: S2ModalType.bottomSheet,
+        //     value: selectedPlan,
+        //     choiceItems: _userController.plans,
+        //     onChange: (state) => setState(() => selectedPlan = state.value),
+        //     hasError: selectedPlan == null && submittedStep4,
+        //   ),
+        // ),
+        ClipRRect(
+          borderRadius: BorderRadius.circular(10),
+          child: SizedBox(
+            height: 250,
+            child: Obx(
+              () => Swiper(
+                itemBuilder: (BuildContext context, int index) {
+                  return plan(_userController.plans[index]);
+                },
+                itemCount: _userController.plans.length,
+                control: SwiperControl(color: Colors.blue),
+              ),
+            ),
           ),
         ),
         Visibility(
@@ -452,6 +471,68 @@ class _RegisterScreenState extends State<RegisterScreen> {
           ),
         ),
       ],
+    );
+  }
+
+  Widget plan(Plan plan) {
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.white,
+        border: Border.all(color: selectedPlan == plan.id ? Colors.blue : Colors.grey[200], width: 2),
+        borderRadius: BorderRadius.circular(10),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Text(
+              plan.name,
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 18,
+              ),
+            ),
+            Text(
+              '${plan.currency} ${plan.price}',
+              style: TextStyle(
+                color: Colors.blue,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+            Divider(),
+            Expanded(
+              child: ListView(
+                physics: BouncingScrollPhysics(),
+                children: plan.features
+                    .map((e) => Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(
+                              Icons.check,
+                              color: Colors.blue,
+                            ),
+                            Text(e.slug),
+                          ],
+                        ))
+                    .toList(),
+              ),
+            ),
+            SizedBox(height: 10),
+            OutlinedButton(
+              style: OutlinedButton.styleFrom(
+                backgroundColor: selectedPlan == plan.id ? Colors.blue.withOpacity(0.2) : null,
+              ),
+              child: Text(selectedPlan == plan.id ? 'Selected plan' : 'Select this plan'),
+              onPressed: () {
+                setState(() {
+                  selectedPlan = plan.id;
+                });
+              },
+            ),
+          ],
+        ),
+      ),
     );
   }
 }
