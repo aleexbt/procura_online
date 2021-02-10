@@ -168,6 +168,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                       city: selectedCity,
                                       address: _address.text,
                                       postcode: _postcode.text,
+                                      plan: selectedPlan,
                                     );
                                   }
                                 },
@@ -201,8 +202,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
       ),
     );
   }
-
-  List<String> titles = ["Flutter Swiper is awosome", "Really nice", "Yeap"];
 
   Widget stepOne() {
     return Column(
@@ -433,18 +432,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        // Obx(
-        //   () => SelectOption(
-        //     isLoading: _userController.isLoadingPlans,
-        //     modalTitle: 'Plan',
-        //     selectText: 'Plan',
-        //     modalType: S2ModalType.bottomSheet,
-        //     value: selectedPlan,
-        //     choiceItems: _userController.plans,
-        //     onChange: (state) => setState(() => selectedPlan = state.value),
-        //     hasError: selectedPlan == null && submittedStep4,
-        //   ),
-        // ),
         ClipRRect(
           borderRadius: BorderRadius.circular(10),
           child: SizedBox(

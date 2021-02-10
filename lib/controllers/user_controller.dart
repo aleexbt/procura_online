@@ -201,6 +201,21 @@ class UserController extends GetxController with StateMixin<User> {
         "plan_id": plan,
       };
 
+      print({
+        "name": name,
+        "email": email,
+        "phone": phone,
+        "password": password,
+        "type": type,
+        "company": company,
+        "skills": skills,
+        "district_id": district,
+        "city_id": city,
+        "address": address,
+        "postcode": postcode,
+        "plan_id": plan,
+      });
+
       await _userRepository.signUp(registerData);
       Get.back();
       Get.rawSnackbar(
