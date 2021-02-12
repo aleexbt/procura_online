@@ -306,7 +306,10 @@ class CreateAdController extends GetxController {
   }
 
   void setFeatured(bool value) async {
-    if (!value) return;
+    if (!value) {
+      isFeatured.value = false;
+      return;
+    }
     _isCheckingSubscription.value = true;
     try {
       bool response = await _userRepository.checkSubscription('listings-featured');

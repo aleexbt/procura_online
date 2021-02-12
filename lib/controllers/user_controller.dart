@@ -474,31 +474,35 @@ class UserController extends GetxController with StateMixin<User> {
   void checkSubscription(String feature) async {
     _isCheckingSubscription.value = true;
     try {
-      bool response = await _userRepository.checkSubscription(feature);
-      if (!response) {
-        if (feature == 'listings') {
-          _createAdPermission.value = response;
-          errorDialog(
-            title: 'Error',
-            message: 'You can\'t create a new ad. Please check your subscription plan.',
-            dismiss: () => Get.back(),
-          );
-        } else if (feature == 'listings-featured') {
-          errorDialog(
-            title: 'Error',
-            message: 'You can\'t make this ad featured. Please check your subscription plan.',
-            dismiss: () => Get.back(),
-          );
-        } else if (feature == 'order-create') {
-          _createOrderPermission.value = response;
-          errorDialog(
-            title: 'Error',
-            message: 'You can\'t create a new order. Please check your subscription plan.',
-            dismiss: () => Get.back(),
-          );
-        } else if (feature == 'orders-access') {
-          _listOrdersPermission.value = response;
-        }
+      bool permission = await _userRepository.checkSubscription(feature);
+
+      if (feature == 'listings' && permission) {
+        _createAdPermission.value = permission;
+      } else if (feature == 'listings' && !permission) {
+        errorDialog(
+          title: 'Error',
+          message: 'You can\'t create a new ad. Please check your subscription plan.',
+          dismiss: () => Get.back(),
+        );
+      }
+      if (feature == 'listings-featured' && !permission) {
+        errorDialog(
+          title: 'Error',
+          message: 'You can\'t make this ad featured. Please check your subscription plan.',
+          dismiss: () => Get.back(),
+        );
+      }
+      if (feature == 'order-create' && permission) {
+        _createOrderPermission.value = permission;
+      } else if (feature == 'order-create' && !permission) {
+        errorDialog(
+          title: 'Error',
+          message: 'You can\'t create a new order. Please check your subscription plan.',
+          dismiss: () => Get.back(),
+        );
+      }
+      if (feature == 'orders-access') {
+        _listOrdersPermission.value = permission;
       }
     } catch (err) {
       _createAdPermission.value = false;

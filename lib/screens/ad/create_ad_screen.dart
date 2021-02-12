@@ -581,7 +581,6 @@ class _CreateAdScreenState extends State<CreateAdScreen> {
                                     visualDensity: VisualDensity.compact,
                                     value: _.isFeatured.value,
                                     onChanged: (value) {
-                                      print('checkbox changed to $value');
                                       _.setFeatured(value);
                                     },
                                   ),

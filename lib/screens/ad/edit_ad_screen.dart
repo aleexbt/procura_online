@@ -614,7 +614,9 @@ class _EditAdScreenState extends State<EditAdScreen> {
                                     _editAdController.formattedRegisteredDate.value =
                                         '${date.day}/${date.month}/${date.year}';
                                   },
-                                  currentTime: DateTime.parse(_editAdController.registeredDate.value) ?? DateTime.now(),
+                                  currentTime: _editAdController.registeredDate.value != null
+                                      ? DateTime.tryParse(_editAdController.registeredDate.value)
+                                      : DateTime.now(),
                                 ),
                               },
                               child: CustomTextInput(
