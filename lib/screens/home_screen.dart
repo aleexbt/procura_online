@@ -124,10 +124,15 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
                   fit: FlexFit.tight,
                   child: FlatButton(
                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(25)),
-                    color: Colors.grey[200],
+                    color: Colors.blue,
                     height: 40,
                     onPressed: () => _userController.isLoggedIn ? Get.toNamed('/ad/new') : Get.toNamed('/auth/login'),
-                    child: Text('Sell'),
+                    child: Text(
+                      'Sell',
+                      style: TextStyle(
+                        color: Colors.white,
+                      ),
+                    ),
                   ),
                 ),
                 Flexible(
