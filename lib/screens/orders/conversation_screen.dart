@@ -133,25 +133,25 @@ class _ConversationScreenState extends State<ConversationScreen> {
                           ),
                           onTap: (_) => _conversationController.muteConversationToggle(),
                         ),
-                        Divider(),
-                        ListTileMoreCustomizable(
-                          leading: Icon(
-                            CupertinoIcons.delete,
-                            color: Colors.black,
-                          ),
-                          title: Text(
-                            "Delete conversation",
-                            style: TextStyle(
-                              color: Colors.black,
-                              fontWeight: FontWeight.w400,
-                            ),
-                          ),
-                          horizontalTitleGap: 0,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          onTap: (_) => _conversationController.deleteConversation(),
-                        ),
+                        // Divider(),
+                        // ListTileMoreCustomizable(
+                        //   leading: Icon(
+                        //     CupertinoIcons.delete,
+                        //     color: Colors.black,
+                        //   ),
+                        //   title: Text(
+                        //     "Delete conversation",
+                        //     style: TextStyle(
+                        //       color: Colors.black,
+                        //       fontWeight: FontWeight.w400,
+                        //     ),
+                        //   ),
+                        //   horizontalTitleGap: 0,
+                        //   shape: RoundedRectangleBorder(
+                        //     borderRadius: BorderRadius.circular(10),
+                        //   ),
+                        //   onTap: (_) => _conversationController.deleteConversation(),
+                        // ),
                       ],
                     ),
                   ),
