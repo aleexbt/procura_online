@@ -22,10 +22,62 @@ class _SettingsScreenState extends State<SettingsScreen> with AutomaticKeepAlive
     super.initState();
   }
 
+  showAlertDialog({
+    @required BuildContext context,
+    @required String title,
+    @required String content,
+    String cancelActionText,
+    @required String confirmActionText,
+  }) {
+    if (Platform.isAndroid) {
+      return showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: Text(title),
+          content: Text(content),
+          actions: <Widget>[
+            if (cancelActionText != null)
+              FlatButton(
+                child: Text(cancelActionText),
+                onPressed: () => Get.back(),
+              ),
+            FlatButton(
+              child: Text(confirmActionText),
+              onPressed: () {},
+            ),
+          ],
+        ),
+      );
+    }
+
+    return showCupertinoDialog(
+      context: context,
+      builder: (context) => CupertinoAlertDialog(
+        title: Text(title),
+        content: Text(content),
+        actions: <Widget>[
+          if (cancelActionText != null)
+            CupertinoDialogAction(
+              child: Text(cancelActionText),
+              onPressed: () => Get.back(),
+            ),
+          CupertinoDialogAction(
+            child: Text(
+              confirmActionText,
+              style: TextStyle(
+                color: Colors.red,
+              ),
+            ),
+            onPressed: () {},
+          ),
+        ],
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     super.build(context);
-
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
@@ -65,6 +117,22 @@ class _SettingsScreenState extends State<SettingsScreen> with AutomaticKeepAlive
               subtitle: Text('Manage your ads'),
             ),
             Divider(),
+            ListTileMoreCustomizable(
+              onTap: (_) => showAlertDialog(
+                context: context,
+                title: 'Delete account',
+                content: 'Are you sure you want to delete your account?',
+                cancelActionText: 'Cancel',
+                confirmActionText: 'Delete',
+              ),
+              leading: Icon(CupertinoIcons.trash, color: Colors.red),
+              title: Text(
+                'Delete account',
+                style: TextStyle(color: Colors.red),
+              ),
+              horizontalTitleGap: 0,
+              subtitle: Text('Delete your account and all your data'),
+            ),
             ListTileMoreCustomizable(
               onTap: (_) => _userController.logOut(),
               leading: Icon(CupertinoIcons.power, color: Colors.blue),
