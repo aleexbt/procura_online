@@ -66,6 +66,7 @@ class EditProfileScreen extends StatelessWidget {
                       ),
                       SizedBox(height: 10),
                       CustomTextInput(
+                        enabled: false,
                         controller: _.email.value..text = _.userData?.email,
                         fillColor: Colors.grey[200],
                         hintText: 'Enter an email address',
@@ -86,6 +87,7 @@ class EditProfileScreen extends StatelessWidget {
                       SizedBox(height: 10),
                       Obx(
                         () => CustomTextInput(
+                          enabled: false,
                           controller: _.phone.value..text = _.userData?.phone,
                           fillColor: Colors.grey[200],
                           hintText: 'Enter a phone number',
