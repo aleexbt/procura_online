@@ -23,29 +23,33 @@ class OrderReplyScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         shadowColor: Colors.transparent,
-        title: Row(
-          children: <Widget>[
-            ClipOval(
-                child: Image.network(
-              'https://mindbodygreen-res.cloudinary.com/images/w_767,q_auto:eco,f_auto,fl_lossy/usr/RetocQT/sarah-fielding.jpg',
-              width: 30,
-              height: 30,
-              fit: BoxFit.cover,
-            )),
-            Expanded(
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text(
-                  order.userInfo.name,
-                  style: TextStyle(
-                    fontSize: 16,
+        title: GestureDetector(
+          behavior: HitTestBehavior.translucent,
+          onTap: () => Get.toNamed('/profile/1'),
+          child: Row(
+            children: <Widget>[
+              ClipOval(
+                  child: Image.network(
+                'https://mindbodygreen-res.cloudinary.com/images/w_767,q_auto:eco,f_auto,fl_lossy/usr/RetocQT/sarah-fielding.jpg',
+                width: 30,
+                height: 30,
+                fit: BoxFit.cover,
+              )),
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text(
+                    order.userInfo.name,
+                    style: TextStyle(
+                      fontSize: 16,
+                    ),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
                   ),
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
                 ),
-              ),
-            )
-          ],
+              )
+            ],
+          ),
         ),
         actions: order.userId == _userController.userData.id
             ? [
