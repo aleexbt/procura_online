@@ -1,4 +1,5 @@
 import 'package:json_annotation/json_annotation.dart';
+import 'package:procura_online/models/user_model.dart';
 
 part 'product_model.g.dart';
 
@@ -40,6 +41,7 @@ class Product {
   String createdAt;
   @JsonKey(name: 'updated_at')
   String updatedAt;
+  User user;
   List<Categories> categories;
   @JsonKey(name: 'main_photo', includeIfNull: false)
   MainPhoto mainPhoto;

@@ -409,7 +409,7 @@ class ProductScreen extends StatelessWidget {
                       ),
                       child: InkWell(
                         borderRadius: BorderRadius.circular(4),
-                        onTap: () => Get.offNamed('/profile/1'),
+                        onTap: () => Get.toNamed('/profile/${_.product.user.id}'),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
@@ -430,7 +430,7 @@ class ProductScreen extends StatelessWidget {
                                     width: 100,
                                     height: 100,
                                     child: ClipOval(
-                                      child: Image.network('https://i.pravatar.cc/200'),
+                                      child: Image.network(_.product.user.logo.thumbnail),
                                     ),
                                   ),
                                   SizedBox(width: 8),
@@ -439,16 +439,16 @@ class ProductScreen extends StatelessWidget {
                                       crossAxisAlignment: CrossAxisAlignment.start,
                                       children: [
                                         Text(
-                                          'Miriam Alice Teixeira',
+                                          _.product.user.name,
                                           style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                                           overflow: TextOverflow.ellipsis,
                                         ),
                                         Text(
-                                          'Travessa São. Lucas, 6 9051-452 Amora',
+                                          _.product.user.company,
                                           overflow: TextOverflow.ellipsis,
                                         ),
-                                        Text('Porto, Santo Tirso'),
-                                        Text('5025'),
+                                        Text(_.product.user.address),
+                                        // Text(),
                                       ],
                                     ),
                                   ),

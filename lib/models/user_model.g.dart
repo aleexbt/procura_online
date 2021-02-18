@@ -51,7 +51,7 @@ class UserAdapter extends TypeAdapter<User> {
       createdAt: fields[31] as String,
       updatedAt: fields[32] as String,
       deletedAt: fields[33] as String,
-      logo: fields[34] as dynamic,
+      logo: fields[34] as Logo,
       cover: fields[35] as dynamic,
       referralLink: fields[36] as String,
       isOnline: fields[37] as bool,
@@ -194,7 +194,9 @@ User _$UserFromJson(Map<String, dynamic> json) {
     createdAt: json['created_at'] as String,
     updatedAt: json['updated_at'] as String,
     deletedAt: json['deleted_at'] as String,
-    logo: json['logo'],
+    logo: json['logo'] == null
+        ? null
+        : Logo.fromJson(json['logo'] as Map<String, dynamic>),
     cover: json['cover'],
     referralLink: json['referral_link'] as String,
     isOnline: json['is_online'] as bool,
@@ -242,4 +244,22 @@ Map<String, dynamic> _$UserToJson(User instance) => <String, dynamic>{
       'referral_link': instance.referralLink,
       'is_online': instance.isOnline,
       'media': instance.media,
+    };
+
+Logo _$LogoFromJson(Map<String, dynamic> json) {
+  return Logo(
+    id: json['id'] as int,
+    createdAt: json['createdAt'] as String,
+    updatedAt: json['updatedAt'] as String,
+    url: json['url'] as String,
+    thumbnail: json['thumbnail'] as String,
+  );
+}
+
+Map<String, dynamic> _$LogoToJson(Logo instance) => <String, dynamic>{
+      'id': instance.id,
+      'createdAt': instance.createdAt,
+      'updatedAt': instance.updatedAt,
+      'url': instance.url,
+      'thumbnail': instance.thumbnail,
     };

@@ -44,7 +44,9 @@ Product _$ProductFromJson(Map<String, dynamic> json) {
     gallery: json['gallery'] == null
         ? null
         : Photos.fromJson(json['gallery'] as Map<String, dynamic>) ?? [],
-  );
+  )..user = json['user'] == null
+      ? null
+      : User.fromJson(json['user'] as Map<String, dynamic>);
 }
 
 Map<String, dynamic> _$ProductToJson(Product instance) {
@@ -75,6 +77,7 @@ Map<String, dynamic> _$ProductToJson(Product instance) {
     'views_count': instance.viewsCount,
     'created_at': instance.createdAt,
     'updated_at': instance.updatedAt,
+    'user': instance.user,
     'categories': instance.categories,
   };
 
