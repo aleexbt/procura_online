@@ -278,8 +278,6 @@ class UserController extends GetxController with StateMixin<User> {
     try {
       Map<String, dynamic> updateData = {
         'name': name.value.text,
-        'email': email.value.text,
-        'phone': phone.value.text,
         'company': company.value.text,
         'type': selectedAccountType.value,
         'address': address.value.text,
@@ -288,8 +286,6 @@ class UserController extends GetxController with StateMixin<User> {
 
       _userData.update((val) {
         val.name = name.value.text;
-        val.email = email.value.text;
-        val.phone = phone.value.text;
         val.company = company.value.text;
         val.type = selectedAccountType.value;
         val.address = address.value.text;
