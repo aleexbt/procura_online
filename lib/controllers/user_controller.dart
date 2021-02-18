@@ -273,13 +273,15 @@ class UserController extends GetxController with StateMixin<User> {
     Get.back();
   }
 
-  void updateProfile() async {
+  void updateProfile({int district, int city}) async {
     _isSaving.value = true;
     try {
       Map<String, dynamic> updateData = {
         'name': name.value.text,
         'company': company.value.text,
         'type': selectedAccountType.value,
+        'district_id': district,
+        'city_id': city,
         'address': address.value.text,
         'postcode': postcode.value.text
       };
@@ -288,6 +290,8 @@ class UserController extends GetxController with StateMixin<User> {
         val.name = name.value.text;
         val.company = company.value.text;
         val.type = selectedAccountType.value;
+        val.districtId = district;
+        val.cityId = city;
         val.address = address.value.text;
         val.postcode = postcode.value.text;
       });
