@@ -87,12 +87,17 @@ class UserRepository {
   }
 
   Future<List> getDistricts() async {
-    final response = await _dio.get('/api/v1/districts');
+    DioClient _dio = DioClient(interceptors: [_dioCacheManager.interceptor]);
+    Options _cacheOptions = buildCacheOptions(Duration(days: 365));
+    final response = await _dio.get('/api/v1/districts', options: _cacheOptions);
     return response.data;
   }
 
   Future<List> getCities(int districtId) async {
-    final response = await _dio.get('/api/v1/cities', queryParameters: {"district_id": "$districtId"});
+    DioClient _dio = DioClient(interceptors: [_dioCacheManager.interceptor]);
+    Options _cacheOptions = buildCacheOptions(Duration(days: 365));
+    final response =
+        await _dio.get('/api/v1/cities', queryParameters: {"district_id": "$districtId"}, options: _cacheOptions);
     return response.data;
   }
 
