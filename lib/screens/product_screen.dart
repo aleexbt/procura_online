@@ -164,7 +164,7 @@ class ProductScreen extends StatelessWidget {
                     ),
                   ),
                   Padding(
-                    padding: const EdgeInsets.fromLTRB(5, 10, 5, 80),
+                    padding: const EdgeInsets.fromLTRB(5, 10, 5, 2),
                     child: Container(
                       constraints: BoxConstraints(minHeight: 60),
                       width: double.infinity,
@@ -390,6 +390,73 @@ class ProductScreen extends StatelessWidget {
                             ),
                           ),
                         ],
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(5, 10, 5, 80),
+                    child: Ink(
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.grey[300],
+                            offset: Offset(2.0, 1.0), //(x,y)
+                            blurRadius: 5.0,
+                          ),
+                        ],
+                        borderRadius: BorderRadius.circular(4),
+                      ),
+                      child: InkWell(
+                        borderRadius: BorderRadius.circular(4),
+                        onTap: () => Get.offNamed('/profile/1'),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.fromLTRB(10, 10, 0, 2),
+                              child: Text(
+                                'Publisher',
+                                style: TextStyle(fontWeight: FontWeight.bold),
+                              ),
+                            ),
+                            Divider(),
+                            Padding(
+                              padding: const EdgeInsets.fromLTRB(10, 0, 12, 8),
+                              child: Row(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  SizedBox(
+                                    width: 100,
+                                    height: 100,
+                                    child: ClipOval(
+                                      child: Image.network('https://i.pravatar.cc/200'),
+                                    ),
+                                  ),
+                                  SizedBox(width: 8),
+                                  Expanded(
+                                    child: Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          'Miriam Alice Teixeira',
+                                          style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                                          overflow: TextOverflow.ellipsis,
+                                        ),
+                                        Text(
+                                          'Travessa São. Lucas, 6 9051-452 Amora',
+                                          overflow: TextOverflow.ellipsis,
+                                        ),
+                                        Text('Porto, Santo Tirso'),
+                                        Text('5025'),
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   ),
