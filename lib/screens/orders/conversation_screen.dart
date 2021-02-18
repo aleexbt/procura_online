@@ -5,6 +5,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:get/get.dart';
 import 'package:list_tile_more_customizable/list_tile_more_customizable.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
@@ -71,32 +72,36 @@ class _ConversationScreenState extends State<ConversationScreen> {
             if (_.isLoading || _.hasError) {
               return Container();
             }
-            return Row(
-              children: <Widget>[
-                ClipOval(
-                  child: Image.network(
-                    'https://mindbodygreen-res.cloudinary.com/images/w_767,q_auto:eco,f_auto,fl_lossy/usr/RetocQT/sarah-fielding.jpg',
-                    width: 30,
-                    height: 30,
-                    fit: BoxFit.cover,
-                  ),
-                ),
-                Expanded(
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Text(
-                      _.conversation.userOne.id == _userController.userData?.id
-                          ? _.conversation.userTwo.name
-                          : _.conversation.userOne.name,
-                      style: TextStyle(
-                        fontSize: 16,
-                      ),
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
+            return GestureDetector(
+              behavior: HitTestBehavior.translucent,
+              onTap: () => Get.toNamed('/profile/1'),
+              child: Row(
+                children: <Widget>[
+                  ClipOval(
+                    child: Image.network(
+                      'https://mindbodygreen-res.cloudinary.com/images/w_767,q_auto:eco,f_auto,fl_lossy/usr/RetocQT/sarah-fielding.jpg',
+                      width: 30,
+                      height: 30,
+                      fit: BoxFit.cover,
                     ),
                   ),
-                ),
-              ],
+                  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text(
+                        _.conversation.userOne.id == _userController.userData?.id
+                            ? _.conversation.userTwo.name
+                            : _.conversation.userOne.name,
+                        style: TextStyle(
+                          fontSize: 16,
+                        ),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             );
           },
         ),
