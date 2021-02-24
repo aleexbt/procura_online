@@ -23,7 +23,9 @@ Chat _$ChatFromJson(Map<String, dynamic> json) {
         ? null
         : Message.fromJson(json['latest_message'] as Map<String, dynamic>),
     seen: json['seen'] as bool,
-  );
+  )..userone = json['userone'] == null
+      ? null
+      : User.fromJson(json['userone'] as Map<String, dynamic>);
 }
 
 Map<String, dynamic> _$ChatToJson(Chat instance) => <String, dynamic>{
@@ -35,6 +37,7 @@ Map<String, dynamic> _$ChatToJson(Chat instance) => <String, dynamic>{
       'mute': instance.mute,
       'human_read_date': instance.humanReadDate,
       'second_user': instance.secondUser,
+      'userone': instance.userone,
       'order': instance.order,
       'latest_message': instance.latestMessage,
       'seen': instance.seen,

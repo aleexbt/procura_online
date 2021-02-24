@@ -1,8 +1,9 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:smart_select/smart_select.dart';
 
-class SelectOption extends StatelessWidget {
+class SelectOptionLogo extends StatelessWidget {
   final bool isLoading;
   final bool isDisabled;
   final bool hasError;
@@ -15,7 +16,7 @@ class SelectOption extends StatelessWidget {
   final Function(S2SingleState) onChange;
   final S2ModalType modalType;
 
-  const SelectOption({
+  const SelectOptionLogo({
     Key key,
     this.isLoading = false,
     this.isDisabled = false,
@@ -110,14 +111,20 @@ class SelectOption extends StatelessWidget {
         activeColor: Colors.blue,
       ),
       value: value,
-      // choiceSubtitleBuilder: (context, choice, sub) => Text('description'),
-      // choiceTitleBuilder: (context, choice, title) => Column(
-      //   crossAxisAlignment: CrossAxisAlignment.start,
-      //   children: [
-      //     Text(choice.title),
-      //     Text('Subtitle'),
-      //   ],
-      // ),
+      choiceSubtitleBuilder: (context, choice, sub) => Text('description'),
+      choiceTitleBuilder: (context, choice, title) => Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        // mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          Text(choice.title),
+          SizedBox(
+              height: 30,
+              child: CachedNetworkImage(
+                imageUrl: 'http://procuraonline-dev.pt/assets/img/logos/${choice.title}.png',
+                fit: BoxFit.contain,
+              )),
+        ],
+      ),
       choiceItems: choiceItems,
       onChange: onChange,
     );

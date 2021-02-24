@@ -99,7 +99,7 @@ class User {
   @HiveField(34)
   Logo logo;
   @HiveField(35)
-  dynamic cover;
+  Cover cover;
   @JsonKey(name: 'referral_link')
   @HiveField(36)
   String referralLink;
@@ -156,21 +156,29 @@ class User {
 }
 
 @JsonSerializable()
+@HiveType(typeId: 7)
 class Logo {
-  int id;
-  String createdAt;
-  String updatedAt;
-  String url;
+  @HiveField(0)
   String thumbnail;
+  @HiveField(1)
+  String url;
 
-  Logo({
-    this.id,
-    this.createdAt,
-    this.updatedAt,
-    this.url,
-    this.thumbnail,
-  });
+  Logo({this.thumbnail, this.url});
 
   factory Logo.fromJson(Map<String, dynamic> json) => _$LogoFromJson(json);
   Map<String, dynamic> toJson() => _$LogoToJson(this);
+}
+
+@JsonSerializable()
+@HiveType(typeId: 8)
+class Cover {
+  @HiveField(0)
+  String thumbnail;
+  @HiveField(1)
+  String url;
+
+  Cover({this.thumbnail, this.url});
+
+  factory Cover.fromJson(Map<String, dynamic> json) => _$CoverFromJson(json);
+  Map<String, dynamic> toJson() => _$CoverToJson(this);
 }

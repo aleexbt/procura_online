@@ -57,10 +57,37 @@ class ProductRepository {
     return response.data;
   }
 
-  Future<Listing> productSearch(String category, String term, {int page = 1, String brand, String model}) async {
-    var cat = category == 'listings' ? 'vehicles' : category;
-    final Response response = await _dio.get('/api/v1/search/$cat',
-        queryParameters: {"search": "$term", "makes[0]": "$brand", "model": "$model", "page": "$page"});
+  Future<Listing> productSearch(
+    var category,
+    String term, {
+    String brand,
+    String model,
+    int page = 1,
+    String fuelType,
+    int yearFrom,
+    int yearTo,
+    int priceFrom,
+    int priceTo,
+    int miliageFrom,
+    int miliageTo,
+    int districtId,
+  }) async {
+    // var cat = category == 'listings' ? 'vehicles' : category;
+    var type = category == 0 ? 'vehicles' : 'auto-parts';
+    final Response response = await _dio.get('/api/v1/search/$type', queryParameters: {
+      "search": "$term",
+      "fuel_type": "$fuelType",
+      "year_from": "$yearFrom",
+      "year_to": "$yearTo",
+      "price_from": "$priceFrom",
+      "price_to": "$priceTo",
+      "miliage_from": "$miliageFrom",
+      "miliage_to": "$miliageTo",
+      "makes[0]": "$brand",
+      "model": "$model",
+      "page": "$page",
+      "district_id": "$districtId",
+    });
     return Listing.fromJson(response.data);
   }
 

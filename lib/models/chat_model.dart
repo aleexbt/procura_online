@@ -1,4 +1,5 @@
 import 'package:json_annotation/json_annotation.dart';
+import 'package:procura_online/models/user_model.dart';
 
 import 'message_model.dart';
 import 'order_model.dart';
@@ -20,6 +21,7 @@ class Chat {
   String humanReadDate;
   @JsonKey(name: 'second_user')
   int secondUser;
+  User userone;
   Order order;
   @JsonKey(name: 'latest_message')
   Message latestMessage;

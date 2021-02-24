@@ -72,14 +72,16 @@ class _ConversationScreenState extends State<ConversationScreen> {
             if (_.isLoading || _.hasError) {
               return Container();
             }
+            // bool isMe = _.conversation.userOne.id == _userController.userData?.id;
+            // String pic = isMe ? _.conversation.userTwo.logo?.thumbnail : _.conversation.userOne.logo?.thumbnail;
             return GestureDetector(
               behavior: HitTestBehavior.translucent,
-              onTap: () => Get.toNamed('/profile/1'),
+              onTap: () => Get.toNamed('/profile/${_.conversation.order.userInfo.id}'),
               child: Row(
                 children: <Widget>[
                   ClipOval(
                     child: Image.network(
-                      'https://mindbodygreen-res.cloudinary.com/images/w_767,q_auto:eco,f_auto,fl_lossy/usr/RetocQT/sarah-fielding.jpg',
+                      _.conversation.order.userInfo.logo.thumbnail,
                       width: 30,
                       height: 30,
                       fit: BoxFit.cover,
@@ -89,9 +91,7 @@ class _ConversationScreenState extends State<ConversationScreen> {
                     child: Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: Text(
-                        _.conversation.userOne.id == _userController.userData?.id
-                            ? _.conversation.userTwo.name
-                            : _.conversation.userOne.name,
+                        _.conversation.order.userInfo.name,
                         style: TextStyle(
                           fontSize: 16,
                         ),

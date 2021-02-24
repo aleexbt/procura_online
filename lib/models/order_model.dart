@@ -31,7 +31,7 @@ class Order {
   String fuelType;
   @JsonKey(name: 'engine_displacement')
   @HiveField(8)
-  int engineDisplacement;
+  String engineDisplacement;
   @HiveField(9)
   String mpn;
   @JsonKey(name: 'user_info')

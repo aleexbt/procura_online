@@ -52,7 +52,7 @@ class UserAdapter extends TypeAdapter<User> {
       updatedAt: fields[32] as String,
       deletedAt: fields[33] as String,
       logo: fields[34] as Logo,
-      cover: fields[35] as dynamic,
+      cover: fields[35] as Cover,
       referralLink: fields[36] as String,
       isOnline: fields[37] as bool,
       media: (fields[38] as List)?.cast<dynamic>(),
@@ -154,6 +154,80 @@ class UserAdapter extends TypeAdapter<User> {
           typeId == other.typeId;
 }
 
+class LogoAdapter extends TypeAdapter<Logo> {
+  @override
+  final int typeId = 7;
+
+  @override
+  Logo read(BinaryReader reader) {
+    final numOfFields = reader.readByte();
+    final fields = <int, dynamic>{
+      for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
+    };
+    return Logo(
+      thumbnail: fields[0] as String,
+      url: fields[1] as String,
+    );
+  }
+
+  @override
+  void write(BinaryWriter writer, Logo obj) {
+    writer
+      ..writeByte(2)
+      ..writeByte(0)
+      ..write(obj.thumbnail)
+      ..writeByte(1)
+      ..write(obj.url);
+  }
+
+  @override
+  int get hashCode => typeId.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is LogoAdapter &&
+          runtimeType == other.runtimeType &&
+          typeId == other.typeId;
+}
+
+class CoverAdapter extends TypeAdapter<Cover> {
+  @override
+  final int typeId = 8;
+
+  @override
+  Cover read(BinaryReader reader) {
+    final numOfFields = reader.readByte();
+    final fields = <int, dynamic>{
+      for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
+    };
+    return Cover(
+      thumbnail: fields[0] as String,
+      url: fields[1] as String,
+    );
+  }
+
+  @override
+  void write(BinaryWriter writer, Cover obj) {
+    writer
+      ..writeByte(2)
+      ..writeByte(0)
+      ..write(obj.thumbnail)
+      ..writeByte(1)
+      ..write(obj.url);
+  }
+
+  @override
+  int get hashCode => typeId.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is CoverAdapter &&
+          runtimeType == other.runtimeType &&
+          typeId == other.typeId;
+}
+
 // **************************************************************************
 // JsonSerializableGenerator
 // **************************************************************************
@@ -197,7 +271,9 @@ User _$UserFromJson(Map<String, dynamic> json) {
     logo: json['logo'] == null
         ? null
         : Logo.fromJson(json['logo'] as Map<String, dynamic>),
-    cover: json['cover'],
+    cover: json['cover'] == null
+        ? null
+        : Cover.fromJson(json['cover'] as Map<String, dynamic>),
     referralLink: json['referral_link'] as String,
     isOnline: json['is_online'] as bool,
     media: json['media'] as List,
@@ -248,18 +324,24 @@ Map<String, dynamic> _$UserToJson(User instance) => <String, dynamic>{
 
 Logo _$LogoFromJson(Map<String, dynamic> json) {
   return Logo(
-    id: json['id'] as int,
-    createdAt: json['createdAt'] as String,
-    updatedAt: json['updatedAt'] as String,
-    url: json['url'] as String,
     thumbnail: json['thumbnail'] as String,
+    url: json['url'] as String,
   );
 }
 
 Map<String, dynamic> _$LogoToJson(Logo instance) => <String, dynamic>{
-      'id': instance.id,
-      'createdAt': instance.createdAt,
-      'updatedAt': instance.updatedAt,
-      'url': instance.url,
       'thumbnail': instance.thumbnail,
+      'url': instance.url,
+    };
+
+Cover _$CoverFromJson(Map<String, dynamic> json) {
+  return Cover(
+    thumbnail: json['thumbnail'] as String,
+    url: json['url'] as String,
+  );
+}
+
+Map<String, dynamic> _$CoverToJson(Cover instance) => <String, dynamic>{
+      'thumbnail': instance.thumbnail,
+      'url': instance.url,
     };

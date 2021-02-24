@@ -133,7 +133,7 @@ class ChatWidget extends StatelessWidget {
                         width: 50,
                         height: 50,
                         child: OctoImage(
-                          image: CachedNetworkImageProvider('https://i.pravatar.cc/200?cache=$index'),
+                          image: CachedNetworkImageProvider(_.chats.chats[index].order.userInfo.logo.thumbnail),
                           placeholderBuilder: OctoPlaceholder.circularProgressIndicator(),
                           errorBuilder: OctoError.icon(color: Colors.grey[400]),
                           fit: BoxFit.cover,

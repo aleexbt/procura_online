@@ -9,10 +9,20 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:octo_image/octo_image.dart';
 import 'package:procura_online/controllers/product_controller.dart';
+import 'package:procura_online/widgets/photo_gallery.dart';
 import 'package:share/share.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class ProductScreen extends StatelessWidget {
   final ProductController _productController = Get.put(ProductController());
+
+  Future<void> _phoneCall(String url) async {
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {
+      throw 'Could not launch $url';
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -75,6 +85,11 @@ class ProductScreen extends StatelessWidget {
                       dotIncreasedColor: Colors.blue,
                       autoplay: false,
                       images: buildImage(_.product.gallery?.original, _.product.mainPhoto?.original),
+                      onImageTap: (value) {
+                        Get.to(
+                          PhotoGallery(buildImage(_.product.gallery?.original, _.product.mainPhoto?.original), value),
+                        );
+                      },
                     ),
                   ),
                   SizedBox(height: 8),
@@ -409,7 +424,7 @@ class ProductScreen extends StatelessWidget {
                       ),
                       child: InkWell(
                         borderRadius: BorderRadius.circular(4),
-                        onTap: () => Get.toNamed('/profile/${_.product.user.id}'),
+                        onTap: () => Get.offNamed('/profile/${_.product.user.id}'),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
@@ -478,16 +493,15 @@ class ProductScreen extends StatelessWidget {
             overlayOpacity: 0.5,
             children: [
               SpeedDialChild(
-                child: Icon(CupertinoIcons.phone),
-                backgroundColor: Colors.green,
-                label: 'Phone call',
-                onTap: () => print('Phone call'),
-              ),
+                  child: Icon(CupertinoIcons.phone),
+                  backgroundColor: Colors.green,
+                  label: 'Phone call',
+                  onTap: () => launch('tel://${_.product.user.phone}')),
               SpeedDialChild(
                 child: Icon(CupertinoIcons.chat_bubble_fill),
                 backgroundColor: Colors.blue,
                 label: 'Send message',
-                onTap: () => print('Send message'),
+                onTap: () => launch('mailto:${_.product.user.email}?subject=Re: ${_.product.title}'),
               ),
             ],
           );
@@ -497,73 +511,37 @@ class ProductScreen extends StatelessWidget {
   }
 
   List buildImage(Map<String, dynamic> photos, String mainPhoto) {
-    List images = [];
+    List<OctoImage> images = [];
 
     if (mainPhoto != null) {
       images.add(
-        GestureDetector(
-          onTap: () => Get.toNamed(
-            '/show-photos',
-            arguments: {
-              "photoId": "photo",
-              "photoUrl": "$mainPhoto",
-            },
-          ),
-          child: Hero(
-            tag: 'photo',
-            child: OctoImage(
-              image: CachedNetworkImageProvider(mainPhoto),
-              placeholderBuilder: OctoPlaceholder.blurHash('LAI#u-9XM[D\$GdIU4oIA-sWFxwRl'),
-              errorBuilder: OctoError.icon(color: Colors.grey[400]),
-              fit: BoxFit.cover,
-            ),
-          ),
+        OctoImage(
+          image: CachedNetworkImageProvider(mainPhoto),
+          placeholderBuilder: OctoPlaceholder.blurHash('LAI#u-9XM[D\$GdIU4oIA-sWFxwRl'),
+          errorBuilder: OctoError.icon(color: Colors.grey[400]),
+          fit: BoxFit.cover,
         ),
       );
     }
 
     if (photos != null) {
       images.addAll(photos.entries
-          .map((entry) => GestureDetector(
-                onTap: () => Get.toNamed(
-                  '/show-photos',
-                  arguments: {
-                    "photoId": "photo_${entry.key}",
-                    "photoUrl": "${entry.value}",
-                  },
-                ),
-                child: Hero(
-                  tag: 'photo_${entry.key}',
-                  child: OctoImage(
-                    image: CachedNetworkImageProvider(entry.value),
-                    placeholderBuilder: OctoPlaceholder.blurHash('LAI#u-9XM[D\$GdIU4oIA-sWFxwRl'),
-                    errorBuilder: OctoError.icon(color: Colors.grey[400]),
-                    fit: BoxFit.cover,
-                  ),
-                ),
+          .map((entry) => OctoImage(
+                image: CachedNetworkImageProvider(entry.value),
+                placeholderBuilder: OctoPlaceholder.blurHash('LAI#u-9XM[D\$GdIU4oIA-sWFxwRl'),
+                errorBuilder: OctoError.icon(color: Colors.grey[400]),
+                fit: BoxFit.cover,
               ))
           .toList());
     }
 
     if (mainPhoto == null && photos == null) {
       images.add(
-        GestureDetector(
-          onTap: () => Get.toNamed(
-            '/show-photos',
-            arguments: {
-              "photoId": "photo",
-              "photoUrl": "https://source.unsplash.com/600x500/?bmw,audi,volvo",
-            },
-          ),
-          child: Hero(
-            tag: 'photo',
-            child: OctoImage(
-              image: CachedNetworkImageProvider('https://source.unsplash.com/600x500/?bmw,audi,volvo'),
-              placeholderBuilder: OctoPlaceholder.blurHash('LAI#u-9XM[D\$GdIU4oIA-sWFxwRl'),
-              errorBuilder: OctoError.icon(color: Colors.grey[400]),
-              fit: BoxFit.cover,
-            ),
-          ),
+        OctoImage(
+          image: CachedNetworkImageProvider('https://source.unsplash.com/600x500/?bmw,audi,volvo'),
+          placeholderBuilder: OctoPlaceholder.blurHash('LAI#u-9XM[D\$GdIU4oIA-sWFxwRl'),
+          errorBuilder: OctoError.icon(color: Colors.grey[400]),
+          fit: BoxFit.cover,
         ),
       );
     }

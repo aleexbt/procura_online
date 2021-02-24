@@ -22,6 +22,9 @@ class _SplashScreenState extends State<SplashScreen> {
 
   void init() async {
     HiveAdapters.register();
+    // Hive.deleteBoxFromDisk('auth');
+    // Hive.deleteBoxFromDisk('userData');
+    // Hive.deleteBoxFromDisk('conversations');
     // await PushNotificationsManager().init();
     Box prefsBox = await Hive.openBox('prefs');
     cacheAssets();

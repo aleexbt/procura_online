@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:octo_image/octo_image.dart';
 import 'package:procura_online/models/message_media.dart';
+import 'package:procura_online/widgets/photo_gallery.dart';
 
 class Bubble extends StatelessWidget {
   Bubble({
@@ -61,7 +62,7 @@ class Bubble extends StatelessWidget {
         Padding(
           padding: EdgeInsets.only(left: isMe ? 0 : 10, right: isMe ? 10 : 0, bottom: 4),
           child: Text(
-            time ?? '0 minutes ago',
+            time ?? 'Unkown',
             style: TextStyle(color: Colors.grey, fontSize: 11),
           ),
         ),
@@ -113,13 +114,14 @@ class Bubble extends StatelessWidget {
             itemCount: photos.length,
             itemBuilder: (context, index) {
               return GestureDetector(
-                onTap: () => Get.toNamed(
-                  '/show-photos',
-                  arguments: {
-                    "photoId": "${photos[index].id}",
-                    "photoUrl": "${photos[index].image}",
-                  },
-                ),
+                // onTap: () => Get.toNamed(
+                //   '/show-photos',
+                //   arguments: {
+                //     "photoId": "${photos[index].id}",
+                //     "photoUrl": "${photos[index].image}",
+                //   },
+                // ),
+                onTap: () => Get.to(PhotoGallery(buildImage(photos), index)),
                 child: Hero(
                   tag: '${photos[index].id}',
                   child: ClipRRect(
@@ -139,5 +141,23 @@ class Bubble extends StatelessWidget {
             }),
       );
     }
+  }
+
+  List buildImage(List<MessageMedia> photos) {
+    List<OctoImage> images = [];
+
+    if (photos != null) {
+      for (MessageMedia photo in photos) {
+        images.add(
+          OctoImage(
+            image: CachedNetworkImageProvider(photo.image),
+            placeholderBuilder: OctoPlaceholder.blurHash('LAI#u-9XM[D\$GdIU4oIA-sWFxwRl'),
+            errorBuilder: OctoError.icon(color: Colors.grey[400]),
+            fit: BoxFit.cover,
+          ),
+        );
+      }
+    }
+    return images;
   }
 }

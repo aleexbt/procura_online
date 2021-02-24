@@ -9,6 +9,8 @@ import 'package:procura_online/models/user_model.dart';
 class HiveAdapters {
   static register() {
     Hive.registerAdapter(UserAdapter());
+    Hive.registerAdapter(LogoAdapter());
+    Hive.registerAdapter(CoverAdapter());
     Hive.registerAdapter(MessageAdapter());
     Hive.registerAdapter(ConversationAdapter());
     Hive.registerAdapter(OrderAdapter());

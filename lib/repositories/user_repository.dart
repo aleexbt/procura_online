@@ -3,6 +3,7 @@ import 'package:dio_http_cache/dio_http_cache.dart';
 import 'package:hive/hive.dart';
 import 'package:procura_online/models/listing_model.dart';
 import 'package:procura_online/models/plan_model.dart';
+import 'package:procura_online/models/profile_model.dart';
 import 'package:procura_online/models/user_model.dart';
 import 'package:procura_online/services/dio_client.dart';
 
@@ -115,5 +116,10 @@ class UserRepository {
     } else {
       return false;
     }
+  }
+
+  Future<Profile> getProfile(int id) async {
+    final response = await _dio.get('/api/v1/listings/company-profile/$id');
+    return Profile.fromJson(response.data);
   }
 }

@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:procura_online/controllers/home_controller.dart';
+import 'package:procura_online/controllers/search_controller.dart';
 import 'package:procura_online/controllers/user_controller.dart';
 import 'package:procura_online/utils/no_glow_behavior.dart';
 import 'package:procura_online/widgets/item_box.dart';
@@ -19,7 +20,7 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
   @override
   bool get wantKeepAlive => true;
 
-  // final SearchController _searchController = Get.find();
+  final SearchController _searchController = Get.find();
   final HomeController _homeController = Get.find();
   final UserController _userController = Get.find();
   final ScrollController _scrollController = ScrollController(initialScrollOffset: 0.0);
@@ -99,7 +100,8 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
                           borderSide: BorderSide(color: Colors.transparent, width: 0.0),
                         ),
                       ),
-                      onChanged: (value) => _homeController.setSearchTerm(value),
+                      // onChanged: (value) => _homeController.setSearchTerm(value),
+                      onChanged: (value) => _searchController.keyword.value = value,
                       onSubmitted: (_) => _homeController.doSearch(),
                       textInputAction: TextInputAction.search,
                       textCapitalization: TextCapitalization.sentences,

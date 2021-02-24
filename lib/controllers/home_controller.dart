@@ -1,50 +1,41 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:procura_online/controllers/search_controller.dart';
 import 'package:procura_online/models/listing_model.dart';
 import 'package:procura_online/models/product_model.dart';
 import 'package:procura_online/repositories/product_repository.dart';
-import 'package:procura_online/repositories/vehicle_repository.dart';
 import 'package:smart_select/smart_select.dart';
 
 class HomeController extends GetxController with StateMixin<Listing> {
   final ProductRepository _productRepository = Get.find();
-  VehicleRepository _vehicleRepository = Get.find();
+  final SearchController _searchController = Get.find();
 
   @override
   void onInit() {
     super.onInit();
     findAll();
-    getBrands();
   }
 
   RxBool _isLoading = true.obs;
   RxBool _isLoadingMore = false.obs;
-  RxBool _isLoadingBrands = false.obs;
-  RxBool _isLoadingModels = false.obs;
   RxBool _hasError = false.obs;
   RxBool _loadingMoreError = false.obs;
   RxBool _isSearch = false.obs;
   RxList<Product> _featured = List<Product>.empty(growable: true).obs;
-  RxList<S2Choice<String>> _brands = List<S2Choice<String>>.empty(growable: true).obs;
-  RxList<S2Choice<String>> _models = List<S2Choice<String>>.empty(growable: true).obs;
 
-  RxString _searchTerm = ''.obs;
   RxString _category = 'All'.obs;
   RxString _categoryValue = 'listings'.obs;
   RxInt _page = 1.obs;
 
   bool get isLoading => _isLoading.value;
   bool get isLoadingMore => _isLoadingMore.value;
-  bool get isLoadingBrands => _isLoadingBrands.value;
-  bool get isLoadingModels => _isLoadingModels.value;
   bool get hasError => _hasError.value;
   bool get loadingMoreError => _loadingMoreError.value;
   bool get isSearch => _isSearch.value;
   int get page => _page.value;
   String get category => _category.value;
   String get categoryValue => _categoryValue.value;
-  String get searchTerm => _searchTerm.value;
 
   int get total => _results.value.meta?.total ?? 0;
   Rx<Listing> _results = Listing().obs;
@@ -53,27 +44,11 @@ class HomeController extends GetxController with StateMixin<Listing> {
 
   List<Product> get featured => _featured;
 
-  List<S2Choice<String>> get brands => _brands;
-  List<S2Choice<String>> get models => _models;
-
   List<S2Choice<String>> categoryOptions = [
     S2Choice<String>(value: 'listings', title: 'All'),
     S2Choice<String>(value: 'vehicles', title: 'Vehicles'),
     S2Choice<String>(value: 'auto-parts', title: 'Auto Parts'),
   ];
-
-  RxString selectedBrand = ''.obs;
-  RxString selectedModel = ''.obs;
-
-  void setBrand(String value) {
-    if (value != '' && value != selectedBrand.value) {
-      getModels(value);
-    }
-    selectedBrand.value = value;
-  }
-
-  void setSearchTerm(String value) => _searchTerm.value = value;
-  void setModel(String value) => selectedModel.value = value;
 
   void findAll({bool skipLoading = false}) async {
     _isLoading.value = !skipLoading;
@@ -142,7 +117,8 @@ class HomeController extends GetxController with StateMixin<Listing> {
     _loadingMoreError.value = false;
     try {
       _page.value = _page.value + 1;
-      Listing response = await _productRepository.productSearch(_categoryValue.value, _searchTerm.value, page: page);
+      Listing response =
+          await _productRepository.productSearch(_categoryValue.value, _searchController.keyword.value, page: page);
       _results.update((val) {
         val.products.addAll(response.products);
       });
@@ -165,16 +141,24 @@ class HomeController extends GetxController with StateMixin<Listing> {
     _isLoading.value = !skipLoading;
     _hasError.value = false;
     try {
-      if (_searchTerm.value.isBlank && selectedBrand.value.isBlank && selectedModel.value.isBlank) {
+      if (!_searchController.isFiltered.value && _searchController.keyword.value.isBlank) {
         _isSearch.value = false;
         Listing response = await _productRepository.findAll(page: page);
         _results.value = response;
       } else {
         Listing response = await _productRepository.productSearch(
-          _categoryValue.value,
-          _searchTerm.value,
-          brand: selectedBrand.value,
-          model: selectedModel.value,
+          _searchController.searchType.value,
+          _searchController.keyword.value,
+          brand: _searchController.brand.value,
+          model: _searchController.model.value,
+          fuelType: _searchController.fuel.value,
+          priceFrom: int.tryParse(_searchController.priceFrom.value.value.text) ?? 0,
+          priceTo: int.tryParse(_searchController.priceTo.value.value.text) ?? 999999999,
+          miliageFrom: int.tryParse(_searchController.miliageFrom.value.value.text) ?? 0,
+          miliageTo: int.tryParse(_searchController.miliageTo.value.value.text) ?? 999999999,
+          yearFrom: int.tryParse(_searchController.yearFrom.value.value.text) ?? 0,
+          yearTo: int.tryParse(_searchController.yearTo.value.value.text) ?? 9999,
+          districtId: _searchController.district.value,
         );
         _results.value = response;
       }
@@ -189,48 +173,7 @@ class HomeController extends GetxController with StateMixin<Listing> {
     }
   }
 
-  void getBrands() async {
-    try {
-      _isLoadingBrands.value = true;
-      List<String> brands = await _vehicleRepository.getMakers();
-      if (brands.length > 0) {
-        List<S2Choice<String>> options = S2Choice.listFrom<String, dynamic>(
-          source: brands,
-          value: (index, item) => item,
-          title: (index, item) => item,
-        );
-        _brands.assignAll(options);
-      }
-    } catch (err) {
-      print(err);
-    } finally {
-      _isLoadingBrands.value = false;
-    }
-  }
-
-  void getModels(String brand) async {
-    try {
-      _isLoadingModels.value = true;
-      List<String> models = await _vehicleRepository.getModels(brand);
-      if (models.length > 0) {
-        List<S2Choice<String>> options = S2Choice.listFrom<String, dynamic>(
-          source: models,
-          value: (index, item) => item,
-          title: (index, item) => item,
-        );
-        _models.assignAll(options);
-      }
-    } catch (err) {
-      print(err);
-    } finally {
-      _isLoadingModels.value = false;
-    }
-  }
-
   void clear() {
-    print('clear');
     _isSearch.value = false;
-    selectedBrand.value = '';
-    selectedModel.value = '';
   }
 }

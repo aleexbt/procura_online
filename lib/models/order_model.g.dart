@@ -25,7 +25,7 @@ class OrderAdapter extends TypeAdapter<Order> {
       noteText: fields[5] as String,
       numberOfDoors: fields[6] as int,
       fuelType: fields[7] as String,
-      engineDisplacement: fields[8] as int,
+      engineDisplacement: fields[8] as String,
       mpn: fields[9] as String,
       userInfo: fields[10] as User,
       makeLogoUrl: fields[11] as String,
@@ -101,7 +101,7 @@ Order _$OrderFromJson(Map<String, dynamic> json) {
     noteText: json['note_text'] as String,
     numberOfDoors: json['number_of_doors'] as int,
     fuelType: json['fuel_type'] as String,
-    engineDisplacement: json['engine_displacement'] as int,
+    engineDisplacement: json['engine_displacement'] as String,
     mpn: json['mpn'] as String,
     userInfo: json['user_info'] == null
         ? null

@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:get/get.dart';
+import 'package:hive/hive.dart';
 import 'package:procura_online/controllers/chat_controller.dart';
 import 'package:procura_online/controllers/conversation_controller.dart';
 import 'package:pusher_client/pusher_client.dart';
@@ -14,15 +15,15 @@ class PusherService {
   String socketId = '';
 
   Future<void> initPusher(String channelName) async {
-    // Box authBox = await Hive.openBox('auth') ?? null;
-    // String token = authBox.get('token') ?? null;
+    Box authBox = await Hive.openBox('auth') ?? null;
+    String token = authBox.get('token') ?? null;
     pusher = PusherClient(
       'cb7f336d45263a9ab275',
       PusherOptions(
         cluster: 'eu',
         auth: PusherAuth(
-          'https://xelapps-validation.herokuapp.com/pusher/auth',
-          headers: {'channel_name': '$channelName', 'socket_id': '$socketId'},
+          'https://procuraonline-dev.pt/api/v1/broadcasting/auth',
+          headers: {'channel_name': '$channelName', 'socket_id': '$socketId', 'authorization': 'Bearer $token'},
         ),
       ),
       enableLogging: true,

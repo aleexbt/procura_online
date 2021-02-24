@@ -169,12 +169,6 @@ class OrdersController extends GetxController {
       Orders response = await _ordersRepository.findAll(filter: _filter.value, page: _page.value);
       _orders.value = response;
       filteredOrders = List.from(response.orders);
-    } on DioError catch (err) {
-      _hasError.value = true;
-      print(err);
-    } catch (err) {
-      _hasError.value = true;
-      print(err);
     } finally {
       _isLoading.value = false;
     }
