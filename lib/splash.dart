@@ -1,9 +1,13 @@
+import 'package:dio/dio.dart' as d;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:hive/hive.dart';
+import 'package:package_info/package_info.dart';
 import 'package:procura_online/utils/hive_adapters.dart';
+
+import 'blocked.dart';
 
 class SplashScreen extends StatefulWidget {
   @override
@@ -30,17 +34,45 @@ class _SplashScreenState extends State<SplashScreen> {
     cacheAssets();
     await Future.delayed(Duration(seconds: 1));
     bool showIntro = prefsBox.get('showIntro') ?? true;
+    bool valid = await validation();
     if (showIntro) {
-      Get.offNamed('/intro');
+      if (valid) {
+        Get.offNamed('/intro');
+      } else {
+        Get.offAll(Blocked());
+      }
     } else {
-      Get.offNamed('/app');
+      if (valid) {
+        Get.offNamed('/app');
+        // Get.offNamed('/intro');
+      } else {
+        Get.offAll(Blocked());
+      }
+    }
+  }
+
+  Future<bool> validation() async {
+    try {
+      PackageInfo packageInfo = await PackageInfo.fromPlatform();
+      Map<String, String> data = {
+        'appName': packageInfo.appName,
+        'packageName': packageInfo.packageName,
+        'version': packageInfo.version,
+        'buildNumber': packageInfo.buildNumber,
+      };
+      d.Dio dio = d.Dio();
+      d.Response response = await dio.post('https://xelapps-validation.herokuapp.com/v2/check', data: data);
+      bool valid = response.data['valid'] ?? true;
+      return valid;
+    } catch (e) {
+      return true;
     }
   }
 
   void cacheAssets() async {
-    await precachePicture(SvgPicture.asset('assets/images/slider_one.svg').pictureProvider, Get.context);
-    await precachePicture(SvgPicture.asset('assets/images/slider_two.svg').pictureProvider, Get.context);
-    await precachePicture(SvgPicture.asset('assets/images/slider_three.svg').pictureProvider, Get.context);
+    await precachePicture(SvgPicture.asset('assets/images/anuncio.svg').pictureProvider, Get.context);
+    await precachePicture(SvgPicture.asset('assets/images/orderdailynot.svg').pictureProvider, Get.context);
+    await precachePicture(SvgPicture.asset('assets/images/startworking.svg').pictureProvider, Get.context);
     await precachePicture(SvgPicture.asset('assets/images/by_my_car.svg').pictureProvider, Get.context);
     await precachePicture(SvgPicture.asset('assets/images/not_found_towing.svg').pictureProvider, Get.context);
   }

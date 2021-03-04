@@ -49,20 +49,20 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
         PageViewModel(
           title: "",
           body: "Easy access to all your cars and auto parts in one place.",
-          image: _buildImage('slider_one'),
+          image: _buildImage('anuncio'),
           decoration: pageDecoration,
         ),
         PageViewModel(
           title: "",
           body:
               "Our email system helps you to sell your business, whether it is an automobile repair or scrap shop you will need.",
-          image: _buildImage('slider_two'),
+          image: _buildImage('orderdailynot'),
           decoration: pageDecoration,
         ),
         PageViewModel(
           title: "",
           body: "Welcome to Procura Online, we wish you good sales.",
-          image: _buildImage('slider_three'),
+          image: _buildImage('startworking'),
           decoration: pageDecoration,
         ),
       ],

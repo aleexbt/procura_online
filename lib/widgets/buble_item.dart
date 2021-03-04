@@ -145,7 +145,6 @@ class Bubble extends StatelessWidget {
 
   List buildImage(List<MessageMedia> photos) {
     List<OctoImage> images = [];
-
     if (photos != null) {
       for (MessageMedia photo in photos) {
         images.add(

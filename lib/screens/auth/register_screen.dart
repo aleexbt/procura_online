@@ -499,7 +499,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               Icons.check,
                               color: Colors.blue,
                             ),
-                            Text(e.slug),
+                            Text(e.name),
                           ],
                         ))
                     .toList(),

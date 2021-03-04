@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:dio/dio.dart';
 import 'package:dio_http_cache/dio_http_cache.dart';
 import 'package:hive/hive.dart';
@@ -6,6 +8,7 @@ import 'package:procura_online/models/plan_model.dart';
 import 'package:procura_online/models/profile_model.dart';
 import 'package:procura_online/models/user_model.dart';
 import 'package:procura_online/services/dio_client.dart';
+import 'package:uuid/uuid.dart';
 
 DioClient _dio = DioClient();
 
@@ -18,6 +21,8 @@ Future<void> setToken() async {
 }
 
 final _dioCacheManager = DioCacheManager(CacheConfig());
+
+enum UploadType { cover, logo }
 
 class UserRepository {
   Future<User> userInfo() async {
@@ -111,7 +116,7 @@ class UserRepository {
   Future<bool> checkSubscription(String feature) async {
     await setToken();
     final response = await _dio.get('/api/v1/check-subscription', queryParameters: {"feature": "$feature"});
-    if (response.data['can'] == 1) {
+    if (response.data['can']) {
       return true;
     } else {
       return false;
@@ -121,5 +126,36 @@ class UserRepository {
   Future<Profile> getProfile(int id) async {
     final response = await _dio.get('/api/v1/listings/company-profile/$id');
     return Profile.fromJson(response.data);
+  }
+
+  Future deleteAccount() async {
+    await setToken();
+    final response = await _dio.delete('/api/v1/user/me/destroy');
+    return response.data;
+  }
+
+  Future<String> uploadCoverLogo(File image, UploadType type) async {
+    await setToken();
+    Uuid uuid = Uuid();
+    String upload = type == UploadType.cover ? 'cover' : 'logo';
+
+    FormData data = FormData.fromMap({
+      "$upload": await MultipartFile.fromFile(
+        image.path,
+        filename: '${uuid.v4()}.jpg',
+      ),
+    });
+
+    Response response = await _dio.post('/api/v1/user/me/update', data: data, onSendProgress: (sent, total) {
+      // _createAdController.uploadImageProgress.value = ((sent / total));
+    });
+
+    User userData = User.fromJson(response.data);
+
+    if (type == UploadType.cover) {
+      return userData.cover.url;
+    } else {
+      return userData.logo.thumbnail;
+    }
   }
 }

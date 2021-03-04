@@ -27,16 +27,15 @@ class MessageAdapter extends TypeAdapter<Message> {
       humanReadDate: fields[7] as String,
       daysSectionDate: fields[8] as String,
       sender: fields[9] as User,
-      hasAttachments: fields[10] as dynamic,
+      hasAttachments: fields[10] as bool,
       media: (fields[11] as List)?.cast<MessageMedia>(),
-      media2: (fields[12] as List)?.cast<OrderMedia>(),
     );
   }
 
   @override
   void write(BinaryWriter writer, Message obj) {
     writer
-      ..writeByte(13)
+      ..writeByte(12)
       ..writeByte(0)
       ..write(obj.id)
       ..writeByte(1)
@@ -60,9 +59,7 @@ class MessageAdapter extends TypeAdapter<Message> {
       ..writeByte(10)
       ..write(obj.hasAttachments)
       ..writeByte(11)
-      ..write(obj.media)
-      ..writeByte(12)
-      ..write(obj.media2);
+      ..write(obj.media);
   }
 
   @override
@@ -94,14 +91,10 @@ Message _$MessageFromJson(Map<String, dynamic> json) {
     sender: json['sender'] == null
         ? null
         : User.fromJson(json['sender'] as Map<String, dynamic>),
-    hasAttachments: json['has_attachments'],
-    media: (json['media_'] as List)
+    hasAttachments: json['has_attachments'] as bool,
+    media: (json['media'] as List)
         ?.map((e) =>
             e == null ? null : MessageMedia.fromJson(e as Map<String, dynamic>))
-        ?.toList(),
-    media2: (json['media'] as List)
-        ?.map((e) =>
-            e == null ? null : OrderMedia.fromJson(e as Map<String, dynamic>))
         ?.toList(),
   );
 }
@@ -118,6 +111,5 @@ Map<String, dynamic> _$MessageToJson(Message instance) => <String, dynamic>{
       'days_section_date': instance.daysSectionDate,
       'sender': instance.sender,
       'has_attachments': instance.hasAttachments,
-      'media_': instance.media,
-      'media': instance.media2,
+      'media': instance.media,
     };

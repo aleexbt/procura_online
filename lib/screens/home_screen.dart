@@ -211,7 +211,7 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
                               child: Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                  SvgPicture.asset('assets/images/by_my_car.svg', width: 280),
+                                  SvgPicture.asset('assets/images/semresultado.svg', width: 280),
                                   SizedBox(height: 20),
                                   Text(
                                     'Oh, looks like we couldn\'t find any results.',

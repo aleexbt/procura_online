@@ -9,10 +9,10 @@ class Plan {
   String name;
   String description;
   @JsonKey(name: 'is_active')
-  bool isActive;
-  int price;
+  int isActive;
+  String price;
   @JsonKey(name: 'signup_fee')
-  int signupFee;
+  String signupFee;
   String currency;
   @JsonKey(name: 'trial_period')
   int trialPeriod;

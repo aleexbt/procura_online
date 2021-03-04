@@ -459,10 +459,10 @@ class ProductScreen extends StatelessWidget {
                                           overflow: TextOverflow.ellipsis,
                                         ),
                                         Text(
-                                          _.product.user.company,
+                                          _.product.user.company ?? '',
                                           overflow: TextOverflow.ellipsis,
                                         ),
-                                        Text(_.product.user.address),
+                                        Text(_.product.user.address ?? ''),
                                         // Text(),
                                       ],
                                     ),

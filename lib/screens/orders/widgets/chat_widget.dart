@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:octo_image/octo_image.dart';
 import 'package:procura_online/controllers/chat_controller.dart';
@@ -105,6 +106,8 @@ class ChatWidget extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
+              SvgPicture.asset('assets/images/emptyinbox.svg', width: 280),
+              SizedBox(height: 10),
               Text('You don\'t have any conversations to show.'),
               TextButton(
                 style: TextButton.styleFrom(primary: Colors.blue),
@@ -152,6 +155,19 @@ class ChatWidget extends StatelessWidget {
                           style: TextStyle(
                             color: Colors.grey[400],
                             fontSize: 12,
+                          ),
+                        ),
+                        Visibility(
+                          visible: !_.chats.chats[index].seen,
+                          child: Padding(
+                            padding: const EdgeInsets.only(top: 2),
+                            child: ClipOval(
+                              child: Container(
+                                width: 8,
+                                height: 8,
+                                color: Colors.blue,
+                              ),
+                            ),
                           ),
                         ),
                         Visibility(

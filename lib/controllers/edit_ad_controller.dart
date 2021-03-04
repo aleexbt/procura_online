@@ -86,15 +86,15 @@ class EditAdController extends GetxController {
   RxString formattedRegisteredDate = ''.obs;
 
   List<S2Choice<String>> colorOptions = [
-    S2Choice<String>(value: 'Black', title: 'Black'),
-    S2Choice<String>(value: 'Blue', title: 'Blue'),
-    S2Choice<String>(value: 'Green', title: 'Green'),
-    S2Choice<String>(value: 'White', title: 'White'),
-    S2Choice<String>(value: 'Grey', title: 'Grey'),
+    S2Choice<String>(value: '0', title: 'Blue'),
+    S2Choice<String>(value: '1', title: 'Orange'),
+    S2Choice<String>(value: '2', title: 'Black'),
+    S2Choice<String>(value: '3', title: 'White'),
   ];
 
   List<S2Choice<String>> fuelOptions = [
-    S2Choice<String>(value: 'gas', title: 'Gasoline'),
+    S2Choice<String>(value: 'gas', title: 'Gás'),
+    S2Choice<String>(value: 'gasoline', title: 'Gasoline'),
     S2Choice<String>(value: 'diesel', title: 'Diesel'),
     S2Choice<String>(value: 'hybrid', title: 'Hybrid'),
     S2Choice<String>(value: 'electric', title: 'Electric'),
@@ -102,7 +102,8 @@ class EditAdController extends GetxController {
 
   List<S2Choice<String>> transmissionOptions = [
     S2Choice<String>(value: 'manual', title: 'Manual'),
-    S2Choice<String>(value: 'auto', title: 'Automatic'),
+    S2Choice<String>(value: 'semi', title: 'Semi-automatic'),
+    S2Choice<String>(value: 'automatic', title: 'Automatic'),
   ];
 
   List<S2Choice<String>> conditionOptions = [

@@ -1,5 +1,8 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+import 'package:octo_image/octo_image.dart';
 import 'package:procura_online/controllers/profile_controller.dart';
 import 'package:procura_online/widgets/item_box.dart';
 
@@ -26,6 +29,18 @@ class ProfileScreen extends StatelessWidget {
             if (_.isLoading) {
               return LinearProgressIndicator();
             }
+            if (_.hasError) {
+              return Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    SvgPicture.asset('assets/images/semresultado.svg', width: 350),
+                    SizedBox(height: 10),
+                    Text('Ops, we couldn\'t found this user.'),
+                  ],
+                ),
+              );
+            }
             return SingleChildScrollView(
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
@@ -43,8 +58,10 @@ class ProfileScreen extends StatelessWidget {
                           ),
                           child: ClipRRect(
                             borderRadius: BorderRadius.circular(8),
-                            child: Image.network(
-                              _.profile.user.cover.url,
+                            child: OctoImage(
+                              image: CachedNetworkImageProvider(_.profile.user.cover.url),
+                              placeholderBuilder: OctoPlaceholder.blurHash('LAI#u-9XM[D\$GdIU4oIA-sWFxwRl'),
+                              errorBuilder: OctoError.icon(color: Colors.grey[400]),
                               fit: BoxFit.cover,
                             ),
                           ),
@@ -59,10 +76,17 @@ class ProfileScreen extends StatelessWidget {
                                   fontSize: 22,
                                   fontWeight: FontWeight.bold,
                                 ),
+                                textAlign: TextAlign.center,
                               ),
                             ),
-                            Text('${_.profile.user.company} - ${_.profile.user.address}'),
-                            SizedBox(height: 20),
+                            SizedBox(height: 5),
+                            Text(
+                              '${_.profile.user.company} - ${_.profile.user.address}',
+                              textAlign: TextAlign.center,
+                            ),
+                            SizedBox(height: 10),
+                            Divider(),
+                            SizedBox(height: 10),
                             ListView.builder(
                               shrinkWrap: true,
                               physics: NeverScrollableScrollPhysics(),
@@ -94,7 +118,12 @@ class ProfileScreen extends StatelessWidget {
                               borderRadius: BorderRadius.circular(100),
                               border: Border.all(color: Colors.white, width: 4)),
                           child: ClipOval(
-                            child: Image.network(_.profile.user.logo.thumbnail),
+                            child: OctoImage(
+                              image: CachedNetworkImageProvider(_.profile.user.logo.thumbnail),
+                              placeholderBuilder: OctoPlaceholder.blurHash('LAI#u-9XM[D\$GdIU4oIA-sWFxwRl'),
+                              errorBuilder: OctoError.icon(color: Colors.grey[400]),
+                              fit: BoxFit.cover,
+                            ),
                           ),
                         ),
                       ),

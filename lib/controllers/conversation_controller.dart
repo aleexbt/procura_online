@@ -79,7 +79,6 @@ class ConversationController extends GetxController with WidgetsBindingObserver 
   void setImagesUrl(String value) => imagesUrl.add(value);
 
   void restoreConversation() async {
-    print('RESTORE_CONVERSATION_ID: $chatId');
     Box<Conversation> box = await Hive.openBox<Conversation>('conversations') ?? null;
     if (box != null && box.get(chatId) != null) {
       _conversation.value = box.get(chatId);
@@ -96,10 +95,14 @@ class ConversationController extends GetxController with WidgetsBindingObserver 
     try {
       pusherService.firePusher('private-conversation.$chatId', 'App\\Events\\ConversationEvent');
       Conversation response = await _chatRepository.findOne(chatId);
-      _chatRepository.markMessageAsRead(chatId);
       _conversation.value = response;
       Box<Conversation> box = await Hive.openBox<Conversation>('conversations');
       box.put(chatId, response);
+      bool seen = _chatController.chats.chats.firstWhere((element) => element.id.toString() == chatId).seen;
+      if (!seen) {
+        _chatRepository.markMessageAsRead(chatId);
+        _chatController.findAll(skipLoading: true);
+      }
     } on DioError catch (err) {
       _hasError.value = true;
       print(err);

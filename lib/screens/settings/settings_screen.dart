@@ -43,7 +43,7 @@ class _SettingsScreenState extends State<SettingsScreen> with AutomaticKeepAlive
               ),
             FlatButton(
               child: Text(confirmActionText),
-              onPressed: () {},
+              onPressed: () => _userController.deleleteAccount(),
             ),
           ],
         ),

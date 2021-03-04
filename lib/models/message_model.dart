@@ -39,13 +39,9 @@ class Message {
   User sender;
   @JsonKey(name: 'has_attachments')
   @HiveField(10)
-  dynamic hasAttachments;
-  @JsonKey(name: 'media_')
+  bool hasAttachments;
   @HiveField(11)
   List<MessageMedia> media;
-  @JsonKey(name: 'media')
-  @HiveField(12)
-  List<OrderMedia> media2;
 
   Message({
     this.id,
@@ -60,7 +56,6 @@ class Message {
     this.sender,
     this.hasAttachments,
     this.media,
-    this.media2,
   });
 
   factory Message.fromJson(Map<String, dynamic> json) => _$MessageFromJson(json);

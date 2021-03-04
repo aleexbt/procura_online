@@ -18,12 +18,13 @@ class PusherService {
     Box authBox = await Hive.openBox('auth') ?? null;
     String token = authBox.get('token') ?? null;
     pusher = PusherClient(
-      'cb7f336d45263a9ab275',
+      '55cc3261f6a5d239653a',
       PusherOptions(
         cluster: 'eu',
         auth: PusherAuth(
           'https://procuraonline-dev.pt/api/v1/broadcasting/auth',
-          headers: {'channel_name': '$channelName', 'socket_id': '$socketId', 'authorization': 'Bearer $token'},
+          // 'https://xelapps-validation.herokuapp.com/pusher/auth',
+          headers: {'authorization': 'Bearer $token'},
         ),
       ),
       enableLogging: true,

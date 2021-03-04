@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:octo_image/octo_image.dart';
 import 'package:procura_online/controllers/orders_controller.dart';
@@ -121,6 +122,8 @@ class OrdersWidget extends StatelessWidget {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
+                  SvgPicture.asset('assets/images/emptyinbox.svg', width: 280),
+                  SizedBox(height: 10),
                   RichText(
                     text: TextSpan(
                       text: 'We don\'t have any orders to show. You can change the filter from ',

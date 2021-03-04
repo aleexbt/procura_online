@@ -25,12 +25,12 @@ class OrderReplyScreen extends StatelessWidget {
         shadowColor: Colors.transparent,
         title: GestureDetector(
           behavior: HitTestBehavior.translucent,
-          onTap: () => Get.toNamed('/profile/1'),
+          onTap: () => Get.toNamed('/profile/${order.userInfo.id}'),
           child: Row(
             children: <Widget>[
               ClipOval(
                   child: Image.network(
-                'https://mindbodygreen-res.cloudinary.com/images/w_767,q_auto:eco,f_auto,fl_lossy/usr/RetocQT/sarah-fielding.jpg',
+                order.userInfo.logo.thumbnail,
                 width: 30,
                 height: 30,
                 fit: BoxFit.cover,

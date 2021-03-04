@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
@@ -464,8 +466,8 @@ class UserController extends GetxController with StateMixin<User> {
       if (response != null) {
         _plans.assignAll(response);
       }
-    } catch (err) {
-      print(err);
+    } catch (e) {
+      print(e);
     } finally {
       _isLoadingPlans.value = false;
     }
@@ -515,6 +517,62 @@ class UserController extends GetxController with StateMixin<User> {
   }
 
   void setListOrdersPermission(bool value) => _listOrdersPermission.value = value;
+
+  void checkOrdersPermission() async {
+    // await Future.delayed(Duration(seconds: 1));
+    if (!listOrdersPermission) {
+      errorDialog(
+        title: 'Error',
+        message: 'You can\'t create a new order. Please check your subscription plan.',
+        dismiss: () => Get.back(),
+      );
+    }
+  }
+
+  void deleleteAccount() async {
+    _userRepository.deleteAccount();
+    Box authBox = await Hive.openBox('auth');
+    Box<User> userBox = await Hive.openBox<User>('userData');
+    authBox.put('isLoggedIn', false);
+    userBox.clear();
+    Get.delete<OrdersController>(force: true);
+    Get.delete<ChatController>(force: true);
+    _isLoggedIn.value = false;
+    _userData.value = User();
+    _notificationHelper.removeExternalUserId();
+    NavKey.pageController.jumpToPage(0);
+    Get.back();
+  }
+
+  void uploadCover(File image) async {
+    _isSaving.value = true;
+    try {
+      var response = await _userRepository.uploadCoverLogo(image, UploadType.cover);
+      _userData.update((val) {
+        val.cover.url = response;
+      });
+    } catch (e) {
+      Get.rawSnackbar(
+          message: 'Ops, error uploading cover photo.', backgroundColor: Colors.red, duration: Duration(seconds: 3));
+    } finally {
+      _isSaving.value = false;
+    }
+  }
+
+  void uploadLogo(File image) async {
+    _isSaving.value = true;
+    try {
+      var response = await _userRepository.uploadCoverLogo(image, UploadType.logo);
+      _userData.update((val) {
+        val.logo.thumbnail = response;
+      });
+    } catch (e) {
+      Get.rawSnackbar(
+          message: 'Ops, error uploading avatar photo.', backgroundColor: Colors.red, duration: Duration(seconds: 3));
+    } finally {
+      _isSaving.value = false;
+    }
+  }
 
   AwesomeDialog errorDialog({String title, String message, Function dismiss}) {
     return AwesomeDialog(

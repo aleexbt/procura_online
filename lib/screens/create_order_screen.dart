@@ -10,6 +10,7 @@ import 'package:procura_online/controllers/user_controller.dart';
 import 'package:procura_online/models/upload_media_model.dart';
 import 'package:procura_online/widgets/gradient_button.dart';
 import 'package:procura_online/widgets/select_option.dart';
+import 'package:procura_online/widgets/select_option_logo.dart';
 import 'package:procura_online/widgets/text_input.dart';
 
 class CreateOrderScreen extends StatefulWidget {
@@ -25,7 +26,8 @@ class _CreateOrderScreenState extends State<CreateOrderScreen> {
 
   @override
   initState() {
-    _userController.checkSubscription('order-create');
+    // _userController.checkSubscription('order-create');
+    WidgetsBinding.instance.addPostFrameCallback((_) => _userController.checkOrdersPermission());
     mainNode = FocusNode();
     super.initState();
   }
@@ -154,6 +156,7 @@ class _CreateOrderScreenState extends State<CreateOrderScreen> {
                               hintText: 'Enter a note',
                               textCapitalization: TextCapitalization.sentences,
                               maxLines: 5,
+                              keyboardType: TextInputType.multiline,
                               validator: (value) {
                                 if (value.isEmpty) {
                                   return 'Please enter a note';
@@ -169,7 +172,7 @@ class _CreateOrderScreenState extends State<CreateOrderScreen> {
                             ),
                             SizedBox(height: 10),
                             Obx(
-                              () => SelectOption(
+                              () => SelectOptionLogo(
                                 enableFilter: true,
                                 isLoading: _ordersController.isLoadingBrands,
                                 placeholder: 'Select one',
@@ -315,7 +318,7 @@ class _CreateOrderScreenState extends State<CreateOrderScreen> {
                             SizedBox(height: 20),
                             GradientButton(
                               text: 'Create order',
-                              onPressed: !_userController.createOrderPermission
+                              onPressed: !_userController.listOrdersPermission
                                   ? null
                                   : () {
                                       setState(() => submitted = true);

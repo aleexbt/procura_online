@@ -1,6 +1,11 @@
+import 'dart:io';
+
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
+import 'package:octo_image/octo_image.dart';
 import 'package:procura_online/controllers/user_controller.dart';
 import 'package:procura_online/widgets/select_option.dart';
 import 'package:procura_online/widgets/text_input.dart';
@@ -17,10 +22,37 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   int district;
   int city;
 
+  var coverImage;
+  var logoImage;
+
   @override
   void initState() {
     getUserLocation();
     super.initState();
+  }
+
+  void selectCover() async {
+    FilePickerResult result = await FilePicker.platform.pickFiles(
+      allowMultiple: false,
+      type: FileType.image,
+    );
+
+    if (result != null) {
+      File file = result.paths.map((path) => File(path)).first;
+      _userController.uploadCover(file);
+    }
+  }
+
+  void selectLogo() async {
+    FilePickerResult result = await FilePicker.platform.pickFiles(
+      allowMultiple: false,
+      type: FileType.image,
+    );
+
+    if (result != null) {
+      File file = result.paths.map((path) => File(path)).first;
+      _userController.uploadLogo(file);
+    }
   }
 
   void getUserLocation() async {
@@ -63,12 +95,65 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
           child: SafeArea(
             child: SingleChildScrollView(
               child: Padding(
-                padding: const EdgeInsets.all(20),
+                padding: const EdgeInsets.all(8),
                 child: Form(
                   key: _formKey,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
+                      Stack(
+                        alignment: Alignment.center,
+                        children: [
+                          Column(
+                            children: [
+                              Container(
+                                height: 220,
+                                width: double.infinity,
+                                decoration: BoxDecoration(
+                                  color: Colors.grey[200],
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
+                                child: GestureDetector(
+                                  onTap: () => selectCover(),
+                                  child: ClipRRect(
+                                    borderRadius: BorderRadius.circular(8),
+                                    child: OctoImage(
+                                      image: CachedNetworkImageProvider(_userController.userData.cover.url),
+                                      placeholderBuilder: OctoPlaceholder.blurHash('LAI#u-9XM[D\$GdIU4oIA-sWFxwRl'),
+                                      errorBuilder: OctoError.icon(color: Colors.grey[400]),
+                                      fit: BoxFit.cover,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              SizedBox(height: 40),
+                            ],
+                          ),
+                          Positioned(
+                            top: 100,
+                            child: SizedBox(
+                              width: 160,
+                              height: 160,
+                              child: Container(
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(100),
+                                    border: Border.all(color: Colors.white, width: 4)),
+                                child: GestureDetector(
+                                  onTap: () => selectLogo(),
+                                  child: ClipOval(
+                                    child: OctoImage(
+                                      image: CachedNetworkImageProvider(_userController.userData.logo.thumbnail),
+                                      placeholderBuilder: OctoPlaceholder.blurHash('LAI#u-9XM[D\$GdIU4oIA-sWFxwRl'),
+                                      errorBuilder: OctoError.icon(color: Colors.grey[400]),
+                                      fit: BoxFit.cover,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
                       Text(
                         'Name',
                         style: TextStyle(

@@ -12,6 +12,7 @@ import 'package:procura_online/controllers/user_controller.dart';
 import 'package:procura_online/models/upload_media_model.dart';
 import 'package:procura_online/widgets/gradient_button.dart';
 import 'package:procura_online/widgets/select_option.dart';
+import 'package:procura_online/widgets/select_option_logo.dart';
 import 'package:procura_online/widgets/text_input.dart';
 
 class CreateAdScreen extends StatefulWidget {
@@ -208,6 +209,7 @@ class _CreateAdScreenState extends State<CreateAdScreen> {
                               hintText: 'Enter the description of the item',
                               textCapitalization: TextCapitalization.sentences,
                               maxLines: 5,
+                              keyboardType: TextInputType.multiline,
                               validator: (value) {
                                 if (value.isEmpty) {
                                   return 'Please enter a description';
@@ -222,7 +224,7 @@ class _CreateAdScreenState extends State<CreateAdScreen> {
                               ),
                             ),
                             SizedBox(height: 10),
-                            SelectOption(
+                            SelectOptionLogo(
                               enableFilter: true,
                               isLoading: _.isLoadingBrands,
                               placeholder: 'Select one',

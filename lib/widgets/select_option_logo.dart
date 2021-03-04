@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:diacritic/diacritic.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:smart_select/smart_select.dart';
@@ -120,7 +121,8 @@ class SelectOptionLogo extends StatelessWidget {
           SizedBox(
               height: 30,
               child: CachedNetworkImage(
-                imageUrl: 'http://procuraonline-dev.pt/assets/img/logos/${choice.title}.png',
+                imageUrl:
+                    'http://procuraonline-dev.pt/assets/img/logos/${removeDiacritics(choice.title.replaceAll(RegExp(' '), '-'))}.png',
                 fit: BoxFit.contain,
               )),
         ],
