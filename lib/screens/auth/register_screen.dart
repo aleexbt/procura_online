@@ -59,8 +59,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
   String selectedAccountType = '';
   final List<S2Choice<String>> accountType = [
-    S2Choice<String>(value: 'company', title: 'Company'),
-    S2Choice<String>(value: 'personal', title: 'Personal'),
+    S2Choice<String>(value: 'company', title: 'Empresa'),
+    S2Choice<String>(value: 'personal', title: 'Particular'),
   ];
 
   List<dynamic> selectedSkills = [];
@@ -82,7 +82,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
       appBar: AppBar(
         brightness: Brightness.dark,
         title: Text(
-          'Sign up',
+          'Registro',
           style: TextStyle(color: Colors.white),
         ),
         centerTitle: true,
@@ -125,7 +125,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       children: [
                         currentStep < 3
                             ? GradientButton(
-                                text: 'Next',
+                                text: 'Seguinte',
                                 onPressed: () {
                                   setState(() {
                                     if (currentStep == 0) {
@@ -135,14 +135,24 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                       }
                                     } else if (currentStep == 1) {
                                       setState(() => submittedStep2 = true);
-                                      if (_formKey.currentState.validate() &&
-                                          selectedAccountType.isNotEmpty &&
-                                          selectedSkills.isNotEmpty) {
-                                        currentStep = currentStep + 1;
+
+                                      if (selectedAccountType == 'company') {
+                                        if (_formKey.currentState.validate() &&
+                                            selectedAccountType.isNotEmpty &&
+                                            selectedSkills.isNotEmpty) {
+                                          currentStep = currentStep + 1;
+                                        }
+                                      } else {
+                                        if (_formKey.currentState.validate() && selectedAccountType.isNotEmpty) {
+                                          currentStep = currentStep + 1;
+                                        }
                                       }
                                     } else if (currentStep == 2) {
                                       setState(() => submittedStep3 = true);
-                                      if (selectedAccountType.isNotEmpty) {
+                                      if (_formKey.currentState.validate() &&
+                                          selectedDistrict != null &&
+                                          selectedCity != null &&
+                                          selectedAccountType.isNotEmpty) {
                                         currentStep = currentStep + 1;
                                       }
                                     }
@@ -150,7 +160,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                 },
                               )
                             : GradientButton(
-                                text: 'Sign up',
+                                text: 'Criar minha conta',
                                 onPressed: () {
                                   setState(() => submittedStep3 = true);
                                   if (_formKey.currentState.validate() &&
@@ -179,7 +189,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             children: [
                               SizedBox(height: 10),
                               TextButton(
-                                child: Text('Previous'),
+                                child: Text('Anterior'),
                                 onPressed: () {
                                   setState(() {
                                     if (currentStep > 0) {
@@ -210,11 +220,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
         CustomTextInput(
           controller: _name,
           fillColor: Colors.grey[200],
-          hintText: 'Full name',
+          hintText: 'Nome completo',
           textCapitalization: TextCapitalization.sentences,
           validator: (value) {
             if (value.isEmpty) {
-              return 'Please enter your name';
+              return 'Campo de preenchimento obrigatório.';
             }
             return null;
           },
@@ -227,10 +237,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
           keyboardType: TextInputType.emailAddress,
           validator: (value) {
             if (value.isEmpty) {
-              return 'Please enter your email address';
+              return 'Campo de preenchimento obrigatório.';
             }
             if (!GetUtils.isEmail(value)) {
-              return 'Please enter a valid email address';
+              return 'Informe um email válido.';
             }
             return null;
           },
@@ -239,11 +249,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
         CustomTextInput(
           controller: _phone,
           fillColor: Colors.grey[200],
-          hintText: 'Phone',
+          hintText: 'Telefone',
           keyboardType: TextInputType.phone,
           validator: (value) {
             if (value.isEmpty) {
-              return 'Please enter your phone number';
+              return 'Campo de preenchimento obrigatório.';
             }
             return null;
           },
@@ -256,10 +266,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
           obscureText: true,
           validator: (value) {
             if (value.isEmpty) {
-              return 'Please enter a password';
+              return 'Campo de preenchimento obrigatório.';
             }
             if (value.length < 8) {
-              return 'Your password must have at least 8 characters';
+              return 'Sua password precisa ter ao menos 8 caracteres.';
             }
             return null;
           },
@@ -268,14 +278,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
         CustomTextInput(
           controller: _passwordConfirmation,
           fillColor: Colors.grey[200],
-          hintText: 'Confirm password',
+          hintText: 'Confirmar password',
           obscureText: true,
           validator: (value) {
             if (value.isEmpty) {
-              return 'Please confirm your password';
+              return 'Confirme sua password.';
             }
             if (value != _password.text) {
-              return 'Your passwords didn\'t match, please verify';
+              return 'As passwords não são iguais.';
             }
             return null;
           },
@@ -289,8 +299,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         SelectOption(
-          modalTitle: 'Account type',
-          selectText: 'Account type',
+          modalTitle: 'Tipo de conta',
+          selectText: 'Tipo de conta',
           modalType: S2ModalType.bottomSheet,
           value: selectedAccountType,
           choiceItems: accountType,
@@ -302,7 +312,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
           child: Padding(
             padding: const EdgeInsets.only(left: 12, top: 5),
             child: Text(
-              'Please select an account type',
+              'Campo de preenchimento obrigatório.',
               style: TextStyle(color: Colors.red, fontSize: 12),
             ),
           ),
@@ -311,11 +321,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
         CustomTextInput(
           controller: _company,
           fillColor: Colors.grey[200],
-          hintText: 'Company',
+          hintText: 'Nome da empresa',
           textCapitalization: TextCapitalization.sentences,
           validator: (value) {
-            if (value.isEmpty) {
-              return 'Please enter your company';
+            if (selectedAccountType == 'company' && value.isEmpty) {
+              return 'Campo de preenchimento obrigatório.';
             }
             return null;
           },
@@ -324,21 +334,21 @@ class _RegisterScreenState extends State<RegisterScreen> {
         Obx(
           () => SelectOptionMulti(
             isLoading: _userController.isLoadingSkills,
-            modalTitle: 'Skills',
-            selectText: 'Skills',
+            modalTitle: 'Tipo de negócio',
+            selectText: 'Tipo de negócio',
             modalType: S2ModalType.bottomSheet,
             value: selectedSkills,
             choiceItems: _userController.skills,
             onChange: (state) => setState(() => selectedSkills = state.value),
-            hasError: selectedSkills.isEmpty && submittedStep2,
+            hasError: selectedSkills.isEmpty && selectedAccountType == 'company' && submittedStep2,
           ),
         ),
         Visibility(
-          visible: selectedSkills.isEmpty && submittedStep2,
+          visible: selectedSkills.isEmpty && selectedAccountType == 'company' && submittedStep2,
           child: Padding(
             padding: const EdgeInsets.only(left: 12, top: 5),
             child: Text(
-              'Please select at least one skill',
+              'Campo de preenchimento obrigatório.',
               style: TextStyle(color: Colors.red, fontSize: 12),
             ),
           ),
@@ -354,8 +364,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
         Obx(
           () => SelectOption(
             isLoading: _userController.isLoadingDistricts,
-            modalTitle: 'District',
-            selectText: 'District',
+            modalTitle: 'Distrito',
+            selectText: 'Distrito',
             modalType: S2ModalType.bottomSheet,
             value: selectedDistrict,
             choiceItems: _userController.districts,
@@ -369,7 +379,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
           child: Padding(
             padding: const EdgeInsets.only(left: 12, top: 5),
             child: Text(
-              'Please select a district',
+              'Campo de preenchimento obrigatório.',
               style: TextStyle(color: Colors.red, fontSize: 12),
             ),
           ),
@@ -379,8 +389,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
           () => SelectOption(
             isLoading: _userController.isLoadingCities,
             isDisabled: selectedDistrict == null,
-            modalTitle: 'City',
-            selectText: 'City',
+            modalTitle: 'Localidade',
+            selectText: 'Localidade',
             value: selectedCity,
             modalType: S2ModalType.bottomSheet,
             choiceItems: _userController.cities,
@@ -393,7 +403,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
           child: Padding(
             padding: const EdgeInsets.only(left: 12, top: 5),
             child: Text(
-              'Please select a city',
+              'Campo de preenchimento obrigatório.',
               style: TextStyle(color: Colors.red, fontSize: 12),
             ),
           ),
@@ -402,11 +412,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
         CustomTextInput(
           controller: _address,
           fillColor: Colors.grey[200],
-          hintText: 'Address',
+          hintText: 'Endereço',
           textCapitalization: TextCapitalization.sentences,
           validator: (value) {
             if (value.isEmpty) {
-              return 'Please enter your address';
+              return 'Campo de preenchimento obrigatório.';
             }
             return null;
           },
@@ -415,11 +425,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
         CustomTextInput(
           controller: _postcode,
           fillColor: Colors.grey[200],
-          hintText: 'Postcode',
+          hintText: 'Código postal',
           keyboardType: TextInputType.number,
           validator: (value) {
             if (value.isEmpty) {
-              return 'Please enter your postcode';
+              return 'Campo de preenchimento obrigatório.';
             }
             return null;
           },
@@ -452,7 +462,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
           child: Padding(
             padding: const EdgeInsets.only(left: 12, top: 5),
             child: Text(
-              'Please select a plan',
+              'Campo de preenchimento obrigatório.',
               style: TextStyle(color: Colors.red, fontSize: 12),
             ),
           ),
@@ -510,7 +520,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
               style: OutlinedButton.styleFrom(
                 backgroundColor: selectedPlan == plan.id ? Colors.blue.withOpacity(0.2) : null,
               ),
-              child: Text(selectedPlan == plan.id ? 'Selected plan' : 'Select this plan'),
+              child: Text(selectedPlan == plan.id ? 'Plano selecionado' : 'Selecionar plano'),
               onPressed: () {
                 setState(() {
                   selectedPlan = plan.id;

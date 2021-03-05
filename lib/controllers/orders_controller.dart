@@ -42,7 +42,7 @@ class OrdersController extends GetxController {
 
   Rx<Orders> _orders = Orders().obs;
   RxString _filter = 'unread'.obs;
-  RxString _filterName = 'Unread'.obs;
+  RxString _filterName = 'Não vistos'.obs;
   RxInt _page = 1.obs;
 
   RxList<File> images = List<File>.empty(growable: true).obs;
@@ -193,18 +193,15 @@ class OrdersController extends GetxController {
       };
       await _ordersRepository.createOrder(data);
       findAll(skipLoading: true);
-      successDialog(
-          title: 'Success', message: 'Your order has been published successfully.', dismiss: () => Get.back());
+      successDialog(title: 'Successo', message: 'Seu pedido foi criado com sucesso.', dismiss: () => Get.back());
     } on DioError catch (err) {
       print(err);
       _publishingOrderError.value = true;
-      Get.rawSnackbar(
-          message: 'Ops, something went wrong.', backgroundColor: Colors.red, duration: Duration(seconds: 5));
+      Get.rawSnackbar(message: 'Ops, ocorreu um erro.', backgroundColor: Colors.red, duration: Duration(seconds: 5));
     } catch (err) {
       print(err);
       _publishingOrderError.value = true;
-      Get.rawSnackbar(
-          message: 'Ops, something went wrong.', backgroundColor: Colors.red, duration: Duration(seconds: 5));
+      Get.rawSnackbar(message: 'Ops, ocorreu um erro.', backgroundColor: Colors.red, duration: Duration(seconds: 5));
     } finally {
       _isPublishingOrder.value = false;
     }
@@ -224,13 +221,11 @@ class OrdersController extends GetxController {
     } on DioError catch (err) {
       print(err);
       _replyingMsgError.value = true;
-      Get.rawSnackbar(
-          message: 'Ops, something went wrong.', backgroundColor: Colors.red, duration: Duration(seconds: 3));
+      Get.rawSnackbar(message: 'Ops, ocorreu um erro.', backgroundColor: Colors.red, duration: Duration(seconds: 3));
     } catch (err) {
       print(err);
       _replyingMsgError.value = true;
-      Get.rawSnackbar(
-          message: 'Ops, something went wrong.', backgroundColor: Colors.red, duration: Duration(seconds: 3));
+      Get.rawSnackbar(message: 'Ops, ocorreu um erro.', backgroundColor: Colors.red, duration: Duration(seconds: 3));
     } finally {
       _isReplyingMsg.value = false;
     }
@@ -251,13 +246,11 @@ class OrdersController extends GetxController {
     } on DioError catch (err) {
       print(err);
       _loadingMoreError.value = true;
-      Get.rawSnackbar(
-          message: 'Ops, something went wrong.', backgroundColor: Colors.red, duration: Duration(seconds: 3));
+      Get.rawSnackbar(message: 'Ops, ocorreu um erro.', backgroundColor: Colors.red, duration: Duration(seconds: 3));
     } catch (err) {
       print(err);
       _loadingMoreError.value = true;
-      Get.rawSnackbar(
-          message: 'Ops, something went wrong.', backgroundColor: Colors.red, duration: Duration(seconds: 3));
+      Get.rawSnackbar(message: 'Ops, ocorreu um erro..', backgroundColor: Colors.red, duration: Duration(seconds: 3));
     } finally {
       _isLoadingMore.value = false;
     }
@@ -288,11 +281,15 @@ class OrdersController extends GetxController {
     } on DioError catch (err) {
       print(err);
       Get.rawSnackbar(
-          message: 'Ops, error while uploading image', backgroundColor: Colors.red, duration: Duration(seconds: 5));
+          message: 'Ops, ocorreu um erro ao enviar imagem.',
+          backgroundColor: Colors.red,
+          duration: Duration(seconds: 5));
     } catch (err) {
       print(err);
       Get.rawSnackbar(
-          message: 'Ops, error while uploading image', backgroundColor: Colors.red, duration: Duration(seconds: 5));
+          message: 'Ops, ocorreu um erro ao enviar imagem.',
+          backgroundColor: Colors.red,
+          duration: Duration(seconds: 5));
     } finally {
       _isUploadingImage.value = false;
       uploadImageProgress.value = 0.0;

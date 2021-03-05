@@ -86,7 +86,7 @@ class _LoginScreenState extends State<LoginScreen> {
       appBar: AppBar(
         brightness: Brightness.dark,
         title: Text(
-          'Sign in',
+          'Entrar',
           style: TextStyle(color: Colors.white),
         ),
         centerTitle: true,
@@ -155,7 +155,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                   Icons.lock,
                                   color: Colors.white,
                                 ),
-                                hintText: 'Password',
+                                hintText: 'Senha',
                                 hintStyle: TextStyle(color: Colors.white),
                                 obscureText: true,
                                 errorBorderColor: Colors.white54,
@@ -182,7 +182,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                     padding: EdgeInsets.all(0),
                                     visualDensity: VisualDensity.compact,
                                   ),
-                                  child: Text('Forgot password?'),
+                                  child: Text('Esqueceu sua senha?'),
                                   onPressed: () => Get.toNamed('/auth/forgot-password'),
                                 ),
                               ),
@@ -194,7 +194,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       Column(
                         children: [
                           LargeButton(
-                            text: 'Login',
+                            text: 'Entrar',
                             onPressed: () {
                               if (_formKey.currentState.validate()) {
                                 FocusScope.of(context).unfocus();
@@ -257,7 +257,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           SizedBox(height: 20),
                           TextButton(
                             style: TextButton.styleFrom(primary: Colors.white),
-                            child: Text('Not a member? Sign up'),
+                            child: Text('Ainda não tem uma conta? Registre-se'),
                             onPressed: () => Get.toNamed('/auth/register'),
                           ),
                         ],

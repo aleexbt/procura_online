@@ -113,8 +113,8 @@ class EditAdController extends GetxController {
   ];
 
   List<S2Choice<String>> negotiableOptions = [
-    S2Choice<String>(value: '1', title: 'Yes'),
-    S2Choice<String>(value: '0', title: 'No'),
+    S2Choice<String>(value: '1', title: 'Sim'),
+    S2Choice<String>(value: '0', title: 'Não'),
   ];
 
   void setImages(List<File> value) => images.addAll(value);
@@ -297,7 +297,7 @@ class EditAdController extends GetxController {
 
       await _productRepository.edit(id: productId, data: editData, photosToRemove: photosToRemove);
       _adsListingController.findAll(skipLoading: true);
-      successDialog(title: 'Success', message: 'Your ad has been updated sucessfully.', dismiss: () => Get.back());
+      successDialog(title: 'Successo', message: 'Anúncio atualizado com sucesso.', dismiss: () => Get.back());
     } on DioError catch (err) {
       print(err);
       try {
@@ -312,7 +312,7 @@ class EditAdController extends GetxController {
             duration: Duration(seconds: 3 + errorList.length));
       } catch (err) {
         Get.rawSnackbar(
-          message: 'Ops, something went wrong.',
+          message: 'Ops, ocorreu um erro.',
           backgroundColor: Colors.red,
           duration: Duration(seconds: 3),
         );
@@ -329,7 +329,7 @@ class EditAdController extends GetxController {
       bool response = await _productRepository.delete(productId);
       if (!response) {
         Get.rawSnackbar(
-          message: 'Ops, something went wrong.',
+          message: 'Ops, ocorreu um erro.',
           backgroundColor: Colors.red,
           duration: Duration(seconds: 3),
         );
@@ -339,14 +339,14 @@ class EditAdController extends GetxController {
     } on DioError catch (err) {
       print(err);
       Get.rawSnackbar(
-        message: 'Ops, something went wrong.',
+        message: 'Ops, ocorreu um erro.',
         backgroundColor: Colors.red,
         duration: Duration(seconds: 3),
       );
     } catch (err) {
       print(err);
       Get.rawSnackbar(
-        message: 'Ops, something went wrong.',
+        message: 'Ops, ocorreu um erro.',
         backgroundColor: Colors.red,
         duration: Duration(seconds: 3),
       );
@@ -365,11 +365,15 @@ class EditAdController extends GetxController {
     } on DioError catch (err) {
       print(err);
       Get.rawSnackbar(
-          message: 'Ops, error while uploading image', backgroundColor: Colors.red, duration: Duration(seconds: 5));
+          message: 'Ops, ocorreu um erro ao enviar imagem.',
+          backgroundColor: Colors.red,
+          duration: Duration(seconds: 5));
     } catch (err) {
       print(err);
       Get.rawSnackbar(
-          message: 'Ops, error while uploading image', backgroundColor: Colors.red, duration: Duration(seconds: 5));
+          message: 'Ops, ocorreu um erro ao enviar imagem.',
+          backgroundColor: Colors.red,
+          duration: Duration(seconds: 5));
     } finally {
       _isUploadingImage.value = false;
       uploadImageProgress.value = 0.0;

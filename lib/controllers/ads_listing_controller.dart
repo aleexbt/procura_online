@@ -57,11 +57,11 @@ class AdsListingController extends GetxController {
     } on DioError catch (err) {
       _loadingMoreError.value = true;
       Get.rawSnackbar(
-          message: 'Ops, error getting more items.', backgroundColor: Colors.red, duration: Duration(seconds: 3));
+          message: 'Ops, erro ao carregar mais items.', backgroundColor: Colors.red, duration: Duration(seconds: 3));
     } catch (err) {
       _loadingMoreError.value = true;
       Get.rawSnackbar(
-          message: 'Ops, error getting more items.', backgroundColor: Colors.red, duration: Duration(seconds: 3));
+          message: 'Ops, erro ao carregar mais items.', backgroundColor: Colors.red, duration: Duration(seconds: 3));
     } finally {
       _isLoadingMore.value = false;
     }

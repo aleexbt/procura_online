@@ -86,7 +86,7 @@ class _AppScreenState extends State<AppScreen> {
         items: <BottomNavigationBarItem>[
           BottomNavigationBarItem(
             icon: Icon(Icons.home),
-            label: 'Home',
+            label: 'Início',
           ),
           BottomNavigationBarItem(
             // icon: Badge(
@@ -99,7 +99,7 @@ class _AppScreenState extends State<AppScreen> {
             //   animationType: BadgeAnimationType.scale,
             // ),
             icon: Icon(CupertinoIcons.chat_bubble_fill),
-            label: 'Chat',
+            label: 'Conversas',
           ),
           // BottomNavigationBarItem(
           //   icon: Icon(CupertinoIcons.plus_app_fill),
@@ -107,7 +107,7 @@ class _AppScreenState extends State<AppScreen> {
           // ),
           BottomNavigationBarItem(
             icon: Icon(Icons.account_circle),
-            label: 'Settings',
+            label: 'Configurações',
           ),
         ],
         currentIndex: _selectedIndex,

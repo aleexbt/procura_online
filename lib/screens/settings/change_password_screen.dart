@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:procura_online/controllers/user_controller.dart';
+import 'package:procura_online/widgets/gradient_button.dart';
 import 'package:procura_online/widgets/text_input.dart';
 
 class ChangePasswordScreen extends StatelessWidget {
@@ -15,23 +16,8 @@ class ChangePasswordScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Change password'),
+        title: Text('Alterar password'),
         elevation: 0,
-        actions: [
-          IconButton(
-            icon: Icon(Icons.check, color: Colors.black),
-            onPressed: () {
-              if (_formKey.currentState.validate()) {
-                FocusScope.of(context).unfocus();
-                _userController.changePassword(
-                  currentPass: _currentPassword.text,
-                  newPass: _newPassword.text,
-                  confirmPass: _confirmPassword.text,
-                );
-              }
-            },
-          ),
-        ],
       ),
       body: Obx(
         () => ModalProgressHUD(
@@ -47,7 +33,7 @@ class ChangePasswordScreen extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'Current password',
+                        'Password atual',
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
                         ),
@@ -56,18 +42,18 @@ class ChangePasswordScreen extends StatelessWidget {
                       CustomTextInput(
                         controller: _currentPassword,
                         fillColor: Colors.grey[200],
-                        hintText: 'Enter your current password',
+                        hintText: 'Informe a password atual',
                         obscureText: true,
                         validator: (value) {
                           if (value.isEmpty) {
-                            return 'Please enter your current password';
+                            return 'Campo de preenchimento obrigatório.';
                           }
                           return null;
                         },
                       ),
                       SizedBox(height: 20),
                       Text(
-                        'New password',
+                        'Nova password',
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
                         ),
@@ -76,38 +62,53 @@ class ChangePasswordScreen extends StatelessWidget {
                       CustomTextInput(
                           controller: _newPassword,
                           fillColor: Colors.grey[200],
-                          hintText: 'Enter a new password',
+                          hintText: 'Informe a nova password',
                           obscureText: true,
                           validator: (value) {
                             if (value.isEmpty) {
-                              return 'Please enter a new password';
+                              return 'Campo de preenchimento obrigatório.';
                             }
                             if (value.length < 8) {
-                              return 'Your new password must have at least 8 characters';
+                              return 'Sua password precisa ter ao menos 8 caracteres.';
                             }
                             return null;
                           }),
                       SizedBox(height: 20),
                       Text(
-                        'Confirm password',
+                        'Confirmar nova password',
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
                         ),
                       ),
                       SizedBox(height: 10),
                       CustomTextInput(
-                          controller: _confirmPassword,
-                          fillColor: Colors.grey[200],
-                          hintText: 'Confirm the new password',
-                          obscureText: true,
-                          validator: (value) {
-                            if (value.isEmpty) {
-                              return 'Please confirm your new password';
-                            }
-                            if (value != _newPassword.text) {
-                              return 'Your passwords didn\'t match, please verify';
-                            }
-                          }),
+                        controller: _confirmPassword,
+                        fillColor: Colors.grey[200],
+                        hintText: 'Confirme sua nova password.',
+                        obscureText: true,
+                        validator: (value) {
+                          if (value.isEmpty) {
+                            return 'Campo de preenchimento obrigatório.';
+                          }
+                          if (value != _newPassword.text) {
+                            return 'As passwords não são iguais.';
+                          }
+                        },
+                      ),
+                      SizedBox(height: 20),
+                      GradientButton(
+                        text: 'Guardar',
+                        onPressed: () {
+                          if (_formKey.currentState.validate()) {
+                            FocusScope.of(context).unfocus();
+                            _userController.changePassword(
+                              currentPass: _currentPassword.text,
+                              newPass: _newPassword.text,
+                              confirmPass: _confirmPassword.text,
+                            );
+                          }
+                        },
+                      ),
                     ],
                   ),
                 ),

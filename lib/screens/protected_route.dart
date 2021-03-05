@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:procura_online/utils/navigation_helper.dart';
 
@@ -22,13 +23,20 @@ class _ProtectedRouteState extends State<ProtectedRoute> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Text('You need to be logged in to view this page.'),
+          SvgPicture.asset('assets/images/registro.svg', width: 300),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+            child: Text(
+              'Você precisar estar autenticado para acessar este conteúdo.',
+              textAlign: TextAlign.center,
+            ),
+          ),
           TextButton(
             style: TextButton.styleFrom(
               textStyle: TextStyle(color: Colors.blue, fontWeight: FontWeight.w600),
             ),
             onPressed: () => Get.toNamed('/auth/login'),
-            child: Text('Login'),
+            child: Text('ENTRAR'),
           )
         ],
       ),

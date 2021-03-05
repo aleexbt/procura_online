@@ -21,7 +21,7 @@ class ForgotPasswordScreen extends StatelessWidget {
       appBar: AppBar(
         brightness: Brightness.dark,
         title: Text(
-          'Forgot password',
+          'Recuperar senha',
           style: TextStyle(color: Colors.white),
         ),
         centerTitle: true,
@@ -85,7 +85,7 @@ class ForgotPasswordScreen extends StatelessWidget {
                         Column(
                           children: [
                             LargeButton(
-                              text: 'Reset password',
+                              text: 'Enviar link de recuperação',
                               onPressed: () {
                                 if (_formKey.currentState.validate()) {
                                   FocusScope.of(context).unfocus();

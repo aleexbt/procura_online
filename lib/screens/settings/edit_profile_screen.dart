@@ -7,6 +7,7 @@ import 'package:get/get.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:octo_image/octo_image.dart';
 import 'package:procura_online/controllers/user_controller.dart';
+import 'package:procura_online/widgets/gradient_button.dart';
 import 'package:procura_online/widgets/select_option.dart';
 import 'package:procura_online/widgets/text_input.dart';
 
@@ -76,19 +77,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     return GetX<UserController>(
       builder: (_) => Scaffold(
         appBar: AppBar(
-          title: Text('Edit profile'),
+          title: Text('Informações da conta'),
           elevation: 0,
-          actions: [
-            IconButton(
-              icon: Icon(Icons.check, color: Colors.black),
-              onPressed: () {
-                if (_formKey.currentState.validate()) {
-                  FocusScope.of(context).unfocus();
-                  _userController.updateProfile(district: district, city: city);
-                }
-              },
-            ),
-          ],
         ),
         body: ModalProgressHUD(
           inAsyncCall: _userController.isSaving,
@@ -130,22 +120,46 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                             ],
                           ),
                           Positioned(
+                            bottom: 50,
+                            right: 10,
+                            child: Icon(
+                              Icons.edit,
+                              color: Colors.white,
+                            ),
+                          ),
+                          Positioned(
                             top: 100,
                             child: SizedBox(
                               width: 160,
                               height: 160,
                               child: Container(
                                 decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(100),
-                                    border: Border.all(color: Colors.white, width: 4)),
+                                  borderRadius: BorderRadius.circular(100),
+                                  border: Border.all(color: Colors.white, width: 4),
+                                ),
                                 child: GestureDetector(
                                   onTap: () => selectLogo(),
                                   child: ClipOval(
-                                    child: OctoImage(
-                                      image: CachedNetworkImageProvider(_userController.userData.logo.thumbnail),
-                                      placeholderBuilder: OctoPlaceholder.blurHash('LAI#u-9XM[D\$GdIU4oIA-sWFxwRl'),
-                                      errorBuilder: OctoError.icon(color: Colors.grey[400]),
-                                      fit: BoxFit.cover,
+                                    child: Stack(
+                                      children: [
+                                        OctoImage(
+                                          width: 160,
+                                          height: 160,
+                                          image: CachedNetworkImageProvider(_userController.userData.logo.thumbnail),
+                                          placeholderBuilder: OctoPlaceholder.blurHash('LAI#u-9XM[D\$GdIU4oIA-sWFxwRl'),
+                                          errorBuilder: OctoError.icon(color: Colors.grey[400]),
+                                          fit: BoxFit.cover,
+                                        ),
+                                        Positioned(
+                                          bottom: 8,
+                                          left: 0,
+                                          right: 0,
+                                          child: Icon(
+                                            Icons.edit,
+                                            color: Colors.white,
+                                          ),
+                                        ),
+                                      ],
                                     ),
                                   ),
                                 ),
@@ -155,7 +169,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                         ],
                       ),
                       Text(
-                        'Name',
+                        'Nome',
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
                         ),
@@ -164,11 +178,11 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                       CustomTextInput(
                         controller: _.name.value..text = _.userData?.name,
                         fillColor: Colors.grey[200],
-                        hintText: 'Enter a name',
+                        hintText: 'Informe um nome',
                         textCapitalization: TextCapitalization.sentences,
                         validator: (value) {
                           if (value.isEmpty) {
-                            return 'Please enter your name';
+                            return 'Campo de preenchimento obrigatório.';
                           }
                         },
                       ),
@@ -184,17 +198,17 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                         enabled: false,
                         controller: _.email.value..text = _.userData?.email,
                         fillColor: Colors.grey[200],
-                        hintText: 'Enter an email address',
+                        hintText: 'Informe um email',
                         keyboardType: TextInputType.emailAddress,
                         validator: (value) {
                           if (value.isEmpty) {
-                            return 'Please enter your email address';
+                            return 'Campo de preenchimento obrigatório.';
                           }
                         },
                       ),
                       SizedBox(height: 20),
                       Text(
-                        'Phone',
+                        'Telefone',
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
                         ),
@@ -205,18 +219,18 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                           enabled: false,
                           controller: _.phone.value..text = _.userData?.phone,
                           fillColor: Colors.grey[200],
-                          hintText: 'Enter a phone number',
+                          hintText: 'Informe um telefone',
                           keyboardType: TextInputType.phone,
                           validator: (value) {
                             if (value.isEmpty) {
-                              return 'Please enter your phone number';
+                              return 'Campo de preenchimento obrigatório.';
                             }
                           },
                         ),
                       ),
                       SizedBox(height: 20),
                       Text(
-                        'Company',
+                        'Nome da empresa',
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
                         ),
@@ -226,33 +240,33 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                         () => CustomTextInput(
                           controller: _.company.value..text = _.userData?.company,
                           fillColor: Colors.grey[200],
-                          hintText: 'Enter a company name',
+                          hintText: 'Informe o nome da empresa',
                           textCapitalization: TextCapitalization.sentences,
                           validator: (value) {
                             if (value.isEmpty) {
-                              return 'Please enter your company name';
+                              return 'Campo de preenchimento obrigatório.';
                             }
                           },
                         ),
                       ),
                       SizedBox(height: 20),
                       Text(
-                        'Account type',
+                        'Tipo de conta',
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
                         ),
                       ),
                       SizedBox(height: 10),
                       SelectOption(
-                        modalTitle: 'Account type',
-                        selectText: 'Select an option',
+                        modalTitle: 'Tipo de conta',
+                        selectText: 'Selecionar opção',
                         value: _.selectedAccountType.value,
                         choiceItems: _.accountTypeOptions,
                         onChange: (state) => _.selectedAccountType(state.value),
                       ),
                       SizedBox(height: 20),
                       Text(
-                        'District',
+                        'Distrito',
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
                         ),
@@ -261,8 +275,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                       Obx(
                         () => SelectOption(
                           isLoading: _.isLoadingDistricts,
-                          modalTitle: 'District',
-                          selectText: 'Select an option',
+                          modalTitle: 'Distrito',
+                          selectText: 'Selecionar opção',
                           value: district,
                           choiceItems: _.districts,
                           onChange: (state) => [setState(() => district = state.value), _.getCities(state.value)],
@@ -271,7 +285,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                       ),
                       SizedBox(height: 20),
                       Text(
-                        'City',
+                        'Localidade',
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
                         ),
@@ -280,8 +294,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                       Obx(
                         () => SelectOption(
                           isLoading: _.isLoadingCities,
-                          modalTitle: 'Cities',
-                          selectText: 'Select an option',
+                          modalTitle: 'Localidade',
+                          selectText: 'Selecionar opção',
                           value: city,
                           choiceItems: _.cities,
                           onChange: (state) => setState(() => city = state.value),
@@ -290,7 +304,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                       ),
                       SizedBox(height: 20),
                       Text(
-                        'Address',
+                        'Endereço',
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
                         ),
@@ -300,18 +314,18 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                         () => CustomTextInput(
                           controller: _.address.value..text = _.userData?.address,
                           fillColor: Colors.grey[200],
-                          hintText: 'Enter an address',
+                          hintText: 'Informe um endereço',
                           textCapitalization: TextCapitalization.sentences,
                           validator: (value) {
                             if (value.isEmpty) {
-                              return 'Please enter your address';
+                              return 'Campo de preenchimento obrigatório.';
                             }
                           },
                         ),
                       ),
                       SizedBox(height: 20),
                       Text(
-                        'Postcode',
+                        'Código postal',
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
                         ),
@@ -321,14 +335,24 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                         () => CustomTextInput(
                           controller: _.postcode.value..text = _.userData?.postcode,
                           fillColor: Colors.grey[200],
-                          hintText: 'Enter a postcode',
+                          hintText: 'Informe um código postal',
                           keyboardType: TextInputType.number,
                           validator: (value) {
                             if (value.isEmpty) {
-                              return 'Please enter your postcode';
+                              return 'Campo de preenchimento obrigatório.';
                             }
                           },
                         ),
+                      ),
+                      SizedBox(height: 20),
+                      GradientButton(
+                        text: 'Guardar',
+                        onPressed: () {
+                          if (_formKey.currentState.validate()) {
+                            FocusScope.of(context).unfocus();
+                            _userController.updateProfile(district: district, city: city);
+                          }
+                        },
                       ),
                     ],
                   ),

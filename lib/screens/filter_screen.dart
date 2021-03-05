@@ -40,13 +40,13 @@ class _FilterScreenState extends State<FilterScreen> with TickerProviderStateMix
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
-        title: Text('Filter results'),
+        title: Text('Filtrar resultados'),
         actions: [
           FlatButton(
             onPressed: () =>
                 [_searchController.clearFilter(), _homeController.clear(), _homeController.findAll(), Get.back()],
             child: Text(
-              'CLEAR',
+              'LIMPAR',
               style: TextStyle(fontWeight: FontWeight.bold),
             ),
           )
@@ -54,8 +54,8 @@ class _FilterScreenState extends State<FilterScreen> with TickerProviderStateMix
         bottom: TabBar(
           controller: _tabController,
           tabs: [
-            Tab(text: 'Vehicle'),
-            Tab(text: 'Auto Parts'),
+            Tab(text: 'Veículo'),
+            Tab(text: 'Peças'),
           ],
         ),
       ),
@@ -70,7 +70,7 @@ class _FilterScreenState extends State<FilterScreen> with TickerProviderStateMix
                 physics: BouncingScrollPhysics(),
                 children: [
                   Text(
-                    'Brand',
+                    'Marca',
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
                     ),
@@ -80,9 +80,9 @@ class _FilterScreenState extends State<FilterScreen> with TickerProviderStateMix
                     () => SelectOptionLogo(
                       enableFilter: true,
                       isLoading: _searchController.isLoadingBrands.value,
-                      placeholder: 'Select one',
-                      modalTitle: 'Brands',
-                      selectText: 'Select a brand',
+                      placeholder: 'Selecionar',
+                      modalTitle: 'Marcas',
+                      selectText: 'Selecionar marca',
                       value: _searchController.brand.value,
                       choiceItems: _searchController.brands,
                       onChange: (state) => _searchController.setBrand(state.value),
@@ -90,7 +90,7 @@ class _FilterScreenState extends State<FilterScreen> with TickerProviderStateMix
                   ),
                   SizedBox(height: 20),
                   Text(
-                    'Model',
+                    'Modelo',
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
                     ),
@@ -101,9 +101,9 @@ class _FilterScreenState extends State<FilterScreen> with TickerProviderStateMix
                       enableFilter: true,
                       isLoading: _searchController.isLoadingModels.value,
                       isDisabled: _searchController.brand.value == '',
-                      placeholder: 'Select one',
-                      modalTitle: 'Models',
-                      selectText: 'Select a model',
+                      placeholder: 'Selecionar',
+                      modalTitle: 'Modelos',
+                      selectText: 'Selecionar modelo',
                       value: _searchController.model.value,
                       choiceItems: _searchController.models,
                       onChange: (state) => [_searchController.model.value = state.value],
@@ -111,7 +111,7 @@ class _FilterScreenState extends State<FilterScreen> with TickerProviderStateMix
                   ),
                   SizedBox(height: 20),
                   Text(
-                    'Year',
+                    'Ano',
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
                     ),
@@ -123,7 +123,7 @@ class _FilterScreenState extends State<FilterScreen> with TickerProviderStateMix
                         child: CustomTextInput(
                           controller: _searchController.yearFrom.value,
                           fillColor: Colors.grey[200],
-                          hintText: 'From',
+                          hintText: 'De',
                           keyboardType: TextInputType.number,
                         ),
                       ),
@@ -132,7 +132,7 @@ class _FilterScreenState extends State<FilterScreen> with TickerProviderStateMix
                         child: CustomTextInput(
                           controller: _searchController.yearTo.value,
                           fillColor: Colors.grey[200],
-                          hintText: 'To',
+                          hintText: 'Até',
                           keyboardType: TextInputType.number,
                         ),
                       ),
@@ -140,7 +140,7 @@ class _FilterScreenState extends State<FilterScreen> with TickerProviderStateMix
                   ),
                   SizedBox(height: 20),
                   Text(
-                    'Price',
+                    'Preço',
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
                     ),
@@ -152,7 +152,7 @@ class _FilterScreenState extends State<FilterScreen> with TickerProviderStateMix
                         child: CustomTextInput(
                           controller: _searchController.priceFrom.value,
                           fillColor: Colors.grey[200],
-                          hintText: 'From',
+                          hintText: 'De',
                           keyboardType: TextInputType.number,
                         ),
                       ),
@@ -161,7 +161,7 @@ class _FilterScreenState extends State<FilterScreen> with TickerProviderStateMix
                         child: CustomTextInput(
                           controller: _searchController.priceTo.value,
                           fillColor: Colors.grey[200],
-                          hintText: 'To',
+                          hintText: 'Até',
                           keyboardType: TextInputType.number,
                         ),
                       ),
@@ -169,7 +169,7 @@ class _FilterScreenState extends State<FilterScreen> with TickerProviderStateMix
                   ),
                   SizedBox(height: 20),
                   Text(
-                    'Miliage',
+                    'Quilómetros',
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
                     ),
@@ -181,7 +181,7 @@ class _FilterScreenState extends State<FilterScreen> with TickerProviderStateMix
                         child: CustomTextInput(
                           controller: _searchController.miliageFrom.value,
                           fillColor: Colors.grey[200],
-                          hintText: 'From',
+                          hintText: 'De',
                           keyboardType: TextInputType.number,
                         ),
                       ),
@@ -190,7 +190,7 @@ class _FilterScreenState extends State<FilterScreen> with TickerProviderStateMix
                         child: CustomTextInput(
                           controller: _searchController.miliageTo.value,
                           fillColor: Colors.grey[200],
-                          hintText: 'To',
+                          hintText: 'Até',
                           keyboardType: TextInputType.number,
                         ),
                       ),
@@ -198,7 +198,7 @@ class _FilterScreenState extends State<FilterScreen> with TickerProviderStateMix
                   ),
                   SizedBox(height: 20),
                   Text(
-                    'Fuel',
+                    'Combustível',
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
                     ),
@@ -206,9 +206,9 @@ class _FilterScreenState extends State<FilterScreen> with TickerProviderStateMix
                   SizedBox(height: 10),
                   Obx(
                     () => SelectOption(
-                      placeholder: 'Select one',
-                      modalTitle: 'Fuel Type',
-                      selectText: 'Select a fuel type',
+                      placeholder: 'Selecionar',
+                      modalTitle: 'Combustível',
+                      selectText: 'Selecionar combustível',
                       value: _searchController.fuel.value,
                       choiceItems: _searchController.fuelOptions,
                       onChange: (state) => _searchController.fuel.value = state.value,
@@ -216,7 +216,7 @@ class _FilterScreenState extends State<FilterScreen> with TickerProviderStateMix
                   ),
                   SizedBox(height: 20),
                   Text(
-                    'Location',
+                    'Localização',
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
                     ),
@@ -226,9 +226,9 @@ class _FilterScreenState extends State<FilterScreen> with TickerProviderStateMix
                     () => SelectOption(
                       enableFilter: true,
                       isLoading: _searchController.isLoadingDistricts.value,
-                      placeholder: 'Select one',
-                      modalTitle: 'Location',
-                      selectText: 'Select a location',
+                      placeholder: 'Selecionar',
+                      modalTitle: 'Localização',
+                      selectText: 'Selecionar ums localização',
                       value: _searchController.district.value,
                       choiceItems: _searchController.districts,
                       onChange: (state) => _searchController.district.value = state.value,
@@ -238,7 +238,7 @@ class _FilterScreenState extends State<FilterScreen> with TickerProviderStateMix
                   SizedBox(
                     width: 280,
                     child: GradientButton(
-                      text: 'Filter',
+                      text: 'Filtrar',
                       onPressed: () =>
                           [_searchController.isFiltered.value = true, _homeController.doSearch(), Get.back()],
                     ),
@@ -252,7 +252,7 @@ class _FilterScreenState extends State<FilterScreen> with TickerProviderStateMix
                 physics: BouncingScrollPhysics(),
                 children: [
                   Text(
-                    'Brands',
+                    'Marcas',
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
                     ),
@@ -262,9 +262,9 @@ class _FilterScreenState extends State<FilterScreen> with TickerProviderStateMix
                     () => SelectOption(
                       enableFilter: true,
                       isLoading: _searchController.isLoadingBrands.value,
-                      placeholder: 'Select one',
-                      modalTitle: 'Brands',
-                      selectText: 'Select a brand',
+                      placeholder: 'Selecionar',
+                      modalTitle: 'Marcas',
+                      selectText: 'Selecionar marca',
                       value: _searchController.brand.value,
                       choiceItems: _searchController.brands,
                       onChange: (state) => _searchController.setBrand(state.value),
@@ -272,7 +272,7 @@ class _FilterScreenState extends State<FilterScreen> with TickerProviderStateMix
                   ),
                   SizedBox(height: 20),
                   Text(
-                    'Models',
+                    'Modelos',
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
                     ),
@@ -283,9 +283,9 @@ class _FilterScreenState extends State<FilterScreen> with TickerProviderStateMix
                       enableFilter: true,
                       isLoading: _searchController.isLoadingModels.value,
                       isDisabled: _searchController.brand.value == '',
-                      placeholder: 'Select one',
-                      modalTitle: 'Models',
-                      selectText: 'Select a model',
+                      placeholder: 'Selecionar',
+                      modalTitle: 'Modelos',
+                      selectText: 'Selecionar modelo',
                       value: _searchController.model.value,
                       choiceItems: _searchController.models,
                       onChange: (state) => _searchController.model.value = state.value,
@@ -293,7 +293,7 @@ class _FilterScreenState extends State<FilterScreen> with TickerProviderStateMix
                   ),
                   SizedBox(height: 20),
                   Text(
-                    'Location',
+                    'Localização',
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
                     ),
@@ -303,9 +303,9 @@ class _FilterScreenState extends State<FilterScreen> with TickerProviderStateMix
                     () => SelectOption(
                       enableFilter: true,
                       isLoading: _searchController.isLoadingDistricts.value,
-                      placeholder: 'Select one',
-                      modalTitle: 'Location',
-                      selectText: 'Select a location',
+                      placeholder: 'Selecionar',
+                      modalTitle: 'Localização',
+                      selectText: 'Selecionar localização',
                       value: _searchController.district.value,
                       choiceItems: _searchController.districts,
                       onChange: (state) => _searchController.district.value = state.value,
@@ -315,7 +315,7 @@ class _FilterScreenState extends State<FilterScreen> with TickerProviderStateMix
                   SizedBox(
                     width: 280,
                     child: GradientButton(
-                      text: 'Filter',
+                      text: 'Filtrar',
                       onPressed: () =>
                           [_searchController.isFiltered.value = true, _homeController.doSearch(), Get.back()],
                     ),

@@ -47,12 +47,10 @@ class ItemBox extends StatelessWidget {
               children: [
                 Expanded(
                   child: ClipRRect(
-                    borderRadius:
-                        BorderRadius.vertical(top: Radius.circular(4)),
+                    borderRadius: BorderRadius.vertical(top: Radius.circular(4)),
                     child: OctoImage(
                       image: CachedNetworkImageProvider(image),
-                      placeholderBuilder: OctoPlaceholder.blurHash(
-                          'LAI#u-9XM[D\$GdIU4oIA-sWFxwRl'),
+                      placeholderBuilder: OctoPlaceholder.blurHash('LAI#u-9XM[D\$GdIU4oIA-sWFxwRl'),
                       errorBuilder: OctoError.icon(color: Colors.grey[400]),
                       fit: BoxFit.cover,
                     ),
@@ -71,19 +69,16 @@ class ItemBox extends StatelessWidget {
                       SizedBox(height: 2.0),
                       Text(
                         '\$$salePrice',
-                        style: TextStyle(
-                            color: Colors.blueAccent,
-                            fontSize: 12.0,
-                            fontWeight: FontWeight.w600),
+                        style: TextStyle(color: Colors.blueAccent, fontSize: 12.0, fontWeight: FontWeight.w600),
                       ),
-                      Text(
-                        '\$21,000',
-                        style: TextStyle(
-                          color: Colors.grey[400],
-                          fontSize: 10,
-                          decoration: TextDecoration.lineThrough,
-                        ),
-                      ),
+                      // Text(
+                      //   '\$21,000',
+                      //   style: TextStyle(
+                      //     color: Colors.grey[400],
+                      //     fontSize: 10,
+                      //     decoration: TextDecoration.lineThrough,
+                      //   ),
+                      // ),
                     ],
                   ),
                 )

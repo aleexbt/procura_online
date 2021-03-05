@@ -33,9 +33,7 @@ class ChatController extends GetxController with WidgetsBindingObserver {
     print('CALL_SUBSCRIBE');
     Box<User> box = await Hive.openBox<User>('userData') ?? null;
     int userId = box.values?.first?.id ?? null;
-    print('userId: $userId');
     if (userId != null) {
-      print('BACKGROUND_SUBSCRIBE_MESSAGES');
       pusherService.firePusher('private-update-conversation.$userId', 'App\\Events\\ConversationUpdateEvent');
       pusherService.firePusher('private-conversation-up', 'App\\Events\\ConversationUpdateEvent');
     }
@@ -107,12 +105,12 @@ class ChatController extends GetxController with WidgetsBindingObserver {
       print(err);
       _loadingMoreError.value = true;
       Get.rawSnackbar(
-          message: 'Ops, error getting more items.', backgroundColor: Colors.red, duration: Duration(seconds: 3));
+          message: 'Ops, erro ao carregar mais items.', backgroundColor: Colors.red, duration: Duration(seconds: 3));
     } catch (err) {
       print(err);
       _loadingMoreError.value = true;
       Get.rawSnackbar(
-          message: 'Ops, error getting more items.', backgroundColor: Colors.red, duration: Duration(seconds: 3));
+          message: 'Ops, erro ao carregar mais items.', backgroundColor: Colors.red, duration: Duration(seconds: 3));
     } finally {
       _isLoadingMore.value = false;
     }

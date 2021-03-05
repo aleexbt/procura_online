@@ -58,7 +58,7 @@ class _OrdersAndChatScreenState extends State<OrdersAndChatScreen> with Automati
                       child: TextField(
                         controller: _selectedIndex == 0 ? _ordersTerm : _chatTerm,
                         decoration: InputDecoration(
-                          hintText: 'Search',
+                          hintText: 'Pesquisar',
                           border: const OutlineInputBorder(
                             borderSide: const BorderSide(color: Colors.transparent, width: 0.0),
                           ),
@@ -109,7 +109,7 @@ class _OrdersAndChatScreenState extends State<OrdersAndChatScreen> with Automati
                                             color: Colors.black,
                                           ),
                                           title: Text(
-                                            'Unread',
+                                            'Não vistos',
                                             style: TextStyle(
                                               color: Colors.black,
                                               fontWeight: FontWeight.w400,
@@ -120,7 +120,7 @@ class _OrdersAndChatScreenState extends State<OrdersAndChatScreen> with Automati
                                             borderRadius: BorderRadius.circular(10),
                                           ),
                                           onTap: (_) => [
-                                            _ordersController.changeFilter(name: 'Unread', value: 'unread'),
+                                            _ordersController.changeFilter(name: 'Não vistos', value: 'unread'),
                                             Get.back()
                                           ],
                                         ),
@@ -131,7 +131,7 @@ class _OrdersAndChatScreenState extends State<OrdersAndChatScreen> with Automati
                                             color: Colors.black,
                                           ),
                                           title: Text(
-                                            'Read',
+                                            'Vistos',
                                             style: TextStyle(
                                               color: Colors.black,
                                               fontWeight: FontWeight.w400,
@@ -141,8 +141,10 @@ class _OrdersAndChatScreenState extends State<OrdersAndChatScreen> with Automati
                                           shape: RoundedRectangleBorder(
                                             borderRadius: BorderRadius.circular(10),
                                           ),
-                                          onTap: (_) =>
-                                              [_ordersController.changeFilter(name: 'Read', value: 'read'), Get.back()],
+                                          onTap: (_) => [
+                                            _ordersController.changeFilter(name: 'Vistos', value: 'read'),
+                                            Get.back()
+                                          ],
                                         ),
                                         Divider(),
                                         ListTileMoreCustomizable(
@@ -151,7 +153,7 @@ class _OrdersAndChatScreenState extends State<OrdersAndChatScreen> with Automati
                                             color: Colors.black,
                                           ),
                                           title: Text(
-                                            'Sent',
+                                            'Enviado',
                                             style: TextStyle(
                                               color: Colors.black,
                                               fontWeight: FontWeight.w400,
@@ -161,8 +163,10 @@ class _OrdersAndChatScreenState extends State<OrdersAndChatScreen> with Automati
                                           shape: RoundedRectangleBorder(
                                             borderRadius: BorderRadius.circular(10),
                                           ),
-                                          onTap: (_) =>
-                                              [_ordersController.changeFilter(name: 'Sent', value: 'sent'), Get.back()],
+                                          onTap: (_) => [
+                                            _ordersController.changeFilter(name: 'Enviado', value: 'sent'),
+                                            Get.back()
+                                          ],
                                         ),
                                       ],
                                     ),
@@ -194,7 +198,7 @@ class _OrdersAndChatScreenState extends State<OrdersAndChatScreen> with Automati
                         height: 40,
                         onPressed: () => _pageController.animateToPage(1,
                             duration: Duration(milliseconds: 300), curve: Curves.linear),
-                        child: Text('Chat'),
+                        child: Text('Conversas'),
                       ),
                     ),
                   ),

@@ -107,8 +107,8 @@ class CreateAdController extends GetxController {
   ];
 
   List<S2Choice<String>> negotiableOptions = [
-    S2Choice<String>(value: '1', title: 'Yes'),
-    S2Choice<String>(value: '0', title: 'No'),
+    S2Choice<String>(value: '1', title: 'Sim'),
+    S2Choice<String>(value: '0', title: 'Não'),
   ];
 
   void setImages(List<File> value) => images.addAll(value);
@@ -258,7 +258,7 @@ class CreateAdController extends GetxController {
       };
 
       await _productRepository.create(createData);
-      successDialog(title: 'Success', message: 'Your ad has been published successfully.', dismiss: () => Get.back());
+      successDialog(title: 'Successo', message: 'Seu anúncio foi criado com sucesso.', dismiss: () => Get.back());
     } on DioError catch (err) {
       print(err.request.data);
       try {
@@ -273,7 +273,7 @@ class CreateAdController extends GetxController {
             duration: Duration(seconds: 3 + errorList.length));
       } catch (err) {
         Get.rawSnackbar(
-          message: 'Ops, something went wrong.',
+          message: 'Ops, ocorreu um erro.',
           backgroundColor: Colors.red,
           duration: Duration(seconds: 3),
         );
@@ -293,11 +293,15 @@ class CreateAdController extends GetxController {
     } on DioError catch (err) {
       print(err);
       Get.rawSnackbar(
-          message: 'Ops, error while uploading image', backgroundColor: Colors.red, duration: Duration(seconds: 5));
+          message: 'Ops, ocorreu um erro ao enviar imagem.',
+          backgroundColor: Colors.red,
+          duration: Duration(seconds: 5));
     } catch (err) {
       print(err);
       Get.rawSnackbar(
-          message: 'Ops, error while uploading image', backgroundColor: Colors.red, duration: Duration(seconds: 5));
+          message: 'Ops, ocorreu um erro ao enviar imagem.',
+          backgroundColor: Colors.red,
+          duration: Duration(seconds: 5));
     } finally {
       _isUploadingImage.value = false;
       uploadImageProgress.value = 0.0;
@@ -319,7 +323,7 @@ class CreateAdController extends GetxController {
       } else {
         errorDialog(
           title: 'Error',
-          message: 'You can\'t make this ad featured. Please check your subscription plan.',
+          message: 'Você não pode destacar este anúncio. Verifique seu plano.',
         );
       }
     } catch (err) {

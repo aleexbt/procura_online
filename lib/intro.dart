@@ -47,21 +47,20 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
       key: introKey,
       pages: [
         PageViewModel(
-          title: "",
-          body: "Easy access to all your cars and auto parts in one place.",
+          title: '',
+          body: 'Fácil acesso a carros e peças em um só lugar.',
           image: _buildImage('anuncio'),
           decoration: pageDecoration,
         ),
         PageViewModel(
-          title: "",
-          body:
-              "Our email system helps you to sell your business, whether it is an automobile repair or scrap shop you will need.",
+          title: '',
+          body: 'Nosso sistema te ajuda e vender mais, seja você uma oficina ou ferro-velho.',
           image: _buildImage('orderdailynot'),
           decoration: pageDecoration,
         ),
         PageViewModel(
-          title: "",
-          body: "Welcome to Procura Online, we wish you good sales.",
+          title: '',
+          body: 'Bem-vindo ao Procura Online, desejamos-lhe boas vendas.',
           image: _buildImage('startworking'),
           decoration: pageDecoration,
         ),
@@ -71,9 +70,9 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
       showSkipButton: true,
       skipFlex: 0,
       nextFlex: 0,
-      skip: const Text('Skip'),
+      skip: const Text('Pular'),
       next: const Icon(Icons.arrow_forward),
-      done: const Text('Done', style: TextStyle(fontWeight: FontWeight.w600)),
+      done: const Text('Concluir', style: TextStyle(fontWeight: FontWeight.w600)),
       dotsDecorator: const DotsDecorator(
         size: Size(10.0, 10.0),
         color: Color(0xFFBDBDBD),

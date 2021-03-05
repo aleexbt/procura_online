@@ -41,7 +41,7 @@ class _AdsListingScreenState extends State<AdsListingScreen> {
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
-        title: Text('My ads'),
+        title: Text('Meus anúncios'),
       ),
       body: GetX<AdsListingController>(
         init: _adsListingController,
@@ -54,11 +54,11 @@ class _AdsListingScreenState extends State<AdsListingScreen> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text('Ops, error retrieving your ads.'),
+                  Text('Ops, erro ao carregar seus anúncios.'),
                   TextButton(
                     style: TextButton.styleFrom(primary: Colors.blue),
                     onPressed: () => _.findAll(),
-                    child: Text('Try again'),
+                    child: Text('Tentar novamente'),
                   ),
                 ],
               ),
@@ -69,11 +69,11 @@ class _AdsListingScreenState extends State<AdsListingScreen> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text('You don\'t have any published ad.'),
+                  Text('Você ainda não tem nenhum anúncio aprovado.'),
                   TextButton(
                     style: TextButton.styleFrom(primary: Colors.blue),
                     onPressed: () => _.findAll(skipLoading: true),
-                    child: Text('Check again'),
+                    child: Text('Verificar novamente'),
                   ),
                 ],
               ),
@@ -86,8 +86,8 @@ class _AdsListingScreenState extends State<AdsListingScreen> {
                 itemCount: _.result.products.length,
                 itemBuilder: (context, index) {
                   return ListTileMoreCustomizable(
-                    onTap: (item) =>
-                        Get.toNamed('/settings/ads/${_.result.products[index].id}', arguments: _.result.products[index]),
+                    onTap: (item) => Get.toNamed('/settings/ads/${_.result.products[index].id}',
+                        arguments: _.result.products[index]),
                     leading: _.result.products[index].mainPhoto?.original != null
                         ? ClipRRect(
                             borderRadius: BorderRadius.circular(5),

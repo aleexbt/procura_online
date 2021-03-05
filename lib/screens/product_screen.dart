@@ -16,32 +16,27 @@ import 'package:url_launcher/url_launcher.dart';
 class ProductScreen extends StatelessWidget {
   final ProductController _productController = Get.put(ProductController());
 
-  Future<void> _phoneCall(String url) async {
-    if (await canLaunch(url)) {
-      await launch(url);
-    } else {
-      throw 'Could not launch $url';
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      // extendBodyBehindAppBar: true,
       appBar: AppBar(
         elevation: 0,
+        // backgroundColor: Colors.transparent,
         actions: [
           IconButton(
             icon: Icon(Icons.share),
             onPressed: () {
               if (_productController.product.title != null) {
                 Share.share(
-                    'I think I found a product you may like ${_productController.product.title}, https://procuraonline-dev.pt/listings/${_productController.product.slug}/${_productController.product.id}');
+                    'Acho que você pode gostar disso: ${_productController.product.title}, https://procuraonline-dev.pt/listings/${_productController.product.slug}/${_productController.product.id}');
               }
             },
           )
         ],
       ),
       body: ListView(
+        // padding: EdgeInsets.only(top: 0),
         children: [
           GetX<ProductController>(
             init: _productController,
@@ -59,7 +54,7 @@ class ProductScreen extends StatelessWidget {
                         SvgPicture.asset('assets/images/not_found_towing.svg', width: 350),
                         SizedBox(height: 20),
                         Text(
-                          'Ops, we cannot find this product.',
+                          'Ops, anúncio não encontrado.',
                           style: TextStyle(
                             fontSize: 14,
                             fontWeight: FontWeight.bold,
@@ -128,17 +123,17 @@ class ProductScreen extends StatelessWidget {
                                   '\$${_.product.price}',
                                   style: TextStyle(color: Colors.blueAccent),
                                 ),
-                                SizedBox(width: 10),
-                                Visibility(
-                                  visible: _.product.oldPrice != '0.00',
-                                  child: Text(
-                                    '\$${_.product.oldPrice}',
-                                    style: TextStyle(
-                                      color: Colors.grey[400],
-                                      decoration: TextDecoration.lineThrough,
-                                    ),
-                                  ),
-                                ),
+                                // SizedBox(width: 10),
+                                // Visibility(
+                                //   visible: _.product.oldPrice != '0.00',
+                                //   child: Text(
+                                //     '\$${_.product.oldPrice}',
+                                //     style: TextStyle(
+                                //       color: Colors.grey[400],
+                                //       decoration: TextDecoration.lineThrough,
+                                //     ),
+                                //   ),
+                                // ),
                               ],
                             ),
                           ],
@@ -168,7 +163,7 @@ class ProductScreen extends StatelessWidget {
                           Padding(
                             padding: const EdgeInsets.fromLTRB(10, 10, 0, 2),
                             child: Text(
-                              'Description',
+                              'Descrição',
                               style: TextStyle(fontWeight: FontWeight.bold),
                             ),
                           ),
@@ -200,7 +195,7 @@ class ProductScreen extends StatelessWidget {
                           Padding(
                             padding: const EdgeInsets.fromLTRB(10, 10, 0, 2),
                             child: Text(
-                              'Details',
+                              'Detalhes',
                               style: TextStyle(fontWeight: FontWeight.bold),
                             ),
                           ),
@@ -216,7 +211,7 @@ class ProductScreen extends StatelessWidget {
                                     children: [
                                       RichText(
                                         text: TextSpan(
-                                          text: 'Make: ',
+                                          text: 'Marca: ',
                                           style: TextStyle(
                                             color: Colors.grey[600],
                                             fontSize: 16,
@@ -224,7 +219,7 @@ class ProductScreen extends StatelessWidget {
                                           ),
                                           children: [
                                             TextSpan(
-                                                text: _.product.make.capitalizeFirst ?? 'Not specified',
+                                                text: _.product.make.capitalizeFirst ?? 'Não informado',
                                                 style: TextStyle(
                                                   color: Colors.grey[600],
                                                   fontWeight: FontWeight.normal,
@@ -235,7 +230,7 @@ class ProductScreen extends StatelessWidget {
                                       Divider(height: 30),
                                       RichText(
                                         text: TextSpan(
-                                          text: 'Model: ',
+                                          text: 'Modelo: ',
                                           style: TextStyle(
                                             color: Colors.grey[600],
                                             fontSize: 16,
@@ -243,7 +238,7 @@ class ProductScreen extends StatelessWidget {
                                           ),
                                           children: [
                                             TextSpan(
-                                                text: _.product.model ?? 'Not specified',
+                                                text: _.product.model ?? 'Não informado',
                                                 style: TextStyle(
                                                   color: Colors.grey[600],
                                                   fontWeight: FontWeight.normal,
@@ -254,7 +249,7 @@ class ProductScreen extends StatelessWidget {
                                       Divider(height: 30),
                                       RichText(
                                         text: TextSpan(
-                                          text: 'Year: ',
+                                          text: 'Ano: ',
                                           style: TextStyle(
                                             color: Colors.grey[600],
                                             fontSize: 16,
@@ -262,7 +257,49 @@ class ProductScreen extends StatelessWidget {
                                           ),
                                           children: [
                                             TextSpan(
-                                                text: _.product.year.toString() ?? 'Not specified',
+                                                text: _.product.year.toString() ?? 'Não especificado',
+                                                style: TextStyle(
+                                                  color: Colors.grey[600],
+                                                  fontWeight: FontWeight.normal,
+                                                )),
+                                          ],
+                                        ),
+                                      ),
+                                      Divider(height: 30),
+                                      RichText(
+                                        text: TextSpan(
+                                          text: 'Mês registro: ',
+                                          style: TextStyle(
+                                            color: Colors.grey[600],
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                          children: [
+                                            TextSpan(
+                                                text: _.product.registered != null
+                                                    ? _.product.registered.split('-')[1]
+                                                    : 'Não especificado',
+                                                style: TextStyle(
+                                                  color: Colors.grey[600],
+                                                  fontWeight: FontWeight.normal,
+                                                )),
+                                          ],
+                                        ),
+                                      ),
+                                      Divider(height: 30),
+                                      RichText(
+                                        text: TextSpan(
+                                          text: 'Ano registro: ',
+                                          style: TextStyle(
+                                            color: Colors.grey[600],
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                          children: [
+                                            TextSpan(
+                                                text: _.product.registered != null
+                                                    ? _.product.registered.split('-')[0]
+                                                    : 'Não especificado',
                                                 style: TextStyle(
                                                   color: Colors.grey[600],
                                                   fontWeight: FontWeight.normal,
@@ -280,7 +317,7 @@ class ProductScreen extends StatelessWidget {
                                     children: [
                                       RichText(
                                         text: TextSpan(
-                                          text: 'Fuel: ',
+                                          text: 'Combustível: ',
                                           style: TextStyle(
                                             color: Colors.grey[600],
                                             fontSize: 16,
@@ -288,7 +325,7 @@ class ProductScreen extends StatelessWidget {
                                           ),
                                           children: [
                                             TextSpan(
-                                                text: _.product.fuelType.capitalizeFirst ?? 'Not specified',
+                                                text: _.product.fuelType.capitalizeFirst ?? 'Não especificado',
                                                 style: TextStyle(
                                                   color: Colors.grey[600],
                                                   fontWeight: FontWeight.normal,
@@ -299,7 +336,7 @@ class ProductScreen extends StatelessWidget {
                                       Divider(height: 30),
                                       RichText(
                                         text: TextSpan(
-                                          text: 'Milage: ',
+                                          text: 'Quilómetros: ',
                                           style: TextStyle(
                                             color: Colors.grey[600],
                                             fontSize: 16,
@@ -307,7 +344,7 @@ class ProductScreen extends StatelessWidget {
                                           ),
                                           children: [
                                             TextSpan(
-                                                text: _.product.mileage.toString() ?? 'Not specified',
+                                                text: _.product.mileage.toString() ?? 'Não especificado',
                                                 style: TextStyle(
                                                   color: Colors.grey[600],
                                                   fontWeight: FontWeight.normal,
@@ -318,7 +355,7 @@ class ProductScreen extends StatelessWidget {
                                       Divider(height: 30),
                                       RichText(
                                         text: TextSpan(
-                                          text: 'E. power: ',
+                                          text: 'Cilindrada: ',
                                           style: TextStyle(
                                             color: Colors.grey[600],
                                             fontSize: 16,
@@ -326,7 +363,26 @@ class ProductScreen extends StatelessWidget {
                                           ),
                                           children: [
                                             TextSpan(
-                                                text: _.product.enginePower.toString() ?? 'Not specified',
+                                                text: _.product.engineDisplacement.toString() ?? 'Não especificado',
+                                                style: TextStyle(
+                                                  color: Colors.grey[600],
+                                                  fontWeight: FontWeight.normal,
+                                                )),
+                                          ],
+                                        ),
+                                      ),
+                                      Divider(height: 30),
+                                      RichText(
+                                        text: TextSpan(
+                                          text: 'Potência: ',
+                                          style: TextStyle(
+                                            color: Colors.grey[600],
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                          children: [
+                                            TextSpan(
+                                                text: _.product.enginePower.toString() ?? 'Não especificado',
                                                 style: TextStyle(
                                                   color: Colors.grey[600],
                                                   fontWeight: FontWeight.normal,
@@ -344,7 +400,7 @@ class ProductScreen extends StatelessWidget {
                                     children: [
                                       RichText(
                                         text: TextSpan(
-                                          text: 'Doors: ',
+                                          text: 'Portas: ',
                                           style: TextStyle(
                                             color: Colors.grey[600],
                                             fontSize: 16,
@@ -352,7 +408,7 @@ class ProductScreen extends StatelessWidget {
                                           ),
                                           children: [
                                             TextSpan(
-                                                text: _.product.numberOfDoors.toString() ?? 'Not specified',
+                                                text: _.product.numberOfDoors.toString() ?? 'Não especificado',
                                                 style: TextStyle(
                                                   color: Colors.grey[600],
                                                   fontWeight: FontWeight.normal,
@@ -363,7 +419,7 @@ class ProductScreen extends StatelessWidget {
                                       Divider(height: 30),
                                       RichText(
                                         text: TextSpan(
-                                          text: 'Seats: ',
+                                          text: 'Lotação: ',
                                           style: TextStyle(
                                             color: Colors.grey[600],
                                             fontSize: 16,
@@ -371,7 +427,7 @@ class ProductScreen extends StatelessWidget {
                                           ),
                                           children: [
                                             TextSpan(
-                                                text: _.product.numberOfSeats.toString() ?? 'Not specified',
+                                                text: _.product.numberOfSeats.toString() ?? 'Não especificado',
                                                 style: TextStyle(
                                                   color: Colors.grey[600],
                                                   fontWeight: FontWeight.normal,
@@ -382,7 +438,7 @@ class ProductScreen extends StatelessWidget {
                                       Divider(height: 30),
                                       RichText(
                                         text: TextSpan(
-                                          text: 'Color: ',
+                                          text: 'Cor: ',
                                           style: TextStyle(
                                             color: Colors.grey[600],
                                             fontSize: 16,
@@ -390,7 +446,49 @@ class ProductScreen extends StatelessWidget {
                                           ),
                                           children: [
                                             TextSpan(
-                                                text: _.product.color ?? 'Not specified',
+                                                text: _.product.color ?? 'Não especificado',
+                                                style: TextStyle(
+                                                  color: Colors.grey[600],
+                                                  fontWeight: FontWeight.normal,
+                                                )),
+                                          ],
+                                        ),
+                                      ),
+                                      Divider(height: 30),
+                                      RichText(
+                                        text: TextSpan(
+                                          text: 'Condição: ',
+                                          style: TextStyle(
+                                            color: Colors.grey[600],
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                          children: [
+                                            TextSpan(
+                                                text: _.product.condition ?? 'Não especificado',
+                                                style: TextStyle(
+                                                  color: Colors.grey[600],
+                                                  fontWeight: FontWeight.normal,
+                                                )),
+                                          ],
+                                        ),
+                                      ),
+                                      Divider(height: 30),
+                                      RichText(
+                                        text: TextSpan(
+                                          text: 'Negociável: ',
+                                          style: TextStyle(
+                                            color: Colors.grey[600],
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                          children: [
+                                            TextSpan(
+                                                text: _.product.negotiable != null
+                                                    ? _.product.negotiable == 0
+                                                        ? 'Não'
+                                                        : 'Sim'
+                                                    : 'Não especificado',
                                                 style: TextStyle(
                                                   color: Colors.grey[600],
                                                   fontWeight: FontWeight.normal,
@@ -431,7 +529,7 @@ class ProductScreen extends StatelessWidget {
                             Padding(
                               padding: const EdgeInsets.fromLTRB(10, 10, 0, 2),
                               child: Text(
-                                'Publisher',
+                                'Anunciante',
                                 style: TextStyle(fontWeight: FontWeight.bold),
                               ),
                             ),
@@ -495,12 +593,12 @@ class ProductScreen extends StatelessWidget {
               SpeedDialChild(
                   child: Icon(CupertinoIcons.phone),
                   backgroundColor: Colors.green,
-                  label: 'Phone call',
+                  label: 'Ligar',
                   onTap: () => launch('tel://${_.product.user.phone}')),
               SpeedDialChild(
-                child: Icon(CupertinoIcons.chat_bubble_fill),
+                child: Icon(CupertinoIcons.mail_solid),
                 backgroundColor: Colors.blue,
-                label: 'Send message',
+                label: 'E-mail',
                 onTap: () => launch('mailto:${_.product.user.email}?subject=Re: ${_.product.title}'),
               ),
             ],

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:procura_online/controllers/user_controller.dart';
+import 'package:procura_online/widgets/gradient_button.dart';
 import 'package:procura_online/widgets/text_input.dart';
 
 class EditBillingScreen extends StatelessWidget {
@@ -13,19 +14,8 @@ class EditBillingScreen extends StatelessWidget {
     return GetX<UserController>(
       builder: (_) => Scaffold(
         appBar: AppBar(
-          title: Text('Edit billing'),
+          title: Text('Faturação'),
           elevation: 0,
-          actions: [
-            IconButton(
-              icon: Icon(Icons.check, color: Colors.black),
-              onPressed: () {
-                if (_formKey.currentState.validate()) {
-                  FocusScope.of(context).unfocus();
-                  _userController.updateBilling();
-                }
-              },
-            ),
-          ],
         ),
         body: ModalProgressHUD(
           inAsyncCall: _userController.isSaving,
@@ -39,7 +29,7 @@ class EditBillingScreen extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'VAT number',
+                        'NIF',
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
                         ),
@@ -48,17 +38,17 @@ class EditBillingScreen extends StatelessWidget {
                       CustomTextInput(
                         controller: _.vatNumber.value..text = _.userData?.vatNumber,
                         fillColor: Colors.grey[200],
-                        hintText: 'Enter a VAT number',
+                        hintText: 'Informe o NIF',
                         keyboardType: TextInputType.number,
                         validator: (value) {
                           if (value.isEmpty) {
-                            return 'Please enter a VAT number';
+                            return 'Campo de preenchimento obrigatório.';
                           }
                         },
                       ),
                       SizedBox(height: 20),
                       Text(
-                        'Billing name',
+                        'Nome',
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
                         ),
@@ -67,17 +57,17 @@ class EditBillingScreen extends StatelessWidget {
                       CustomTextInput(
                         controller: _.billingName.value..text = _.userData?.billingName,
                         fillColor: Colors.grey[200],
-                        hintText: 'Enter a billing name',
+                        hintText: 'Informe um nome',
                         textCapitalization: TextCapitalization.sentences,
                         validator: (value) {
                           if (value.isEmpty) {
-                            return 'Please enter a billing name';
+                            return 'Campo de preenchimento obrigatório.';
                           }
                         },
                       ),
                       SizedBox(height: 20),
                       Text(
-                        'Billing country',
+                        'País',
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
                         ),
@@ -87,18 +77,18 @@ class EditBillingScreen extends StatelessWidget {
                         () => CustomTextInput(
                           controller: _.billingCountry.value..text = _.userData?.billingCountry,
                           fillColor: Colors.grey[200],
-                          hintText: 'Enter a billing country',
+                          hintText: 'Informe o país',
                           textCapitalization: TextCapitalization.sentences,
                           validator: (value) {
                             if (value.isEmpty) {
-                              return 'Please enter a billing country';
+                              return 'Campo de preenchimento obrigatório.';
                             }
                           },
                         ),
                       ),
                       SizedBox(height: 20),
                       Text(
-                        'Billing city',
+                        'Cidade',
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
                         ),
@@ -108,18 +98,18 @@ class EditBillingScreen extends StatelessWidget {
                         () => CustomTextInput(
                           controller: _.billingCity.value..text = _.userData?.billingCity,
                           fillColor: Colors.grey[200],
-                          hintText: 'Enter a billing city',
+                          hintText: 'Informe a cidade',
                           textCapitalization: TextCapitalization.sentences,
                           validator: (value) {
                             if (value.isEmpty) {
-                              return 'Please enter a billing city';
+                              return 'Campo de preenchimento obrigatório.';
                             }
                           },
                         ),
                       ),
                       SizedBox(height: 20),
                       Text(
-                        'Billing address',
+                        'Endereço',
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
                         ),
@@ -129,18 +119,18 @@ class EditBillingScreen extends StatelessWidget {
                         () => CustomTextInput(
                           controller: _.billingAddress.value..text = _.userData?.billingAddress,
                           fillColor: Colors.grey[200],
-                          hintText: 'Enter a billing address',
+                          hintText: 'Informe o endereço',
                           textCapitalization: TextCapitalization.sentences,
                           validator: (value) {
                             if (value.isEmpty) {
-                              return 'Please enter a billing address';
+                              return 'Campo de preenchimento obrigatório.';
                             }
                           },
                         ),
                       ),
                       SizedBox(height: 20),
                       Text(
-                        'Billing postcode',
+                        'Código postal',
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
                         ),
@@ -150,14 +140,24 @@ class EditBillingScreen extends StatelessWidget {
                         () => CustomTextInput(
                           controller: _.billingPostcode.value..text = _.userData?.billingPostcode,
                           fillColor: Colors.grey[200],
-                          hintText: 'Enter a billing postcode',
+                          hintText: 'Informe o código postal',
                           keyboardType: TextInputType.number,
                           validator: (value) {
                             if (value.isEmpty) {
-                              return 'Please enter a billing postcode';
+                              return 'Campo de preenchimento obrigatório.';
                             }
                           },
                         ),
+                      ),
+                      SizedBox(height: 20),
+                      GradientButton(
+                        text: 'Guardar',
+                        onPressed: () {
+                          if (_formKey.currentState.validate()) {
+                            FocusScope.of(context).unfocus();
+                            _userController.updateBilling();
+                          }
+                        },
                       ),
                     ],
                   ),

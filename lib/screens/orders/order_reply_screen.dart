@@ -68,7 +68,7 @@ class OrderReplyScreen extends StatelessWidget {
                                 color: Colors.black,
                               ),
                               title: Text(
-                                "Mark as sold",
+                                'Marcar como vendido',
                                 style: TextStyle(
                                   color: Colors.black,
                                   fontWeight: FontWeight.w400,
@@ -138,15 +138,15 @@ class OrderReplyScreen extends StatelessWidget {
                                       ),
                                     ),
                                     SizedBox(height: 5),
-                                    Text('MPN: ${order.mpn}'),
+                                    Text('Referência: ${order.mpn}'),
                                     Divider(),
-                                    Text('Model: ${order.model}'),
+                                    Text('Modelo: ${order.model}'),
                                     Divider(),
-                                    Text('Number of Doors: ${order.numberOfDoors}'),
+                                    Text('Lotação: ${order.numberOfDoors}'),
                                     Divider(),
-                                    Text('Fuel Type: ${order.fuelType}'),
+                                    Text('Combustível: ${order.fuelType}'),
                                     Divider(),
-                                    Text('Notes: ${order.noteText}'),
+                                    Text('Nota: ${order.noteText}'),
                                     Visibility(
                                       visible: order.media.length > 0,
                                       child: Padding(
@@ -215,7 +215,7 @@ class OrderReplyScreen extends StatelessWidget {
                           controller: _message,
                           textCapitalization: TextCapitalization.sentences,
                           decoration: InputDecoration.collapsed(
-                            hintText: "Write your message",
+                            hintText: 'Escreva sua mensagem',
                           ),
                         ),
                       ),

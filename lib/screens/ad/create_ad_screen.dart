@@ -87,7 +87,7 @@ class _CreateAdScreenState extends State<CreateAdScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Create ad'),
+        title: Text('Criar anúncio'),
         elevation: 0,
       ),
       body: GetX<CreateAdController>(builder: (_) {
@@ -121,7 +121,7 @@ class _CreateAdScreenState extends State<CreateAdScreen> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              'Category',
+                              'Categoria',
                               style: TextStyle(
                                 fontWeight: FontWeight.bold,
                               ),
@@ -129,9 +129,8 @@ class _CreateAdScreenState extends State<CreateAdScreen> {
                             SizedBox(height: 10),
                             SelectOption(
                               isLoading: _.isLoadingCategories,
-                              placeholder: 'Select one',
-                              modalTitle: 'Categories',
-                              selectText: 'Select a category',
+                              modalTitle: 'Categoria',
+                              selectText: 'Selecionar categoria',
                               value: _.selectedCategory.value,
                               choiceItems: _.categories,
                               onChange: (state) => _.setCategory(state.value),
@@ -142,14 +141,14 @@ class _CreateAdScreenState extends State<CreateAdScreen> {
                               child: Padding(
                                 padding: const EdgeInsets.only(left: 12, top: 5),
                                 child: Text(
-                                  'Please select a category',
+                                  'Campo de preenchimento obrigatório.',
                                   style: TextStyle(color: Colors.red, fontSize: 12),
                                 ),
                               ),
                             ),
                             SizedBox(height: 20),
                             Text(
-                              'Subcategory',
+                              'Subcategoria',
                               style: TextStyle(
                                 fontWeight: FontWeight.bold,
                               ),
@@ -158,9 +157,8 @@ class _CreateAdScreenState extends State<CreateAdScreen> {
                             SelectOption(
                               isLoading: _.isLoadingSubCategories,
                               isDisabled: _.selectedCategory.value == '',
-                              placeholder: 'Select one',
-                              modalTitle: 'Subcategories',
-                              selectText: 'Select a subcategory',
+                              modalTitle: 'Subcategoria',
+                              selectText: 'Selecionar subcategoria',
                               value: _.selectedSubCategory.value,
                               choiceItems: _.subcategories,
                               onChange: (state) => _.setSubCategory(state.value),
@@ -171,14 +169,14 @@ class _CreateAdScreenState extends State<CreateAdScreen> {
                               child: Padding(
                                 padding: const EdgeInsets.only(left: 12, top: 5),
                                 child: Text(
-                                  'Please select a subcategory',
+                                  'Campo de preenchimento obrigatório.',
                                   style: TextStyle(color: Colors.red, fontSize: 12),
                                 ),
                               ),
                             ),
                             SizedBox(height: 20),
                             Text(
-                              'Ad title',
+                              'Título',
                               style: TextStyle(
                                 fontWeight: FontWeight.bold,
                               ),
@@ -187,17 +185,17 @@ class _CreateAdScreenState extends State<CreateAdScreen> {
                             CustomTextInput(
                               controller: _.title.value,
                               fillColor: Colors.grey[200],
-                              hintText: 'Enter the title of your ad',
+                              hintText: 'Escolha um título para seu anúncio',
                               textCapitalization: TextCapitalization.sentences,
                               validator: (value) {
                                 if (value.isEmpty) {
-                                  return 'Please enter a title';
+                                  return 'Campo de preenchimento obrigatório.';
                                 }
                               },
                             ),
                             SizedBox(height: 20),
                             Text(
-                              'Description',
+                              'Descrição',
                               style: TextStyle(
                                 fontWeight: FontWeight.bold,
                               ),
@@ -206,19 +204,19 @@ class _CreateAdScreenState extends State<CreateAdScreen> {
                             CustomTextInput(
                               controller: _.description.value,
                               fillColor: Colors.grey[200],
-                              hintText: 'Enter the description of the item',
+                              hintText: 'Informe uma descrição para o item',
                               textCapitalization: TextCapitalization.sentences,
                               maxLines: 5,
                               keyboardType: TextInputType.multiline,
                               validator: (value) {
                                 if (value.isEmpty) {
-                                  return 'Please enter a description';
+                                  return 'Campo de preenchimento obrigatório.';
                                 }
                               },
                             ),
                             SizedBox(height: 20),
                             Text(
-                              'Brand',
+                              'Marca',
                               style: TextStyle(
                                 fontWeight: FontWeight.bold,
                               ),
@@ -227,9 +225,8 @@ class _CreateAdScreenState extends State<CreateAdScreen> {
                             SelectOptionLogo(
                               enableFilter: true,
                               isLoading: _.isLoadingBrands,
-                              placeholder: 'Select one',
-                              modalTitle: 'Brands',
-                              selectText: 'Select a brand',
+                              modalTitle: 'Marca',
+                              selectText: 'Selecionar marca',
                               value: _.selectedBrand.value,
                               choiceItems: _.brands,
                               onChange: (state) => _.setBrand(state.value),
@@ -240,14 +237,14 @@ class _CreateAdScreenState extends State<CreateAdScreen> {
                               child: Padding(
                                 padding: const EdgeInsets.only(left: 12, top: 5),
                                 child: Text(
-                                  'Please select a brand',
+                                  'Campo de preenchimento obrigatório.',
                                   style: TextStyle(color: Colors.red, fontSize: 12),
                                 ),
                               ),
                             ),
                             SizedBox(height: 20),
                             Text(
-                              'Model',
+                              'Modelo',
                               style: TextStyle(
                                 fontWeight: FontWeight.bold,
                               ),
@@ -257,9 +254,8 @@ class _CreateAdScreenState extends State<CreateAdScreen> {
                               enableFilter: true,
                               isLoading: _.isLoadingModels,
                               isDisabled: _.selectedBrand.value == '',
-                              placeholder: 'Select one',
-                              modalTitle: 'Models',
-                              selectText: 'Select a model',
+                              modalTitle: 'Modelo',
+                              selectText: 'Selecionar modelo',
                               value: _.selectedModel.value,
                               choiceItems: _.models,
                               onChange: (state) => _.setModel(state.value),
@@ -270,14 +266,14 @@ class _CreateAdScreenState extends State<CreateAdScreen> {
                               child: Padding(
                                 padding: const EdgeInsets.only(left: 12, top: 5),
                                 child: Text(
-                                  'Please select a model',
+                                  'Campo de preenchimento obrigatório.',
                                   style: TextStyle(color: Colors.red, fontSize: 12),
                                 ),
                               ),
                             ),
                             SizedBox(height: 20),
                             Text(
-                              'Year',
+                              'Ano',
                               style: TextStyle(
                                 fontWeight: FontWeight.bold,
                               ),
@@ -286,26 +282,26 @@ class _CreateAdScreenState extends State<CreateAdScreen> {
                             CustomTextInput(
                               controller: _.year.value,
                               fillColor: Colors.grey[200],
-                              hintText: 'Enter the year',
+                              hintText: 'Informe o ano',
                               keyboardType: TextInputType.number,
                               maxLength: 4,
                               validator: (value) {
                                 if (value.isEmpty) {
-                                  return 'Please enter a year';
+                                  return 'Campo de preenchimento obrigatório.';
                                 }
                               },
                             ),
                             SizedBox(height: 20),
                             Text(
-                              'Color',
+                              'Cor',
                               style: TextStyle(
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
                             SizedBox(height: 10),
                             SelectOption(
-                              modalTitle: 'Color',
-                              selectText: 'Select a color',
+                              modalTitle: 'Cor',
+                              selectText: 'Selecionar cor',
                               value: _.selectedColor.value,
                               choiceItems: _.colorOptions,
                               onChange: (state) => _.setColor(state.value),
@@ -316,14 +312,14 @@ class _CreateAdScreenState extends State<CreateAdScreen> {
                               child: Padding(
                                 padding: const EdgeInsets.only(left: 12, top: 5),
                                 child: Text(
-                                  'Please select a color',
+                                  'Campo de preenchimento obrigatório.',
                                   style: TextStyle(color: Colors.red, fontSize: 12),
                                 ),
                               ),
                             ),
                             SizedBox(height: 20),
                             Text(
-                              'Engine displacement',
+                              'Cilindrada',
                               style: TextStyle(
                                 fontWeight: FontWeight.bold,
                               ),
@@ -332,17 +328,17 @@ class _CreateAdScreenState extends State<CreateAdScreen> {
                             CustomTextInput(
                               controller: _.engineDisplacement.value,
                               fillColor: Colors.grey[200],
-                              hintText: 'Enter the engine displacement',
+                              hintText: 'Informe a cilindrada',
                               keyboardType: TextInputType.number,
                               validator: (value) {
                                 if (value.isEmpty) {
-                                  return 'Please enter the engine displacement';
+                                  return 'Campo de preenchimento obrigatório.';
                                 }
                               },
                             ),
                             SizedBox(height: 20),
                             Text(
-                              'Engine power',
+                              'Potência',
                               style: TextStyle(
                                 fontWeight: FontWeight.bold,
                               ),
@@ -351,25 +347,25 @@ class _CreateAdScreenState extends State<CreateAdScreen> {
                             CustomTextInput(
                               controller: _.enginePower.value,
                               fillColor: Colors.grey[200],
-                              hintText: 'Enter the engine power',
+                              hintText: 'Informe a potência',
                               keyboardType: TextInputType.number,
                               validator: (value) {
                                 if (value.isEmpty) {
-                                  return 'Please enter the engine power';
+                                  return 'Campo de preenchimento obrigatório.';
                                 }
                               },
                             ),
                             SizedBox(height: 20),
                             Text(
-                              'Transmission',
+                              'Transmissão',
                               style: TextStyle(
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
                             SizedBox(height: 10),
                             SelectOption(
-                              modalTitle: 'Transmission Type',
-                              selectText: 'Select a transmission type',
+                              modalTitle: 'Transmissão',
+                              selectText: 'Selecionar transmissão',
                               value: _.selectedTransmission.value,
                               choiceItems: _.transmissionOptions,
                               onChange: (state) => _.setTransmission(state.value),
@@ -380,14 +376,14 @@ class _CreateAdScreenState extends State<CreateAdScreen> {
                               child: Padding(
                                 padding: const EdgeInsets.only(left: 12, top: 5),
                                 child: Text(
-                                  'Please select a transmission type',
+                                  'Campo de preenchimento obrigatório.',
                                   style: TextStyle(color: Colors.red, fontSize: 12),
                                 ),
                               ),
                             ),
                             SizedBox(height: 20),
                             Text(
-                              'Milage',
+                              'Quilómetros',
                               style: TextStyle(
                                 fontWeight: FontWeight.bold,
                               ),
@@ -396,17 +392,17 @@ class _CreateAdScreenState extends State<CreateAdScreen> {
                             CustomTextInput(
                               controller: _.miliage.value,
                               fillColor: Colors.grey[200],
-                              hintText: 'Enter the miliage',
+                              hintText: 'Informe os quilómetros',
                               keyboardType: TextInputType.number,
                               validator: (value) {
                                 if (value.isEmpty) {
-                                  return 'Please enter the miliage';
+                                  return 'Campo de preenchimento obrigatório.';
                                 }
                               },
                             ),
                             SizedBox(height: 20),
                             Text(
-                              'Number of seats',
+                              'Lotação',
                               style: TextStyle(
                                 fontWeight: FontWeight.bold,
                               ),
@@ -415,18 +411,18 @@ class _CreateAdScreenState extends State<CreateAdScreen> {
                             CustomTextInput(
                               controller: _.numberOfSeats.value,
                               fillColor: Colors.grey[200],
-                              hintText: 'Enter the number of seats',
+                              hintText: 'Informe a lotação',
                               keyboardType: TextInputType.number,
                               maxLength: 4,
                               validator: (value) {
                                 if (value.isEmpty) {
-                                  return 'Please enter the number of seats';
+                                  return 'Campo de preenchimento obrigatório.';
                                 }
                               },
                             ),
                             SizedBox(height: 20),
                             Text(
-                              'Number of doors',
+                              'Número de portas',
                               style: TextStyle(
                                 fontWeight: FontWeight.bold,
                               ),
@@ -435,26 +431,26 @@ class _CreateAdScreenState extends State<CreateAdScreen> {
                             CustomTextInput(
                               controller: _.numberOfDoors.value,
                               fillColor: Colors.grey[200],
-                              hintText: 'Enter the number of doors',
+                              hintText: 'Informe o número de portas',
                               keyboardType: TextInputType.number,
                               maxLength: 4,
                               validator: (value) {
                                 if (value.isEmpty) {
-                                  return 'Please enter the number of doors';
+                                  return 'Campo de preenchimento obrigatório.';
                                 }
                               },
                             ),
                             SizedBox(height: 20),
                             Text(
-                              'Fuel type',
+                              'Combustível',
                               style: TextStyle(
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
                             SizedBox(height: 10),
                             SelectOption(
-                              modalTitle: 'Fuel',
-                              selectText: 'Select a fuel type',
+                              modalTitle: 'Combustível',
+                              selectText: 'Selecionar combustível',
                               value: _.selectedFuel.value,
                               choiceItems: _.fuelOptions,
                               onChange: (state) => _.setFuel(state.value),
@@ -465,22 +461,22 @@ class _CreateAdScreenState extends State<CreateAdScreen> {
                               child: Padding(
                                 padding: const EdgeInsets.only(left: 12, top: 5),
                                 child: Text(
-                                  'Please select a fuel type',
+                                  'Campo de preenchimento obrigatório.',
                                   style: TextStyle(color: Colors.red, fontSize: 12),
                                 ),
                               ),
                             ),
                             SizedBox(height: 20),
                             Text(
-                              'Condition',
+                              'Condição',
                               style: TextStyle(
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
                             SizedBox(height: 10),
                             SelectOption(
-                              modalTitle: 'Condition',
-                              selectText: 'Select a condition',
+                              modalTitle: 'Condição',
+                              selectText: 'Informe a condição',
                               value: _.selectedCondition.value,
                               choiceItems: _.conditionOptions,
                               onChange: (state) => _.setCondition(state.value),
@@ -491,14 +487,14 @@ class _CreateAdScreenState extends State<CreateAdScreen> {
                               child: Padding(
                                 padding: const EdgeInsets.only(left: 12, top: 5),
                                 child: Text(
-                                  'Please select a condition',
+                                  'Campo de preenchimento obrigatório.',
                                   style: TextStyle(color: Colors.red, fontSize: 12),
                                 ),
                               ),
                             ),
                             SizedBox(height: 20),
                             Text(
-                              'Price',
+                              'Preço',
                               style: TextStyle(
                                 fontWeight: FontWeight.bold,
                               ),
@@ -507,26 +503,26 @@ class _CreateAdScreenState extends State<CreateAdScreen> {
                             CustomTextInput(
                               controller: _.price.value,
                               fillColor: Colors.grey[200],
-                              hintText: 'Enter the price',
+                              hintText: 'Informe o preço',
                               keyboardType: TextInputType.number,
                               maxLength: 8,
                               validator: (value) {
                                 if (value.isEmpty) {
-                                  return 'Please enter a price';
+                                  return 'Campo de preenchimento obrigatório.';
                                 }
                               },
                             ),
                             SizedBox(height: 20),
                             Text(
-                              'Negotiable',
+                              'Negociável',
                               style: TextStyle(
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
                             SizedBox(height: 10),
                             SelectOption(
-                              modalTitle: 'Negotiable',
-                              selectText: 'Is negotiable?',
+                              modalTitle: 'Negociável',
+                              selectText: 'É negociável?',
                               value: _.selectedNegotiable.value,
                               choiceItems: _.negotiableOptions,
                               onChange: (state) => _.setNegotiable(state.value),
@@ -537,14 +533,14 @@ class _CreateAdScreenState extends State<CreateAdScreen> {
                               child: Padding(
                                 padding: const EdgeInsets.only(left: 12, top: 5),
                                 child: Text(
-                                  'Please select if is negotiable',
+                                  'Campo de preenchimento obrigatório.',
                                   style: TextStyle(color: Colors.red, fontSize: 12),
                                 ),
                               ),
                             ),
                             SizedBox(height: 20),
                             Text(
-                              'Registered date',
+                              'Data de registro',
                               style: TextStyle(
                                 fontWeight: FontWeight.bold,
                               ),
@@ -587,13 +583,13 @@ class _CreateAdScreenState extends State<CreateAdScreen> {
                                     },
                                   ),
                                 ),
-                                Text('Make this ad featured?'),
+                                Text('Colocar em destaque?'),
                               ],
                             ),
                             SizedBox(height: 20),
                             Obx(
                               () => GradientButton(
-                                text: 'Publish ad',
+                                text: 'Publicar',
                                 onPressed: !_userController.createAdPermission
                                     ? null
                                     : () {
@@ -707,7 +703,7 @@ class _CreateAdScreenState extends State<CreateAdScreen> {
                         size: 50,
                         color: Colors.blue,
                       ),
-                      Text('Main photo'),
+                      Text('Foto principal'),
                     ],
                   ),
                 ),
@@ -832,7 +828,7 @@ class _CreateAdScreenState extends State<CreateAdScreen> {
                         size: 35,
                       ),
                       Text(
-                        'ADD MORE',
+                        'ADD MAIS',
                         style: TextStyle(
                           color: Colors.grey[400],
                           fontSize: 12,

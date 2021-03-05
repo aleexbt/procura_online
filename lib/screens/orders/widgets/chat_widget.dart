@@ -91,11 +91,11 @@ class ChatWidget extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text('Ops, error retrieving your chats.'),
+              Text('Ops, erro ao carregar mensagens.'),
               TextButton(
                 style: TextButton.styleFrom(primary: Colors.blue),
                 onPressed: () => _.findAll(),
-                child: Text('Try again'),
+                child: Text('Tentar novamente'),
               ),
             ],
           ),
@@ -108,11 +108,11 @@ class ChatWidget extends StatelessWidget {
             children: [
               SvgPicture.asset('assets/images/emptyinbox.svg', width: 280),
               SizedBox(height: 10),
-              Text('You don\'t have any conversations to show.'),
+              Text('Sem conversas no momento'),
               TextButton(
                 style: TextButton.styleFrom(primary: Colors.blue),
                 onPressed: () => _.findAll(),
-                child: Text('Check again'),
+                child: Text('Verificar novamente'),
               ),
             ],
           ),

@@ -94,11 +94,11 @@ class OrdersWidget extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text('Ops, error retrieving orders.'),
+                Text('Ops, erro ao carregar pedidos.'),
                 TextButton(
                   style: TextButton.styleFrom(primary: Colors.blue),
                   onPressed: () => _.findAll(),
-                  child: Text('Try again'),
+                  child: Text('Tentar novamente'),
                 ),
               ],
             ),
@@ -109,7 +109,7 @@ class OrdersWidget extends StatelessWidget {
             padding: const EdgeInsets.all(8),
             child: Center(
               child: Text(
-                'You can only see orders you sent. Change your subscription plan to see other users orders.',
+                'Você só pode ver pedidos enviados. Mude seu plano para ver pedidos de outros usuários.',
                 textAlign: TextAlign.center,
               ),
             ),
@@ -124,26 +124,11 @@ class OrdersWidget extends StatelessWidget {
                 children: [
                   SvgPicture.asset('assets/images/emptyinbox.svg', width: 280),
                   SizedBox(height: 10),
-                  RichText(
-                    text: TextSpan(
-                      text: 'We don\'t have any orders to show. You can change the filter from ',
-                      style: TextStyle(color: Colors.grey[800]),
-                      children: [
-                        TextSpan(
-                          text: '${_ordersController.filterName}',
-                          style: TextStyle(fontWeight: FontWeight.bold),
-                        ),
-                        TextSpan(
-                          text: ' to something else.',
-                        ),
-                      ],
-                    ),
-                    textAlign: TextAlign.center,
-                  ),
+                  Text('Sem pedidos no momento'),
                   TextButton(
                     style: TextButton.styleFrom(primary: Colors.blue),
                     onPressed: () => _.findAll(),
-                    child: Text('Check again'),
+                    child: Text('Verificar novamente'),
                   ),
                 ],
               ),

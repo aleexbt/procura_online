@@ -105,6 +105,9 @@ class UserController extends GetxController with StateMixin<User> {
       }
     } catch (err) {
       print('INIT_DATA_ERROR');
+      Hive.deleteBoxFromDisk('auth');
+      Hive.deleteBoxFromDisk('userData');
+      Hive.deleteBoxFromDisk('conversations');
     }
   }
 
@@ -165,8 +168,7 @@ class UserController extends GetxController with StateMixin<User> {
           duration: Duration(seconds: 3 + errorList.length));
     } catch (err) {
       print(err);
-      Get.rawSnackbar(
-          message: 'Ops, something went wrong.', backgroundColor: Colors.red, duration: Duration(seconds: 3));
+      Get.rawSnackbar(message: 'Ops, ocorreu um erro.', backgroundColor: Colors.red, duration: Duration(seconds: 3));
     } finally {
       _isLoading.value = false;
     }
@@ -203,25 +205,10 @@ class UserController extends GetxController with StateMixin<User> {
         "plan_id": plan,
       };
 
-      print({
-        "name": name,
-        "email": email,
-        "phone": phone,
-        "password": password,
-        "type": type,
-        "company": company,
-        "skills": skills,
-        "district_id": district,
-        "city_id": city,
-        "address": address,
-        "postcode": postcode,
-        "plan_id": plan,
-      });
-
       await _userRepository.signUp(registerData);
       Get.back();
       Get.rawSnackbar(
-          message: 'User registered successfully.', backgroundColor: Colors.green, duration: Duration(seconds: 3));
+          message: 'Usuário registrado com sucesso.', backgroundColor: Colors.green, duration: Duration(seconds: 3));
     } on DioError catch (err) {
       Map<String, dynamic> errors = err.response.data['errors'];
       List<String> errorList = [];
@@ -307,16 +294,12 @@ class UserController extends GetxController with StateMixin<User> {
       print(err);
       _savingError.value = true;
       Get.rawSnackbar(
-          message: 'Ops, error updating profile information.',
-          backgroundColor: Colors.red,
-          duration: Duration(seconds: 3));
+          message: 'Ops, erro salvar alterações.', backgroundColor: Colors.red, duration: Duration(seconds: 3));
     } catch (err) {
       print(err);
       _savingError.value = true;
       Get.rawSnackbar(
-          message: 'Ops, error updating profile information..',
-          backgroundColor: Colors.red,
-          duration: Duration(seconds: 3));
+          message: 'Ops, erro salvar alterações.', backgroundColor: Colors.red, duration: Duration(seconds: 3));
     } finally {
       _isSaving.value = false;
     }
@@ -352,16 +335,12 @@ class UserController extends GetxController with StateMixin<User> {
       print(err);
       _savingError.value = true;
       Get.rawSnackbar(
-          message: 'Ops, error updating billing information.',
-          backgroundColor: Colors.red,
-          duration: Duration(seconds: 3));
+          message: 'Ops, erro salvar alterações.', backgroundColor: Colors.red, duration: Duration(seconds: 3));
     } catch (err) {
       print(err);
       _savingError.value = true;
       Get.rawSnackbar(
-          message: 'Ops, error updating billing information.',
-          backgroundColor: Colors.red,
-          duration: Duration(seconds: 3));
+          message: 'Ops, erro salvar alterações.', backgroundColor: Colors.red, duration: Duration(seconds: 3));
     } finally {
       _isSaving.value = false;
     }
@@ -378,7 +357,7 @@ class UserController extends GetxController with StateMixin<User> {
       await _userRepository.changePassword(passwordData);
       Get.back();
       Get.rawSnackbar(
-          message: 'Password changed successfully.', backgroundColor: Colors.green, duration: Duration(seconds: 3));
+          message: 'Password alterada com sucesso.', backgroundColor: Colors.green, duration: Duration(seconds: 3));
     } on DioError catch (err) {
       Map<String, dynamic> errors = err.response.data['errors'];
       List<String> errorList = [];
@@ -482,15 +461,15 @@ class UserController extends GetxController with StateMixin<User> {
         _createAdPermission.value = permission;
       } else if (feature == 'listings' && !permission) {
         errorDialog(
-          title: 'Error',
-          message: 'You can\'t create a new ad. Please check your subscription plan.',
+          title: 'Erro',
+          message: 'Você não pode criar um novo anúncio. Verifique seu plano.',
           dismiss: () => Get.back(),
         );
       }
       if (feature == 'listings-featured' && !permission) {
         errorDialog(
-          title: 'Error',
-          message: 'You can\'t make this ad featured. Please check your subscription plan.',
+          title: 'Erro',
+          message: 'Impossível colocar em destaque. Verifique seu plano.',
           dismiss: () => Get.back(),
         );
       }
@@ -498,8 +477,8 @@ class UserController extends GetxController with StateMixin<User> {
         _createOrderPermission.value = permission;
       } else if (feature == 'order-create' && !permission) {
         errorDialog(
-          title: 'Error',
-          message: 'You can\'t create a new order. Please check your subscription plan.',
+          title: 'Erro',
+          message: 'Você não pode criar um novo pedido. Verifique seu plano.',
           dismiss: () => Get.back(),
         );
       }
@@ -522,8 +501,8 @@ class UserController extends GetxController with StateMixin<User> {
     // await Future.delayed(Duration(seconds: 1));
     if (!listOrdersPermission) {
       errorDialog(
-        title: 'Error',
-        message: 'You can\'t create a new order. Please check your subscription plan.',
+        title: 'Erro',
+        message: 'Você não pode criar um novo pedido. Verifique seu plano.',
         dismiss: () => Get.back(),
       );
     }
@@ -553,7 +532,7 @@ class UserController extends GetxController with StateMixin<User> {
       });
     } catch (e) {
       Get.rawSnackbar(
-          message: 'Ops, error uploading cover photo.', backgroundColor: Colors.red, duration: Duration(seconds: 3));
+          message: 'Ops, erro ao enviar foto da capa.', backgroundColor: Colors.red, duration: Duration(seconds: 3));
     } finally {
       _isSaving.value = false;
     }
@@ -568,7 +547,7 @@ class UserController extends GetxController with StateMixin<User> {
       });
     } catch (e) {
       Get.rawSnackbar(
-          message: 'Ops, error uploading avatar photo.', backgroundColor: Colors.red, duration: Duration(seconds: 3));
+          message: 'Ops, erro ao enviar foto do perfil.', backgroundColor: Colors.red, duration: Duration(seconds: 3));
     } finally {
       _isSaving.value = false;
     }

@@ -92,7 +92,7 @@ class _CreateOrderScreenState extends State<CreateOrderScreen> {
     FocusScope.of(context).requestFocus(mainNode);
     return Scaffold(
       appBar: AppBar(
-        title: Text('Create order'),
+        title: Text('Adicionar pedido'),
         elevation: 0,
       ),
       body: Obx(
@@ -125,7 +125,7 @@ class _CreateOrderScreenState extends State<CreateOrderScreen> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              'MPN',
+                              'Referência',
                               style: TextStyle(
                                 fontWeight: FontWeight.bold,
                               ),
@@ -134,17 +134,17 @@ class _CreateOrderScreenState extends State<CreateOrderScreen> {
                             CustomTextInput(
                               controller: _ordersController.mpn.value,
                               fillColor: Colors.grey[200],
-                              hintText: 'Enter the MPN',
+                              hintText: 'Informe uma referência',
                               textCapitalization: TextCapitalization.sentences,
                               validator: (value) {
                                 if (value.isEmpty) {
-                                  return 'Please enter the MPN';
+                                  return 'Campo de preenchimento obrigatório.';
                                 }
                               },
                             ),
                             SizedBox(height: 20),
                             Text(
-                              'Note',
+                              'Pedido',
                               style: TextStyle(
                                 fontWeight: FontWeight.bold,
                               ),
@@ -153,19 +153,19 @@ class _CreateOrderScreenState extends State<CreateOrderScreen> {
                             CustomTextInput(
                               controller: _ordersController.note.value,
                               fillColor: Colors.grey[200],
-                              hintText: 'Enter a note',
+                              hintText: 'Detalhes do seu pedido',
                               textCapitalization: TextCapitalization.sentences,
                               maxLines: 5,
                               keyboardType: TextInputType.multiline,
                               validator: (value) {
                                 if (value.isEmpty) {
-                                  return 'Please enter a note';
+                                  return 'Campo de preenchimento obrigatório.';
                                 }
                               },
                             ),
                             SizedBox(height: 20),
                             Text(
-                              'Brand',
+                              'Marca',
                               style: TextStyle(
                                 fontWeight: FontWeight.bold,
                               ),
@@ -175,9 +175,8 @@ class _CreateOrderScreenState extends State<CreateOrderScreen> {
                               () => SelectOptionLogo(
                                 enableFilter: true,
                                 isLoading: _ordersController.isLoadingBrands,
-                                placeholder: 'Select one',
-                                modalTitle: 'Brands',
-                                selectText: 'Select a brand',
+                                modalTitle: 'Marca',
+                                selectText: 'Selecionar marca',
                                 value: _ordersController.selectedBrand.value,
                                 choiceItems: _ordersController.brands,
                                 onChange: (state) => _ordersController.setBrand(state.value),
@@ -190,7 +189,7 @@ class _CreateOrderScreenState extends State<CreateOrderScreen> {
                                 child: Padding(
                                   padding: const EdgeInsets.only(left: 12, top: 5),
                                   child: Text(
-                                    'Please select a brand',
+                                    'Campo de preenchimento obrigatório.',
                                     style: TextStyle(color: Colors.red, fontSize: 12),
                                   ),
                                 ),
@@ -198,7 +197,7 @@ class _CreateOrderScreenState extends State<CreateOrderScreen> {
                             ),
                             SizedBox(height: 20),
                             Text(
-                              'Model',
+                              'Modelo',
                               style: TextStyle(
                                 fontWeight: FontWeight.bold,
                               ),
@@ -209,9 +208,8 @@ class _CreateOrderScreenState extends State<CreateOrderScreen> {
                                 enableFilter: true,
                                 isLoading: _ordersController.isLoadingModels,
                                 isDisabled: _ordersController.selectedBrand.value == '',
-                                placeholder: 'Select one',
-                                modalTitle: 'Models',
-                                selectText: 'Select a model',
+                                modalTitle: 'Modelo',
+                                selectText: 'Selecionar modelo',
                                 value: _ordersController.selectedModel.value,
                                 choiceItems: _ordersController.models,
                                 onChange: (state) => _ordersController.setModel(state.value),
@@ -224,7 +222,7 @@ class _CreateOrderScreenState extends State<CreateOrderScreen> {
                                 child: Padding(
                                   padding: const EdgeInsets.only(left: 12, top: 5),
                                   child: Text(
-                                    'Please select a model',
+                                    'Campo de preenchimento obrigatório.',
                                     style: TextStyle(color: Colors.red, fontSize: 12),
                                   ),
                                 ),
@@ -232,7 +230,7 @@ class _CreateOrderScreenState extends State<CreateOrderScreen> {
                             ),
                             SizedBox(height: 20),
                             Text(
-                              'Year',
+                              'Ano',
                               style: TextStyle(
                                 fontWeight: FontWeight.bold,
                               ),
@@ -241,18 +239,18 @@ class _CreateOrderScreenState extends State<CreateOrderScreen> {
                             CustomTextInput(
                               controller: _ordersController.year.value,
                               fillColor: Colors.grey[200],
-                              hintText: 'Enter the year',
+                              hintText: 'Informe o ano',
                               keyboardType: TextInputType.number,
                               maxLength: 4,
                               validator: (value) {
                                 if (value.isEmpty) {
-                                  return 'Please enter a year';
+                                  return 'Campo de preenchimento obrigatório.';
                                 }
                               },
                             ),
                             SizedBox(height: 20),
                             Text(
-                              'Engine displacement',
+                              'Potência',
                               style: TextStyle(
                                 fontWeight: FontWeight.bold,
                               ),
@@ -261,17 +259,17 @@ class _CreateOrderScreenState extends State<CreateOrderScreen> {
                             CustomTextInput(
                               controller: _ordersController.engineDisplacement.value,
                               fillColor: Colors.grey[200],
-                              hintText: 'Enter the engine displacement',
+                              hintText: 'Informe a potência',
                               keyboardType: TextInputType.number,
                               validator: (value) {
                                 if (value.isEmpty) {
-                                  return 'Please enter the engine displacement';
+                                  return 'Campo de preenchimento obrigatório.';
                                 }
                               },
                             ),
                             SizedBox(height: 20),
                             Text(
-                              'Number of doors',
+                              'Lotação',
                               style: TextStyle(
                                 fontWeight: FontWeight.bold,
                               ),
@@ -280,26 +278,26 @@ class _CreateOrderScreenState extends State<CreateOrderScreen> {
                             CustomTextInput(
                               controller: _ordersController.numberOfDoors.value,
                               fillColor: Colors.grey[200],
-                              hintText: 'Enter the number of doors',
+                              hintText: 'Informe o número de portas',
                               keyboardType: TextInputType.number,
-                              maxLength: 4,
+                              maxLength: 2,
                               validator: (value) {
                                 if (value.isEmpty) {
-                                  return 'Please enter the number of doors';
+                                  return 'Campo de preenchimento obrigatório.';
                                 }
                               },
                             ),
                             SizedBox(height: 20),
                             Text(
-                              'Fuel type',
+                              'Combustível',
                               style: TextStyle(
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
                             SizedBox(height: 10),
                             SelectOption(
-                              modalTitle: 'Fuel',
-                              selectText: 'Select a fuel type',
+                              modalTitle: 'Combustível',
+                              selectText: 'Selecionar combustível',
                               value: _ordersController.selectedFuel.value,
                               choiceItems: _ordersController.fuelOptions,
                               onChange: (state) => _ordersController.setFuel(state.value),
@@ -310,14 +308,14 @@ class _CreateOrderScreenState extends State<CreateOrderScreen> {
                               child: Padding(
                                 padding: const EdgeInsets.only(left: 12, top: 5),
                                 child: Text(
-                                  'Please select a fuel type',
+                                  'Campo de preenchimento obrigatório.',
                                   style: TextStyle(color: Colors.red, fontSize: 12),
                                 ),
                               ),
                             ),
                             SizedBox(height: 20),
                             GradientButton(
-                              text: 'Create order',
+                              text: 'Enviar pedido',
                               onPressed: !_userController.listOrdersPermission
                                   ? null
                                   : () {
@@ -453,7 +451,7 @@ class _CreateOrderScreenState extends State<CreateOrderScreen> {
                         size: 35,
                       ),
                       Text(
-                        'ADD PHOTOS',
+                        'ADD FOTOS',
                         style: TextStyle(
                           color: Colors.grey[400],
                           fontSize: 12,

@@ -124,9 +124,7 @@ class _ConversationScreenState extends State<ConversationScreen> {
                             color: Colors.black,
                           ),
                           title: Text(
-                            _conversationController.conversation.mute == 0
-                                ? 'Mute conversation'
-                                : 'Unmute conversation',
+                            _conversationController.conversation.mute == 0 ? 'Silenciar conversa' : 'Restaurar som',
                             style: TextStyle(
                               color: Colors.black,
                               fontWeight: FontWeight.w400,
@@ -181,11 +179,11 @@ class _ConversationScreenState extends State<ConversationScreen> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text('Ops, error retrieving message data.'),
+                    Text('Ops, ocorreu um erro ao carregar messagens.'),
                     TextButton(
                       style: TextButton.styleFrom(primary: Colors.blue),
                       onPressed: () => _.findOne(),
-                      child: Text('Try again'),
+                      child: Text('Tentar novamente'),
                     ),
                   ],
                 ),
@@ -241,15 +239,15 @@ class _ConversationScreenState extends State<ConversationScreen> {
                                               ),
                                             ),
                                             SizedBox(height: 5),
-                                            Text('MPN: ${order.mpn}'),
+                                            Text('Referência: ${order.mpn}'),
                                             Divider(),
-                                            Text('Model: ${order.model}'),
+                                            Text('Modelo: ${order.model}'),
                                             Divider(),
-                                            Text('Number of Doors: ${order.numberOfDoors}'),
+                                            Text('Lotação: ${order.numberOfDoors}'),
                                             Divider(),
-                                            Text('Fuel Type: ${order.fuelType}'),
+                                            Text('Combustível: ${order.fuelType}'),
                                             Divider(),
-                                            Text('Notes: ${order.noteText}'),
+                                            Text('Nota: ${order.noteText}'),
                                             Visibility(
                                               visible: order.media.length > 0,
                                               child: Padding(
@@ -421,7 +419,7 @@ class _ConversationScreenState extends State<ConversationScreen> {
                                       controller: _conversationController.messageInput.value,
                                       textCapitalization: TextCapitalization.sentences,
                                       decoration: InputDecoration.collapsed(
-                                        hintText: "Write your message",
+                                        hintText: 'Escreva sua mensagem',
                                       ),
                                     ),
                                   ),

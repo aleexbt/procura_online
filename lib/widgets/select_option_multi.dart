@@ -20,9 +20,9 @@ class SelectOptionMulti extends StatelessWidget {
     this.isDisabled = false,
     this.hasError = false,
     this.enableFilter = false,
-    this.modalTitle = 'Options',
-    this.placeholder = 'Choose one',
-    this.selectText = 'Select an option',
+    this.modalTitle = 'Opções',
+    this.placeholder = 'Escolher',
+    this.selectText = 'Selecionar',
     @required this.value,
     @required this.choiceItems,
     @required this.onChange,
@@ -56,23 +56,27 @@ class SelectOptionMulti extends StatelessWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        selectText,
-                        style: TextStyle(fontSize: 16),
-                      ),
-                      Text(
-                        state.valueTitle?.join(', ') ?? placeholder,
-                        style: TextStyle(
-                          fontSize: 12,
-                          color: state.valueTitle != null ? Colors.blue : Colors.grey[600],
-                          fontWeight: state.valueTitle != null ? FontWeight.bold : FontWeight.normal,
+                  Expanded(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          selectText,
+                          style: TextStyle(fontSize: 16),
                         ),
-                      )
-                    ],
+                        Text(
+                          state.valueTitle?.join(', ') ?? placeholder,
+                          style: TextStyle(
+                            fontSize: 12,
+                            color: state.valueTitle != null ? Colors.blue : Colors.grey[600],
+                            fontWeight: state.valueTitle != null ? FontWeight.bold : FontWeight.normal,
+                          ),
+                          overflow: TextOverflow.ellipsis,
+                          maxLines: 1,
+                        ),
+                      ],
+                    ),
                   ),
                   isLoading
                       ? SizedBox(

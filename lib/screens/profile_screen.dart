@@ -20,7 +20,7 @@ class ProfileScreen extends StatelessWidget {
         //   ),
         //   onPressed: () => Get.offAllNamed('/app'),
         // ),
-        title: Text('Profile'),
+        title: Text('Perfil'),
         elevation: 0,
       ),
       body: GetX(
@@ -36,7 +36,7 @@ class ProfileScreen extends StatelessWidget {
                   children: [
                     SvgPicture.asset('assets/images/semresultado.svg', width: 350),
                     SizedBox(height: 10),
-                    Text('Ops, we couldn\'t found this user.'),
+                    Text('Ops, usuário não encontrado.'),
                   ],
                 ),
               );

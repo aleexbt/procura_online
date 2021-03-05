@@ -89,7 +89,7 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
                   Expanded(
                     child: TextField(
                       decoration: InputDecoration(
-                        hintText: 'Search',
+                        hintText: 'Pesquisar',
                         border: const OutlineInputBorder(
                           borderSide: const BorderSide(color: Colors.transparent, width: 0.0),
                         ),
@@ -130,7 +130,7 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
                     height: 40,
                     onPressed: () => _userController.isLoggedIn ? Get.toNamed('/ad/new') : Get.toNamed('/auth/login'),
                     child: Text(
-                      'Sell',
+                      'Vender',
                       style: TextStyle(
                         color: Colors.white,
                       ),
@@ -147,7 +147,7 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
                         color: _homeController.categoryValue == 'vehicles' ? Colors.grey[300] : Colors.grey[200],
                         height: 40,
                         onPressed: () => changeCategory(name: 'Vehicles', value: 'vehicles'),
-                        child: Text('Vehicles'),
+                        child: Text('Veículos'),
                       ),
                     ),
                   ),
@@ -160,7 +160,7 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
                       color: _homeController.categoryValue == 'auto-parts' ? Colors.grey[300] : Colors.grey[200],
                       height: 40,
                       onPressed: () => changeCategory(name: 'Auto Parts', value: 'auto-parts'),
-                      child: Text('Auto Parts'),
+                      child: Text('Peças'),
                     ),
                   ),
                 ),
@@ -193,11 +193,11 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
                               child: Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                  Text('Ops, error while retrieving ads.'),
+                                  Text('Ops, erro ao carregar anúncios.'),
                                   TextButton(
                                     style: TextButton.styleFrom(primary: Colors.blue),
                                     onPressed: () => _.findAll(),
-                                    child: Text('Try again'),
+                                    child: Text('Tentar novamente'),
                                   ),
                                 ],
                               ),
@@ -214,7 +214,7 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
                                   SvgPicture.asset('assets/images/semresultado.svg', width: 280),
                                   SizedBox(height: 20),
                                   Text(
-                                    'Oh, looks like we couldn\'t find any results.',
+                                    'Oh, não conseguimos encontrar nenhum resultado.',
                                     style: TextStyle(
                                       fontSize: 13,
                                       fontWeight: FontWeight.bold,

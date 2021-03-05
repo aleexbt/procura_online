@@ -130,13 +130,11 @@ class ConversationController extends GetxController with WidgetsBindingObserver 
       await _chatRepository.replyMessage(data);
     } on DioError catch (err) {
       _replyingError.value = true;
-      Get.rawSnackbar(
-          message: 'Ops, something went wrong.', backgroundColor: Colors.red, duration: Duration(seconds: 3));
+      Get.rawSnackbar(message: 'Ops, ocorreu um erro.', backgroundColor: Colors.red, duration: Duration(seconds: 3));
     } catch (err) {
       _replyingError.value = true;
       print(err);
-      Get.rawSnackbar(
-          message: 'Ops, something went wrong.', backgroundColor: Colors.red, duration: Duration(seconds: 3));
+      Get.rawSnackbar(message: 'Ops, ocorreu um erro.', backgroundColor: Colors.red, duration: Duration(seconds: 3));
     } finally {
       messageInput.value.clear();
       images.clear();
@@ -178,19 +176,16 @@ class ConversationController extends GetxController with WidgetsBindingObserver 
       Get.back(closeOverlays: true);
     } on DioError catch (err) {
       _deletingError.value = true;
-      Get.rawSnackbar(
-          message: 'Ops, something went wrong.', backgroundColor: Colors.red, duration: Duration(seconds: 3));
+      Get.rawSnackbar(message: 'Ops, ocorreu um erro.', backgroundColor: Colors.red, duration: Duration(seconds: 3));
     } catch (err) {
       _deletingError.value = true;
-      Get.rawSnackbar(
-          message: 'Ops, something went wrong.', backgroundColor: Colors.red, duration: Duration(seconds: 3));
+      Get.rawSnackbar(message: 'Ops, ocorreu um erro.', backgroundColor: Colors.red, duration: Duration(seconds: 3));
     } finally {
       _isDeleting.value = false;
     }
   }
 
   void backgroundUpdateMessages() async {
-    print('BACKGROUND_UPDATE_MESSAGES');
     try {
       Conversation response = await _chatRepository.findOne(chatId);
       _conversation.value = response;
@@ -222,11 +217,11 @@ class ConversationController extends GetxController with WidgetsBindingObserver 
     } on DioError catch (err) {
       print(err);
       Get.rawSnackbar(
-          message: 'Ops, error while uploading image', backgroundColor: Colors.red, duration: Duration(seconds: 5));
+          message: 'Ops, erro ao enviar imagem.', backgroundColor: Colors.red, duration: Duration(seconds: 5));
     } catch (err) {
       print(err);
       Get.rawSnackbar(
-          message: 'Ops, error while uploading image', backgroundColor: Colors.red, duration: Duration(seconds: 5));
+          message: 'Ops, erro ao enviar imagem.', backgroundColor: Colors.red, duration: Duration(seconds: 5));
     } finally {
       _isUploadingImage.value = false;
       uploadImageProgress.value = 0.0;
