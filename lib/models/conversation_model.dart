@@ -28,18 +28,15 @@ class Conversation {
   @JsonKey(name: 'human_read_date')
   @HiveField(6)
   String humanReadDate;
-  @JsonKey(name: 'second_user')
+  @JsonKey(name: 'user_one')
   @HiveField(7)
-  String secondUser;
-  @JsonKey(name: 'userone')
-  @HiveField(8)
   User userOne;
-  @JsonKey(name: 'usertwo')
-  @HiveField(9)
+  @JsonKey(name: 'user_two')
+  @HiveField(8)
   User userTwo;
-  @HiveField(10)
+  @HiveField(9)
   Order order;
-  @HiveField(11)
+  @HiveField(10)
   List<Message> messages;
 
   Conversation({
@@ -50,7 +47,6 @@ class Conversation {
     this.createdAt,
     this.updatedAt,
     this.humanReadDate,
-    this.secondUser,
     this.userOne,
     this.userTwo,
     this.order,

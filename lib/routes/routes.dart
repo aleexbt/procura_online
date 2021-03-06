@@ -5,6 +5,7 @@ class Routers {
   static const home = '/home';
   static const chat = '/chat';
   static const chatConversation = '/chat/conversation/:id';
+  static const userInfo = '/chat/user-info';
   static const chatReply = '/chat/new/:id';
   static const login = '/auth/login';
   static const register = '/auth/register';

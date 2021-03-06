@@ -19,20 +19,32 @@ class OrderReplyScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    _ordersRepository.markOrderAsRead(orderId);
+    if (!order.seen) {
+      _ordersRepository.markOrderAsRead(orderId);
+    }
     return Scaffold(
       appBar: AppBar(
         shadowColor: Colors.transparent,
         title: GestureDetector(
           behavior: HitTestBehavior.translucent,
-          onTap: () => Get.toNamed('/profile/${order.userInfo.id}'),
+          onTap: () => Get.toNamed('/chat/user-info', arguments: {
+            'profileId': order.userInfo.id,
+            'avatar': order.userInfo.logo.thumbnail,
+            'name': order.userInfo.name,
+            'address': order.userInfo.address,
+            'phone': order.userInfo.phone,
+            'email': order.userInfo.email,
+            'register': order.userInfo.createdAt,
+          }),
           child: Row(
             children: <Widget>[
               ClipOval(
-                  child: Image.network(
-                order.userInfo.logo.thumbnail,
+                  child: OctoImage(
                 width: 30,
                 height: 30,
+                image: CachedNetworkImageProvider(order.userInfo.logo.thumbnail),
+                placeholderBuilder: OctoPlaceholder.blurHash('LAI#u-9XM[D\$GdIU4oIA-sWFxwRl'),
+                errorBuilder: OctoError.icon(color: Colors.grey[400]),
                 fit: BoxFit.cover,
               )),
               Expanded(
@@ -131,22 +143,17 @@ class OrderReplyScreen extends StatelessWidget {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(
-                                      '${order.make} ${order.model} ${order.year}',
+                                      '${order.make} / ${order.model} / ${order.year}',
                                       style: TextStyle(
                                         fontSize: 16,
                                         fontWeight: FontWeight.bold,
                                       ),
                                     ),
                                     SizedBox(height: 5),
-                                    Text('Referência: ${order.mpn}'),
+                                    Text(
+                                        'Combustível: ${order.fuelType ?? ''} / Cilindrada: ${order.engineDisplacement ?? ''} / Nº portas: ${order.numberOfDoors ?? ''}'),
                                     Divider(),
-                                    Text('Modelo: ${order.model}'),
-                                    Divider(),
-                                    Text('Lotação: ${order.numberOfDoors}'),
-                                    Divider(),
-                                    Text('Combustível: ${order.fuelType}'),
-                                    Divider(),
-                                    Text('Nota: ${order.noteText}'),
+                                    Text('${order.noteText}'),
                                     Visibility(
                                       visible: order.media.length > 0,
                                       child: Padding(

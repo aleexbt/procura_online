@@ -24,18 +24,17 @@ class ConversationAdapter extends TypeAdapter<Conversation> {
       createdAt: fields[4] as String,
       updatedAt: fields[5] as String,
       humanReadDate: fields[6] as String,
-      secondUser: fields[7] as String,
-      userOne: fields[8] as User,
-      userTwo: fields[9] as User,
-      order: fields[10] as Order,
-      messages: (fields[11] as List)?.cast<Message>(),
+      userOne: fields[7] as User,
+      userTwo: fields[8] as User,
+      order: fields[9] as Order,
+      messages: (fields[10] as List)?.cast<Message>(),
     );
   }
 
   @override
   void write(BinaryWriter writer, Conversation obj) {
     writer
-      ..writeByte(12)
+      ..writeByte(11)
       ..writeByte(0)
       ..write(obj.id)
       ..writeByte(1)
@@ -51,14 +50,12 @@ class ConversationAdapter extends TypeAdapter<Conversation> {
       ..writeByte(6)
       ..write(obj.humanReadDate)
       ..writeByte(7)
-      ..write(obj.secondUser)
-      ..writeByte(8)
       ..write(obj.userOne)
-      ..writeByte(9)
+      ..writeByte(8)
       ..write(obj.userTwo)
-      ..writeByte(10)
+      ..writeByte(9)
       ..write(obj.order)
-      ..writeByte(11)
+      ..writeByte(10)
       ..write(obj.messages);
   }
 
@@ -86,13 +83,12 @@ Conversation _$ConversationFromJson(Map<String, dynamic> json) {
     createdAt: json['created_at'] as String,
     updatedAt: json['updated_at'] as String,
     humanReadDate: json['human_read_date'] as String,
-    secondUser: json['second_user'] as String,
-    userOne: json['userone'] == null
+    userOne: json['user_one'] == null
         ? null
-        : User.fromJson(json['userone'] as Map<String, dynamic>),
-    userTwo: json['usertwo'] == null
+        : User.fromJson(json['user_one'] as Map<String, dynamic>),
+    userTwo: json['user_two'] == null
         ? null
-        : User.fromJson(json['usertwo'] as Map<String, dynamic>),
+        : User.fromJson(json['user_two'] as Map<String, dynamic>),
     order: json['order'] == null
         ? null
         : Order.fromJson(json['order'] as Map<String, dynamic>),
@@ -112,9 +108,8 @@ Map<String, dynamic> _$ConversationToJson(Conversation instance) =>
       'created_at': instance.createdAt,
       'updated_at': instance.updatedAt,
       'human_read_date': instance.humanReadDate,
-      'second_user': instance.secondUser,
-      'userone': instance.userOne,
-      'usertwo': instance.userTwo,
+      'user_one': instance.userOne,
+      'user_two': instance.userTwo,
       'order': instance.order,
       'messages': instance.messages,
     };

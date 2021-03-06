@@ -58,6 +58,7 @@ class ConversationController extends GetxController with WidgetsBindingObserver 
   RxDouble uploadImageProgress = 0.0.obs;
   RxBool _isUploadingImage = false.obs;
   Rx<Conversation> _conversation = Conversation().obs;
+  List<Message> filteredMessages;
 
   bool get isLoading => _isLoading.value;
   bool get hasError => _hasError.value;
@@ -96,6 +97,7 @@ class ConversationController extends GetxController with WidgetsBindingObserver 
       pusherService.firePusher('private-conversation.$chatId', 'App\\Events\\ConversationEvent');
       Conversation response = await _chatRepository.findOne(chatId);
       _conversation.value = response;
+      filteredMessages = List.from(response.messages);
       Box<Conversation> box = await Hive.openBox<Conversation>('conversations');
       box.put(chatId, response);
       bool seen = _chatController.chats.chats.firstWhere((element) => element.id.toString() == chatId).seen;
@@ -143,6 +145,14 @@ class ConversationController extends GetxController with WidgetsBindingObserver 
       _isReplying.value = false;
       _chatController.findAll();
     }
+  }
+
+  void filterMessages(String term) {
+    List<Message> filtered =
+        filteredMessages.where((message) => message.message.toLowerCase().contains(term.toLowerCase())).toList();
+    _conversation.update((val) {
+      val.messages = filtered;
+    });
   }
 
   void muteConversationToggle() async {
@@ -204,7 +214,7 @@ class ConversationController extends GetxController with WidgetsBindingObserver 
     _conversation.update((val) {
       val.messages.add(Message.fromJson(data['message']));
     });
-    // _chatController.findAll(skipLoading: true);
+    _chatRepository.markMessageAsRead(chatId);
   }
 
   Future<UploadMedia> mediaUpload(File photo) async {

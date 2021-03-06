@@ -11,17 +11,14 @@ class Chat {
   int id;
   @JsonKey(name: 'order_id')
   int orderId;
-  @JsonKey(name: 'user_one')
-  int userOne;
-  @JsonKey(name: 'user_two')
-  int userTwo;
   int status;
   bool mute;
   @JsonKey(name: 'human_read_date')
   String humanReadDate;
   @JsonKey(name: 'second_user')
   int secondUser;
-  User userone;
+  User userOne;
+  User userTwo;
   Order order;
   @JsonKey(name: 'latest_message')
   Message latestMessage;
@@ -30,12 +27,12 @@ class Chat {
   Chat({
     this.id,
     this.orderId,
-    this.userOne,
-    this.userTwo,
     this.status,
     this.mute,
     this.humanReadDate,
     this.secondUser,
+    this.userOne,
+    this.userTwo,
     this.order,
     this.latestMessage,
     this.seen,

@@ -27,6 +27,7 @@ class _ConversationScreenState extends State<ConversationScreen> {
   final ConversationController _conversationController = Get.find();
   final UserController _userController = Get.find();
   final ScrollController _scrollController = ScrollController();
+  bool showSearch = false;
 
   void _scrollToBottom() {
     if (_scrollController.hasClients) {
@@ -67,45 +68,95 @@ class _ConversationScreenState extends State<ConversationScreen> {
     return Scaffold(
       appBar: AppBar(
         shadowColor: Colors.transparent,
-        title: GetX<ConversationController>(
-          builder: (_) {
-            if (_.isLoading || _.hasError) {
-              return Container();
-            }
-            // bool isMe = _.conversation.userOne.id == _userController.userData?.id;
-            // String pic = isMe ? _.conversation.userTwo.logo?.thumbnail : _.conversation.userOne.logo?.thumbnail;
-            return GestureDetector(
-              behavior: HitTestBehavior.translucent,
-              onTap: () => Get.toNamed('/profile/${_.conversation.order.userInfo.id}'),
-              child: Row(
-                children: <Widget>[
-                  ClipOval(
-                    child: Image.network(
-                      _.conversation.order.userInfo.logo.thumbnail,
-                      width: 30,
-                      height: 30,
-                      fit: BoxFit.cover,
-                    ),
+        title: showSearch
+            ? TextFormField(
+                autofocus: true,
+                onChanged: (value) => _conversationController.filterMessages(value),
+                decoration: InputDecoration(
+                  hintText: 'Pesquisar',
+                  border: const OutlineInputBorder(
+                    borderSide: const BorderSide(color: Colors.transparent, width: 0.0),
                   ),
-                  Expanded(
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Text(
-                        _.conversation.order.userInfo.name,
-                        style: TextStyle(
-                          fontSize: 16,
+                  enabledBorder: const OutlineInputBorder(
+                    borderSide: const BorderSide(color: Colors.transparent, width: 0.0),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.transparent, width: 0.0),
+                  ),
+                ),
+              )
+            : GetX<ConversationController>(
+                builder: (_) {
+                  if (_.isLoading || _.hasError) {
+                    return Container();
+                  }
+                  bool isMe = _.conversation.userOne.id == _userController.userData?.id;
+                  String avatar =
+                      isMe ? _.conversation.userTwo.logo?.thumbnail : _.conversation.userOne.logo?.thumbnail;
+                  int profile = isMe ? _.conversation.userTwo.id : _.conversation.userOne.id;
+                  String name = isMe ? _.conversation.userTwo.name : _.conversation.userOne.name;
+                  String address = isMe ? _.conversation.userTwo.address : _.conversation.userOne.address;
+                  String phone = isMe ? _.conversation.userTwo.phone : _.conversation.userOne.phone;
+                  String email = isMe ? _.conversation.userTwo.email : _.conversation.userOne.email;
+                  String register = isMe ? _.conversation.userTwo.createdAt : _.conversation.userOne.createdAt;
+                  return GestureDetector(
+                    behavior: HitTestBehavior.translucent,
+                    onTap: () => Get.toNamed('/chat/user-info', arguments: {
+                      'profileId': profile,
+                      'avatar': avatar,
+                      'name': name,
+                      'address': address,
+                      'phone': phone,
+                      'email': email,
+                      'register': register,
+                    }),
+                    child: Row(
+                      children: <Widget>[
+                        ClipOval(
+                          child: OctoImage(
+                            width: 30,
+                            height: 30,
+                            image: CachedNetworkImageProvider(avatar),
+                            placeholderBuilder: OctoPlaceholder.blurHash('LAI#u-9XM[D\$GdIU4oIA-sWFxwRl'),
+                            errorBuilder: OctoError.icon(color: Colors.grey[400]),
+                            fit: BoxFit.cover,
+                          ),
                         ),
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                      ),
+                        Expanded(
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Text(
+                              name,
+                              style: TextStyle(
+                                fontSize: 16,
+                              ),
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
-                  ),
-                ],
+                  );
+                },
               ),
-            );
-          },
-        ),
         actions: [
+          IconButton(
+            icon: Icon(showSearch ? Icons.clear : Icons.search),
+            onPressed: () {
+              setState(() {
+                showSearch = !showSearch;
+              });
+
+              if (showSearch) {
+                // searchFocus.requestFocus(s);
+              }
+
+              if (!showSearch) {
+                _conversationController.filterMessages('');
+              }
+            },
+          ),
           IconButton(
             icon: Icon(Icons.more_vert),
             onPressed: () => Get.bottomSheet(
@@ -116,6 +167,26 @@ class _ConversationScreenState extends State<ConversationScreen> {
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
+                        ListTileMoreCustomizable(
+                          leading: Icon(
+                            Icons.account_box_outlined,
+                            color: Colors.black,
+                          ),
+                          title: Text(
+                            'Ver perfil',
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontWeight: FontWeight.w400,
+                            ),
+                          ),
+                          horizontalTitleGap: 0,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          onTap: (__) => Get.toNamed(
+                              '/profile/${_conversationController.conversation.userOne.id == _userController.userData?.id ? _conversationController.conversation.userTwo.id : _conversationController.conversation.userOne.id}'),
+                        ),
+                        Divider(),
                         ListTileMoreCustomizable(
                           leading: Icon(
                             _conversationController.conversation.mute == 0
@@ -136,25 +207,6 @@ class _ConversationScreenState extends State<ConversationScreen> {
                           ),
                           onTap: (_) => _conversationController.muteConversationToggle(),
                         ),
-                        // Divider(),
-                        // ListTileMoreCustomizable(
-                        //   leading: Icon(
-                        //     CupertinoIcons.delete,
-                        //     color: Colors.black,
-                        //   ),
-                        //   title: Text(
-                        //     "Delete conversation",
-                        //     style: TextStyle(
-                        //       color: Colors.black,
-                        //       fontWeight: FontWeight.w400,
-                        //     ),
-                        //   ),
-                        //   horizontalTitleGap: 0,
-                        //   shape: RoundedRectangleBorder(
-                        //     borderRadius: BorderRadius.circular(10),
-                        //   ),
-                        //   onTap: (_) => _conversationController.deleteConversation(),
-                        // ),
                       ],
                     ),
                   ),
@@ -232,22 +284,17 @@ class _ConversationScreenState extends State<ConversationScreen> {
                                           crossAxisAlignment: CrossAxisAlignment.start,
                                           children: [
                                             Text(
-                                              '${order.make} ${order.model} ${order.year}',
+                                              '${order.make} / ${order.model} / ${order.year}',
                                               style: TextStyle(
                                                 fontSize: 16,
                                                 fontWeight: FontWeight.bold,
                                               ),
                                             ),
                                             SizedBox(height: 5),
-                                            Text('Referência: ${order.mpn}'),
+                                            Text(
+                                                'Combustível: ${order.fuelType ?? ''} / Cilindrada: ${order.engineDisplacement ?? ''} / Nº portas: ${order.numberOfDoors ?? ''}'),
                                             Divider(),
-                                            Text('Modelo: ${order.model}'),
-                                            Divider(),
-                                            Text('Lotação: ${order.numberOfDoors}'),
-                                            Divider(),
-                                            Text('Combustível: ${order.fuelType}'),
-                                            Divider(),
-                                            Text('Nota: ${order.noteText}'),
+                                            Text('${order.noteText}'),
                                             Visibility(
                                               visible: order.media.length > 0,
                                               child: Padding(

@@ -16,6 +16,7 @@ import 'package:procura_online/screens/home_screen.dart';
 import 'package:procura_online/screens/orders/conversation_screen.dart';
 import 'package:procura_online/screens/orders/order_reply_screen.dart';
 import 'package:procura_online/screens/orders/orders_chat_screen.dart';
+import 'package:procura_online/screens/orders/user_info_screen.dart';
 import 'package:procura_online/screens/product_screen.dart';
 import 'package:procura_online/screens/profile_screen.dart';
 import 'package:procura_online/screens/settings/ads_listing_screen.dart';
@@ -86,6 +87,11 @@ List<GetPage> getPages = [
     page: () => ConversationScreen(),
     binding: ConversationBindings(),
     transition: Platform.isIOS ? Transition.native : null,
+  ),
+  GetPage(
+    name: Routers.userInfo,
+    page: () => UserInfoScreen(),
+    transition: Transition.rightToLeft,
   ),
   GetPage(
     name: Routers.chatReply,

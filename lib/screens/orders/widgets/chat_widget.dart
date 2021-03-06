@@ -5,11 +5,13 @@ import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:octo_image/octo_image.dart';
 import 'package:procura_online/controllers/chat_controller.dart';
+import 'package:procura_online/controllers/user_controller.dart';
 import 'package:shimmer/shimmer.dart';
 
 class ChatWidget extends StatelessWidget {
   final ChatController _chatController = Get.find();
   final ScrollController _scrollController = ScrollController();
+  final UserController _userController = Get.find();
 
   Future<void> refresItems() async {
     return _chatController.findAll(skipLoading: true);
@@ -129,6 +131,9 @@ class ChatWidget extends StatelessWidget {
                 controller: _scrollController,
                 physics: AlwaysScrollableScrollPhysics(),
                 itemBuilder: (context, index) {
+                  bool isMe = _.chats.chats[index].userOne.id == _userController.userData?.id;
+                  String avatar =
+                      isMe ? _.chats.chats[index].userTwo.logo.thumbnail : _.chats.chats[index].userOne.logo.thumbnail;
                   return ListTile(
                     leading: ClipRRect(
                       borderRadius: BorderRadius.circular(50),
@@ -136,7 +141,7 @@ class ChatWidget extends StatelessWidget {
                         width: 50,
                         height: 50,
                         child: OctoImage(
-                          image: CachedNetworkImageProvider(_.chats.chats[index].order.userInfo.logo.thumbnail),
+                          image: CachedNetworkImageProvider(avatar),
                           placeholderBuilder: OctoPlaceholder.circularProgressIndicator(),
                           errorBuilder: OctoError.icon(color: Colors.grey[400]),
                           fit: BoxFit.cover,
