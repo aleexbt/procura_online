@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:diacritic/diacritic.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -148,8 +149,11 @@ class ConversationController extends GetxController with WidgetsBindingObserver 
   }
 
   void filterMessages(String term) {
-    List<Message> filtered =
-        filteredMessages.where((message) => message.message.toLowerCase().contains(term.toLowerCase())).toList();
+    List<Message> filtered = filteredMessages
+        .where((msg) => msg.message != null
+            ? removeDiacritics(msg.message.toLowerCase()).contains(removeDiacritics(term.toLowerCase()))
+            : false)
+        .toList();
     _conversation.update((val) {
       val.messages = filtered;
     });

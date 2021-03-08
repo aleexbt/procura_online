@@ -22,77 +22,81 @@ class UserInfoScreen extends StatelessWidget {
         title: Text('Informações do usuário'),
         elevation: 0,
       ),
-      body: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 8),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Center(
-              child: GestureDetector(
-                onTap: () => Get.toNamed('/profile/$profileId'),
-                child: ClipOval(
-                  child: OctoImage(
-                    image: CachedNetworkImageProvider(avatar),
-                    placeholderBuilder: OctoPlaceholder.blurHash('LAI#u-9XM[D\$GdIU4oIA-sWFxwRl'),
-                    errorBuilder: OctoError.icon(color: Colors.grey[400]),
-                    fit: BoxFit.cover,
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 8),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Center(
+                child: GestureDetector(
+                  onTap: () => Get.toNamed('/profile/$profileId'),
+                  child: ClipOval(
+                    child: OctoImage(
+                      width: 170,
+                      height: 170,
+                      image: CachedNetworkImageProvider(avatar),
+                      placeholderBuilder: OctoPlaceholder.blurHash('LAI#u-9XM[D\$GdIU4oIA-sWFxwRl'),
+                      errorBuilder: OctoError.icon(color: Colors.grey[400]),
+                      fit: BoxFit.cover,
+                    ),
                   ),
                 ),
               ),
-            ),
-            SizedBox(height: 10),
-            Center(
-              child: Text(
-                name,
-                style: TextStyle(
-                  fontSize: 19,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ),
-            SizedBox(height: 10),
-            Container(
-              width: double.infinity,
-              height: 50,
-              decoration: BoxDecoration(
-                color: Colors.grey[100],
-                border: Border.all(color: Colors.grey[200]),
-              ),
-              child: Center(
+              SizedBox(height: 10),
+              Center(
                 child: Text(
-                  'DETALHES',
-                  style: TextStyle(color: Colors.blue),
-                  textAlign: TextAlign.center,
+                  name,
+                  style: TextStyle(
+                    fontSize: 19,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
               ),
-            ),
-            ListTile(
-              title: Text('Endereço'),
-              subtitle: Text(address),
-              trailing: Icon(Icons.location_on),
-              onTap: () => MapsLauncher.launchQuery(address),
-            ),
-            Divider(),
-            ListTile(
-              title: Text('Contacto telefónico'),
-              subtitle: Text(phone),
-              trailing: Icon(Icons.phone),
-              onTap: () => launch('tel://$phone'),
-            ),
-            Divider(),
-            ListTile(
-              title: Text('Email'),
-              subtitle: Text(email),
-              trailing: Icon(Icons.mail),
-              onTap: () => launch('mailto:$email?subject=Contacto de Procura Online'),
-            ),
-            Divider(),
-            ListTile(
-              title: Text('Registrado desde'),
-              subtitle: Text(register),
-              trailing: Icon(Icons.calendar_today),
-            ),
-          ],
+              SizedBox(height: 10),
+              Container(
+                width: double.infinity,
+                height: 50,
+                decoration: BoxDecoration(
+                  color: Colors.grey[100],
+                  border: Border.all(color: Colors.grey[200]),
+                ),
+                child: Center(
+                  child: Text(
+                    'DETALHES',
+                    style: TextStyle(color: Colors.blue),
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+              ),
+              ListTile(
+                title: Text('Endereço'),
+                subtitle: Text(address),
+                trailing: Icon(Icons.location_on),
+                onTap: () => MapsLauncher.launchQuery(address),
+              ),
+              Divider(),
+              ListTile(
+                title: Text('Contacto telefónico'),
+                subtitle: Text(phone),
+                trailing: Icon(Icons.phone),
+                onTap: () => launch('tel://$phone'),
+              ),
+              Divider(),
+              ListTile(
+                title: Text('Email'),
+                subtitle: Text(email),
+                trailing: Icon(Icons.mail),
+                onTap: () => launch('mailto:$email?subject=Contacto de Procura Online'),
+              ),
+              Divider(),
+              ListTile(
+                title: Text('Registrado desde'),
+                subtitle: Text(register),
+                trailing: Icon(Icons.calendar_today),
+              ),
+            ],
+          ),
         ),
       ),
     );

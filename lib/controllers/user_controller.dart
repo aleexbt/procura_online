@@ -253,6 +253,7 @@ class UserController extends GetxController with StateMixin<User> {
     Box<User> userBox = await Hive.openBox<User>('userData');
     authBox.put('isLoggedIn', false);
     userBox.clear();
+    Hive.deleteBoxFromDisk('conversations');
     Get.delete<OrdersController>(force: true);
     Get.delete<ChatController>(force: true);
     _isLoggedIn.value = false;
@@ -514,6 +515,7 @@ class UserController extends GetxController with StateMixin<User> {
     Box<User> userBox = await Hive.openBox<User>('userData');
     authBox.put('isLoggedIn', false);
     userBox.clear();
+    Hive.deleteBoxFromDisk('conversations');
     Get.delete<OrdersController>(force: true);
     Get.delete<ChatController>(force: true);
     _isLoggedIn.value = false;
