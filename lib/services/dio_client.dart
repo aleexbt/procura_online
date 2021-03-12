@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
+import 'package:procura_online/app_settings.dart';
 
 const _defaultConnectTimeout = 25000;
 const _defaultReceiveTimeout = 6000;
@@ -14,7 +15,7 @@ class DioClient {
   DioClient({this.token, this.interceptors}) {
     _dio = Dio();
     _dio
-      ..options.baseUrl = 'https://procuraonline-dev.pt'
+      ..options.baseUrl = '$kBaseUrl'
       ..options.connectTimeout = _defaultConnectTimeout
       ..options.receiveTimeout = _defaultReceiveTimeout
       ..httpClientAdapter

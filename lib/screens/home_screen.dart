@@ -130,7 +130,7 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
                     height: 40,
                     onPressed: () => _userController.isLoggedIn ? Get.toNamed('/ad/new') : Get.toNamed('/auth/login'),
                     child: Text(
-                      'Vender',
+                      'Anunciar',
                       style: TextStyle(
                         color: Colors.white,
                       ),
@@ -146,8 +146,8 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
                         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(25)),
                         color: _homeController.categoryValue == 'vehicles' ? Colors.grey[300] : Colors.grey[200],
                         height: 40,
-                        onPressed: () => changeCategory(name: 'Vehicles', value: 'vehicles'),
-                        child: Text('Veículos'),
+                        onPressed: () => changeCategory(name: 'Automóveis', value: 'vehicles'),
+                        child: Text('Automóveis'),
                       ),
                     ),
                   ),
@@ -159,7 +159,7 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
                       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(25)),
                       color: _homeController.categoryValue == 'auto-parts' ? Colors.grey[300] : Colors.grey[200],
                       height: 40,
-                      onPressed: () => changeCategory(name: 'Auto Parts', value: 'auto-parts'),
+                      onPressed: () => changeCategory(name: 'Peças', value: 'auto-parts'),
                       child: Text('Peças'),
                     ),
                   ),

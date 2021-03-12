@@ -1,11 +1,14 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:hive/hive.dart';
 import 'package:procura_online/controllers/chat_controller.dart';
 import 'package:procura_online/controllers/conversation_controller.dart';
 import 'package:pusher_client/pusher_client.dart';
+
+import '../app_settings.dart';
 
 class PusherService {
   PusherEvent lastEvent;
@@ -18,25 +21,21 @@ class PusherService {
     Box authBox = await Hive.openBox('auth') ?? null;
     String token = authBox.get('token') ?? null;
     pusher = PusherClient(
-      '55cc3261f6a5d239653a',
+      kPusherToken,
       PusherOptions(
-        cluster: 'eu',
-        auth: PusherAuth(
-          'https://procuraonline-dev.pt/api/v1/broadcasting/auth',
-          // 'https://xelapps-validation.herokuapp.com/pusher/auth',
-          headers: {'authorization': 'Bearer $token'},
-        ),
+        cluster: kPusherCluster,
+        auth: PusherAuth(kPusherAuthUrl, headers: {'authorization': 'Bearer $token'}),
       ),
-      enableLogging: true,
+      enableLogging: kDebugMode,
       autoConnect: true,
     );
   }
 
   void connectPusher() {
     socketId = pusher.getSocketId();
-    pusher.onConnectionStateChange((state) {
-      print("previousState: ${state.previousState}, currentState: ${state.currentState}");
-    });
+    // pusher.onConnectionStateChange((state) {
+    //   print("previousState: ${state.previousState}, currentState: ${state.currentState}");
+    // });
     pusher.onConnectionError((error) {
       print("error: ${error.message}");
     });

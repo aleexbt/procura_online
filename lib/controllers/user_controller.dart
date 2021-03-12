@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:awesome_dialog/awesome_dialog.dart';
+import 'package:device_info/device_info.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -82,8 +83,8 @@ class UserController extends GetxController with StateMixin<User> {
 
   RxString selectedAccountType = ''.obs;
   final List<S2Choice<String>> accountTypeOptions = [
-    S2Choice<String>(value: 'company', title: 'Company'),
-    S2Choice<String>(value: 'personal', title: 'Personal'),
+    S2Choice<String>(value: 'company', title: 'Empresa'),
+    S2Choice<String>(value: 'personal', title: 'Particular'),
   ];
 
   void setAccountType(String value) => selectedAccountType.value = value;
@@ -128,10 +129,21 @@ class UserController extends GetxController with StateMixin<User> {
   void signIn({String email, String password}) async {
     _isLoading.value = true;
     try {
+      DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
+      String deviceName;
+
+      if (Platform.isAndroid) {
+        AndroidDeviceInfo androidInfo = await deviceInfo.androidInfo;
+        deviceName = androidInfo.model;
+      } else {
+        IosDeviceInfo iosdInfo = await deviceInfo.iosInfo;
+        deviceName = iosdInfo.utsname.machine;
+      }
+
       Map<String, dynamic> loginData = {
         "email": email,
         "password": password,
-        "device_name": "Android",
+        "device_name": deviceName,
       };
 
       var response = await _userRepository.signIn(loginData);
@@ -190,37 +202,59 @@ class UserController extends GetxController with StateMixin<User> {
   }) async {
     _isLoading.value = true;
     try {
-      Map<String, dynamic> registerData = {
-        "name": name,
-        "email": email,
-        "phone": phone,
-        "password": password,
-        "type": type,
-        "company": company,
-        "skills": skills,
-        "district_id": district,
-        "city_id": city,
-        "address": address,
-        "postcode": postcode,
-        "plan_id": plan,
-      };
+      Map<String, dynamic> registerData;
+
+      if (type == 'company') {
+        registerData = {
+          "name": name,
+          "email": email,
+          "phone": phone,
+          "password": password,
+          "type": type,
+          "company": company,
+          "skills": skills,
+          "district_id": district,
+          "city_id": city,
+          "address": address,
+          "postcode": postcode,
+          "plan_id": plan,
+        };
+      } else {
+        registerData = {
+          "name": name,
+          "email": email,
+          "phone": phone,
+          "password": password,
+          "type": type,
+          "skills": skills,
+          "district_id": district,
+          "city_id": city,
+          "address": address,
+          "postcode": postcode,
+          "plan_id": plan,
+        };
+      }
 
       await _userRepository.signUp(registerData);
       Get.back();
       Get.rawSnackbar(
           message: 'Usuário registrado com sucesso.', backgroundColor: Colors.green, duration: Duration(seconds: 3));
     } on DioError catch (err) {
-      Map<String, dynamic> errors = err.response.data['errors'];
-      List<String> errorList = [];
+      try {
+        Map<String, dynamic> errors = err.response.data['errors'];
+        List<String> errorList = [];
 
-      errors.forEach((key, value) {
-        errorList.add(value[0]);
-      });
+        errors.forEach((key, value) {
+          errorList.add(value[0]);
+        });
 
-      Get.rawSnackbar(
-          message: errorList.join('\n'),
-          backgroundColor: Colors.red,
-          duration: Duration(seconds: 3 + errorList.length));
+        Get.rawSnackbar(
+            message: errorList.join('\n'),
+            backgroundColor: Colors.red,
+            duration: Duration(seconds: 3 + errorList.length));
+      } catch (e) {
+        Get.rawSnackbar(message: 'Ops, ocorreu um erro.', backgroundColor: Colors.red, duration: Duration(seconds: 3));
+      }
     } finally {
       _isLoading.value = false;
     }

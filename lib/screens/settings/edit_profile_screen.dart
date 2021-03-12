@@ -26,6 +26,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   var coverImage;
   var logoImage;
 
+  bool submitted = false;
+
   @override
   void initState() {
     getUserLocation();
@@ -264,6 +266,16 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                         choiceItems: _.accountTypeOptions,
                         onChange: (state) => _.selectedAccountType(state.value),
                       ),
+                      Visibility(
+                        visible: _.selectedAccountType.value.isEmpty && submitted,
+                        child: Padding(
+                          padding: const EdgeInsets.only(left: 12, top: 5),
+                          child: Text(
+                            'Campo de preenchimento obrigatório.',
+                            style: TextStyle(color: Colors.red, fontSize: 12),
+                          ),
+                        ),
+                      ),
                       SizedBox(height: 20),
                       Text(
                         'Distrito',
@@ -283,6 +295,16 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                           hasError: district == null,
                         ),
                       ),
+                      Visibility(
+                        visible: district == null && submitted,
+                        child: Padding(
+                          padding: const EdgeInsets.only(left: 12, top: 5),
+                          child: Text(
+                            'Campo de preenchimento obrigatório.',
+                            style: TextStyle(color: Colors.red, fontSize: 12),
+                          ),
+                        ),
+                      ),
                       SizedBox(height: 20),
                       Text(
                         'Localidade',
@@ -300,6 +322,16 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                           choiceItems: _.cities,
                           onChange: (state) => setState(() => city = state.value),
                           hasError: _.userData.cityId == null,
+                        ),
+                      ),
+                      Visibility(
+                        visible: city == null && submitted,
+                        child: Padding(
+                          padding: const EdgeInsets.only(left: 12, top: 5),
+                          child: Text(
+                            'Campo de preenchimento obrigatório.',
+                            style: TextStyle(color: Colors.red, fontSize: 12),
+                          ),
                         ),
                       ),
                       SizedBox(height: 20),
@@ -348,7 +380,12 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                       GradientButton(
                         text: 'Guardar',
                         onPressed: () {
-                          if (_formKey.currentState.validate()) {
+                          setState(() => submitted = true);
+
+                          if (_formKey.currentState.validate() &&
+                              _.selectedAccountType.value.isNotEmpty &&
+                              district != null &&
+                              city != null) {
                             FocusScope.of(context).unfocus();
                             _userController.updateProfile(district: district, city: city);
                           }

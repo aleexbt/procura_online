@@ -42,7 +42,7 @@ class ChangePasswordScreen extends StatelessWidget {
                       CustomTextInput(
                         controller: _currentPassword,
                         fillColor: Colors.grey[200],
-                        hintText: 'Informe a password atual',
+                        hintText: 'Escreva a password atual',
                         obscureText: true,
                         validator: (value) {
                           if (value.isEmpty) {
@@ -62,7 +62,7 @@ class ChangePasswordScreen extends StatelessWidget {
                       CustomTextInput(
                           controller: _newPassword,
                           fillColor: Colors.grey[200],
-                          hintText: 'Informe a nova password',
+                          hintText: 'Escreva a nova password',
                           obscureText: true,
                           validator: (value) {
                             if (value.isEmpty) {
@@ -84,7 +84,7 @@ class ChangePasswordScreen extends StatelessWidget {
                       CustomTextInput(
                         controller: _confirmPassword,
                         fillColor: Colors.grey[200],
-                        hintText: 'Confirme sua nova password.',
+                        hintText: 'Confirmar a nova password',
                         obscureText: true,
                         validator: (value) {
                           if (value.isEmpty) {

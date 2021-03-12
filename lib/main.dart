@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hive/hive.dart';
@@ -25,6 +26,16 @@ class MyApp extends StatelessWidget {
         }
       },
       child: GetMaterialApp(
+        localizationsDelegates: [
+          GlobalMaterialLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate,
+          GlobalCupertinoLocalizations.delegate,
+        ],
+        supportedLocales: [
+          const Locale('pt', 'PT'),
+          const Locale('pt', 'BR'),
+          const Locale('en', 'US'),
+        ],
         customTransition: SharedZaxisPageTransitionVertical(),
         initialBinding: AppBindings(),
         initialRoute: Routers.initialRoute,

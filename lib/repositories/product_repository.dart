@@ -4,6 +4,7 @@ import 'package:dio/dio.dart';
 import 'package:dio_http_cache/dio_http_cache.dart';
 import 'package:get/instance_manager.dart';
 import 'package:hive/hive.dart';
+import 'package:procura_online/app_settings.dart';
 import 'package:procura_online/controllers/create_ad_controller.dart';
 import 'package:procura_online/controllers/edit_ad_controller.dart';
 import 'package:procura_online/models/listing_model.dart';
@@ -26,20 +27,20 @@ final _dioCacheManager = DioCacheManager(CacheConfig());
 
 class ProductRepository {
   Future<Listing> findAll({String category = 'listings', int page = 1}) async {
-    final Response response = await _dio.get('/api/v1/$category', queryParameters: {"page": "$page"});
+    final Response response = await _dio.get('/$kApiPath/$category', queryParameters: {"page": "$page"});
     return Listing.fromJson(response.data);
   }
 
   Future<Product> findOne(String productId) async {
     // _dio.interceptors.add(_dioCacheManager.interceptor);
     // Options _cacheOptions = buildCacheOptions(Duration(minutes: 5));
-    final Response response = await _dio.get('/api/v1/listings/$productId');
+    final Response response = await _dio.get('/$kApiPath/listings/$productId');
     return Product.fromJson(response.data['data']);
   }
 
   Future<Product> create(Map<String, dynamic> data) async {
     await setToken();
-    Response response = await _dio.post('/api/v1/listings', data: data);
+    Response response = await _dio.post('/$kApiPath/listings', data: data);
     return Product.fromJson(response.data);
   }
 
@@ -49,11 +50,11 @@ class ProductRepository {
     if (photosToRemove.length > 0) {
       photosToRemove.forEach((photoId) {
         setToken();
-        _dio.delete('/api/v1/listings/$id/photos/$photoId');
+        _dio.delete('/$kApiPath/listings/$id/photos/$photoId');
       });
     }
 
-    final Response response = await _dio.post('/api/v1/listings/$id?_method=PATCH', data: data);
+    final Response response = await _dio.post('/$kApiPath/listings/$id?_method=PATCH', data: data);
     return response.data;
   }
 
@@ -74,7 +75,7 @@ class ProductRepository {
   }) async {
     // var cat = category == 'listings' ? 'vehicles' : category;
     var type = category == 0 ? 'vehicles' : 'auto-parts';
-    final Response response = await _dio.get('/api/v1/search/$type', queryParameters: {
+    final Response response = await _dio.get('/$kApiPath/search/$type', queryParameters: {
       "search": "$term",
       "fuel_type": "$fuelType",
       "year_from": "$yearFrom",
@@ -93,7 +94,7 @@ class ProductRepository {
 
   Future<bool> delete(String productId) async {
     await setToken();
-    Response response = await _dio.delete('/api/v1/listings/$productId');
+    Response response = await _dio.delete('/$kApiPath/listings/$productId');
     return response.data['result'];
   }
 
@@ -109,7 +110,7 @@ class ProductRepository {
     });
 
     await setToken();
-    Response response = await _dio.post('/api/v1/listings/media', data: data, onSendProgress: (sent, total) {
+    Response response = await _dio.post('/$kApiPath/listings/media', data: data, onSendProgress: (sent, total) {
       _createAdController.uploadImageProgress.value = ((sent / total));
     });
     return UploadMedia.fromJson(response.data);
@@ -127,7 +128,7 @@ class ProductRepository {
     });
 
     await setToken();
-    Response response = await _dio.post('/api/v1/listings/media', data: data, onSendProgress: (sent, total) {
+    Response response = await _dio.post('/$kApiPath/listings/media', data: data, onSendProgress: (sent, total) {
       _editAdController.uploadImageProgress.value = ((sent / total));
     });
     return UploadMedia.fromJson(response.data);

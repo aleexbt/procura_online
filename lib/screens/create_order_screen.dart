@@ -26,7 +26,6 @@ class _CreateOrderScreenState extends State<CreateOrderScreen> {
 
   @override
   initState() {
-    // _userController.checkSubscription('order-create');
     WidgetsBinding.instance.addPostFrameCallback((_) => _userController.checkOrdersPermission());
     mainNode = FocusNode();
     super.initState();
@@ -125,46 +124,6 @@ class _CreateOrderScreenState extends State<CreateOrderScreen> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              'Referência',
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            SizedBox(height: 10),
-                            CustomTextInput(
-                              controller: _ordersController.mpn.value,
-                              fillColor: Colors.grey[200],
-                              hintText: 'Informe uma referência',
-                              textCapitalization: TextCapitalization.sentences,
-                              validator: (value) {
-                                if (value.isEmpty) {
-                                  return 'Campo de preenchimento obrigatório.';
-                                }
-                              },
-                            ),
-                            SizedBox(height: 20),
-                            Text(
-                              'Pedido',
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            SizedBox(height: 10),
-                            CustomTextInput(
-                              controller: _ordersController.note.value,
-                              fillColor: Colors.grey[200],
-                              hintText: 'Detalhes do seu pedido',
-                              textCapitalization: TextCapitalization.sentences,
-                              maxLines: 5,
-                              keyboardType: TextInputType.multiline,
-                              validator: (value) {
-                                if (value.isEmpty) {
-                                  return 'Campo de preenchimento obrigatório.';
-                                }
-                              },
-                            ),
-                            SizedBox(height: 20),
-                            Text(
                               'Marca',
                               style: TextStyle(
                                 fontWeight: FontWeight.bold,
@@ -250,46 +209,7 @@ class _CreateOrderScreenState extends State<CreateOrderScreen> {
                             ),
                             SizedBox(height: 20),
                             Text(
-                              'Potência',
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            SizedBox(height: 10),
-                            CustomTextInput(
-                              controller: _ordersController.engineDisplacement.value,
-                              fillColor: Colors.grey[200],
-                              hintText: 'Informe a potência',
-                              keyboardType: TextInputType.number,
-                              validator: (value) {
-                                if (value.isEmpty) {
-                                  return 'Campo de preenchimento obrigatório.';
-                                }
-                              },
-                            ),
-                            SizedBox(height: 20),
-                            Text(
-                              'Lotação',
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            SizedBox(height: 10),
-                            CustomTextInput(
-                              controller: _ordersController.numberOfDoors.value,
-                              fillColor: Colors.grey[200],
-                              hintText: 'Informe o número de portas',
-                              keyboardType: TextInputType.number,
-                              maxLength: 2,
-                              validator: (value) {
-                                if (value.isEmpty) {
-                                  return 'Campo de preenchimento obrigatório.';
-                                }
-                              },
-                            ),
-                            SizedBox(height: 20),
-                            Text(
-                              'Combustível',
+                              'Combustível (opcional)',
                               style: TextStyle(
                                 fontWeight: FontWeight.bold,
                               ),
@@ -301,17 +221,70 @@ class _CreateOrderScreenState extends State<CreateOrderScreen> {
                               value: _ordersController.selectedFuel.value,
                               choiceItems: _ordersController.fuelOptions,
                               onChange: (state) => _ordersController.setFuel(state.value),
-                              hasError: _ordersController.selectedFuel.value.isEmpty && submitted,
                             ),
-                            Visibility(
-                              visible: _ordersController.selectedFuel.value.isEmpty && submitted,
-                              child: Padding(
-                                padding: const EdgeInsets.only(left: 12, top: 5),
-                                child: Text(
-                                  'Campo de preenchimento obrigatório.',
-                                  style: TextStyle(color: Colors.red, fontSize: 12),
-                                ),
+                            SizedBox(height: 20),
+                            Text(
+                              'Potência (opcional)',
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
                               ),
+                            ),
+                            SizedBox(height: 10),
+                            CustomTextInput(
+                              controller: _ordersController.engineDisplacement.value,
+                              fillColor: Colors.grey[200],
+                              hintText: 'Informe a potência',
+                              keyboardType: TextInputType.number,
+                            ),
+                            SizedBox(height: 20),
+                            Text(
+                              'Nº de portas (opcional)',
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            SizedBox(height: 10),
+                            CustomTextInput(
+                              controller: _ordersController.numberOfDoors.value,
+                              fillColor: Colors.grey[200],
+                              hintText: 'Informe o número de portas',
+                              keyboardType: TextInputType.number,
+                              maxLength: 2,
+                            ),
+                            SizedBox(height: 20),
+                            Text(
+                              'Referência (opcional)',
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            SizedBox(height: 10),
+                            CustomTextInput(
+                              controller: _ordersController.mpn.value,
+                              fillColor: Colors.grey[200],
+                              hintText: 'Informe uma referência',
+                              textCapitalization: TextCapitalization.sentences,
+                            ),
+                            SizedBox(height: 20),
+                            Text(
+                              'Pedido',
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            SizedBox(height: 10),
+                            CustomTextInput(
+                              controller: _ordersController.note.value,
+                              fillColor: Colors.grey[200],
+                              hintText: 'Detalhes do seu pedido',
+                              textCapitalization: TextCapitalization.sentences,
+                              maxLines: 5,
+                              keyboardType: TextInputType.multiline,
+                              validator: (value) {
+                                if (value.isEmpty) {
+                                  return 'Campo de preenchimento obrigatório.';
+                                }
+                              },
                             ),
                             SizedBox(height: 20),
                             GradientButton(
@@ -451,7 +424,7 @@ class _CreateOrderScreenState extends State<CreateOrderScreen> {
                         size: 35,
                       ),
                       Text(
-                        'ADD FOTOS',
+                        'ADICIONAR FOTOS',
                         style: TextStyle(
                           color: Colors.grey[400],
                           fontSize: 12,

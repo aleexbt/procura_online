@@ -422,7 +422,7 @@ class _CreateAdScreenState extends State<CreateAdScreen> {
                             ),
                             SizedBox(height: 20),
                             Text(
-                              'Número de portas',
+                              'Nº de portas',
                               style: TextStyle(
                                 fontWeight: FontWeight.bold,
                               ),
@@ -828,7 +828,7 @@ class _CreateAdScreenState extends State<CreateAdScreen> {
                         size: 35,
                       ),
                       Text(
-                        'ADD MAIS',
+                        'ADICIONAR MAIS',
                         style: TextStyle(
                           color: Colors.grey[400],
                           fontSize: 12,

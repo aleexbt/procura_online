@@ -21,7 +21,7 @@ class ForgotPasswordScreen extends StatelessWidget {
       appBar: AppBar(
         brightness: Brightness.dark,
         title: Text(
-          'Recuperar senha',
+          'Recuperar password',
           style: TextStyle(color: Colors.white),
         ),
         centerTitle: true,

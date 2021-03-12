@@ -134,7 +134,6 @@ class ChatController extends GetxController with WidgetsBindingObserver {
     _chats.update((val) {
       val.chats.removeWhere((chat) => chat.id == conversation.id);
       val.chats.insert(0, conversation);
-      // val.chats.firstWhere((chat) => chat.id == conversation.id).latestMessage = conversation.latestMessage;
     });
   }
 }

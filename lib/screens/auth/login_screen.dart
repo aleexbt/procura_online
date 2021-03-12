@@ -40,48 +40,8 @@ class _LoginScreenState extends State<LoginScreen> {
     super.dispose();
   }
 
-  // GoogleSignIn _googleSignIn = GoogleSignIn(
-  //   scopes: [
-  //     'email',
-  //     'https://www.googleapis.com/auth/userinfo.email',
-  //     'https://www.googleapis.com/auth/userinfo.profile',
-  //   ],
-  // );
-  //
-  // Future<void> _handleSignInGoogle() async {
-  //   try {
-  //     await _googleSignIn.signIn();
-  //   } catch (e) {
-  //     print('login failed $e');
-  //   }
-  // }
-  //
-  // Future<void> _handleSignInFacebook() async {
-  //   try {
-  //     // by default the login method has the next permissions ['email','public_profile']
-  //     AccessToken accessToken = await FacebookAuth.instance.login();
-  //     print(accessToken.toJson());
-  //     // get the user data
-  //     final userData = await FacebookAuth.instance.getUserData();
-  //     print(userData);
-  //   } on FacebookAuthException catch (e) {
-  //     switch (e.errorCode) {
-  //       case FacebookAuthErrorCode.OPERATION_IN_PROGRESS:
-  //         print("You have a previous login operation in progress");
-  //         break;
-  //       case FacebookAuthErrorCode.CANCELLED:
-  //         print("login cancelled");
-  //         break;
-  //       case FacebookAuthErrorCode.FAILED:
-  //         print("login failed ${e.message}");
-  //         break;
-  //     }
-  //   }
-  // }
-
   @override
   Widget build(BuildContext context) {
-    final focus = FocusNode();
     return Scaffold(
       appBar: AppBar(
         brightness: Brightness.dark,
@@ -143,7 +103,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                 onEditingComplete: _node.nextFocus,
                                 validator: (value) {
                                   if (value.isEmpty) {
-                                    return 'Please enter your email address';
+                                    return 'Campo de preenchimento obrigatório.';
                                   }
                                   return null;
                                 },
@@ -155,7 +115,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                   Icons.lock,
                                   color: Colors.white,
                                 ),
-                                hintText: 'Senha',
+                                hintText: 'Password',
                                 hintStyle: TextStyle(color: Colors.white),
                                 obscureText: true,
                                 errorBorderColor: Colors.white54,
@@ -169,7 +129,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                 },
                                 validator: (value) {
                                   if (value.isEmpty) {
-                                    return 'Please enter your password';
+                                    return 'Campo de preenchimento obrigatório.';
                                   }
                                   return null;
                                 },
@@ -182,7 +142,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                     padding: EdgeInsets.all(0),
                                     visualDensity: VisualDensity.compact,
                                   ),
-                                  child: Text('Esqueceu sua senha?'),
+                                  child: Text('Não se lembra da password?'),
                                   onPressed: () => Get.toNamed('/auth/forgot-password'),
                                 ),
                               ),
@@ -203,61 +163,10 @@ class _LoginScreenState extends State<LoginScreen> {
                               }
                             },
                           ),
-                          // Padding(
-                          //   padding: const EdgeInsets.all(8.0),
-                          //   child: Text('- OR -'),
-                          // ),
-                          // MaterialButton(
-                          //   child: Center(
-                          //       child: Padding(
-                          //     padding: const EdgeInsets.all(4.0),
-                          //     child: Row(
-                          //       mainAxisAlignment: MainAxisAlignment.center,
-                          //       children: <Widget>[
-                          //         Padding(
-                          //           padding: const EdgeInsets.only(right: 4.0),
-                          //           child: Image.asset(
-                          //             'assets/images/icon_google.png',
-                          //             width: 20,
-                          //             height: 20,
-                          //           ),
-                          //         ),
-                          //         Text('Login with Google', style: TextStyle(color: Colors.blue)),
-                          //       ],
-                          //     ),
-                          //   )),
-                          //   onPressed: () => _handleSignInGoogle(),
-                          //   color: Colors.white,
-                          // ),
-                          // MaterialButton(
-                          //   child: Center(
-                          //       child: Padding(
-                          //     padding: const EdgeInsets.all(4.0),
-                          //     child: Padding(
-                          //       padding: const EdgeInsets.all(6.0),
-                          //       child: Row(
-                          //         mainAxisAlignment: MainAxisAlignment.center,
-                          //         children: <Widget>[
-                          //           Padding(
-                          //             padding: const EdgeInsets.only(right: 8.0),
-                          //             child: Image.asset(
-                          //               'assets/images/icon_facebook.png',
-                          //               width: 20,
-                          //               height: 20,
-                          //             ),
-                          //           ),
-                          //           Text('Login with Facebook', style: TextStyle(color: Colors.white)),
-                          //         ],
-                          //       ),
-                          //     ),
-                          //   )),
-                          //   onPressed: () => _handleSignInFacebook(),
-                          //   color: Color.fromRGBO(59, 89, 152, 1),
-                          // ),
                           SizedBox(height: 20),
                           TextButton(
                             style: TextButton.styleFrom(primary: Colors.white),
-                            child: Text('Ainda não tem uma conta? Registre-se'),
+                            child: Text('Ainda não tem conta? Registre-se agora'),
                             onPressed: () => Get.toNamed('/auth/register'),
                           ),
                         ],

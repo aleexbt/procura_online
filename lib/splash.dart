@@ -75,6 +75,7 @@ class _SplashScreenState extends State<SplashScreen> {
     await precachePicture(SvgPicture.asset('assets/images/startworking.svg').pictureProvider, Get.context);
     await precachePicture(SvgPicture.asset('assets/images/by_my_car.svg').pictureProvider, Get.context);
     await precachePicture(SvgPicture.asset('assets/images/not_found_towing.svg').pictureProvider, Get.context);
+    await precachePicture(SvgPicture.asset('assets/images/registro.svg').pictureProvider, Get.context);
   }
 
   @override

@@ -8,6 +8,7 @@ import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:octo_image/octo_image.dart';
+import 'package:procura_online/app_settings.dart';
 import 'package:procura_online/controllers/product_controller.dart';
 import 'package:procura_online/widgets/photo_gallery.dart';
 import 'package:share/share.dart';
@@ -29,7 +30,7 @@ class ProductScreen extends StatelessWidget {
             onPressed: () {
               if (_productController.product.title != null) {
                 Share.share(
-                    'Acho que você pode gostar disso: ${_productController.product.title}, https://procuraonline-dev.pt/listings/${_productController.product.slug}/${_productController.product.id}');
+                    'Acho que você pode gostar disso: ${_productController.product.title}, $kBaseUrl/listings/${_productController.product.slug}/${_productController.product.id}');
               }
             },
           )
@@ -598,7 +599,7 @@ class ProductScreen extends StatelessWidget {
               SpeedDialChild(
                 child: Icon(CupertinoIcons.mail_solid),
                 backgroundColor: Colors.blue,
-                label: 'E-mail',
+                label: 'Email',
                 onTap: () => launch('mailto:${_.product.user.email}?subject=Re: ${_.product.title}'),
               ),
             ],

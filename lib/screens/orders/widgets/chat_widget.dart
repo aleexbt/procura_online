@@ -110,7 +110,7 @@ class ChatWidget extends StatelessWidget {
             children: [
               SvgPicture.asset('assets/images/emptyinbox.svg', width: 280),
               SizedBox(height: 10),
-              Text('Sem conversas no momento'),
+              Text('Sem conversas de momento'),
               TextButton(
                 style: TextButton.styleFrom(primary: Colors.blue),
                 onPressed: () => _.findAll(),

@@ -4,6 +4,7 @@ import 'package:dio/dio.dart';
 import 'package:dio_http_cache/dio_http_cache.dart';
 import 'package:get/instance_manager.dart';
 import 'package:hive/hive.dart';
+import 'package:procura_online/app_settings.dart';
 import 'package:procura_online/controllers/orders_controller.dart';
 import 'package:procura_online/models/message_model.dart';
 import 'package:procura_online/models/order_model.dart';
@@ -27,28 +28,28 @@ final _dioCacheManager = DioCacheManager(CacheConfig());
 class OrdersRepository {
   Future<Orders> findAll({String filter = 'vazio', int page = 1}) async {
     await setToken();
-    Response response = await _dio.get('/api/v1/orders', queryParameters: {"filter": "$filter", "page": "$page"});
+    Response response = await _dio.get('/$kApiPath/orders', queryParameters: {"filter": "$filter", "page": "$page"});
     return Orders.fromJson(response.data);
   }
 
   Future<Message> replyOrder(Map<String, dynamic> data) async {
     await setToken();
-    Response response = await _dio.post('/api/v1/conversation/send', data: data);
+    Response response = await _dio.post('/$kApiPath/conversation/send', data: data);
     return response.data['data']['conversation_id'];
   }
 
   void markOrderAsRead(String orderId) async {
     await setToken();
-    _dio.get('/api/v1/orders/seen/$orderId');
+    _dio.get('/$kApiPath/orders/seen/$orderId');
   }
 
   void markOrderAsSold(String orderId) async {
     await setToken();
-    _dio.get('/api/v1/orders/$orderId/sold');
+    _dio.get('/$kApiPath/orders/$orderId/sold');
   }
 
   Future<Order> createOrder(Map<String, dynamic> data) async {
-    Response response = await _dio.post('/api/v1/orders', data: data);
+    Response response = await _dio.post('/$kApiPath/orders', data: data);
     return Order.fromJson(response.data);
   }
 
@@ -64,7 +65,7 @@ class OrdersRepository {
     });
 
     await setToken();
-    Response response = await _dio.post('/api/v1/orders/media', data: data, onSendProgress: (sent, total) {
+    Response response = await _dio.post('/$kApiPath/orders/media', data: data, onSendProgress: (sent, total) {
       _ordersController.uploadImageProgress.value = ((sent / total));
     });
     return UploadMedia.fromJson(response.data);

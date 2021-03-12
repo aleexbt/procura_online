@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:diacritic/diacritic.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:procura_online/app_settings.dart';
 import 'package:smart_select/smart_select.dart';
 
 class SelectOptionLogo extends StatelessWidget {
@@ -115,14 +116,13 @@ class SelectOptionLogo extends StatelessWidget {
       choiceSubtitleBuilder: (context, choice, sub) => Text('description'),
       choiceTitleBuilder: (context, choice, title) => Row(
         crossAxisAlignment: CrossAxisAlignment.center,
-        // mainAxisAlignment: MainAxisAlignment.start,
         children: [
           Text(choice.title),
           SizedBox(
               height: 30,
               child: CachedNetworkImage(
                 imageUrl:
-                    'http://procuraonline-dev.pt/assets/img/logos/${removeDiacritics(choice.title.replaceAll(RegExp(' '), '-'))}.png',
+                    '$kBaseUrl/assets/img/logos/${removeDiacritics(choice.title.replaceAll(RegExp(' '), '-'))}.png',
                 fit: BoxFit.contain,
               )),
         ],
