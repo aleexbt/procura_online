@@ -24,6 +24,10 @@
 	<string>$(CURRENT_PROJECT_VERSION)</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<key>NSLocationAlwaysUsageDescription</key>
+	<string>Precisamos de acesso da sua localização para encontrar automóveis próximos.</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>Precisamos de acesso da sua localização para encontrar automóveis próximos.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>Permission needed to pick a photo from gallery.</string>
 	<key>UIBackgroundModes</key>

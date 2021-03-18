@@ -41,10 +41,11 @@ class SearchController extends GetxController {
   List<S2Choice<int>> get districts => _districts;
 
   List<S2Choice<String>> fuelOptions = [
-    S2Choice<String>(value: 'gas', title: 'Gasoline'),
-    S2Choice<String>(value: 'diesel', title: 'Diesel'),
-    S2Choice<String>(value: 'hybrid', title: 'Hybrid'),
-    S2Choice<String>(value: 'electric', title: 'Electric'),
+    S2Choice<String>(value: 'gas', title: 'Gás'),
+    S2Choice<String>(value: 'electric', title: 'Eléctrico'),
+    S2Choice<String>(value: 'diesel', title: 'Gásoleo'),
+    S2Choice<String>(value: 'gasoline', title: 'Gasolina'),
+    S2Choice<String>(value: 'hybrid', title: 'Híbrido'),
   ];
 
   void setBrand(String value) {

@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:octo_image/octo_image.dart';
+import 'package:sizer/sizer.dart';
 
 class ItemBox extends StatelessWidget {
   final double width;
@@ -29,8 +30,8 @@ class ItemBox extends StatelessWidget {
       child: Stack(
         children: [
           Container(
-            width: width,
-            height: height,
+            width: width.w,
+            height: height.h,
             decoration: BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.circular(4),

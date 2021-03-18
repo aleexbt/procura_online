@@ -607,6 +607,7 @@ class _EditAdScreenState extends State<EditAdScreen> {
                                   showTitleActions: true,
                                   minTime: DateTime(1900, 1, 1),
                                   maxTime: DateTime.now(),
+                                  locale: LocaleType.pt,
                                   onConfirm: (date) {
                                     _editAdController.registeredDate.value = date.toString();
                                     _editAdController.formattedRegisteredDate.value =

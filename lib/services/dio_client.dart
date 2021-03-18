@@ -1,11 +1,25 @@
 import 'dart:io';
 
 import 'package:dio/dio.dart';
+import 'package:dio_cache_interceptor/dio_cache_interceptor.dart';
 import 'package:flutter/foundation.dart';
+import 'package:get/get.dart';
 import 'package:procura_online/app_settings.dart';
+import 'package:procura_online/utils/app_path.dart';
 
 const _defaultConnectTimeout = 25000;
 const _defaultReceiveTimeout = 6000;
+
+Directory dir = Get.find<AppPath>().directory;
+var cacheStore = DbCacheStore(databasePath: dir.path, logStatements: kDebugMode);
+
+final cacheOptions = CacheOptions(
+  store: cacheStore,
+  policy: CachePolicy.cacheStoreNo,
+  hitCacheOnErrorExcept: [401, 403],
+  priority: CachePriority.normal,
+  maxStale: const Duration(days: 1),
+);
 
 class DioClient {
   String token;
@@ -27,6 +41,7 @@ class DioClient {
     if (interceptors?.isNotEmpty ?? false) {
       _dio.interceptors.addAll(interceptors);
     }
+    _dio.interceptors.add(DioCacheInterceptor(options: cacheOptions));
     if (kDebugMode) {
       _dio.interceptors.add(LogInterceptor(
         responseBody: true,
@@ -34,7 +49,7 @@ class DioClient {
         requestHeader: false,
         responseHeader: false,
         request: false,
-        requestBody: true,
+        requestBody: false,
       ));
     }
   }

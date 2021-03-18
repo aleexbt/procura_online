@@ -50,7 +50,7 @@ class ProfileScreen extends StatelessWidget {
                     Column(
                       children: [
                         Container(
-                          height: 220,
+                          height: 30,
                           width: double.infinity,
                           decoration: BoxDecoration(
                             color: Colors.grey[200],

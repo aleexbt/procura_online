@@ -12,6 +12,7 @@ import 'package:procura_online/app_settings.dart';
 import 'package:procura_online/controllers/product_controller.dart';
 import 'package:procura_online/widgets/photo_gallery.dart';
 import 'package:share/share.dart';
+import 'package:sizer/sizer.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class ProductScreen extends StatelessWidget {
@@ -19,6 +20,7 @@ class ProductScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    double height = 35;
     return Scaffold(
       // extendBodyBehindAppBar: true,
       appBar: AppBar(
@@ -30,7 +32,7 @@ class ProductScreen extends StatelessWidget {
             onPressed: () {
               if (_productController.product.title != null) {
                 Share.share(
-                    'Acho que você pode gostar disso: ${_productController.product.title}, $kBaseUrl/listings/${_productController.product.slug}/${_productController.product.id}');
+                    'Achamos que podes gostar disso: ${_productController.product.title}, $kBaseUrl/listings/${_productController.product.slug}/${_productController.product.id}');
               }
             },
           )
@@ -71,7 +73,7 @@ class ProductScreen extends StatelessWidget {
                 children: [
                   SizedBox(
                     width: double.infinity,
-                    height: 300,
+                    height: height.h,
                     child: Carousel(
                       dotSize: 5.0,
                       dotSpacing: 15.0,
@@ -345,7 +347,9 @@ class ProductScreen extends StatelessWidget {
                                           ),
                                           children: [
                                             TextSpan(
-                                                text: _.product.mileage.toString() ?? 'Não especificado',
+                                                text: _.product.mileage != null
+                                                    ? _.product.mileage.toString()
+                                                    : 'Não especificado',
                                                 style: TextStyle(
                                                   color: Colors.grey[600],
                                                   fontWeight: FontWeight.normal,
@@ -364,7 +368,9 @@ class ProductScreen extends StatelessWidget {
                                           ),
                                           children: [
                                             TextSpan(
-                                                text: _.product.engineDisplacement.toString() ?? 'Não especificado',
+                                                text: _.product.engineDisplacement != null
+                                                    ? _.product.engineDisplacement.toString()
+                                                    : 'Não especificado',
                                                 style: TextStyle(
                                                   color: Colors.grey[600],
                                                   fontWeight: FontWeight.normal,
@@ -383,7 +389,9 @@ class ProductScreen extends StatelessWidget {
                                           ),
                                           children: [
                                             TextSpan(
-                                                text: _.product.enginePower.toString() ?? 'Não especificado',
+                                                text: _.product.enginePower != null
+                                                    ? _.product.enginePower.toString()
+                                                    : 'Não especificado',
                                                 style: TextStyle(
                                                   color: Colors.grey[600],
                                                   fontWeight: FontWeight.normal,
@@ -409,7 +417,9 @@ class ProductScreen extends StatelessWidget {
                                           ),
                                           children: [
                                             TextSpan(
-                                                text: _.product.numberOfDoors.toString() ?? 'Não especificado',
+                                                text: _.product.numberOfDoors != null
+                                                    ? _.product.numberOfDoors.toString()
+                                                    : 'Não especificado',
                                                 style: TextStyle(
                                                   color: Colors.grey[600],
                                                   fontWeight: FontWeight.normal,
@@ -428,7 +438,9 @@ class ProductScreen extends StatelessWidget {
                                           ),
                                           children: [
                                             TextSpan(
-                                                text: _.product.numberOfSeats.toString() ?? 'Não especificado',
+                                                text: _.product.numberOfSeats != null
+                                                    ? _.product.numberOfSeats.toString()
+                                                    : 'Não especificado',
                                                 style: TextStyle(
                                                   color: Colors.grey[600],
                                                   fontWeight: FontWeight.normal,
@@ -588,17 +600,24 @@ class ProductScreen extends StatelessWidget {
           return SpeedDial(
             // animatedIcon: AnimatedIcons.menu_close,
             child: Icon(CupertinoIcons.ellipses_bubble_fill),
+            backgroundColor: Colors.blue,
+            activeBackgroundColor: Colors.blue,
+            activeForegroundColor: Colors.white,
+            activeIcon: Icons.clear,
             curve: Curves.bounceIn,
             overlayOpacity: 0.5,
+            overlayColor: Colors.white,
             children: [
               SpeedDialChild(
                   child: Icon(CupertinoIcons.phone),
                   backgroundColor: Colors.green,
+                  labelBackgroundColor: Colors.white,
                   label: 'Ligar',
                   onTap: () => launch('tel://${_.product.user.phone}')),
               SpeedDialChild(
                 child: Icon(CupertinoIcons.mail_solid),
                 backgroundColor: Colors.blue,
+                labelBackgroundColor: Colors.white,
                 label: 'Email',
                 onTap: () => launch('mailto:${_.product.user.email}?subject=Re: ${_.product.title}'),
               ),

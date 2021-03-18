@@ -5,7 +5,6 @@ import 'package:procura_online/controllers/search_controller.dart';
 import 'package:procura_online/models/listing_model.dart';
 import 'package:procura_online/models/product_model.dart';
 import 'package:procura_online/repositories/product_repository.dart';
-import 'package:smart_select/smart_select.dart';
 
 class HomeController extends GetxController with StateMixin<Listing> {
   final ProductRepository _productRepository = Get.find();
@@ -44,11 +43,11 @@ class HomeController extends GetxController with StateMixin<Listing> {
 
   List<Product> get featured => _featured;
 
-  List<S2Choice<String>> categoryOptions = [
-    S2Choice<String>(value: 'listings', title: 'All'),
-    S2Choice<String>(value: 'vehicles', title: 'Vehicles'),
-    S2Choice<String>(value: 'auto-parts', title: 'Auto Parts'),
-  ];
+  // List<S2Choice<String>> categoryOptions = [
+  //   S2Choice<String>(value: 'listings', title: 'All'),
+  //   S2Choice<String>(value: 'vehicles', title: 'Vehicles'),
+  //   S2Choice<String>(value: 'auto-parts', title: 'Auto Parts'),
+  // ];
 
   void findAll({bool skipLoading = false}) async {
     _isLoading.value = !skipLoading;
@@ -112,7 +111,6 @@ class HomeController extends GetxController with StateMixin<Listing> {
   }
 
   void nextPageSearch() async {
-    _page.value = 1;
     _isLoadingMore.value = true;
     _loadingMoreError.value = false;
     try {

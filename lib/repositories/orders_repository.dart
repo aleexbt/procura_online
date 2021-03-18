@@ -1,7 +1,6 @@
 import 'dart:io';
 
 import 'package:dio/dio.dart';
-import 'package:dio_http_cache/dio_http_cache.dart';
 import 'package:get/instance_manager.dart';
 import 'package:hive/hive.dart';
 import 'package:procura_online/app_settings.dart';
@@ -22,8 +21,6 @@ Future<void> setToken() async {
     _dio = DioClient(token: token);
   }
 }
-
-final _dioCacheManager = DioCacheManager(CacheConfig());
 
 class OrdersRepository {
   Future<Orders> findAll({String filter = 'vazio', int page = 1}) async {

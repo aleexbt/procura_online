@@ -226,7 +226,6 @@ class UserController extends GetxController with StateMixin<User> {
           "phone": phone,
           "password": password,
           "type": type,
-          "skills": skills,
           "district_id": district,
           "city_id": city,
           "address": address,

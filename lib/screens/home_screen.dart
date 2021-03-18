@@ -157,9 +157,9 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
                   child: Obx(
                     () => FlatButton(
                       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(25)),
-                      color: _homeController.categoryValue == 'auto-parts' ? Colors.grey[300] : Colors.grey[200],
+                      color: _homeController.categoryValue == 'autoparts' ? Colors.grey[300] : Colors.grey[200],
                       height: 40,
-                      onPressed: () => changeCategory(name: 'Peças', value: 'auto-parts'),
+                      onPressed: () => changeCategory(name: 'Peças', value: 'autoparts'),
                       child: Text('Peças'),
                     ),
                   ),
@@ -238,8 +238,8 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
                                   return Padding(
                                     padding: const EdgeInsets.only(right: 10),
                                     child: ItemBox(
-                                      width: 250,
-                                      height: 250,
+                                      width: 50,
+                                      height: 100,
                                       image: _.featured[index].mainPhoto?.bigThumb ??
                                           'https://source.unsplash.com/600x500/?bmw,audi,volvo',
                                       title: _.featured[index].title ?? 'Title',

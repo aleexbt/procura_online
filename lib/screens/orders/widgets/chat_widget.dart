@@ -149,7 +149,7 @@ class ChatWidget extends StatelessWidget {
                       ),
                     ),
                     title: Text(
-                        '${_.chats.chats[index].order.model} ${_.chats.chats[index].order.year}'), // messages.messages[index].usertwo.name
+                        '${_.chats.chats[index].order?.model ?? ''} ${_.chats.chats[index].order?.year ?? ''}'), // messages.messages[index].usertwo.name
                     subtitle: Text(_.chats?.chats[index]?.latestMessage?.message ?? ''),
                     trailing: Column(
                       mainAxisAlignment: MainAxisAlignment.center,

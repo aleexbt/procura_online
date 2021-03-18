@@ -553,6 +553,7 @@ class _CreateAdScreenState extends State<CreateAdScreen> {
                                   showTitleActions: true,
                                   minTime: DateTime(1900, 1, 1),
                                   maxTime: DateTime.now(),
+                                  locale: LocaleType.pt,
                                   onConfirm: (date) {
                                     _createAdController.registeredDate.value = date.toString();
                                     _createAdController.formattedRegisteredDate.value =

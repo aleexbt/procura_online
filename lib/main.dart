@@ -7,10 +7,13 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:procura_online/app_bindings.dart';
 import 'package:procura_online/routes/pages.dart';
 import 'package:procura_online/routes/routes.dart';
+import 'package:procura_online/utils/app_path.dart';
 import 'package:procura_online/utils/route_transition_vertical.dart';
+import 'package:sizer/sizer_util.dart';
 
 void main() async {
   await Hive.initFlutter();
+  await Get.put(AppPath()).getPath();
   runApp(MyApp());
 }
 
@@ -25,31 +28,40 @@ class MyApp extends StatelessWidget {
           FocusManager.instance.primaryFocus.unfocus();
         }
       },
-      child: GetMaterialApp(
-        localizationsDelegates: [
-          GlobalMaterialLocalizations.delegate,
-          GlobalWidgetsLocalizations.delegate,
-          GlobalCupertinoLocalizations.delegate,
-        ],
-        supportedLocales: [
-          const Locale('pt', 'PT'),
-          const Locale('pt', 'BR'),
-          const Locale('en', 'US'),
-        ],
-        customTransition: SharedZaxisPageTransitionVertical(),
-        initialBinding: AppBindings(),
-        initialRoute: Routers.initialRoute,
-        getPages: getPages,
-        popGesture: true,
-        debugShowCheckedModeBanner: false,
-        title: 'Procura Online',
-        theme: ThemeData(
-          primaryColor: Colors.white,
-          visualDensity: VisualDensity.adaptivePlatformDensity,
-          textTheme: GoogleFonts.openSansTextTheme(
-            Theme.of(context).textTheme,
-          ),
-        ),
+      child: LayoutBuilder(
+        builder: (context, constraints) {
+          return OrientationBuilder(
+            builder: (context, orientation) {
+              SizerUtil().init(constraints, orientation);
+              return GetMaterialApp(
+                localizationsDelegates: [
+                  GlobalMaterialLocalizations.delegate,
+                  GlobalWidgetsLocalizations.delegate,
+                  GlobalCupertinoLocalizations.delegate,
+                ],
+                supportedLocales: [
+                  const Locale('pt', 'PT'),
+                  const Locale('pt', 'BR'),
+                  const Locale('en', 'US'),
+                ],
+                customTransition: SharedZaxisPageTransitionVertical(),
+                initialBinding: AppBindings(),
+                initialRoute: Routers.initialRoute,
+                getPages: getPages,
+                popGesture: true,
+                debugShowCheckedModeBanner: false,
+                title: 'Procura Online',
+                theme: ThemeData(
+                  primaryColor: Colors.white,
+                  visualDensity: VisualDensity.adaptivePlatformDensity,
+                  textTheme: GoogleFonts.openSansTextTheme(
+                    Theme.of(context).textTheme,
+                  ),
+                ),
+              );
+            },
+          );
+        },
       ),
     );
   }
