@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:dio/dio.dart';
-import 'package:dio_cache_interceptor/dio_cache_interceptor.dart';
+import 'package:dio_http_cache/dio_http_cache.dart';
 import 'package:hive/hive.dart';
 import 'package:procura_online/app_settings.dart';
 import 'package:procura_online/models/listing_model.dart';
@@ -20,6 +20,8 @@ Future<void> setToken() async {
     _dio = DioClient(token: token);
   }
 }
+
+final _dioCacheManager = DioCacheManager(CacheConfig());
 
 enum UploadType { cover, logo }
 
@@ -92,22 +94,17 @@ class UserRepository {
   }
 
   Future<List> getDistricts() async {
-    final _cacheOptions = CacheOptions(
-      policy: CachePolicy.cacheStoreForce,
-      maxStale: const Duration(days: 365),
-    );
-
-    final response = await _dio.get('/$kApiPath/districts', options: _cacheOptions.toOptions());
+    DioClient _dio = DioClient(interceptors: [_dioCacheManager.interceptor]);
+    Options _cacheOptions = buildCacheOptions(Duration(days: 365));
+    final response = await _dio.get('/$kApiPath/districts', options: _cacheOptions);
     return response.data;
   }
 
   Future<List> getCities(int districtId) async {
-    final _cacheOptions = CacheOptions(
-      policy: CachePolicy.cacheStoreForce,
-      maxStale: const Duration(days: 365),
-    );
-    final response = await _dio.get('/$kApiPath/cities',
-        queryParameters: {"district_id": "$districtId"}, options: _cacheOptions.toOptions());
+    DioClient _dio = DioClient(interceptors: [_dioCacheManager.interceptor]);
+    Options _cacheOptions = buildCacheOptions(Duration(days: 365));
+    final response =
+    await _dio.get('/$kApiPath/cities', queryParameters: {"district_id": "$districtId"}, options: _cacheOptions);
     return response.data;
   }
 

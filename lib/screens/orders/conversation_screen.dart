@@ -169,26 +169,6 @@ class _ConversationScreenState extends State<ConversationScreen> {
                       children: [
                         ListTileMoreCustomizable(
                           leading: Icon(
-                            Icons.account_box_outlined,
-                            color: Colors.black,
-                          ),
-                          title: Text(
-                            'Ver perfil',
-                            style: TextStyle(
-                              color: Colors.black,
-                              fontWeight: FontWeight.w400,
-                            ),
-                          ),
-                          horizontalTitleGap: 0,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          onTap: (__) => Get.toNamed(
-                              '/profile/${_conversationController.conversation.userOne.id == _userController.userData?.id ? _conversationController.conversation.userTwo.id : _conversationController.conversation.userOne.id}'),
-                        ),
-                        Divider(),
-                        ListTileMoreCustomizable(
-                          leading: Icon(
                             _conversationController.conversation.mute == 0
                                 ? CupertinoIcons.speaker_slash
                                 : CupertinoIcons.speaker_2,

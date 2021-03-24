@@ -13,7 +13,6 @@ import 'package:sizer/sizer_util.dart';
 
 void main() async {
   await Hive.initFlutter();
-  await Get.put(AppPath()).getPath();
   runApp(MyApp());
 }
 

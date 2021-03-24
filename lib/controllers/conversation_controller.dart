@@ -14,14 +14,15 @@ import 'package:procura_online/services/pusher_service.dart';
 
 class ConversationController extends GetxController with WidgetsBindingObserver {
   final String chatId = Get.parameters['id'];
+  final bool skipFetch = Get.arguments != null ? Get.arguments['skipFetch'] ?? false : false;
   final ChatRepository _chatRepository = Get.find();
   final ChatController _chatController = Get.find();
   PusherService pusherService;
 
   @override
   void onInit() {
-    restoreConversation();
     pusherService = PusherService();
+    restoreConversation();
     WidgetsBinding.instance.addObserver(this);
     super.onInit();
   }
@@ -95,13 +96,15 @@ class ConversationController extends GetxController with WidgetsBindingObserver 
     _isLoading.value = !skipLoading;
     _hasError.value = false;
     try {
-      pusherService.firePusher('private-conversation.$chatId', 'App\\Events\\ConversationEvent');
       Conversation response = await _chatRepository.findOne(chatId);
       _conversation.value = response;
       filteredMessages = List.from(response.messages);
       Box<Conversation> box = await Hive.openBox<Conversation>('conversations');
       box.put(chatId, response);
-      bool seen = _chatController.chats.chats.firstWhere((element) => element.id.toString() == chatId).seen;
+      bool seen = _chatController.chats.chats
+              .firstWhere((element) => element.id.toString() == chatId, orElse: () => null)
+              ?.seen ??
+          false;
       if (!seen) {
         _chatRepository.markMessageAsRead(chatId);
         _chatController.findAll(skipLoading: true);
@@ -111,9 +114,15 @@ class ConversationController extends GetxController with WidgetsBindingObserver 
       print(err);
     } catch (err) {
       _hasError.value = true;
-      print(err);
+      print('CONVERSATION_FATAL_ERROR: $err');
     } finally {
       _isLoading.value = false;
+      if (skipFetch) {
+        await Future.delayed(Duration(seconds: 5));
+        pusherService.firePusher('private-conversation.$chatId', 'App\\Events\\ConversationEvent');
+      } else {
+        pusherService.firePusher('private-conversation.$chatId', 'App\\Events\\ConversationEvent');
+      }
     }
   }
 
@@ -215,10 +224,14 @@ class ConversationController extends GetxController with WidgetsBindingObserver 
   }
 
   void addMessage(Map<String, dynamic> data) async {
-    _conversation.update((val) {
-      val.messages.add(Message.fromJson(data['message']));
-    });
-    _chatRepository.markMessageAsRead(chatId);
+    try {
+      _conversation.update((val) {
+        val.messages.add(Message.fromJson(data['message']));
+      });
+      _chatRepository.markMessageAsRead(chatId);
+    } catch (e) {
+      print('ADD_MESSAGE_ERROR');
+    }
   }
 
   Future<UploadMedia> mediaUpload(File photo) async {

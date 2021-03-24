@@ -15,11 +15,13 @@ class UserInfoScreen extends StatelessWidget {
   final String email = Get.arguments['email'] ?? 'Indisponível';
   final String register = Get.arguments['register'] ?? 'Indisponível';
 
+  void _launch(url) async => await canLaunch(url) ? await launch(url) : throw 'Could not launch $url';
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Informações do usuário'),
+        title: Text('Informações do utilizador'),
         elevation: 0,
       ),
       body: SingleChildScrollView(
@@ -29,17 +31,14 @@ class UserInfoScreen extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Center(
-                child: GestureDetector(
-                  onTap: () => Get.toNamed('/profile/$profileId'),
-                  child: ClipOval(
-                    child: OctoImage(
-                      width: 170,
-                      height: 170,
-                      image: CachedNetworkImageProvider(avatar),
-                      placeholderBuilder: OctoPlaceholder.blurHash('LAI#u-9XM[D\$GdIU4oIA-sWFxwRl'),
-                      errorBuilder: OctoError.icon(color: Colors.grey[400]),
-                      fit: BoxFit.cover,
-                    ),
+                child: ClipOval(
+                  child: OctoImage(
+                    width: 170,
+                    height: 170,
+                    image: CachedNetworkImageProvider(avatar),
+                    placeholderBuilder: OctoPlaceholder.blurHash('LAI#u-9XM[D\$GdIU4oIA-sWFxwRl'),
+                    errorBuilder: OctoError.icon(color: Colors.grey[400]),
+                    fit: BoxFit.cover,
                   ),
                 ),
               ),
@@ -80,15 +79,20 @@ class UserInfoScreen extends StatelessWidget {
                 title: Text('Contacto telefónico'),
                 subtitle: Text(phone),
                 trailing: Icon(Icons.phone),
-                onTap: () => launch('tel://$phone'),
+                onTap: () => _launch('tel:$phone'),
               ),
               Divider(),
               ListTile(
-                title: Text('Email'),
-                subtitle: Text(email),
-                trailing: Icon(Icons.mail),
-                onTap: () => launch('mailto:$email?subject=Contacto de Procura Online'),
-              ),
+                  title: Text('Email'),
+                  subtitle: Text(email),
+                  trailing: Icon(Icons.mail),
+                  onTap: () => _launch(
+                        Uri(
+                          scheme: 'mailto',
+                          path: email,
+                          queryParameters: {'subject': 'Contacto de ProcuraOnline'},
+                        ).toString(),
+                      )),
               Divider(),
               ListTile(
                 title: Text('Registrado desde'),

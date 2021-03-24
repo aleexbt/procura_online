@@ -45,11 +45,6 @@ class _LoginScreenState extends State<LoginScreen> {
     return Scaffold(
       appBar: AppBar(
         brightness: Brightness.dark,
-        title: Text(
-          'Entrar',
-          style: TextStyle(color: Colors.white),
-        ),
-        centerTitle: true,
         backgroundColor: Colors.blue,
         elevation: 0,
         iconTheme: IconThemeData(color: Colors.white),
@@ -166,7 +161,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           SizedBox(height: 20),
                           TextButton(
                             style: TextButton.styleFrom(primary: Colors.white),
-                            child: Text('Ainda não tem conta? Registre-se agora'),
+                            child: Text('Ainda não tem conta? Registe-se agora'),
                             onPressed: () => Get.toNamed('/auth/register'),
                           ),
                         ],

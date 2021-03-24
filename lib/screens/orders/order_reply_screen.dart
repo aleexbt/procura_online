@@ -20,7 +20,7 @@ class OrderReplyScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (!order.seen) {
-      _ordersRepository.markOrderAsRead(orderId);
+      _ordersController.markOrderAsRead(orderId);
     }
     return Scaffold(
       appBar: AppBar(

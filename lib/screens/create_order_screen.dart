@@ -26,7 +26,8 @@ class _CreateOrderScreenState extends State<CreateOrderScreen> {
 
   @override
   initState() {
-    WidgetsBinding.instance.addPostFrameCallback((_) => _userController.checkOrdersPermission());
+    // WidgetsBinding.instance.addPostFrameCallback((_) => _userController.checkCreateOrderPermission());
+    _userController.checkSubscription('orders-create');
     mainNode = FocusNode();
     super.initState();
   }

@@ -20,11 +20,6 @@ class ForgotPasswordScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         brightness: Brightness.dark,
-        title: Text(
-          'Recuperar password',
-          style: TextStyle(color: Colors.white),
-        ),
-        centerTitle: true,
         backgroundColor: Colors.blue,
         elevation: 0,
         iconTheme: IconThemeData(color: Colors.white),
@@ -73,7 +68,7 @@ class ForgotPasswordScreen extends StatelessWidget {
                                 errorTextColor: Colors.white,
                                 validator: (value) {
                                   if (value.isEmpty) {
-                                    return 'Please enter your email address';
+                                    return 'Campo de preenchimento obrigatório.';
                                   }
                                   return null;
                                 },

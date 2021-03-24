@@ -1,4 +1,4 @@
-package com.procura.procura_online
+package pt.procuraonline.procuraonline
 
 import io.flutter.embedding.android.FlutterActivity
 

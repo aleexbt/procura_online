@@ -50,7 +50,7 @@ class ProfileScreen extends StatelessWidget {
                     Column(
                       children: [
                         Container(
-                          height: 30,
+                          height: 220,
                           width: double.infinity,
                           decoration: BoxDecoration(
                             color: Colors.grey[200],
@@ -92,15 +92,18 @@ class ProfileScreen extends StatelessWidget {
                               physics: NeverScrollableScrollPhysics(),
                               itemCount: _.profile.data.length,
                               itemBuilder: (context, index) {
-                                return ItemBox(
-                                  width: double.infinity,
-                                  height: 280,
-                                  title: _.profile.data[index].title,
-                                  salePrice: _.profile.data[index].price,
-                                  normalPrice: _.profile.data[index].oldPrice,
-                                  image: _.profile.data[index].mainPhoto?.bigThumb ??
-                                      'https://source.unsplash.com/600x500/?bmw,audi,volvo',
-                                  onTap: () => Get.toNamed('/product/${_.profile.data[index].id}'),
+                                return Padding(
+                                  padding: const EdgeInsets.symmetric(vertical: 5),
+                                  child: ItemBox(
+                                    width: double.infinity,
+                                    height: 30,
+                                    title: _.profile.data[index].title,
+                                    salePrice: _.profile.data[index].price,
+                                    normalPrice: _.profile.data[index].oldPrice,
+                                    image: _.profile.data[index].mainPhoto?.bigThumb ??
+                                        'https://source.unsplash.com/600x500/?bmw,audi,volvo',
+                                    onTap: () => Get.toNamed('/product/${_.profile.data[index].id}'),
+                                  ),
                                 );
                               },
                             ),

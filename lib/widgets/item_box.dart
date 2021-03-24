@@ -69,7 +69,7 @@ class ItemBox extends StatelessWidget {
                       ),
                       SizedBox(height: 2.0),
                       Text(
-                        '\$$salePrice',
+                        '\€$salePrice',
                         style: TextStyle(color: Colors.blueAccent, fontSize: 12.0, fontWeight: FontWeight.w600),
                       ),
                       // Text(

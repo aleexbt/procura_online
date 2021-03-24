@@ -507,9 +507,9 @@ class UserController extends GetxController with StateMixin<User> {
           dismiss: () => Get.back(),
         );
       }
-      if (feature == 'order-create' && permission) {
+      if (feature == 'orders-create' && permission) {
         _createOrderPermission.value = permission;
-      } else if (feature == 'order-create' && !permission) {
+      } else if (feature == 'orders-create' && !permission) {
         errorDialog(
           title: 'Erro',
           message: 'Você não pode criar um novo pedido. Verifique seu plano.',
@@ -520,9 +520,14 @@ class UserController extends GetxController with StateMixin<User> {
         _listOrdersPermission.value = permission;
       }
     } catch (err) {
-      _createAdPermission.value = false;
-      _createOrderPermission.value = false;
-      _listOrdersPermission.value = false;
+      errorDialog(
+        title: 'Erro',
+        message: 'Ops, ocorreu um erro na verificação.',
+        dismiss: () => Get.back(),
+      );
+      // _createAdPermission.value = false;
+      // _createOrderPermission.value = false;
+      // _listOrdersPermission.value = false;
       print(err);
     } finally {
       _isCheckingSubscription.value = false;
@@ -534,6 +539,17 @@ class UserController extends GetxController with StateMixin<User> {
   void checkOrdersPermission() async {
     // await Future.delayed(Duration(seconds: 1));
     if (!listOrdersPermission) {
+      errorDialog(
+        title: 'Erro',
+        message: 'Você não pode criar um novo pedido. Verifique seu plano.',
+        dismiss: () => Get.back(),
+      );
+    }
+  }
+
+  void checkCreateOrderPermission() async {
+    // await Future.delayed(Duration(seconds: 1));
+    if (!createOrderPermission) {
       errorDialog(
         title: 'Erro',
         message: 'Você não pode criar um novo pedido. Verifique seu plano.',

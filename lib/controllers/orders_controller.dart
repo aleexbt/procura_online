@@ -31,6 +31,7 @@ class OrdersController extends GetxController {
   RxBool _isLoadingMore = false.obs;
   RxBool _isLoadingBrands = false.obs;
   RxBool _isLoadingModels = false.obs;
+  RxBool _isCheckingSubscription = false.obs;
   RxBool _loadingMoreError = false.obs;
   RxBool _isUploadingImage = false.obs;
   RxBool _isPublishingOrder = false.obs;
@@ -53,6 +54,7 @@ class OrdersController extends GetxController {
   bool get isLoadingMore => _isLoadingMore.value;
   bool get isLoadingBrands => _isLoadingBrands.value;
   bool get isLoadingModels => _isLoadingModels.value;
+  bool get isCheckingSubscription => _isCheckingSubscription.value;
   bool get loadingMoreError => _loadingMoreError.value;
   bool get isUploadingImage => _isUploadingImage.value;
   bool get isPublishingOrder => _isPublishingOrder.value;
@@ -217,7 +219,7 @@ class OrdersController extends GetxController {
       Map<String, dynamic> data = {"message": message, "order_id": orderId};
       Message response = await _chatRepository.replyMessage(data);
       _chatRepository.findAll();
-      Get.offNamed('/chat/conversation/${response.conversationId}');
+      Get.offNamed('/chat/conversation/${response.conversationId}', arguments: {'skipFetch': true});
     } on DioError catch (err) {
       print(err);
       _replyingMsgError.value = true;
@@ -295,6 +297,15 @@ class OrdersController extends GetxController {
       uploadImageProgress.value = 0.0;
     }
     return _result;
+  }
+
+  void markOrderAsRead(String orderId) {
+    try {
+      _ordersRepository.markOrderAsRead(orderId);
+      findAll(skipLoading: true);
+    } catch (err) {
+      print(err);
+    }
   }
 
   void markOrderAsSold(String orderId) {

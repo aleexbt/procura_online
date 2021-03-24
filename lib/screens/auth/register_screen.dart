@@ -41,11 +41,26 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
   @override
   void initState() {
+    WidgetsBinding.instance.addPostFrameCallback((_) => SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+          statusBarBrightness: Brightness.light,
+          statusBarColor: Colors.white,
+          statusBarIconBrightness: Brightness.light,
+        )));
     _userController.getSkills();
     _userController.getDistricts();
     _userController.getPlans();
     mainNode = FocusNode();
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+      statusBarBrightness: Brightness.light,
+      statusBarColor: Colors.blue,
+      statusBarIconBrightness: Brightness.light,
+    ));
+    super.dispose();
   }
 
   List<Widget> steps() {
@@ -73,24 +88,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
   @override
   Widget build(BuildContext context) {
-    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light.copyWith(
-      statusBarColor: Colors.blue,
-    ));
     FocusScope.of(context).requestFocus(mainNode);
-
     return Scaffold(
       appBar: AppBar(
-        brightness: Brightness.dark,
-        title: Text(
-          'Registro',
-          style: TextStyle(color: Colors.white),
-        ),
-        centerTitle: true,
-        backgroundColor: Colors.blue,
+        brightness: Brightness.light,
+        backgroundColor: Colors.transparent,
         elevation: 0,
-        iconTheme: IconThemeData(color: Colors.white),
+        iconTheme: IconThemeData(color: Colors.blue),
       ),
-      // backgroundColor: Colors.blue,
       body: SafeArea(
         child: Obx(
           () => ModalProgressHUD(
@@ -108,10 +113,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         child: Column(
                           children: [
                             Padding(
-                              padding: const EdgeInsets.only(top: 50, left: 80, right: 80, bottom: 40),
+                              padding: const EdgeInsets.only(top: 0, left: 80, right: 80, bottom: 40),
                               child: SvgPicture.asset(
                                 'assets/images/logo_branco.svg',
-                                width: 100,
+                                width: 70,
                                 color: Colors.blue,
                               ),
                             ),

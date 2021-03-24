@@ -18,6 +18,8 @@ import 'package:url_launcher/url_launcher.dart';
 class ProductScreen extends StatelessWidget {
   final ProductController _productController = Get.put(ProductController());
 
+  void _launch(url) async => await canLaunch(url) ? await launch(url) : throw 'Could not launch $url';
+
   @override
   Widget build(BuildContext context) {
     double height = 35;
@@ -123,7 +125,7 @@ class ProductScreen extends StatelessWidget {
                             Row(
                               children: [
                                 Text(
-                                  '\$${_.product.price}',
+                                  '\€${_.product.price}',
                                   style: TextStyle(color: Colors.blueAccent),
                                 ),
                                 // SizedBox(width: 10),
@@ -601,9 +603,9 @@ class ProductScreen extends StatelessWidget {
             // animatedIcon: AnimatedIcons.menu_close,
             child: Icon(CupertinoIcons.ellipses_bubble_fill),
             backgroundColor: Colors.blue,
-            activeBackgroundColor: Colors.blue,
-            activeForegroundColor: Colors.white,
-            activeIcon: Icons.clear,
+            // activeBackgroundColor: Colors.blue,
+            // activeForegroundColor: Colors.white,
+            // activeIcon: Icons.clear,
             curve: Curves.bounceIn,
             overlayOpacity: 0.5,
             overlayColor: Colors.white,
@@ -613,13 +615,19 @@ class ProductScreen extends StatelessWidget {
                   backgroundColor: Colors.green,
                   labelBackgroundColor: Colors.white,
                   label: 'Ligar',
-                  onTap: () => launch('tel://${_.product.user.phone}')),
+                  onTap: () => _launch('tel:${_.product.user.phone}')),
               SpeedDialChild(
                 child: Icon(CupertinoIcons.mail_solid),
                 backgroundColor: Colors.blue,
                 labelBackgroundColor: Colors.white,
                 label: 'Email',
-                onTap: () => launch('mailto:${_.product.user.email}?subject=Re: ${_.product.title}'),
+                onTap: () => _launch(
+                  Uri(
+                    scheme: 'mailto',
+                    path: _.product.user.email,
+                    queryParameters: {'subject': 'Re: ${_.product.title}'},
+                  ).toString(),
+                ),
               ),
             ],
           );
