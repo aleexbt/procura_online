@@ -8,6 +8,7 @@ import 'package:procura_online/controllers/search_controller.dart';
 import 'package:procura_online/controllers/user_controller.dart';
 import 'package:procura_online/utils/no_glow_behavior.dart';
 import 'package:procura_online/widgets/item_box.dart';
+import 'package:procura_online/widgets/scroll_keyboard_closer.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key key}) : super(key: key);
@@ -24,6 +25,7 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
   final HomeController _homeController = Get.find();
   final UserController _userController = Get.find();
   final ScrollController _scrollController = ScrollController(initialScrollOffset: 0.0);
+  final TextEditingController _keywordController = TextEditingController();
 
   @override
   void initState() {
@@ -55,6 +57,9 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
   }
 
   void changeCategory({String name, String value}) {
+    _searchController.clearFilter();
+    _homeController.clear();
+    _keywordController.clear();
     if (_homeController.categoryValue == value) {
       _homeController.changeCategory(name: 'Listings', value: 'listings');
     } else {
@@ -88,8 +93,19 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
                   Icon(Icons.search),
                   Expanded(
                     child: TextField(
+                      controller: _keywordController,
                       decoration: InputDecoration(
                         hintText: 'Pesquisar',
+                        suffix: Obx(
+                          () => Text(
+                            _searchController.searchType.value == 0 ? 'AUTOMÓVEIS' : 'PEÇAS',
+                            style: TextStyle(
+                              color: Colors.blue,
+                              fontSize: 12,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
                         border: const OutlineInputBorder(
                           borderSide: const BorderSide(color: Colors.transparent, width: 0.0),
                         ),
@@ -100,7 +116,6 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
                           borderSide: BorderSide(color: Colors.transparent, width: 0.0),
                         ),
                       ),
-                      // onChanged: (value) => _homeController.setSearchTerm(value),
                       onChanged: (value) => _searchController.keyword.value = value,
                       onSubmitted: (_) => _homeController.doSearch(),
                       textInputAction: TextInputAction.search,
@@ -173,121 +188,131 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
               behavior: NoGlowBehavior(),
               child: RefreshIndicator(
                 onRefresh: refresItems,
-                child: SingleChildScrollView(
-                  controller: _scrollController,
-                  child: GetX<HomeController>(
-                      init: _homeController,
-                      builder: (_) {
-                        if (_.isLoading) {
-                          return Padding(
-                            padding: EdgeInsets.only(top: Get.size.height / 3),
-                            child: Center(
-                              child: CircularProgressIndicator(),
-                            ),
-                          );
-                        }
-                        if (_.hasError) {
-                          return Padding(
-                            padding: EdgeInsets.only(top: Get.size.height / 4),
-                            child: Center(
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Text('Ops, erro ao carregar anúncios.'),
-                                  TextButton(
-                                    style: TextButton.styleFrom(primary: Colors.blue),
-                                    onPressed: () => _.findAll(),
-                                    child: Text('Tentar novamente'),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          );
-                        }
-                        if (_.total == 0) {
-                          return Padding(
-                            padding: EdgeInsets.only(top: Get.size.height / 5),
-                            child: Center(
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  SvgPicture.asset('assets/images/semresultado.svg', width: 280),
-                                  SizedBox(height: 20),
-                                  Text(
-                                    'Oh, não conseguimos encontrar nenhum resultado.',
-                                    style: TextStyle(
-                                      fontSize: 13,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          );
-                        }
-                        return Column(
-                          children: [
-                            SizedBox(
-                              height: _.featured.length > 0 ? 250 : 0,
-                              child: ListView.builder(
-                                scrollDirection: Axis.horizontal,
-                                physics: BouncingScrollPhysics(),
-                                shrinkWrap: true,
-                                itemCount: _.featured.length,
-                                itemBuilder: (context, index) {
-                                  return Padding(
-                                    padding: const EdgeInsets.only(right: 10),
-                                    child: ItemBox(
-                                      width: 50,
-                                      height: 100,
-                                      image: _.featured[index].mainPhoto?.bigThumb ??
-                                          'https://source.unsplash.com/600x500/?bmw,audi,volvo',
-                                      title: _.featured[index].title ?? 'Title',
-                                      salePrice: _.featured[index].price ?? '0',
-                                      normalPrice: _.featured[index].oldPrice,
-                                      onTap: () => Get.toNamed('/product/${_homeController.featured[index].id}'),
-                                    ),
-                                  );
-                                },
-                              ),
-                            ),
-                            SizedBox(height: _.featured.length > 0 ? 20 : 0),
-                            GridView.builder(
-                              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                                crossAxisCount: 2,
-                                crossAxisSpacing: 5,
-                                mainAxisSpacing: 5,
-                                childAspectRatio: 0.80,
-                              ),
-                              shrinkWrap: true,
-                              physics: BouncingScrollPhysics(),
-                              itemCount: _.results?.length ?? 0,
-                              itemBuilder: (context, index) {
-                                return ItemBox(
-                                  width: 200,
-                                  height: 250,
-                                  image: _.results[index].mainPhoto?.thumb ??
-                                      'https://source.unsplash.com/600x500/?bmw,audi,volvo?ad=${_.results[index].id}',
-                                  title: _.results[index].title,
-                                  salePrice: _.results[index].price,
-                                  normalPrice: _.results[index].oldPrice,
-                                  onTap: () => Get.toNamed('/product/${_.results[index].id}'),
-                                );
-                              },
-                            ),
-                            Obx(
-                              () => Visibility(
-                                visible: _homeController.isLoadingMore,
-                                child: Padding(
-                                  padding: const EdgeInsets.only(top: 15),
+                child: ScrollKeyboardCloser(
+                  child: GestureDetector(
+                    onPanDown: (DragDownDetails dragDownDetails) {
+                      if (FocusScope.of(context).isFirstFocus) {
+                        FocusScope.of(context).requestFocus(FocusNode());
+                      }
+                    },
+                    child: SingleChildScrollView(
+                      controller: _scrollController,
+                      child: GetX<HomeController>(
+                          init: _homeController,
+                          builder: (_) {
+                            if (_.isLoading) {
+                              return Padding(
+                                padding: EdgeInsets.only(top: Get.size.height / 3),
+                                child: Center(
                                   child: CircularProgressIndicator(),
                                 ),
-                              ),
-                            ),
-                            SizedBox(height: 15),
-                          ],
-                        );
-                      }),
+                              );
+                            }
+                            if (_.hasError) {
+                              return Padding(
+                                padding: EdgeInsets.only(top: Get.size.height / 4),
+                                child: Center(
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Text('Ops, erro ao carregar anúncios.'),
+                                      TextButton(
+                                        style: TextButton.styleFrom(primary: Colors.blue),
+                                        onPressed: () => _.findAll(),
+                                        child: Text('Tentar novamente'),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              );
+                            }
+                            if (_.total == 0) {
+                              return Padding(
+                                padding: EdgeInsets.only(top: Get.size.height / 5),
+                                child: Center(
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      SvgPicture.asset('assets/images/semresultado.svg', width: 280),
+                                      SizedBox(height: 20),
+                                      Text(
+                                        'Oh, não conseguimos encontrar nenhum resultado.',
+                                        style: TextStyle(
+                                          fontSize: 13,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              );
+                            }
+                            return Column(
+                              children: [
+                                SizedBox(
+                                  height: _.featured.length > 0 ? 250 : 0,
+                                  child: ListView.builder(
+                                    scrollDirection: Axis.horizontal,
+                                    physics: BouncingScrollPhysics(),
+                                    shrinkWrap: true,
+                                    itemCount: _.featured.length,
+                                    itemBuilder: (context, index) {
+                                      return Padding(
+                                        padding: const EdgeInsets.only(right: 10),
+                                        child: ItemBox(
+                                          width: 50,
+                                          height: 100,
+                                          image: _.featured[index].mainPhoto?.bigThumb ??
+                                              'https://source.unsplash.com/600x500/?bmw,audi,volvo',
+                                          title: _.featured[index].title ?? 'Title',
+                                          salePrice: _.featured[index].price ?? '0',
+                                          normalPrice: _.featured[index].oldPrice,
+                                          onTap: () => Get.toNamed('/product/${_homeController.featured[index].id}'),
+                                        ),
+                                      );
+                                    },
+                                  ),
+                                ),
+                                SizedBox(height: _.featured.length > 0 ? 20 : 0),
+                                GridView.builder(
+                                  keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+                                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                                    crossAxisCount: 2,
+                                    crossAxisSpacing: 5,
+                                    mainAxisSpacing: 5,
+                                    childAspectRatio: 0.80,
+                                  ),
+                                  shrinkWrap: true,
+                                  physics: BouncingScrollPhysics(),
+                                  itemCount: _.results?.length ?? 0,
+                                  itemBuilder: (context, index) {
+                                    return ItemBox(
+                                      width: 200,
+                                      height: 250,
+                                      image: _.results[index].mainPhoto?.thumb ??
+                                          'https://source.unsplash.com/600x500/?bmw,audi,volvo?ad=${_.results[index].id}',
+                                      title: _.results[index].title,
+                                      salePrice: _.results[index].price,
+                                      normalPrice: _.results[index].oldPrice,
+                                      onTap: () => Get.toNamed('/product/${_.results[index].id}'),
+                                    );
+                                  },
+                                ),
+                                Obx(
+                                  () => Visibility(
+                                    visible: _homeController.isLoadingMore,
+                                    child: Padding(
+                                      padding: const EdgeInsets.only(top: 15),
+                                      child: CircularProgressIndicator(),
+                                    ),
+                                  ),
+                                ),
+                                SizedBox(height: 15),
+                              ],
+                            );
+                          }),
+                    ),
+                  ),
                 ),
               ),
             ),

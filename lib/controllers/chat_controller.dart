@@ -1,3 +1,4 @@
+import 'package:diacritic/diacritic.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -117,16 +118,23 @@ class ChatController extends GetxController with WidgetsBindingObserver {
   }
 
   void filterResults(String term) {
-    List<Chat> filtered = filteredConversations
-        .where(
-          (conversation) =>
-              conversation.order.userInfo.name.toLowerCase().contains(term.toLowerCase()) ||
-              conversation.latestMessage.message.toLowerCase().contains(term.toLowerCase()),
-        )
-        .toList();
+    try {
+      String keyword = removeDiacritics(term.toLowerCase());
+      String model(String model) => model != null ? removeDiacritics(model.toLowerCase()) : '';
+      String message(String msg) => msg != null ? removeDiacritics(msg.toLowerCase()) : '';
 
-    _chats.value.chats = filtered;
-    _chats.refresh();
+      List<Chat> filtered = filteredConversations
+          .where((conversation) =>
+              model(conversation.order.model).contains(keyword) ||
+              message(conversation.latestMessage.message).contains(keyword))
+          .toList();
+
+      _chats.update((val) {
+        val.chats = filtered;
+      });
+    } catch (e) {
+      print('FILTER_MESSAGES_ERROR: $e');
+    }
   }
 
   void updateMessages(Map<String, dynamic> data) async {

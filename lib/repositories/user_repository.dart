@@ -46,7 +46,7 @@ class UserRepository {
   }
 
   Future<String> passwordReset(String email) async {
-    final response = await _dio.post('/$kApiPath/forgot-password', data: email);
+    final response = await _dio.post('/$kApiPath/forgot-password', data: {'email': email});
     if (response.statusCode == 200) {
       return response.data['message'];
     }
@@ -104,7 +104,7 @@ class UserRepository {
     DioClient _dio = DioClient(interceptors: [_dioCacheManager.interceptor]);
     Options _cacheOptions = buildCacheOptions(Duration(days: 365));
     final response =
-    await _dio.get('/$kApiPath/cities', queryParameters: {"district_id": "$districtId"}, options: _cacheOptions);
+        await _dio.get('/$kApiPath/cities', queryParameters: {"district_id": "$districtId"}, options: _cacheOptions);
     return response.data;
   }
 

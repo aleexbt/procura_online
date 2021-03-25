@@ -73,8 +73,7 @@ class ProductRepository {
     int miliageTo,
     int districtId,
   }) async {
-    // var cat = category == 'listings' ? 'vehicles' : category;
-    var type = category == 0 ? 'vehicles' : 'auto-parts';
+    var type = category == 0 ? 'vehicles' : 'autoparts';
     final Response response = await _dio.get('/$kApiPath/search/$type', queryParameters: {
       "search": "$term",
       "fuel_type": "$fuelType",
@@ -84,7 +83,7 @@ class ProductRepository {
       "price_to": "$priceTo",
       "miliage_from": "$miliageFrom",
       "miliage_to": "$miliageTo",
-      "makes[0]": "$brand",
+      "makes": "$brand",
       "model": "$model",
       "page": "$page",
       "district_id": "$districtId",
@@ -132,5 +131,9 @@ class ProductRepository {
       _editAdController.uploadImageProgress.value = ((sent / total));
     });
     return UploadMedia.fromJson(response.data);
+  }
+
+  Future<void> updatePhoneCount(String id) async {
+    await _dio.get('$kBaseUrl/listings/$id/phone');
   }
 }

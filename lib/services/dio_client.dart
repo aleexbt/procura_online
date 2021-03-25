@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:procura_online/app_settings.dart';
 import 'package:procura_online/utils/app_path.dart';
@@ -40,16 +41,16 @@ class DioClient {
       _dio.interceptors.addAll(interceptors);
     }
     // _dio.interceptors.add(DioCacheInterceptor(options: cacheOptions));
-    // if (kDebugMode) {
-    //   _dio.interceptors.add(LogInterceptor(
-    //     responseBody: true,
-    //     error: true,
-    //     requestHeader: false,
-    //     responseHeader: false,
-    //     request: false,
-    //     requestBody: false,
-    //   ));
-    // }
+    if (kDebugMode) {
+      _dio.interceptors.add(LogInterceptor(
+        responseBody: true,
+        error: true,
+        requestHeader: false,
+        responseHeader: false,
+        request: false,
+        requestBody: true,
+      ));
+    }
   }
 
   Future<dynamic> get(

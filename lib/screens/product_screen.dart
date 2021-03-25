@@ -18,7 +18,13 @@ import 'package:url_launcher/url_launcher.dart';
 class ProductScreen extends StatelessWidget {
   final ProductController _productController = Get.put(ProductController());
 
-  void _launch(url) async => await canLaunch(url) ? await launch(url) : throw 'Could not launch $url';
+  void _launch(url) async {
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {
+      throw 'Could not launch $url';
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -611,11 +617,15 @@ class ProductScreen extends StatelessWidget {
             overlayColor: Colors.white,
             children: [
               SpeedDialChild(
-                  child: Icon(CupertinoIcons.phone),
-                  backgroundColor: Colors.green,
-                  labelBackgroundColor: Colors.white,
-                  label: 'Ligar',
-                  onTap: () => _launch('tel:${_.product.user.phone}')),
+                child: Icon(CupertinoIcons.phone),
+                backgroundColor: Colors.green,
+                labelBackgroundColor: Colors.white,
+                label: 'Ligar',
+                onTap: () {
+                  _launch('tel:${_.product.user.phone}');
+                  _.updatePhoneCount();
+                },
+              ),
               SpeedDialChild(
                 child: Icon(CupertinoIcons.mail_solid),
                 backgroundColor: Colors.blue,

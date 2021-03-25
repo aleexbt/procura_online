@@ -1,6 +1,6 @@
 name: procura_online
 description: Procura Online App
-version: 2.0.1+312
+version: 2.0.3+315
 
 environment:
   sdk: ">=2.7.0 <3.0.0"

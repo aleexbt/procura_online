@@ -158,14 +158,17 @@ class ConversationController extends GetxController with WidgetsBindingObserver 
   }
 
   void filterMessages(String term) {
-    List<Message> filtered = filteredMessages
-        .where((msg) => msg.message != null
-            ? removeDiacritics(msg.message.toLowerCase()).contains(removeDiacritics(term.toLowerCase()))
-            : false)
-        .toList();
-    _conversation.update((val) {
-      val.messages = filtered;
-    });
+    try {
+      String keyword = removeDiacritics(term.toLowerCase());
+      String message(String msg) => msg != null ? removeDiacritics(msg.toLowerCase()) : '';
+      List<Message> filtered = filteredMessages.where((msg) => message(msg.message).contains(keyword)).toList();
+
+      _conversation.update((val) {
+        val.messages = filtered;
+      });
+    } catch (e) {
+      print('FILTER_MESSAGES_ERROR: $e');
+    }
   }
 
   void muteConversationToggle() async {

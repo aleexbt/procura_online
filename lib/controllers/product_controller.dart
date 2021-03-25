@@ -37,4 +37,8 @@ class ProductController extends GetxController {
       _isLoading.value = false;
     }
   }
+
+  void updatePhoneCount() {
+    _productRepository.updatePhoneCount(productId);
+  }
 }

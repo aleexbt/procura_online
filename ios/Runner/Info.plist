@@ -17,11 +17,18 @@
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>$(MARKETING_VERSION)</string>
+	<string>$(FLUTTER_BUILD_NAME)</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleVersion</key>
-	<string>$(CURRENT_PROJECT_VERSION)</string>
+	<string>$(FLUTTER_BUILD_NUMBER)</string>
+	<key>LSApplicationQueriesSchemes</key>
+	<array>
+		<string>tel</string>
+		<string>mailto</string>
+		<string>https</string>
+		<string>http</string>
+	</array>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSLocationAlwaysUsageDescription</key>
@@ -29,7 +36,7 @@
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>Precisamos de acesso da sua localização para encontrar automóveis próximos.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>Permission needed to pick a photo from gallery.</string>
+	<string>Precisamos desta permissão para que você possa escolher uma imagem para o anúncio.</string>
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>fetch</string>

@@ -42,29 +42,45 @@ class PusherService {
   }
 
   void subscribePusher(String channelName) {
-    channel = pusher.subscribe(channelName);
+    try {
+      channel = pusher.subscribe(channelName);
+    } catch (e) {
+      print('PUSHER_SUBSCRIBE_ERROR: $e');
+    }
   }
 
   void unSubscribePusher(String channelName) {
-    pusher.unsubscribe(channelName);
+    try {
+      pusher.unsubscribe(channelName);
+    } catch (e) {
+      print('PUSHER_UNSUBSCRIBE_ERROR: $e');
+    }
   }
 
   void bindEvent(String eventName) {
-    channel.bind(eventName, (PusherEvent event) {
-      if (eventName == 'App\\Events\\ConversationEvent') {
-        final ConversationController _conversationController = Get.find();
-        Map<String, dynamic> json = jsonDecode(event.data);
-        _conversationController.addMessage(json);
-      } else if (eventName == 'App\\Events\\ConversationUpdateEvent') {
-        final ChatController _chatController = Get.find();
-        Map<String, dynamic> json = jsonDecode(event.data);
-        _chatController.updateMessages(json['conversation']);
-      }
-    });
+    try {
+      channel.bind(eventName, (PusherEvent event) {
+        if (eventName == 'App\\Events\\ConversationEvent') {
+          final ConversationController _conversationController = Get.find();
+          Map<String, dynamic> json = jsonDecode(event.data);
+          _conversationController.addMessage(json);
+        } else if (eventName == 'App\\Events\\ConversationUpdateEvent') {
+          final ChatController _chatController = Get.find();
+          Map<String, dynamic> json = jsonDecode(event.data);
+          _chatController.updateMessages(json['conversation']);
+        }
+      });
+    } catch (e) {
+      print('PUSHER_BIND_ERROR: $e');
+    }
   }
 
   void unbindEvent(String eventName) {
-    channel.unbind(eventName);
+    try {
+      channel.unbind(eventName);
+    } catch (e) {
+      print('PUSHER_UNBIND_ERROR: $e');
+    }
   }
 
   Future<void> firePusher(String channelName, String eventName) async {

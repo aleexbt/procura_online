@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:awesome_dialog/awesome_dialog.dart';
+import 'package:diacritic/diacritic.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -267,10 +268,18 @@ class OrdersController extends GetxController {
   }
 
   void filterResults(String term) {
-    List<Order> filtered =
-        filteredOrders.where((order) => order.model.toLowerCase().contains(term.toLowerCase())).toList();
-    _orders.value.orders = filtered;
-    _orders.refresh();
+    try {
+      String keyword = removeDiacritics(term.toLowerCase());
+      String model(String model) => model != null ? removeDiacritics(model.toLowerCase()) : '';
+
+      List<Order> filtered = filteredOrders.where((order) => model(order.model).contains(keyword)).toList();
+
+      _orders.update((val) {
+        val.orders = filtered;
+      });
+    } catch (e) {
+      print('FILTER_ORDERS_ERROR: $e');
+    }
   }
 
   Future<UploadMedia> mediaUpload(File photo) async {

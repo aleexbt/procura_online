@@ -15,7 +15,13 @@ class UserInfoScreen extends StatelessWidget {
   final String email = Get.arguments['email'] ?? 'Indisponível';
   final String register = Get.arguments['register'] ?? 'Indisponível';
 
-  void _launch(url) async => await canLaunch(url) ? await launch(url) : throw 'Could not launch $url';
+  void _launch(url) async {
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {
+      throw 'Could not launch $url';
+    }
+  }
 
   @override
   Widget build(BuildContext context) {

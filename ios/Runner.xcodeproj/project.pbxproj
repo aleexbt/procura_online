@@ -486,7 +486,6 @@
 				CODE_SIGN_ENTITLEMENTS = "Runner/Procura Online.entitlements";
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 312;
 				DEVELOPMENT_TEAM = WRJ34743JC;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = Runner/Info.plist;
@@ -494,7 +493,6 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 2.0.1;
 				PRODUCT_BUNDLE_IDENTIFIER = pt.procuraonline.procuraOnlinePT;
 				PRODUCT_NAME = "Procura Online";
 				PROVISIONING_PROFILE_SPECIFIER = "Profile PO";
@@ -622,7 +620,6 @@
 				CODE_SIGN_ENTITLEMENTS = "Runner/Procura Online.entitlements";
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 312;
 				DEVELOPMENT_TEAM = WRJ34743JC;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = Runner/Info.plist;
@@ -630,7 +627,6 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 2.0.1;
 				PRODUCT_BUNDLE_IDENTIFIER = pt.procuraonline.procuraOnlinePT;
 				PRODUCT_NAME = "Procura Online";
 				PROVISIONING_PROFILE_SPECIFIER = "Profile PO";
@@ -652,7 +648,6 @@
 				CODE_SIGN_ENTITLEMENTS = "Runner/Procura Online.entitlements";
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 312;
 				DEVELOPMENT_TEAM = WRJ34743JC;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = Runner/Info.plist;
@@ -660,7 +655,6 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 2.0.1;
 				PRODUCT_BUNDLE_IDENTIFIER = pt.procuraonline.procuraOnlinePT;
 				PRODUCT_NAME = "Procura Online";
 				PROVISIONING_PROFILE_SPECIFIER = "Profile PO";
