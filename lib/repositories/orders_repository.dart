@@ -42,7 +42,7 @@ class OrdersRepository {
 
   void markOrderAsSold(String orderId) async {
     await setToken();
-    _dio.get('/$kApiPath/orders/$orderId/sold');
+    _dio.post('/$kApiPath/orders/$orderId/sold');
   }
 
   Future<Order> createOrder(Map<String, dynamic> data) async {

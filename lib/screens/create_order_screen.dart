@@ -288,20 +288,21 @@ class _CreateOrderScreenState extends State<CreateOrderScreen> {
                               },
                             ),
                             SizedBox(height: 20),
-                            GradientButton(
-                              text: 'Enviar pedido',
-                              onPressed: !_userController.listOrdersPermission
-                                  ? null
-                                  : () {
-                                      setState(() => submitted = true);
-                                      if (_formKey.currentState.validate() &&
-                                          _ordersController.selectedBrand.value.isNotEmpty &&
-                                          _ordersController.selectedModel.value.isNotEmpty &&
-                                          _ordersController.selectedFuel.value.isNotEmpty) {
-                                        FocusScope.of(context).unfocus();
-                                        _ordersController.createOrder(images: imagesUrl);
-                                      }
-                                    },
+                            Obx(
+                              () => GradientButton(
+                                text: 'Enviar pedido',
+                                onPressed: !_userController.createOrderPermission
+                                    ? null
+                                    : () {
+                                        setState(() => submitted = true);
+                                        if (_formKey.currentState.validate() &&
+                                            _ordersController.selectedBrand.value.isNotEmpty &&
+                                            _ordersController.selectedModel.value.isNotEmpty) {
+                                          FocusScope.of(context).unfocus();
+                                          _ordersController.createOrder(images: imagesUrl);
+                                        }
+                                      },
+                              ),
                             ),
                           ],
                         ),

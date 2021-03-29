@@ -7,7 +7,6 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:procura_online/app_bindings.dart';
 import 'package:procura_online/routes/pages.dart';
 import 'package:procura_online/routes/routes.dart';
-import 'package:procura_online/utils/app_path.dart';
 import 'package:procura_online/utils/route_transition_vertical.dart';
 import 'package:sizer/sizer_util.dart';
 

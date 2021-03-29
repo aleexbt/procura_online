@@ -508,6 +508,7 @@ class UserController extends GetxController with StateMixin<User> {
         );
       }
       if (feature == 'orders-create' && permission) {
+        print('========== SETOU PERMISSION: $permission');
         _createOrderPermission.value = permission;
       } else if (feature == 'orders-create' && !permission) {
         errorDialog(
